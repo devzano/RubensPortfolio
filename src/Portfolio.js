@@ -74,7 +74,7 @@ function Portfolio() {
             </div>
           </div>
           <div className="centered-content">
-              <a href="apps.apple.com/us/app/reciperealm/id6458877177" target="_blank" rel="noopener noreferrer">RecipeRealm</a>
+              <a href="https://apps.apple.com/us/app/reciperealm/id6458877177" target="_blank" rel="noopener noreferrer">RecipeRealm</a>
             <div className="project-image-container">
               <table className="rounded-images-table">
                 <tr>

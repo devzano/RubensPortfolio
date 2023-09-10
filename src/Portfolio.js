@@ -74,35 +74,35 @@ function Portfolio() {
             </div>
           </div>
           <div className="centered-content">
-              <a href="https://github.com/devzano/RecipeRealm" target="_blank" rel="noopener noreferrer">RecipeRealm</a>
+              <a href="apps.apple.com/us/app/reciperealm/id6458877177" target="_blank" rel="noopener noreferrer">RecipeRealm</a>
             <div className="project-image-container">
               <table className="rounded-images-table">
                 <tr>
                   <td align="center">
-                    <img src={recipeRealmScreens[0]} alt="RecipeRealm List View" width="300"/>
+                    <img src={recipeRealmScreens[0]} alt="Home View" width="300"/>
                   </td>
                   <td align="center">
-                    <img src={recipeRealmScreens[1]} alt="RecipeRealm List View" width="300"/>
+                    <img src={recipeRealmScreens[1]} alt="Home2 View" width="300"/>
                   </td>
                   <td align="center">
-                    <img src={recipeRealmScreens[2]} alt="RecipeRealm New Recipe View" width="300"/>
+                    <img src={recipeRealmScreens[2]} alt="Share Recipe View" width="300"/>
                   </td>
                   <td align="center">
-                    <img src={recipeRealmScreens[3]} alt="RecipeRealm New Recipe View 2" width="300"/>
+                    <img src={recipeRealmScreens[3]} alt="New Recipe View" width="300"/>
                   </td>
                 </tr>
                 <tr>
                   <td align="center">
-                    <img src={recipeRealmScreens[4]} alt="RecipeRealm Test Detail View" width="300"/>
-                  </td>
-                  <td align="center">
-                    <img src={recipeRealmScreens[5]} alt="RecipeRealm Test Edit Detail View" width="300"/>
-                  </td>
-                  <td align="center">
-                    <img src={recipeRealmScreens[6]} alt="RecipeRealm Detail 1 View" width="300"/>
-                  </td>
-                  <td align="center">
-                    <img src={recipeRealmScreens[7]} alt="RecipeRealm Detail 2 View" width="300"/>
+                    <img src={recipeRealmScreens[4]} alt="New2 View" width="300
+                  </td
+                  <td align="center
+                    <img src={recipeRealmScreens[5]} alt="Detail View" width="300
+                  </td
+                  <td align="center
+                    <img src={recipeRealmScreens[6]} alt="Detail2 View" width="300
+                  </td
+                  <td align="center
+                    <img src={recipeRealmScreens[7]} alt="Edit View" width="300"/>
                   </td>
                 </tr>
               </table>

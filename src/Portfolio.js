@@ -79,10 +79,10 @@ function Portfolio() {
               <table className="rounded-images-table">
                 <tr>
                   <td align="center">
-                    <img src={recipeRealmScreens[0]} alt="Home View" width="300"/>
+                    <img src={recipeRealmScreens[0]} alt="Home Recipe View" width="300"/>
                   </td>
                   <td align="center">
-                    <img src={recipeRealmScreens[1]} alt="Home2 View" width="300"/>
+                    <img src={recipeRealmScreens[1]} alt="Home2 Recipe View" width="300"/>
                   </td>
                   <td align="center">
                     <img src={recipeRealmScreens[2]} alt="Share Recipe View" width="300"/>
@@ -93,16 +93,16 @@ function Portfolio() {
                 </tr>
                 <tr>
                   <td align="center">
-                    <img src={recipeRealmScreens[4]} alt="New2 View" width="300
-                  </td
-                  <td align="center
-                    <img src={recipeRealmScreens[5]} alt="Detail View" width="300
-                  </td
-                  <td align="center
-                    <img src={recipeRealmScreens[6]} alt="Detail2 View" width="300
-                  </td
-                  <td align="center
-                    <img src={recipeRealmScreens[7]} alt="Edit View" width="300"/>
+                    <img src={recipeRealmScreens[4]} alt="New2 Recipe View" width="300"/>
+                  </td>
+                  <td align="center">
+                    <img src={recipeRealmScreens[5]} alt="Detail Recipe View" width="300"/>
+                  </td>
+                  <td align="center">
+                    <img src={recipeRealmScreens[6]} alt="Detail2 Recipe View" width="300"/>
+                  </td>
+                  <td align="center">
+                    <img src={recipeRealmScreens[7]} alt="Edit Recipe View" width="300"/>
                   </td>
                 </tr>
               </table>

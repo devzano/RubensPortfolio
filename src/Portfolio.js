@@ -66,11 +66,9 @@ function Portfolio() {
         <section className="section">
           <h2 className="section-title">Projects</h2>
           <div className="centered-content">
-            <a href="https://github.com/devzano/watchlistr" target="_blank" rel="noopener noreferrer">Watchlistr</a>
+            <a href="https://watchlistr-web.vercel.app" target="_blank" rel="noopener noreferrer">Watchlistr</a>
             <div className="project-image-container">
-              <div className="image-button-container">
                 <img src={watchlistrScreens[watchlistrIndex]} alt={`Project ${watchlistrIndex + 1}`} className="project-image" />
-              </div>
             </div>
           </div>
           <div className="centered-content">

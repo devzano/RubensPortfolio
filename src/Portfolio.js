@@ -3,9 +3,9 @@ import './Portfolio.css';
 
 function Portfolio() {
   const watchlistrScreens = [
-    "https://github.com/devzano/Watchlistr/raw/main/src/styles/Screenshots/LoginPage.png?raw=true",
-    "https://github.com/devzano/watchlistr/raw/main/src/styles/Screenshots/PopularMovies.png?raw=true",
-    "https://github.com/devzano/watchlistr/raw/main/src/styles/Screenshots/TopRatedTVShows.png?raw=true"
+    "https://github.com/devzano/Watchlistr-Web/raw/main/React/src/styles/Screenshots/LoginPage.png?raw=true",
+    "https://github.com/devzano/Watchlistr-Web/raw/main/React/src/styles/Screenshots/PopularMovies.png?raw=true",
+    "https://github.com/devzano/Watchlistr-Web/raw/main/React/src/styles/Screenshots/TopRatedTVShows.png?raw=true"
   ];
   const recipeRealmScreens = [
     "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(Home).png?raw=true",

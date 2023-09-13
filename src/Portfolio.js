@@ -68,7 +68,7 @@ function Portfolio() {
           <div className="centered-content">
             <a href="https://watchlistr-web.vercel.app" target="_blank" rel="noopener noreferrer">Watchlistr</a>
             <div className="project-image-container">
-                <img src={watchlistrScreens[watchlistrIndex]} alt={`Project ${watchlistrIndex + 1}`} className="project-image" />
+            <img src={watchlistrScreens[watchlistrIndex]} alt={`Project ${watchlistrIndex + 1}`}  className="project-image" style={{ width: '100%', maxHeight: '500px' }} />
             </div>
           </div>
           <div className="centered-content">

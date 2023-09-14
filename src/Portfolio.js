@@ -39,8 +39,7 @@ function Portfolio() {
             <p>Motivated and driven, with a passion for software engineering. Currently seeking an entry-level position to acquire valuable experience in the field. Eager to contribute to a team and collaborate towards the attainment of company objectives.</p>
             <h2 className="section-title">Contact</h2>
             <p><a href="https://www.linkedin.com/in/rubenmanzano-se/">LinkedIn</a></p>
-            <p><a href="mailto:rmanzano.se@gmail.com">rmanzano.se@gmail.com</a></p>
-            <p><a href="tel:3053232827">Phone</a> - <a href="sms:3053232827">Text</a></p>
+            <p><a href="mailto:rmanzano.se@gmail.com">Email</a> - <a href="tel:3053232827">Phone</a> - <a href="sms:3053232827">Text</a></p>
         </section>
         <section className="section">
             <h2 className="section-title">Skills</h2>

@@ -5,11 +5,10 @@ function BetaSignupForm() {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
-    const [message, setMessage] = useState("");
+    const [isSignedUp, setIsSignedUp] = useState(false);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
         try {
             const response = await fetch('/api/sendMail', {
                 method: 'POST',
@@ -20,13 +19,18 @@ function BetaSignupForm() {
             });
 
             if (response.status === 200) {
-                setMessage('Thank you for signing up! We will send you a invititaion shortly.');
+                setIsSignedUp(true);
             } else {
-                setMessage('There was an error signing up. Please try again later.');
+                setIsSignedUp(false);
+                alert('There was an error signing up. Please try again later.');
             }
         } catch (error) {
-            setMessage('There was an error signing up. Please try again later.');
+            setIsSignedUp(false);
+            alert('There was an error signing up. Please try again later.');
         }
+        setFirstName("");
+        setLastName("");
+        setEmail("");
     };
 
     return (
@@ -47,7 +51,14 @@ function BetaSignupForm() {
                 </div>
                 <button type="submit">Sign Up</button>
             </form>
-            {message && <p>{message}</p>}
+            {isSignedUp && (
+                <p>
+                    Thank you for signing up to test the last version of RecipeRealm!
+                    We will send you an invitation shortly.
+                    In the meantime, download <a href="https://apps.apple.com/us/app/testflight/id899247664" target="_blank" rel="noopener noreferrer">TestFlight</a>
+                    from the Apple Store. It's where you will install the latest version.
+                </p>
+            )}
         </div>
     );
 }

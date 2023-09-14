@@ -4,8 +4,8 @@ module.exports = async (req, res) => {
   if (req.method !== "POST") {
     return res.status(405).end();
   }
-  
-  const { name, email } = req.body;
+
+  const { firstName, lastName, email } = req.body;
 
   let transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
     from: process.env.EMAIL_USER,
     to: process.env.EMAIL_USER,
     subject: 'New Beta Signup',
-    text: `Name: ${name}, Email: ${email}`
+    text: `First Name: ${firstName}, Last Name: ${lastName}, Email: ${email}`
   };
 
   try {

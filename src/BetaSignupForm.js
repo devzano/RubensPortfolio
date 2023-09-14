@@ -34,29 +34,27 @@ function BetaSignupForm() {
     };
 
     return (
-        <div>
-            <h2>Sign up for Beta Testing</h2>
+        <div className="beta-signup-container">
+            <h2 className="beta-signup-title">Sign up to beta test!</h2>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label>First Name:</label>
-                    <input type="text" value={firstName} onChange={e => setFirstName(e.target.value)} required />
+                    <label className="beta-signup-label">First Name:</label>
+                    <input className="beta-signup-input" type="text" value={firstName} onChange={e => setFirstName(e.target.value)} required />
                 </div>
                 <div>
-                    <label>Last Name:</label>
-                    <input type="text" value={lastName} onChange={e => setLastName(e.target.value)} required />
+                    <label className="beta-signup-label">Last Name:</label>
+                    <input className="beta-signup-input" type="text" value={lastName} onChange={e => setLastName(e.target.value)} required />
                 </div>
                 <div>
-                    <label>Email:</label>
-                    <input type="email" value={email} onChange={e => setEmail(e.target.value)} required />
+                    <label className="beta-signup-label">Email:</label>
+                    <input className="beta-signup-input" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
                 </div>
-                <button type="submit">Sign Up</button>
+                <button className="beta-signup-submit" type="submit">Sign Up</button>
             </form>
             {isSignedUp && (
                 <p>
                     Thank you for signing up to test the last version of RecipeRealm!
-                    We will send you an invitation shortly.
-                    In the meantime, download <a href="https://apps.apple.com/us/app/testflight/id899247664" target="_blank" rel="noopener noreferrer">TestFlight</a>
-                    from the Apple Store. It's where you will install the latest version.
+                    We will send you an invitation shortly. In the meantime, download <a href="https://apps.apple.com/us/app/testflight/id899247664" target="_blank" rel="noopener noreferrer">TestFlight</a> from the Apple App Store. It's where you will install the latest version.
                 </p>
             )}
         </div>

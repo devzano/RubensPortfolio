@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import './Portfolio.css';
+import BetaSignupForm from './BetaSignupForm';
 
 function Portfolio() {
   const watchlistrScreens = [
@@ -25,6 +26,8 @@ function Portfolio() {
     }, 3000);
     return () => clearInterval(interval);
   }, [watchlistrScreens.length]);
+
+	const [showForm, setShowForm] = useState(false);
 
   return (
     <div className="coding-background">
@@ -105,6 +108,7 @@ function Portfolio() {
                 </tr>
               </table>
             </div>
+<button onClick={() => setShowForm(!showForm)}>Sign Up for Beta Testing</button>{showForm && <BetaSignupForm />}
           </div>
         </section>
       </div>

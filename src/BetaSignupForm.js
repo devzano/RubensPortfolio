@@ -39,14 +39,17 @@ function BetaSignupForm() {
             <form onSubmit={handleSubmit}>
                 <div>
                     <label className="beta-signup-label">First Name:</label>
+                    <br/>
                     <input className="beta-signup-input" type="text" value={firstName} onChange={e => setFirstName(e.target.value)} required />
                 </div>
                 <div>
                     <label className="beta-signup-label">Last Name:</label>
+                    <br/>
                     <input className="beta-signup-input" type="text" value={lastName} onChange={e => setLastName(e.target.value)} required />
                 </div>
                 <div>
                     <label className="beta-signup-label">Email:</label>
+                    <br/>
                     <input className="beta-signup-input" type="email" value={email} onChange={e => setEmail(e.target.value)} required />
                 </div>
                 <button className="beta-signup-submit" type="submit">Sign Up</button>

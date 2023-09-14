@@ -26,7 +26,7 @@ function Portfolio() {
     }, 3000);
     return () => clearInterval(interval);
   }, [watchlistrScreens.length]);
-
+	
 	const [showForm, setShowForm] = useState(false);
 
   return (
@@ -76,6 +76,7 @@ function Portfolio() {
           </div>
           <div className="centered-content">
               <a href="https://apps.apple.com/us/app/reciperealm/id6458877177" target="_blank" rel="noopener noreferrer">RecipeRealm</a>
+	<button onClick={() => setShowForm(!showForm)}>Sign Up for Beta Testing</button>{showForm && <BetaSignupForm />}
             <div className="project-image-container">
               <table className="rounded-images-table">
                 <tr>
@@ -108,7 +109,6 @@ function Portfolio() {
                 </tr>
               </table>
             </div>
-<button onClick={() => setShowForm(!showForm)}>Sign Up for Beta Testing</button>{showForm && <BetaSignupForm />}
           </div>
         </section>
       </div>

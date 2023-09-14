@@ -35,11 +35,11 @@ function BetaSignupForm() {
             <form onSubmit={handleSubmit}>
                 <div>
                     <label>First Name:</label>
-                    <input type="text" value={firstName} onChange={e => setName(e.target.value)} required />
+                    <input type="text" value={firstName} onChange={e => setFirstName(e.target.value)} required />
                 </div>
 <div>
                     <label>Last Name:</label>
-                    <input type="text" value={lastName} onChange={e => setName(e.target.value)} required />
+                    <input type="text" value={lastName} onChange={e => setLastName(e.target.value)} required />
                 </div>
                 <div>
                     <label>Email:</label>

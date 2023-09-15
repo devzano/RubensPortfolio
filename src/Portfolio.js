@@ -75,8 +75,6 @@ function Portfolio() {
           </div>
           <div className="centered-content">
               <a href="https://apps.apple.com/us/app/reciperealm/id6458877177" target="_blank" rel="noopener noreferrer" className="link-font">RecipeRealm</a>
-              <br/>
-              <button onClick={() => setShowForm(!showForm)} className="beta-button">Beta Testing</button>{showForm && <BetaSignupForm />}
             <div className="project-image-container">
               <table className="rounded-images-table">
                 <tr>
@@ -108,6 +106,7 @@ function Portfolio() {
                   </td>
                 </tr>
               </table>
+              <button onClick={() => setShowForm(!showForm)} className="beta-button">Beta Testing</button>{showForm && <BetaSignupForm />}
             </div>
           </div>
         </section>

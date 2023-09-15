@@ -106,8 +106,8 @@ function Portfolio() {
                   </td>
                 </tr>
               </table>
-              <button onClick={() => setShowForm(!showForm)} className="beta-button">Beta Testing</button>{showForm && <BetaSignupForm />}
             </div>
+            <button onClick={() => setShowForm(!showForm)} className="beta-button">Beta Testing</button>{showForm && <BetaSignupForm />}
           </div>
         </section>
       </div>

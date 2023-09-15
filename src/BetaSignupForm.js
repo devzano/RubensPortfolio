@@ -36,6 +36,7 @@ function BetaSignupForm() {
     return (
         <div className="beta-signup-container">
             <h2 className="beta-signup-title">Sign up to beta test!</h2>
+            <h2 className="beta-signup-note">(Note: Make to use your current Apple email thats used for your iPhone.)</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label className="beta-signup-label">First Name:</label>

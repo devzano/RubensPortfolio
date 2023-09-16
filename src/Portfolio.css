@@ -42,6 +42,11 @@
   text-align: center;
 }
 
+.section-title {
+  color: #5e00a3;
+  text-align: center;
+}
+
 .sections-container {
   display: flex;
   flex-direction: row;
@@ -57,11 +62,6 @@
   border-radius: 10px;
   flex: 1;
   margin: 20px;
-  text-align: center;
-}
-
-.section h2 {
-  color: #5e00a3;
   text-align: center;
 }
 

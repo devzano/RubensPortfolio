@@ -18,6 +18,13 @@
     color: cornflowerblue;
 }
 
+.beta-signup-note {
+    font-size: 12px;
+    font-weight: 300;
+    margin-bottom: 10px;
+    color: cornflowerblue;
+}
+
 .beta-signup-label {
     align-self: flex-start;
     margin: 10px 0;
@@ -27,7 +34,8 @@
 }
 
 .beta-signup-input {
-    width: auto;
+    width: 100%;
+    box-sizing: border-box;
     padding: 10px 15px;
     border: 2px solid #23395B;
     border-radius: 25px;

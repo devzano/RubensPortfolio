@@ -7,6 +7,7 @@ function Portfolio() {
     "https://github.com/devzano/Watchlistr-Web/raw/main/React/src/styles/Screenshots/PopularMovies.png?raw=true",
     "https://github.com/devzano/Watchlistr-Web/raw/main/React/src/styles/Screenshots/TopRatedTVShows.png?raw=true"
   ];
+
   const recipeRealmScreens = [
     "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(Home).png?raw=true",
     "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(Home2).png?raw=true",
@@ -71,7 +72,7 @@ function Portfolio() {
           <div className="centered-content">
             <a href="https://watchlistr-web.vercel.app" target="_blank" rel="noopener noreferrer" className="link-font">Watchlistr</a>
             <div className="project-image-container">
-            <img src={watchlistrScreens[watchlistrIndex]} alt={`Project ${watchlistrIndex + 1}`}  className="project-image" style={{ width: '100%', maxHeight: '500px' }} />
+            <img src={watchlistrScreens[watchlistrIndex]} alt={`Project ${watchlistrIndex + 1}`}  className="project-image" style={{width: '100%', maxHeight: '500px'}} />
             </div>
           </div>
           <div className="centered-content">

@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react';
 import './Portfolio.css';
-import BetaSignupForm from './BetaSignupForm';
 
 function Portfolio() {
   const watchlistrScreens = [
@@ -27,7 +26,9 @@ function Portfolio() {
     return () => clearInterval(interval);
   }, [watchlistrScreens.length]);
 
-	const [showForm, setShowForm] = useState(false);
+  const handleBetaButtonClick = () => {
+    window.open("https://testflight.apple.com/join/0ox0x9Rq", "_blank");
+  }
 
   return (
     <div className="coding-background">
@@ -76,7 +77,7 @@ function Portfolio() {
           <div className="centered-content">
               <a href="https://apps.apple.com/us/app/reciperealm/id6458877177" target="_blank" rel="noopener noreferrer" className="link-font">RecipeRealm</a>
               <br/>
-              <button onClick={() => setShowForm(!showForm)} className="beta-button">Beta Testing</button>{showForm && <BetaSignupForm />}
+              <button onClick={handleBetaButtonClick} className="beta-button">Beta Testing</button>
             <div className="project-image-container">
               <table className="rounded-images-table">
                 <tr>

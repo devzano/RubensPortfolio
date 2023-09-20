@@ -1,10 +1,10 @@
 import React from 'react';
-import { isMobile } from 'react-device-detect';
-import Portfolio from './Portfolio';
+import {isMobile} from 'react-device-detect';
+import Portfolio from '../Portfolio/Portfolio';
 import DynamicBackground from './DynamicBackground';
 import './App.css';
 
-function App() {
+const App = () => {
   return (
     <div className="App">
       {isMobile ? (
@@ -12,11 +12,11 @@ function App() {
         <div className="mobile"></div>
       ) : (
         // Render dynamic background for desktop
-        <DynamicBackground />
+        <DynamicBackground/>
       )}
       <Portfolio/>
     </div>
   );
-}
+};
 
 export default App;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 
 const RecipeRealm = () => {
   const RecipeRealmScreenshots = [
@@ -12,6 +12,15 @@ const RecipeRealm = () => {
     "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(Edit).png?raw=true"
   ];
 
+  const [currentSet, setCurrentSet] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSet((prevSet) => (prevSet + 1) % 2);
+    }, 4000);
+    return () => clearInterval(interval)
+  }, []);
+
   const handleBetaButtonClick = () => {
     window.open("https://testflight.apple.com/join/0ox0x9Rq", "_blank");
   }
@@ -23,35 +32,14 @@ const RecipeRealm = () => {
       <button onClick={handleBetaButtonClick} className="beta-button">Beta Testing</button>
       <div className="project-image-container">
         <table className="rounded-images-table">
-                <tr>
-                  <td align="center">
-                    <img src={RecipeRealmScreenshots[0]} alt="Home Recipe View" width="300"/>
-                  </td>
-                  <td align="center">
-                    <img src={RecipeRealmScreenshots[1]} alt="Home2 Recipe View" width="300"/>
-                  </td>
-                  <td align="center">
-                    <img src={RecipeRealmScreenshots[2]} alt="Share Recipe View" width="300"/>
-                  </td>
-                  <td align="center">
-                    <img src={RecipeRealmScreenshots[3]} alt="New Recipe View" width="300"/>
-                  </td>
-                </tr>
-                <tr>
-                  <td align="center">
-                    <img src={RecipeRealmScreenshots[4]} alt="New2 Recipe View" width="300"/>
-                  </td>
-                  <td align="center">
-                    <img src={RecipeRealmScreenshots[5]} alt="Detail Recipe View" width="300"/>
-                  </td>
-                  <td align="center">
-                    <img src={RecipeRealmScreenshots[6]} alt="Detail2 Recipe View" width="300"/>
-                  </td>
-                  <td align="center">
-                    <img src={RecipeRealmScreenshots[7]} alt="Edit Recipe View" width="300"/>
-                  </td>
-                </tr>
-              </table>
+          <tr>
+              {[0, 1, 2, 3].map(i => (
+                <td align="center" key={i}>
+                  <img src={RecipeRealmScreenshots[i + currentSet * 4]} alt={`RecipeRealm View ${i + currentSet * 4}`} width="300"/>
+                </td>
+              ))}
+          </tr>
+        </table>
       </div>
     </div>
   );

@@ -39,6 +39,8 @@ function Portfolio() {
         <section className="section">
             <h2 className="section-title">About Me</h2>
             <p>Motivated and driven, with a passion for software engineering. Currently seeking an entry-level position to acquire valuable experience in the field. Eager to contribute to a team and collaborate towards the attainment of company objectives.</p>
+            <br/>
+            <br/>
             <h2 className="section-title">Contact</h2>
             <p><a href="https://www.linkedin.com/in/rubenmanzano-se/">LinkedIn</a></p>
             <p><a href="mailto:rmanzano.se@gmail.com">Email</a> - <a href="tel:3053232827">Phone</a> - <a href="sms:3053232827">Text</a></p>
@@ -48,27 +50,28 @@ function Portfolio() {
             <ul className="skills-list">
               <li className="skill">HTML</li>
               <li className="skill">CSS</li>
-              <li className="skill">Javascript</li>
+              <li className="skill">JavaScript</li>
               <li className="skill">Python</li>
               <li className="skill">React</li>
+              <li className="skill">Swift</li>
               <li className="skill">Flask</li>
+              <li className="skill">ExpressJS</li>
+              <li className="skill">NodeJS</li>
               <li className="skill">GIT</li>
               <li className="skill">PostgresSQL</li>
+              <li className="skill">MySQL</li>
               <li className="skill">Data Analysis</li>
-              <li className="skill">API Development</li>
+              <li className="skill">PHPMyAdmin</li>
               <li className="skill">Algorithms</li>
+              <li className="skill">UI/UX Design</li>
               <li className="skill">Debugging</li>
               <li className="skill">Testing</li>
-              <li className="skill">Backend</li>
-              <li className="skill">Frontend</li>
-              <li className="skill">Full-Stack</li>
-              <li className="skill">iOS Development</li>
-              <li className="skill">UI/UX Design</li>
+              <li className="skill">Full-Stack Developer</li>
             </ul>
           </section>
         </div>
+        <h2 className="section-title">Projects</h2>
         <section className="section">
-          <h2 className="section-title">Projects</h2>
           <div className="centered-content">
             <a href="https://watchlistr-web.vercel.app" target="_blank" rel="noopener noreferrer" className="link-font">Watchlistr</a>
             <div className="project-image-container">

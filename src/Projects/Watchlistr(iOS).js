@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import '../Portfolio/Portfolio.css';
 
 const WatchlistriOS = () => {
   const WatchlistrScreenshots = [

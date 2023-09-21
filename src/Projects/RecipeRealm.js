@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import './Portfolio.css';
+import '../Portfolio/Portfolio.css';
 
 const RecipeRealm = () => {
   const RecipeRealmScreenshots = [

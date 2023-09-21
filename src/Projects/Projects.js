@@ -2,6 +2,7 @@ import React from 'react';
 import WatchlistrWeb from '../Projects/Watchlistr(Web)';
 import RecipeRealm from '../Projects/RecipeRealm';
 import WatchlistriOS from '../Projects/Watchlistr(iOS)';
+import '../Portfolio/Portfolio.css';
 
 const Projects = () => {
   return (

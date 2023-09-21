@@ -123,6 +123,7 @@
   height: auto;
   object-fit: contain;
   border-radius: 10px;
+  zIndex: -1;
 }
 
 .project-image-container img {
@@ -131,7 +132,6 @@
   width: 100%;
   height: auto;
   object-fit: contain;
-  zIndex: -1;
 }
 
 /* Responsive styles */

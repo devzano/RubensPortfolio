@@ -1,14 +1,11 @@
 import React from 'react';
 import './Portfolio.css';
-import WatchlistrWeb from '../Projects/Watchlistr(Web)';
-import RecipeRealm from '../Projects/RecipeRealm';
-import WatchlistriOS from '../Projects/Watchlistr(iOS)';
 
 const Portfolio = () => {
   return (
     <div className="coding-background">
-      <div className="portfolio">
       <h1 className="title">My Portfolio</h1>
+      <div className="portfolio">
         <div className="sections-container">
         <section className="section">
           <h2 className="section-title">About Me</h2>
@@ -44,16 +41,6 @@ const Portfolio = () => {
             </ul>
           </section>
         </div>
-        <h2 className="section-title">Projects</h2>
-        <section className="section">
-          <WatchlistrWeb/>
-        </section>
-        <section className="section">
-          <RecipeRealm/>
-        </section>
-        <section className="section">
-          <WatchlistriOS/>
-        </section>
       </div>
     </div>
   );

@@ -134,7 +134,6 @@
 }
 
 /* Responsive styles */
-/* Add these styles within your existing media queries */
 @media (max-width: 768px) {
   .sections-container {
     flex-direction: column;
@@ -142,15 +141,6 @@
 
   .section {
     min-width: unset;
-  }
-
-  /* Adjust the max-width and max-height for the project images */
-  .project-image-container img {
-    max-width: 100%; /* Allow images to resize to the container's width */
-    max-height: auto; /* Allow images to maintain their aspect ratio */
-    width: 100%;
-    height: auto;
-    object-fit: contain;
   }
 }
 

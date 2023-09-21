@@ -138,6 +138,10 @@
   .sections-container {
     flex-direction: column;
   }
+  
+  .project-image-container img {
+    max-height: 120vh;
+  }
 
   .section {
     min-width: unset;

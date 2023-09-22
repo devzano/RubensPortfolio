@@ -2,11 +2,15 @@
   position: fixed;
   top: 0;
   left: 0;
-  height: 100%;
-  width: 200px;
+  height: auto;
+  width: 150px;
   background-color: #1a1a1a;
-  padding-top: 20px;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
+  transition: width 0.3s;
+}
+
+.navbar:hover {
+  width: 200px;
 }
 
 .navbar-list {
@@ -15,35 +19,29 @@
 }
 
 .navbar-list li {
-  text-align: center;
-  margin-bottom: 10px;
+  text-align: left;
+  margin: 0;
+  padding: 0;
 }
 
 .navbar-list li a {
   text-decoration: none;
-  color: white;
-  padding: 10px 15px;
+  color: #fff;
   display: block;
-  transition: background 0.3s;
+  padding: 15px 20px;
+  transition: background-color 0.3s;
 }
 
 .navbar-list li a:hover {
-  background-color: #555;
-}
-
-.navbar-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 200px;
+  background-color: #444;
 }
 
 .navbar-icon {
-  position: fixed;
+  position: absolute;
   top: 20px;
   left: 20px;
-  font-size: 30px;
+  font-size: 24px;
   cursor: pointer;
-  color: white;
+  color: cornflowerblue;
+  z-index: 2;
 }

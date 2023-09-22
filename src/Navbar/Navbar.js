@@ -1,12 +1,27 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {Link} from 'react-router-dom';
 import './Navbar.css';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const navbarRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (navbarRef.current && !navbarRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
-    <div className="navbar-container" onClick={() => setIsOpen(!isOpen)}>
+    <div className="navbar-container" onClick={() => setIsOpen(!isOpen)} ref={navbarRef} >
       {isOpen ? (
         <div className="navbar">
           <ul className="navbar-list">
@@ -15,7 +30,9 @@ const Navbar = () => {
           </ul>
         </div>
       ) : (
-        <div className="navbar-icon">&#9776;</div>
+        <div className="navbar-icon" onClick={() => setIsOpen(!isOpen)}>
+          &#9776;
+        </div>
       )}
     </div>
   );

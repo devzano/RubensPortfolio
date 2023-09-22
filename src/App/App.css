@@ -18,3 +18,31 @@ a:visited {
 .mobile {
   background-color: black;
 }
+
+.coding-background {
+  background-color: #111;
+  padding: 20px;
+  min-height: 100vh;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .sections-container {
+    flex-direction: column;
+  }
+
+  .section {
+    min-width: unset;
+  }
+}
+
+@media (max-width: 480px) {
+  .portfolio {
+    padding: 10px;
+  }
+
+  .skill {
+    font-size: 12px;
+    padding: 5px 8px;
+  }
+}

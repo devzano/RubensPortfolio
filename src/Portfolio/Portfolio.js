@@ -1,7 +1,18 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './Portfolio.css';
 
+const skills = ["HTML", "CSS", "JavaScript", "Python", "React", "Swift", "Flask", "ExpressJS", "NodeJS", "GIT", "PostgresSQL", "MySQL", "Data Analysis", "PHPMyAdmin", "Algorithms", "UI/UX Design", "Debugging", "Testing", "Full-Stack Developer",];
+
 const Portfolio = () => {
+  useEffect(() => {
+    const skillElements = document.querySelectorAll('.skill');
+    skillElements.forEach((skill, index) => {
+      setTimeout(() => {
+        skill.classList.add('skill-typing');
+      }, 100 * index);
+    });
+  }, []);
+
   return (
     <div className="coding-background">
       <h1 className="title">My Portfolio</h1>
@@ -19,25 +30,11 @@ const Portfolio = () => {
         <section className="section">
             <h2 className="section-title">Skills</h2>
             <ul className="skills-list">
-              <li className="skill">HTML</li>
-              <li className="skill">CSS</li>
-              <li className="skill">JavaScript</li>
-              <li className="skill">Python</li>
-              <li className="skill">React</li>
-              <li className="skill">Swift</li>
-              <li className="skill">Flask</li>
-              <li className="skill">ExpressJS</li>
-              <li className="skill">NodeJS</li>
-              <li className="skill">GIT</li>
-              <li className="skill">PostgresSQL</li>
-              <li className="skill">MySQL</li>
-              <li className="skill">Data Analysis</li>
-              <li className="skill">PHPMyAdmin</li>
-              <li className="skill">Algorithms</li>
-              <li className="skill">UI/UX Design</li>
-              <li className="skill">Debugging</li>
-              <li className="skill">Testing</li>
-              <li className="skill">Full-Stack Developer</li>
+              {skills.map((skill, index) => (
+                <li key={index} className="skill">
+                  {skill}
+                </li>
+              ))}
             </ul>
           </section>
         </div>

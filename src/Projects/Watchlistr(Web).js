@@ -4,8 +4,14 @@ import '../Portfolio/Portfolio.css';
 const WatchlistrWeb = () => {
   const WatchlistrWebScreens = [
     "https://github.com/devzano/Watchlistr-Web/raw/main/React/src/styles/Screenshots/LoginPage.png?raw=true",
+    "https://github.com/devzano/Watchlistr-Web/raw/main/React/src/styles/Screenshots/SignupPage.png?raw=true",
+    "https://github.com/devzano/Watchlistr-Web/raw/main/React/src/styles/Screenshots/Upcoming.png?raw=true",
     "https://github.com/devzano/Watchlistr-Web/raw/main/React/src/styles/Screenshots/PopularMovies.png?raw=true",
-    "https://github.com/devzano/Watchlistr-Web/raw/main/React/src/styles/Screenshots/TopRatedTVShows.png?raw=true"
+    "https://github.com/devzano/Watchlistr-Web/raw/main/React/src/styles/Screenshots/TopRatedMovies.png?raw=true",
+    "https://github.com/devzano/Watchlistr-Web/raw/main/React/src/styles/Screenshots/PopularTVShows.png?raw=true",
+    "https://github.com/devzano/Watchlistr-Web/raw/main/React/src/styles/Screenshots/AiringToday.png?raw=true",
+    "https://github.com/devzano/Watchlistr-Web/raw/main/React/src/styles/Screenshots/TopRatedTVShows.png?raw=true",
+    "https://github.com/devzano/Watchlistr-Web/raw/main/React/src/styles/Screenshots/Watchlist.png?raw=true",
   ];
 
   const [watchlistrIndex, setWatchlistrIndex] = useState(0);

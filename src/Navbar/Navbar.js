@@ -7,14 +7,12 @@ const Navbar = () => {
   const navbarRef = useRef(null);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (navbarRef.current && !navbarRef.current.contains(event.target)) {
+    const handleClickOutside = (ev) => {
+      if (navbarRef.current && !navbarRef.current.contains(ev.target)) {
         setIsOpen(false);
       }
     };
-
     document.addEventListener('mousedown', handleClickOutside);
-
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };

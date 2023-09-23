@@ -18,7 +18,7 @@ const WatchlistrWeb = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setWatchlistrIndex((prevIndex) => (prevIndex + 1) % WatchlistrWebScreens.length);
-    }, 3000);
+    }, 4000);
     return () => clearInterval(interval);
   }, [WatchlistrWebScreens.length]);
 

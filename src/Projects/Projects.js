@@ -9,13 +9,13 @@ const Projects = () => {
     <div className="coding-background">
       <h2 className="section-title">Projects</h2>
       <section className="section">
-        <WatchlistrWeb />
+        <WatchlistrWeb/>
       </section>
       <section className="section">
-        <RecipeRealm />
+        <RecipeRealm/>
       </section>
       <section className="section">
-        <WatchlistriOS />
+        <WatchlistriOS/>
       </section>
     </div>
   );

@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import '../Portfolio/Portfolio.css';
+import '../Projects/Projects.css';
 
 const RecipeRealm = () => {
   const RecipeRealmScreenshots = [
@@ -27,20 +28,24 @@ const RecipeRealm = () => {
   }
 
   return (
-    <div className="centered-content">
-      <a href="https://apps.apple.com/us/app/reciperealm/id6458877177" target="_blank" rel="noopener noreferrer" className="link-font">RecipeRealm</a>
-      <br/>
-      <button onClick={handleBetaButtonClick} className="beta-button">Beta Testing</button>
-      <div className="project-image-container">
-        <table className="rounded-images-table">
-          <tr>
-              {[0, 1, 2, 3].map(i => (
-                <td align="center" key={i}>
-                  <img src={RecipeRealmScreenshots[i + currentSet * 4]} alt={`RecipeRealm View ${i + currentSet * 4}`} width="300"/>
-                </td>
-              ))}
-          </tr>
-        </table>
+    <div className="coding-background">
+      <div className="section">
+      <div className="centered-content">
+        <a href="https://apps.apple.com/us/app/reciperealm/id6458877177" target="_blank" rel="noopener noreferrer" className="section-title link-font">RecipeRealm</a>
+        <br/>
+        <button onClick={handleBetaButtonClick} className="beta-button">Beta Testing</button>
+        <div className="project-image-container">
+          <table className="rounded-images-table">
+            <tr>
+                {[0, 1, 2, 3].map(i => (
+                  <td align="center" key={i}>
+                    <img src={RecipeRealmScreenshots[i + currentSet * 4]} alt={`RecipeRealm View ${i + currentSet * 4}`} width="300"/>
+                  </td>
+                ))}
+            </tr>
+          </table>
+        </div>
+      </div>
       </div>
     </div>
   );

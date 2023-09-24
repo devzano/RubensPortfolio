@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import '../Portfolio/Portfolio.css';
+import '../Projects/Projects.css';
 
 const WatchlistriOS = () => {
   const WatchlistrScreenshots = [
@@ -31,8 +32,10 @@ const WatchlistriOS = () => {
   }
 
   return (
-    <div className="centered-content">
-      <a href="https://github.com/devzano/Watchlistr-iOS" target="_blank" rel="noopener noreferrer" className="link-font">Watchlistr (iOS)</a>
+    <div className="coding-background">
+      <div className="section">
+      <div className="centered-content">
+      <a href="https://github.com/devzano/Watchlistr-iOS" target="_blank" rel="noopener noreferrer" className="section-title link-font">Watchlistr (iOS)</a>
       <br/>
       <button onClick={handleBetaButtonClick} className="beta-button">Beta Testing</button>
       <div className="project-image-container">
@@ -51,6 +54,8 @@ const WatchlistriOS = () => {
           transition: opacity 1s;
         }
       `}</style>
+      </div>
+      </div>
     </div>
   );
 };

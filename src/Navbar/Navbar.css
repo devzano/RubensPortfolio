@@ -24,18 +24,12 @@
 }
 
 .navbar-list {
-  list-style-type: none;
+  display: flex;
+  flex-direction: column;
   padding: 0;
 }
 
-.navbar-list li {
-  text-align: left;
-  margin: 0;
-  padding: 0;
-  position: relative;
-}
-
-.navbar-list .navbar-link {
+.navbar-link {
   text-decoration: none;
   cursor: default;
   color: #fff;
@@ -44,25 +38,28 @@
   transition: background-color 0.3s;
 }
 
-.navbar-list .navbar-link:hover {
+.navbar-link:hover {
   background-color: #444;
 }
 
-.navbar-list li > ul {
+.navbar-list > div {
+  position: relative; /* Ensure the dropdown is positioned relative to the hovered link */
+}
+
+.dropdown {
   display: none;
-  list-style-type: none;
   position: absolute;
   left: 100%;
-  top: 0;
+  top: 0; /* Align the top of the dropdown with the top of the hovered link */
   min-width: 150px;
   background-color: #1a1a1a;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
 }
 
-.navbar-list li:hover > ul {
+.navbar-list div:hover .dropdown {
   display: block;
 }
 
-.navbar-list li > ul > li a {
+.dropdown .navbar-link {
   padding: 10px 15px;
 }

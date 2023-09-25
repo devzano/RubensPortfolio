@@ -1,13 +1,15 @@
-.portfolio {
+.project {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
+  min-height: 80vh;
   padding: 20px;
 }
 
 .project-image-container {
   max-width: 1200px;
   margin: 20px auto;
+  z-index: 1;
 }
 
 .project-image {
@@ -23,4 +25,31 @@
   width: 100%;
   height: auto;
   object-fit: contain;
+}
+
+.beta-button {
+  background-color: #23395B;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 25px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  text-align: center;
+  display: inline-block;
+  text-decoration: none;
+  background-image: linear-gradient(160deg, #23395B 0%, #1a2e4a 100%);
+}
+
+.beta-button:hover {
+  background-color: #1a2e4a;
+  box-shadow: 0px 7px 20px rgba(0, 0, 0, 0.25);
+  transform: translateY(-2px);
+}
+
+.beta-button:active {
+  transform: translateY(0px);
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.2);
 }

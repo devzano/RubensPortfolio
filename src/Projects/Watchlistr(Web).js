@@ -25,15 +25,15 @@ const WatchlistrWeb = () => {
 
   return (
     <div className="coding-background">
-      <div className="portfolio">
-      <div className="section">
-        <div className="centered-content">
-          <a href="https://watchlistr-web.vercel.app" target="_blank" rel="noopener noreferrer" className="section-title link-font">Watchlistr</a>
-          <div className="project-image-container">
-          <img src={WatchlistrWebScreens[watchlistrIndex]} alt={`Project ${watchlistrIndex + 1}`} className="project-image" style={{width: '100%', maxHeight: '500px'}}/>
+      <div className="project">
+        <div className="section">
+          <div className="centered-content">
+            <a href="https://watchlistr-web.vercel.app" target="_blank" rel="noopener noreferrer" className="section-title link-font">Watchlistr</a>
+            <div className="project-image-container">
+            <img src={WatchlistrWebScreens[watchlistrIndex]} alt={`Project ${watchlistrIndex + 1}`} className="project-image" style={{width: '100%', maxHeight: '500px'}}/>
+            </div>
           </div>
         </div>
-      </div>
       </div>
     </div>
   );

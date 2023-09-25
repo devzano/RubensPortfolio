@@ -27,21 +27,21 @@ const Navbar = () => {
       {isOpen ? (
         <div className="navbar">
           <ul className="navbar-list">
-            <li><Link to="/" onClick={() => setIsOpen(false)}>Home</Link></li>
-            <li>
-              <span onClick={() => setWebDropdownOpen(!isWebDropdownOpen)}>Web</span>
+            <li><Link className="navbar-link" to="/" onClick={() => setIsOpen(false)}>Home</Link></li>
+            <li onMouseEnter={() => setWebDropdownOpen(true)} onMouseLeave={() => setWebDropdownOpen(false)}>
+              <span className="navbar-link">Web</span>
               {isWebDropdownOpen && (
                 <ul>
-                  <li><Link to="/watchlistr-web" onClick={() => setIsOpen(false)}>Watchlistr</Link></li>
+                  <li><Link className="navbar-link" to="/watchlistr-web" onClick={() => setIsOpen(false)}>Watchlistr</Link></li>
                 </ul>
               )}
             </li>
-            <li>
-              <span onClick={() => setMobileDropdownOpen(!isMobileDropdownOpen)}>iOS</span>
+            <li onMouseEnter={() => setMobileDropdownOpen(true)} onMouseLeave={() => setMobileDropdownOpen(false)}>
+              <span className="navbar-link">iOS</span>
               {isMobileDropdownOpen && (
                 <ul>
-                  <li><Link to="/reciperealm" onClick={() => setIsOpen(false)}>RecipeRealm</Link></li>
-                  <li><Link to="/watchlistr-ios" onClick={() => setIsOpen(false)}>Watchlistr</Link></li>
+                  <li><Link className="navbar-link" to="/reciperealm" onClick={() => setIsOpen(false)}>RecipeRealm</Link></li>
+                  <li><Link className="navbar-link" to="/watchlistr-ios" onClick={() => setIsOpen(false)}>Watchlistr</Link></li>
                 </ul>
               )}
             </li>

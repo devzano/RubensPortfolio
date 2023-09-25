@@ -43,14 +43,14 @@
 }
 
 .navbar-list > div {
-  position: relative; /* Ensure the dropdown is positioned relative to the hovered link */
+  position: relative;
 }
 
 .dropdown {
   display: none;
   position: absolute;
   left: 100%;
-  top: 0; /* Align the top of the dropdown with the top of the hovered link */
+  top: 0;
   min-width: 150px;
   background-color: #1a1a1a;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);

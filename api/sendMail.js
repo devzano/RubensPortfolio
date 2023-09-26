@@ -5,13 +5,13 @@ module.exports = async (req, res) => {
     return res.status(405).end();
   }
 
-  const { firstName, lastName, email } = req.body;
+  const {firstName, lastName, email} = req.body;
 
   let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_APP_PASSWORD
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_APP_PASSWORD
     }
   });
 

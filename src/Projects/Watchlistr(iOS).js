@@ -24,7 +24,7 @@ const WatchlistriOS = () => {
     const interval = setInterval(() => {
       setCurrentSet((prevSet) => (prevSet + 1) % 3);
     }, 4000);
-    return () => clearInterval(interval);
+    return() => clearInterval(interval);
   }, []);
 
   const handleBetaButtonClick = () => {
@@ -33,24 +33,28 @@ const WatchlistriOS = () => {
 
   return (
     <div className="coding-background">
-      <div className="project">
-        <div className="section">
-          <div className="centered-content">
-            <a href="https://github.com/devzano/Watchlistr-iOS" target="_blank" rel="noopener noreferrer" className="section-title link-font">Watchlistr (iOS)</a>
-            <br/>
-            <button onClick={handleBetaButtonClick} className="beta-button">Beta Testing</button>
+      <h1 className="title">
+        <a href="https://github.com/devzano/Watchlistr-iOS" target="_blank" rel="noopener noreferrer" className="section-title link-font">Watchlistr</a>
+      </h1>
+      <div className="centered-content">
+        <button onClick={handleBetaButtonClick}
+          className="beta-button">Beta Testing</button>
+        <div className="project">
+          <div className="sections-container">
+            <div className="section">
               <div className="project-image-container">
                 <table className="rounded-images-table">
-                  <tr>
-                    {[0, 1, 2, 3].map(i => (
-                      <td align="center" key={i}>
+                  <tr> {
+                    [0, 1, 2, 3].map(i => (
+                      <td align="center"
+                        key={i}>
                         <img src={WatchlistrScreenshots[i + currentSet * 4]} alt={`Watchlistr View ${i + currentSet * 4}`} width="300"/>
                       </td>
-                    ))}
-                  </tr>
+                    ))
+                  } </tr>
                 </table>
               </div>
-            <style jsx>{`.project-image-container {transition: opacity 1s;}`}</style>
+            </div>
           </div>
         </div>
       </div>

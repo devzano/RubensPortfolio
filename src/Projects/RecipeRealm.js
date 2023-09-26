@@ -20,7 +20,7 @@ const RecipeRealm = () => {
     const interval = setInterval(() => {
       setCurrentSet((prevSet) => (prevSet + 1) % 2);
     }, 4000);
-    return () => clearInterval(interval)
+    return() => clearInterval(interval)
   }, []);
 
   const handleBetaButtonClick = () => {
@@ -29,22 +29,27 @@ const RecipeRealm = () => {
 
   return (
     <div className="coding-background">
-      <div className="project">
-        <div className="section">
-          <div className="centered-content">
-            <a href="https://apps.apple.com/us/app/reciperealm/id6458877177" target="_blank" rel="noopener noreferrer" className="section-title link-font">RecipeRealm</a>
-            <br/>
-            <button onClick={handleBetaButtonClick} className="beta-button">Beta Testing</button>
-            <div className="project-image-container">
-              <table className="rounded-images-table">
-                <tr>
-                    {[0, 1, 2, 3].map(i => (
-                      <td align="center" key={i}>
+      <h1 className="title">
+        <a href="https://apps.apple.com/us/app/reciperealm/id6458877177" target="_blank" rel="noopener noreferrer" className="section-title link-font">RecipeRealm</a>
+      </h1>
+      <div className="centered-content">
+        <button onClick={handleBetaButtonClick}
+          className="beta-button">Beta Testing</button>
+        <div className="project">
+          <div className="sections-container">
+            <div className="section">
+              <div className="project-image-container">
+                <table className="rounded-images-table">
+                  <tr> {
+                    [0, 1, 2, 3].map(i => (
+                      <td align="center"
+                        key={i}>
                         <img src={RecipeRealmScreenshots[i + currentSet * 4]} alt={`RecipeRealm View ${i + currentSet * 4}`} width="300"/>
                       </td>
-                    ))}
-                </tr>
-              </table>
+                    ))
+                  } </tr>
+                </table>
+              </div>
             </div>
           </div>
         </div>

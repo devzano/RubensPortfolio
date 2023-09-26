@@ -20,17 +20,21 @@ const WatchlistrWeb = () => {
     const interval = setInterval(() => {
       setWatchlistrIndex((prevIndex) => (prevIndex + 1) % WatchlistrWebScreens.length);
     }, 4000);
-    return () => clearInterval(interval);
+    return() => clearInterval(interval);
   }, [WatchlistrWebScreens.length]);
 
   return (
     <div className="coding-background">
-      <div className="project">
-        <div className="section">
-          <div className="centered-content">
-            <a href="https://watchlistr-web.vercel.app" target="_blank" rel="noopener noreferrer" className="section-title link-font">Watchlistr</a>
-            <div className="project-image-container">
-            <img src={WatchlistrWebScreens[watchlistrIndex]} alt={`Project ${watchlistrIndex + 1}`} className="project-image" style={{width: '100%', maxHeight: '500px'}}/>
+      <h1 className="title">
+        <a href="https://watchlistr-web.vercel.app" target="_blank" rel="noopener noreferrer" className="section-title link-font">Watchlistr</a>
+      </h1>
+      <div className="centered-content">
+        <div className="project">
+          <div className="sections-container">
+            <div className="section">
+              <div className="project-image-container">
+                <img src={WatchlistrWebScreens[watchlistrIndex]} alt={`Project ${watchlistrIndex + 1}`} className="project-image" style={{width: '100%', maxHeight: '500px'}}/>
+              </div>
             </div>
           </div>
         </div>

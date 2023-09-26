@@ -1,7 +1,27 @@
 import React, {useEffect} from 'react';
 import './Portfolio.css';
 
-const skills = ["HTML", "CSS", "JavaScript", "Python", "React", "Swift", "Flask", "ExpressJS", "NodeJS", "GIT", "PostgresSQL", "MySQL", "Data Analysis", "PHPMyAdmin", "Algorithms", "UI/UX Design", "Debugging", "Testing", "Full-Stack Developer",];
+const skills = [
+  "HTML",
+  "CSS",
+  "JavaScript",
+  "Python",
+  "React",
+  "Swift",
+  "Flask",
+  "ExpressJS",
+  "NodeJS",
+  "GIT",
+  "PostgresSQL",
+  "MySQL",
+  "Data Analysis",
+  "PHPMyAdmin",
+  "Algorithms",
+  "UI/UX Design",
+  "Debugging",
+  "Testing",
+  "Full-Stack Developer",
+];
 
 const Portfolio = () => {
   useEffect(() => {
@@ -16,26 +36,31 @@ const Portfolio = () => {
   return (
     <div className="coding-background">
       <h1 className="title">My Portfolio</h1>
-      <div className="portfolio">
+      <div className="project">
         <div className="sections-container">
-        <section className="section">
-          <h2 className="section-title">About Me</h2>
+          <section className="section">
+            <h2 className="section-title">About Me</h2>
             <p>Motivated and driven, with a passion for software engineering. Currently seeking an entry-level position to acquire valuable experience in the field. Eager to contribute to a team and collaborate towards the attainment of company objectives.</p>
             <br/>
             <br/>
-          <h2 className="section-title">Contact</h2>
-            <p><a href="https://www.linkedin.com/in/rubenmanzano-se/">LinkedIn</a></p>
-            <p><a href="mailto:rmanzano.se@gmail.com">Email</a> - <a href="tel:3053232827">Phone</a> - <a href="sms:3053232827">Text</a></p>
-        </section>
-        <section className="section">
+            <h2 className="section-title">Contact</h2>
+            <p>
+              <a href="https://www.linkedin.com/in/rubenmanzano-se/">LinkedIn</a>
+            </p>
+            <p>
+              <a href="mailto:rmanzano.se@gmail.com">Email</a>
+              -
+              <a href="tel:3053232827">Phone</a>
+              -
+              <a href="sms:3053232827">Text</a>
+            </p>
+          </section>
+          <section className="section">
             <h2 className="section-title">Skills</h2>
             <ul className="skills-list">
-              {skills.map((skill, index) => (
-                <li key={index} className="skill">
-                  {skill}
-                </li>
-              ))}
-            </ul>
+              {
+              skills.map((skill, index) => (<li key={index} className="skill"> {skill} </li>))
+            } </ul>
           </section>
         </div>
       </div>

@@ -18,13 +18,17 @@ const App = () => {
         {isMobile ? (
           <div className="mobile"></div>
         ) : (
-          <DynamicBackground/>
-        )}
+          <DynamicBackground/>)
+        }
         <Routes>
-          <Route path="/" element={<Portfolio/>}/>
-          <Route path="/watchlistr-web" element={<WatchlistrWeb/>}/>
-          <Route path="/reciperealm" element={<RecipeRealm/>}/>
-          <Route path="/watchlistr-ios" element={<WatchlistriOS/>}/>
+          <Route path="/"
+            element={<Portfolio/>}/>
+          <Route path="/watchlistr-web"
+            element={<WatchlistrWeb/>}/>
+          <Route path="/reciperealm"
+            element={<RecipeRealm/>}/>
+          <Route path="/watchlistr-ios"
+            element={<WatchlistriOS/>}/>
         </Routes>
       </div>
     </Router>

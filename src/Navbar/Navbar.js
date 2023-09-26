@@ -45,6 +45,7 @@ const Navbar = () => {
                 </div>
               )}
             </div>
+            <Link className="navbar-link" to="/projects" onClick={() => setIsOpen(false)}>All Projects</Link>
           </div>
         </div>
       ) : (

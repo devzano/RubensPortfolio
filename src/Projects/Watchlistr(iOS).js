@@ -21,15 +21,18 @@ const WatchlistriOS = () => {
   const [currentSet, setCurrentSet] = useState(0);
 
   useEffect(() => {
+    const maxSets = window.innerWidth <= 768 ? WatchlistrScreenshots.length / 2 : WatchlistrScreenshots.length / 4;
     const interval = setInterval(() => {
-      setCurrentSet((prevSet) => (prevSet + 1) % 3);
+      setCurrentSet(prevSet => (prevSet + 1) % maxSets);
     }, 4000);
-    return() => clearInterval(interval);
-  }, []);
+    return () => clearInterval(interval);
+  }, [WatchlistrScreenshots.length]);
 
   const handleBetaButtonClick = () => {
     window.open("https://testflight.apple.com/join/5fAq7d4d", "_blank");
   }
+
+  const numberOfImages = window.innerWidth <= 768 ? 2 : 4;
 
   return (
     <div className="coding-background">
@@ -43,16 +46,17 @@ const WatchlistriOS = () => {
           <div className="sections-container">
             <div className="section">
               <div className="project-image-container">
-                <table className="rounded-images-table">
-                  <tr> {
-                    [0, 1, 2, 3].map(i => (
-                      <td align="center"
-                        key={i}>
-                        <img src={WatchlistrScreenshots[i + currentSet * 4]} alt={`Watchlistr View ${i + currentSet * 4}`} width="300"/>
-                      </td>
-                    ))
-                  } </tr>
-                </table>
+              <table className="rounded-images-table">
+                <tr> {
+                  Array.from({length: numberOfImages}).map((_, i) => (
+                    <td align="center" key={i}>
+                      <img src={WatchlistrScreenshots[i + currentSet * numberOfImages]}
+                           alt={`Watchlistr View ${i + currentSet * numberOfImages}`}
+                           width="300"/>
+                    </td>
+                  ))
+                } </tr>
+              </table>
               </div>
             </div>
           </div>

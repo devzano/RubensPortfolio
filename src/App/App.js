@@ -7,6 +7,7 @@ import Portfolio from '../Portfolio/Portfolio';
 import WatchlistrWeb from '../Projects/Watchlistr(Web)';
 import RecipeRealm from '../Projects/RecipeRealm';
 import WatchlistriOS from '../Projects/Watchlistr(iOS)';
+import Projects from '../Projects/Projects';
 import './App.css';
 import '../Navbar/Navbar.css';
 
@@ -29,6 +30,8 @@ const App = () => {
             element={<RecipeRealm/>}/>
           <Route path="/watchlistr-ios"
             element={<WatchlistriOS/>}/>
+          <Route path="/projects"
+            element={<Projects/>}/>
         </Routes>
       </div>
     </Router>

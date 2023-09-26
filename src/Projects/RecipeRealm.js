@@ -17,15 +17,18 @@ const RecipeRealm = () => {
   const [currentSet, setCurrentSet] = useState(0);
 
   useEffect(() => {
+    const maxSets = window.innerWidth <= 768 ? RecipeRealmScreenshots.length / 2 : RecipeRealmScreenshots.length / 4;
     const interval = setInterval(() => {
-      setCurrentSet((prevSet) => (prevSet + 1) % 2);
+      setCurrentSet(prevSet => (prevSet + 1) % maxSets);
     }, 4000);
-    return() => clearInterval(interval)
-  }, []);
+    return () => clearInterval(interval);
+  }, [RecipeRealmScreenshots.length]);
 
   const handleBetaButtonClick = () => {
     window.open("https://testflight.apple.com/join/0ox0x9Rq", "_blank");
   }
+
+  const numberOfImages = window.innerWidth <= 768 ? 2 : 4;
 
   return (
     <div className="coding-background">
@@ -39,16 +42,17 @@ const RecipeRealm = () => {
           <div className="sections-container">
             <div className="section">
               <div className="project-image-container">
-                <table className="rounded-images-table">
-                  <tr> {
-                    [0, 1, 2, 3].map(i => (
-                      <td align="center"
-                        key={i}>
-                        <img src={RecipeRealmScreenshots[i + currentSet * 4]} alt={`RecipeRealm View ${i + currentSet * 4}`} width="300"/>
-                      </td>
-                    ))
-                  } </tr>
-                </table>
+              <table className="rounded-images-table">
+                <tr> {
+                  Array.from({length: numberOfImages}).map((_, i) => (
+                    <td align="center" key={i}>
+                      <img src={RecipeRealmScreenshots[i + currentSet * numberOfImages]}
+                           alt={`RecipeRealm View ${i + currentSet * numberOfImages}`}
+                           width="300"/>
+                    </td>
+                  ))
+                } </tr>
+              </table>
               </div>
             </div>
           </div>

@@ -8,7 +8,6 @@
 .project-image-container {
   max-width: 1200px;
   margin: 20px auto;
-  z-index: 1;
 }
 
 .project-image {
@@ -24,6 +23,7 @@
   width: 100%;
   height: auto;
   object-fit: contain;
+  transition: opacity 1s;
 }
 
 .beta-button {

@@ -1,6 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import '../Portfolio/Portfolio.css';
 import '../Projects/Projects.css';
+import githubLogo from '../Projects/CodingLogos/github(light).png';
+import xcodeLogo from '../Projects/CodingLogos/xcode.png'
+import coredataLogo from '../Projects/CodingLogos/coredata.png'
+import switftuiLogo from '../Projects/CodingLogos/swiftui.png';
 
 const RecipeRealm = () => {
   const RecipeRealmScreenshots = [
@@ -30,10 +34,17 @@ const RecipeRealm = () => {
 
   const numberOfImages = window.innerWidth <= 768 ? 2 : 4;
 
+  const builtWithLogos = [
+    xcodeLogo,
+    coredataLogo,
+    switftuiLogo,
+    githubLogo
+  ];
+
   return (
     <div className="coding-background">
       <h1 className="title">
-        <a href="https://apps.apple.com/us/app/reciperealm/id6458877177" target="_blank" rel="noopener noreferrer" className="section-title link-font">RecipeRealm</a>
+        <a href="https://apps.apple.com/us/app/reciperealm/id6458877177" target="_blank" rel="noopener noreferrer" className="section-title">RecipeRealm</a>
       </h1>
       <div className="centered-content">
         <button onClick={handleBetaButtonClick}
@@ -42,7 +53,7 @@ const RecipeRealm = () => {
           <div className="sections-container">
             <div className="section">
               <div className="project-image-container">
-              <table className="rounded-images-table">
+              <table className="rounded-images-table centered-images-table">
                 <tr> {
                   Array.from({length: numberOfImages}).map((_, i) => (
                     <td align="center" key={i}>
@@ -53,6 +64,22 @@ const RecipeRealm = () => {
                   ))
                 } </tr>
               </table>
+              </div>
+              <p className="project-description">
+              Discover a world of flavors with RecipeRealm. Easily create, store, and edit diverse recipes with images, prep/cook times, ingredients, and detailed steps. Explore new recipes with the in-app browser, or capture ingredient lits from web pages. Find recipes quickly with the search bar. Enjoy one of my own recipes, included when you first install. My app is customizable by changing the app tint, sharing/importing recipes, and creating folders to group recipes. Elevate your cooking journey today!
+              </p>
+              <div className="logo-container">
+                {builtWithLogos.map((logo, index) => (
+                  <span key={index}>
+                    {index === builtWithLogos.length - 1 ? (
+                      <a href="https://github.com/devzano/RecipeRealm" target="_blank" rel="noopener noreferrer">
+                        <img src={logo} alt={`Logo ${index + 1}`} className="logo" />
+                      </a>
+                    ) : (
+                      <img src={logo} alt={`Logo ${index + 1}`} className="logo" />
+                    )}
+                  </span>
+                ))}
               </div>
             </div>
           </div>

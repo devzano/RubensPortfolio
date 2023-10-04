@@ -1,6 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import '../Portfolio/Portfolio.css';
 import '../Projects/Projects.css';
+import githubLogo from '../Projects/CodingLogos/github(light).png';
+import xcodeLogo from '../Projects/CodingLogos/xcode.png'
+import switftuiLogo from '../Projects/CodingLogos/swiftui.png';
+import firebaseLogo from '../Projects/CodingLogos/firebase.png';
 
 const WatchlistriOS = () => {
   const WatchlistrScreenshots = [
@@ -34,10 +38,17 @@ const WatchlistriOS = () => {
 
   const numberOfImages = window.innerWidth <= 768 ? 2 : 4;
 
+  const builtWithLogos = [
+    xcodeLogo,
+    switftuiLogo,
+    firebaseLogo,
+    githubLogo
+  ];
+
   return (
     <div className="coding-background">
       <h1 className="title">
-        <a href="https://github.com/devzano/Watchlistr-iOS" target="_blank" rel="noopener noreferrer" className="section-title link-font">Watchlistr</a>
+        <a href="https://github.com/devzano/Watchlistr-iOS" target="_blank" rel="noopener noreferrer" className="section-title">Watchlistr</a>
       </h1>
       <div className="centered-content">
         <button onClick={handleBetaButtonClick}
@@ -46,7 +57,7 @@ const WatchlistriOS = () => {
           <div className="sections-container">
             <div className="section">
               <div className="project-image-container">
-              <table className="rounded-images-table">
+              <table className="rounded-images-table centered-images-table">
                 <tr> {
                   Array.from({length: numberOfImages}).map((_, i) => (
                     <td align="center" key={i}>
@@ -57,6 +68,20 @@ const WatchlistriOS = () => {
                   ))
                 } </tr>
               </table>
+              </div>
+              <p className="project-description">Watchlistr is designed from my website with a different implentation, with the help of Apple I am able to let users keep track of movies and TV shows they'd like to watch when they create a Watchlist. With an intuitive UI and easy-to-navigate tabs, users can effortlessly browse through movies, TV shows, and even see where they can watch them based on available providers.</p>
+              <div className="logo-container">
+                {builtWithLogos.map((logo, index) => (
+                  <span key={index}>
+                    {index === builtWithLogos.length - 1 ? (
+                      <a href="https://github.com/devzano/Watchlistr-iOS" target="_blank" rel="noopener noreferrer">
+                        <img src={logo} alt={`Logo ${index + 1}`} className="logo" />
+                      </a>
+                    ) : (
+                      <img src={logo} alt={`Logo ${index + 1}`} className="logo" />
+                    )}
+                  </span>
+                ))}
               </div>
             </div>
           </div>

@@ -26,6 +26,18 @@
   transition: opacity 1s;
 }
 
+.centered-images-table {
+  margin: 0 auto;
+}
+
+.project-description {
+  font-size: 18px;
+  margin: 20px 0;
+  text-align: center;
+  color: cornflowerblue;
+  line-height: 1.4;
+}
+
 .beta-button {
   background-color: #23395B;
   color: white;
@@ -85,4 +97,19 @@ img {
   -webkit-user-drag: none;
   -webkit-user-select: none;
   -ms-user-select: none;
+}
+
+.built-with-section {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.logo-container {
+  margin-top: 10px;
+}
+
+.logo {
+  width: 50px;
+  height: auto;
+  margin-right: 10px;
 }

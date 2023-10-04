@@ -82,8 +82,9 @@
 .next-slide {
   min-width: 100%;
   transition: transform 0.3s;
-  height: auto;
-  display: flex; 
+  max-height: 400px;
+  overflow-y: auto;
+  display: flex;
   flex-direction: column;
 }
 

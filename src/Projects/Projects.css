@@ -75,6 +75,7 @@
   display: flex;
   transition: transform 0.3s;
   transform: translateX(0%);
+  min-height: auto;
 }
 
 .current-slide,

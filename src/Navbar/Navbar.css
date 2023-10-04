@@ -5,6 +5,7 @@
   font-size: 24px;
   cursor: pointer;
   color: cornflowerblue;
+  z-index: 2;
 }
 
 .navbar {

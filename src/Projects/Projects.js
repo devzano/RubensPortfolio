@@ -44,6 +44,8 @@ const Projects = () => {
     >
       <h2 className="section-title">Projects</h2>
       <div className="centered-content">
+        <div className="sections-container">
+<div className="section">
       <div className="slider">
         <p className="swipe-prompt">swipe to see more projects</p>
         <div className="project">
@@ -54,6 +56,8 @@ const Projects = () => {
             </div>
           ))}
         </div>
+      </div>
+      </div>
       </div>
       </div>
       </div>

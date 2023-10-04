@@ -45,7 +45,7 @@ const Projects = () => {
       <h2 className="section-title">Projects</h2>
       <div className="centered-content">
       <div className="slider">
-        <p className="swipe-prompt">hold and swipe to see more projects</p>
+        <p className="swipe-prompt">swipe to see more projects</p>
         <div className="project">
         <div className="slide-container" style={{transform: slideTransform}}>
           {slides.map((slide, index) => (

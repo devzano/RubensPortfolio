@@ -66,7 +66,7 @@ const RecipeRealm = () => {
               </table>
               </div>
               <p className="project-description">
-              Discover a world of flavors with RecipeRealm. Easily create, store, and edit diverse recipes with images, prep/cook times, ingredients, and detailed steps. Explore new recipes with the in-app browser, or capture ingredient lits from web pages. Find recipes quickly with the search bar. Enjoy one of my own recipes, included when you first install. My app is customizable by changing the app tint, sharing/importing recipes, and creating folders to group recipes. Elevate your cooking journey today!
+              Discover a world of flavors with RecipeRealm. Easily create, store, and edit diverse recipes with images, prep/cook times, ingredients, and detailed steps. Explore new recipes with the in-app browser and capture its ingredient list from the web page from the scan button! Find your recipes quickly with the search bar. I’ve included one of my own recipes when you first install, hope you enjoy! I made my app customizable by letting you change the tint color, share and import recipes with each other, also create folders to group recipes. Elevate your cooking journey today!
               </p>
               <div className="logo-container">
                 {builtWithLogos.map((logo, index) => (

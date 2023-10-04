@@ -45,10 +45,13 @@ const Projects = () => {
       <h2 className="section-title">Projects</h2>
       <div className="slider">
         <p className="swipe-prompt">swipe to see more projects</p>
-        <div className="slide-container" style={{transform: slideTransform}}>
+        <div className="slide-container" style={{ transform: slideTransform }}>
           {slides.map((slide, index) => (
-            <div key={index} className={index === currentSlide ? "current-slide" : "next-slide"}>
-              {slide}
+            <div
+              key={index}
+              className={index === currentSlide ? 'current-slide' : 'next-slide'}
+            >
+              {index === currentSlide && slide}
             </div>
           ))}
         </div>

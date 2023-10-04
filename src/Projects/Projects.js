@@ -3,6 +3,7 @@ import WatchlistrWeb from '../Projects/Watchlistr(Web)';
 import RecipeRealm from '../Projects/RecipeRealm';
 import WatchlistriOS from '../Projects/Watchlistr(iOS)';
 import '../Projects/Projects.css';
+import '../Portfolio/Portfolio.css';
 
 const Projects = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -42,8 +43,10 @@ const Projects = () => {
       onMouseLeave={() => isDragging && setIsDragging(false)}
     >
       <h2 className="section-title">Projects</h2>
+      <div className="centered-content">
       <div className="slider">
         <p className="swipe-prompt">hold and swipe to see more projects</p>
+        <div className="project">
         <div className="slide-container" style={{transform: slideTransform}}>
           {slides.map((slide, index) => (
             <div key={index} className={index === currentSlide ? "current-slide" : "next-slide"}>
@@ -51,6 +54,8 @@ const Projects = () => {
             </div>
           ))}
         </div>
+      </div>
+      </div>
       </div>
     </div>
   );

@@ -43,12 +43,8 @@ const Projects = () => {
       onMouseLeave={() => isDragging && setIsDragging(false)}
     >
       <h2 className="section-title">Projects</h2>
-      <div className="centered-content">
       <div className="slider">
         <p className="swipe-prompt">swipe to see more projects</p>
-        <div className="project">
-        <div className="sections-container">
-        <div className="section">
         <div className="slide-container" style={{transform: slideTransform}}>
           {slides.map((slide, index) => (
             <div key={index} className={index === currentSlide ? "current-slide" : "next-slide"}>
@@ -56,10 +52,6 @@ const Projects = () => {
             </div>
           ))}
         </div>
-      </div>
-      </div>
-      </div>
-      </div>
       </div>
     </div>
   );

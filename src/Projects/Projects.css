@@ -75,17 +75,14 @@
   display: flex;
   transition: transform 0.3s;
   transform: translateX(0%);
-  height: auto;
+  min-height: auto;
 }
 
 .current-slide,
 .next-slide {
   min-width: 100%;
   transition: transform 0.3s;
-  max-height: 400px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
+  min-height: auto;
 }
 
 .swipe-prompt {

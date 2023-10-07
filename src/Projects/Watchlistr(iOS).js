@@ -69,16 +69,16 @@ const WatchlistriOS = () => {
                 } </tr>
               </table>
               </div>
-              <p className="project-description">Watchlistr is designed from my initial website with a different implentation, with the help of Apple & Google, I am able to let users create an account to keep track of their favorite movies and TV shows when added to their Watchlist. With an intuitive UI and easy-to-navigate tabs, users can effortlessly browse through movies, TV shows, and even see where they can watch them based on available providers.</p>
+              <p className="project-description">Watchlistr is designed from my initial website with a different implantation, with the help of Apple & Google, I am able to let users create an account to keep track of their favorite movies and TV shows when added to their Watchlist. With an intuitive UI and easy-to-navigate tabs, users can effortlessly browse through movies, TV shows, and even see where they can watch them based on available providers.</p>
               <div className="logo-container">
                 {builtWithLogos.map((logo, index) => (
                   <span key={index}>
                     {index === builtWithLogos.length - 1 ? (
                       <a href="https://github.com/devzano/Watchlistr-iOS" target="_blank" rel="noopener noreferrer">
-                        <img src={logo} alt={`Logo ${index + 1}`} className="logo" />
+                        <img src={logo} alt={`Logo ${index + 1}`} className="logo"/>
                       </a>
                     ) : (
-                      <img src={logo} alt={`Logo ${index + 1}`} className="logo" />
+                      <img src={logo} alt={`Logo ${index + 1}`} className="logo"/>
                     )}
                   </span>
                 ))}

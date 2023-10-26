@@ -9,13 +9,17 @@ import switftuiLogo from '../Projects/CodingLogos/swiftui.png';
 const RecipeRealm = () => {
   const RecipeRealmScreenshots = [
     "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(Home).png?raw=true",
+    "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(Options).png?raw=true",
     "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(Home2).png?raw=true",
-    "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(Share).png?raw=true",
-    "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(New).png?raw=true",
-    "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(New2).png?raw=true",
+    "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(ContextMenu).png?raw=true",
+    "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(CreateFolder).png?raw=true",
+    "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(NestedFolder).png?raw=true",
+    "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(InsideFolder).png?raw=true",
     "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(Detail).png?raw=true",
     "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(Detail2).png?raw=true",
-    "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(Edit).png?raw=true"
+    "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(Edit).png?raw=true",
+    "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(New).png?raw=true",
+    "https://github.com/devzano/RecipeRealm/raw/main/Screenshots/RecipeRealm%20(New2).png?raw=true"
   ];
 
   const [currentSet, setCurrentSet] = useState(0);

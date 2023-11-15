@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import '../Portfolio/Portfolio.css';
 import '../Projects/Projects.css';
-import '../MailForm/BetaSignupForm.css';
-import BetaSignupForm from '../MailForm/BetaSignupForm';
+import '../Projects/MailForm/BetaSignupForm.css';
+import BetaSignupForm from '../Projects/MailForm/BetaSignupForm';
 import githubLogo from '../Projects/CodingLogos/github(light).png';
 import xcodeLogo from '../Projects/CodingLogos/xcode.png'
 import switftuiLogo from '../Projects/CodingLogos/swiftui.png';
@@ -62,7 +62,7 @@ const WatchlistriOS = () => {
       <button onClick={handleAppStoreButtonClick} className="app-button">Available on the App Store</button>
         <p className="swipe-prompt">For a full experience of Watchlistr sign up below to test!</p>
         <button onClick={toggleBetaForm} className="app-button">Beta Signup</button>
-        {showBetaForm && <BetaSignupForm />}
+        {showBetaForm && <BetaSignupForm/>}
         <div className="project">
           <div className="sections-container">
             <div className="section">

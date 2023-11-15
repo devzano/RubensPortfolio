@@ -52,7 +52,7 @@ const RecipeRealm = () => {
       </h1>
       <div className="centered-content">
         <button onClick={handleBetaButtonClick}
-          className="beta-button">Beta Testing</button>
+          className="app-button">Beta Testing</button>
         <div className="project">
           <div className="sections-container">
             <div className="section">

@@ -57,7 +57,7 @@ const BetaSignupForm = () => {
             </form>
             {isSignedUp && (
                 <p>
-                    Thank you for signing up to test the last version of RecipeRealm!
+                    Thank you for signing up to test the last version!
                     We will send you an invitation shortly. In the meantime, download <a href="https://apps.apple.com/us/app/testflight/id899247664" target="_blank" rel="noopener noreferrer">TestFlight</a> from the Apple App Store. It's where you will install the latest version.
                 </p>
             )}

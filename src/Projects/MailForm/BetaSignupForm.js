@@ -36,7 +36,7 @@ const BetaSignupForm = () => {
     return (
         <div className="beta-signup-container">
             <h2 className="beta-signup-title">Sign up to beta test!</h2>
-            <h2 className="beta-signup-note">(Note: Make to use your Apple email thats used on your device.)</h2>
+            <h2 className="beta-signup-note">(Note: Make sure to use your Apple email that's used on your device.)</h2>
             <form onSubmit={handleSubmit}>
                 <div>
                     <label className="beta-signup-label">First Name:</label>

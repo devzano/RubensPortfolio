@@ -42,6 +42,7 @@ const Navbar = () => {
                 <div className="dropdown">
                   <Link className="navbar-link" to="/reciperealm" onClick={() => setIsOpen(false)}>RecipeRealm</Link>
                   <Link className="navbar-link" to="/watchlistr-ios" onClick={() => setIsOpen(false)}>Watchlistr</Link>
+                  <Link className="navbar-link" to="/echoexpense" onClick={() => setIsOpen(false)}>EchoExpense</Link>
                 </div>
               )}
             </div>

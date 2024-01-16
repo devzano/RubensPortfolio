@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import WatchlistrWeb from '../Projects/Watchlistr(Web)';
 import RecipeRealm from '../Projects/RecipeRealm';
 import WatchlistriOS from '../Projects/Watchlistr(iOS)';
+import EchoExpense from '../Projects/EchoExpense';
 import '../Projects/Projects.css';
 import '../Portfolio/Portfolio.css';
 
@@ -9,7 +10,7 @@ const Projects = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [startX, setStartX] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
-  const slides = [<WatchlistrWeb/>, <RecipeRealm/>, <WatchlistriOS/>];
+  const slides = [<WatchlistrWeb/>, <RecipeRealm/>, <WatchlistriOS/>, <EchoExpense/>];
 
   const handleStart = (clientX) => {
     setStartX(clientX);

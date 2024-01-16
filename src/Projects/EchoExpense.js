@@ -70,7 +70,7 @@ const EchoExpense = () => {
               </table>
               </div>
               <p className="project-description">
-              Elevate your financial management with Echo Expense. Effortlessly record and categorize your expenses, ensuring financial clarity and control. With Echo Expense, you can effortlessly create, edit, and organize your expenses. Take charge of your finances with Echo Expense.
+              Elevate your financial management with Echo Expense, a iOS application designed to empower you in managing your bills. With Echo Expense, you can seamlessly create, edit, and organize your bills while configuring timely personalized notifications for payments, ensuring financial clarity and control. Take charge of your finances and maintain a comprehensive record of your expenses, paid bills, and notifications with the precision and convenience of Echo Expense.
               </p>
               <div className="logo-container">
                 {builtWithLogos.map((logo, index) => (

@@ -56,7 +56,7 @@ const WatchlistriOS = () => {
   return (
     <div className="coding-background">
       <h1 className="title">
-        <a href="https://github.com/devzano/Watchlistr-iOS" target="_blank" rel="noopener noreferrer" className="section-title">Watchlistr</a>
+        <a href="https://apps.apple.com/us/app/watchlistr/id6459355223" target="_blank" rel="noopener noreferrer" className="section-title">Watchlistr</a>
       </h1>
       <div className="centered-content">
       <button onClick={handleAppStoreButtonClick} className="app-button">Available on the App Store</button>

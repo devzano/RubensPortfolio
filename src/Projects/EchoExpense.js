@@ -48,7 +48,7 @@ const EchoExpense = () => {
   return (
     <div className="coding-background">
       <h1 className="title">
-        <a href="https://github.com/devzano/EchoExpense" target="_blank" rel="noopener noreferrer" className="section-title">EchoExpense</a>
+        <a href="https://apps.apple.com/us/app/echoexpense/id6475660500" target="_blank" rel="noopener noreferrer" className="section-title">EchoExpense</a>
       </h1>
       <div className="centered-content">
       <button onClick={handleAppStoreButtonClick} className="app-button">Available on the App Store</button>

@@ -32,8 +32,8 @@ const EchoExpense = () => {
     return () => clearInterval(interval);
   }, [EchoExpenseScreenshots.length]);
 
-  const handleBetaButtonClick = () => {
-    window.open("https://testflight.apple.com/join/fk5oTPsy", "_blank");
+  const handleAppStoreButtonClick = () => {
+    window.open("https://apps.apple.com/us/app/echoexpense/id6475660500", "_blank");
   }
 
   const numberOfImages = window.innerWidth <= 768 ? 2 : 4;
@@ -51,8 +51,7 @@ const EchoExpense = () => {
         <a href="https://github.com/devzano/EchoExpense" target="_blank" rel="noopener noreferrer" className="section-title">EchoExpense</a>
       </h1>
       <div className="centered-content">
-        <button onClick={handleBetaButtonClick}
-          className="app-button">Beta Testing</button>
+      <button onClick={handleAppStoreButtonClick} className="app-button">Available on the App Store</button>
         <div className="project">
           <div className="sections-container">
             <div className="section">

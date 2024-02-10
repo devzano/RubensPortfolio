@@ -1,12 +1,12 @@
 import React, {useState, useEffect} from 'react';
-import '../Portfolio/Portfolio.css';
-import '../Projects/Projects.css';
-import '../Projects/MailForm/BetaSignupForm.css';
-import BetaSignupForm from '../MailForm/BetaSignupForm';
-import githubLogo from '../Projects/CodingLogos/github(light).png';
-import xcodeLogo from '../Projects/CodingLogos/xcode.png'
-import switftuiLogo from '../Projects/CodingLogos/swiftui.png';
-import firebaseLogo from '../Projects/CodingLogos/firebase.png';
+import '../../Portfolio/Portfolio.css';
+import '../../Projects/Projects.css';
+import '../../Projects/MailForm/BetaSignupForm.css';
+import BetaSignupForm from '../../MailForm/BetaSignupForm';
+import githubLogo from '../../Projects/CodingLogos/github(light).png';
+import xcodeLogo from '../../Projects/CodingLogos/xcode.png'
+import switftuiLogo from '../../Projects/CodingLogos/swiftui.png';
+import firebaseLogo from '../../Projects/CodingLogos/firebase.png';
 
 const WatchlistriOS = () => {
   const WatchlistrScreenshots = [

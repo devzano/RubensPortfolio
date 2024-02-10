@@ -8,18 +8,18 @@ import firebaseLogo from '../Projects/CodingLogos/firebase.png';
 
 const EchoExpense = () => {
   const EchoExpenseScreenshots = [
-    "https://github.com/devzano/EchoExpense/raw/main/Screenshots/EchoExpense%20(LoadingView).png?raw=true",
-    "https://github.com/devzano/EchoExpense/raw/main/Screenshots/EchoExpense%20(HomeView).png?raw=true",
-    "https://github.com/devzano/EchoExpense/raw/main/Screenshots/EchoExpense%20(AccountView).png?raw=true",
-    "https://github.com/devzano/EchoExpense/raw/main/Screenshots/EchoExpense%20(NewBillView2).png?raw=true",
-    "https://github.com/devzano/EchoExpense/raw/main/Screenshots/EchoExpense%20(NewBillView3).png?raw=true",
-    "https://github.com/devzano/EchoExpense/raw/main/Screenshots/EchoExpense%20(HomeView2).png?raw=true",
-    "https://github.com/devzano/EchoExpense/raw/main/Screenshots/EchoExpense%20(HomeView3).png?raw=true",
-    "https://github.com/devzano/EchoExpense/raw/main/Screenshots/EchoExpense%20(Details).png?raw=true",
-    "https://github.com/devzano/EchoExpense/raw/main/Screenshots/EchoExpense%20(Menu).png?raw=true",
-    "https://github.com/devzano/EchoExpense/raw/main/Screenshots/EchoExpense%20(AccountView2).png?raw=true",
-    "https://github.com/devzano/EchoExpense/raw/main/Screenshots/EchoExpense%20(AccountView3).png?raw=true",
-    "https://github.com/devzano/EchoExpense/raw/main/Screenshots/EchoExpense%20(CalendarView).png?raw=true"
+    "../Projects/EchoExpense/Screenshots/EchoExpense%20(LoadingView).png",
+    "../Projects/EchoExpense/Screenshots/EchoExpense%20(HomeView).png",
+    "../Projects/EchoExpense/Screenshots/EchoExpense%20(AccountView).png",
+    "../Projects/EchoExpense/Screenshots/EchoExpense%20(NewBillView2).png",
+    "../Projects/EchoExpense/Screenshots/EchoExpense%20(NewBillView3).png",
+    "../Projects/EchoExpense/Screenshots/EchoExpense%20(HomeView2).png",
+    "../Projects/EchoExpense/Screenshots/EchoExpense%20(HomeView3).png",
+    "../Projects/EchoExpense/Screenshots/EchoExpense%20(Details).png",
+    "../Projects/EchoExpense/Screenshots/EchoExpense%20(Menu).png",
+    "../Projects/EchoExpense/Screenshots/EchoExpense%20(AccountView2).png",
+    "../Projects/EchoExpense/Screenshots/EchoExpense%20(AccountView3).png",
+    "../Projects/EchoExpense/Screenshots/EchoExpense%20(CalendarView).png"
   ];
 
   const [currentSet, setCurrentSet] = useState(0);
@@ -75,7 +75,7 @@ const EchoExpense = () => {
                 {builtWithLogos.map((logo, index) => (
                   <span key={index}>
                     {index === builtWithLogos.length - 1 ? (
-                      <a href="https://github.com/devzano/EchoExpense" target="_blank" rel="noopener noreferrer">
+                      <a href="https://github.com/devzano" target="_blank" rel="noopener noreferrer">
                         <img src={logo} alt={`Logo ${index + 1}`} className="logo" />
                       </a>
                     ) : (

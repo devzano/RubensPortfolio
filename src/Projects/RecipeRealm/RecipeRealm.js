@@ -48,7 +48,8 @@ const RecipeRealm = () => {
   return (
     <div className="coding-background">
       <h1 className="title">
-        <a href="https://apps.apple.com/us/app/reciperealm/id6458877177" target="_blank" rel="noopener noreferrer" className="section-title">RecipeRealm</a>
+      {/* https://apps.apple.com/us/app/reciperealm/id6458877177 */}
+        <a href="https://testflight.apple.com/join/0ox0x9Rq" target="_blank" rel="noopener noreferrer" className="section-title">RecipeRealm</a>
       </h1>
       <div className="centered-content">
         <button onClick={handleBetaButtonClick}
@@ -76,7 +77,7 @@ const RecipeRealm = () => {
                 {builtWithLogos.map((logo, index) => (
                   <span key={index}>
                     {index === builtWithLogos.length - 1 ? (
-                      <a href="https://github.com/devzano/RecipeRealm" target="_blank" rel="noopener noreferrer">
+                      <a href="https://github.com/devzano" target="_blank" rel="noopener noreferrer">
                         <img src={logo} alt={`Logo ${index + 1}`} className="logo" />
                       </a>
                     ) : (

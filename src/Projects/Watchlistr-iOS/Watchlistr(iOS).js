@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import '../Portfolio/Portfolio.css';
 import '../Projects/Projects.css';
 import '../Projects/MailForm/BetaSignupForm.css';
-import BetaSignupForm from '../Projects/MailForm/BetaSignupForm';
+import BetaSignupForm from '../MailForm/BetaSignupForm';
 import githubLogo from '../Projects/CodingLogos/github(light).png';
 import xcodeLogo from '../Projects/CodingLogos/xcode.png'
 import switftuiLogo from '../Projects/CodingLogos/swiftui.png';
@@ -84,7 +84,7 @@ const WatchlistriOS = () => {
                 {builtWithLogos.map((logo, index) => (
                   <span key={index}>
                     {index === builtWithLogos.length - 1 ? (
-                      <a href="https://github.com/devzano/Watchlistr-iOS" target="_blank" rel="noopener noreferrer">
+                      <a href="https://github.com/devzano" target="_blank" rel="noopener noreferrer">
                         <img src={logo} alt={`Logo ${index + 1}`} className="logo"/>
                       </a>
                     ) : (

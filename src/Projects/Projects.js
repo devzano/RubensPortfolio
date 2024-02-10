@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import WatchlistrWeb from '../Projects/Watchlistr(Web)';
-import RecipeRealm from '../Projects/RecipeRealm';
-import WatchlistriOS from '../Projects/Watchlistr(iOS)';
-import EchoExpense from '../Projects/EchoExpense';
+import RecipeRealm from '../Projects/RecipeRealm/RecipeRealm';
+import WatchlistriOS from '../Projects/Watchlistr-iOS/Watchlistr(iOS)';
+import EchoExpense from '../Projects/EchoExpense/EchoExpense';
 import '../Projects/Projects.css';
 import '../Portfolio/Portfolio.css';
 

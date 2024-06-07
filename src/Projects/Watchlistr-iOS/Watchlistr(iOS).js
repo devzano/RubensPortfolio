@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import '../../Portfolio/Portfolio.css';
 import '../../Projects/Projects.css';
 import '../../Projects/MailForm/BetaSignupForm.css';
-import BetaSignupForm from '../MailForm/BetaSignupForm';
 import githubLogo from '../../Projects/CodingLogos/github(light).png';
 import xcodeLogo from '../../Projects/CodingLogos/xcode.png';
 import switftuiLogo from '../../Projects/CodingLogos/swiftui.png';
@@ -57,14 +56,12 @@ const WatchlistriOS = () => {
     }
   }, [WatchlistrScreenshots.length]);
 
-  const [showBetaForm, setShowBetaForm] = useState(false);
-
   const handleAppStoreButtonClick = () => {
     window.open("https://apps.apple.com/us/app/watchlistr/id6459355223", "_blank");
   };
 
-  const toggleBetaForm = () => {
-    setShowBetaForm(!showBetaForm);
+  const handleBetaSignupButtonClick = () => {
+    window.open("https://testflight.apple.com/join/5fAq7d4d", "_blank");
   };
 
   const calculateNumberOfImages = () => {
@@ -87,9 +84,8 @@ const WatchlistriOS = () => {
       </h1>
       <div className="centered-content">
         <button onClick={handleAppStoreButtonClick} className="app-button">Available on the App Store</button>
-        <p className="swipe-prompt">For a full experience of Watchlistr sign up below to test!</p>
-        <button onClick={toggleBetaForm} className="app-button">Beta Signup</button>
-        {showBetaForm && <BetaSignupForm />}
+        <p className="swipe-prompt">for a full experience of Watchlistr tap below to test!</p>
+        <button onClick={handleBetaSignupButtonClick} className="app-button">Beta</button>
         <div className="project">
           <div className="sections-container">
             <div className="section">

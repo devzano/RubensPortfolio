@@ -94,7 +94,7 @@ const RecipeRealm = () => {
         <a href="https://testflight.apple.com/join/0ox0x9Rq" target="_blank" rel="noopener noreferrer" className="section-title">RecipeRealm</a>
       </h1>
       <div className="centered-content">
-        <button onClick={handleBetaButtonClick} className="app-button">Beta Testing</button>
+        <button onClick={handleBetaButtonClick} className="app-button">Beta</button>
         <div className="project">
           <div className="sections-container">
             <div className="section">

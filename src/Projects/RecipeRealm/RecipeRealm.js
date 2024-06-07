@@ -7,40 +7,56 @@ import coredataLogo from '../../Projects/CodingLogos/coredata.png';
 import switftuiLogo from '../../Projects/CodingLogos/swiftui.png';
 
 import WelcomeView from '../RecipeRealm/Screenshots/RecipeRealm(WelcomeView).png';
-import HomeView from '../RecipeRealm/Screenshots/RecipeRealm(HomeView).png';
 import GoogleSearchView from '../RecipeRealm/Screenshots/RecipeRealm(GoogleSearchView).png';
+import NewRecipeTabView from '../RecipeRealm/Screenshots/RecipeRealm(NewRecipeTab2View).png';
+import NewRecipeTab2View from '../RecipeRealm/Screenshots/RecipeRealm(NewRecipeTabView).png';
+import NewFolderView from '../RecipeRealm/Screenshots/RecipeRealm(NewFolderView).png';
 import DetailsView from '../RecipeRealm/Screenshots/RecipeRealm(DetailsView).png';
 import Details2View from '../RecipeRealm/Screenshots/RecipeRealm(Details2View).png';
 import EditDetailsView from '../RecipeRealm/Screenshots/RecipeRealm(EditDetailsView).png';
-import NewRecipeTabView from '../RecipeRealm/Screenshots/RecipeRealm(NewRecipeTabView).png';
-import RecipeAssistantView from '../RecipeRealm/Screenshots/RecipeRealm(RecipeAssistantView).png';
-import OptionsView from '../RecipeRealm/Screenshots/RecipeRealm(OptionsView).png';
+import EditDetails2View from '../RecipeRealm/Screenshots/RecipeRealm(EditDetails2View).png';
 import RecipeContextMenuView from '../RecipeRealm/Screenshots/RecipeRealm(RecipeContextMenuView).png';
-import NewFolderView from '../RecipeRealm/Screenshots/RecipeRealm(NewFolderView).png';
 import NestedView from '../RecipeRealm/Screenshots/RecipeRealm(NestedView).png';
 import FolderContextMenuView from '../RecipeRealm/Screenshots/RecipeRealm(FolderContextMenuView).png';
 import InsideFolderView from '../RecipeRealm/Screenshots/RecipeRealm(InsideFolderView).png';
 import InsideFolderContextMenuView from '../RecipeRealm/Screenshots/RecipeRealm(InsideFolderContextMenuView).png';
 import InsideRecipeFolderRecipeView from '../RecipeRealm/Screenshots/RecipeRealm(InsideRecipeFolderRecipeView).png';
+import InsideRecipeFolderEditRecipeView from '../RecipeRealm/Screenshots/RecipeRealm(InsideRecipeFolderEditRecipeView).png';
+import LoginView from '../RecipeRealm/Screenshots/RecipeRealm(LoginView).png';
+import CommunitySignupView from '../RecipeRealm/Screenshots/RecipeRealm(CommunitySignupView).png';
+import CommunityProfileMenuView from '../RecipeRealm/Screenshots/RecipeRealm(CommunityProfileMenuView).png';
+import CommunityNewPostView from '../RecipeRealm/Screenshots/RecipeRealm(CommunityNewPostView).png';
+import CommunityPostsSidemenuView from '../RecipeRealm/Screenshots/RecipeRealm(CommunityPostsSidemenuView).png';
+import RecipeAssistantView from '../RecipeRealm/Screenshots/RecipeRealm(RecipeAssistantView).png';
+import OptionsView from '../RecipeRealm/Screenshots/RecipeRealm(OptionsView).png';
+import ChangeTintView from '../RecipeRealm/Screenshots/RecipeRealm(ChangeTintView).png';
 
 const RecipeRealm = () => {
   const RecipeRealmScreenshots = [
     WelcomeView,
-    HomeView,
     GoogleSearchView,
+    NewRecipeTabView,
+    NewRecipeTab2View,
     DetailsView,
     Details2View,
     EditDetailsView,
-    NewRecipeTabView,
-    RecipeAssistantView,
-    OptionsView,
-    RecipeContextMenuView,
+    EditDetails2View,
     NewFolderView,
+    RecipeContextMenuView,
     NestedView,
     FolderContextMenuView,
     InsideFolderView,
     InsideFolderContextMenuView,
     InsideRecipeFolderRecipeView,
+    InsideRecipeFolderEditRecipeView,
+    LoginView,
+    CommunitySignupView,
+    CommunityProfileMenuView,
+    CommunityNewPostView,
+    CommunityPostsSidemenuView,
+    RecipeAssistantView,
+    OptionsView,
+    ChangeTintView
   ];
 
   const [currentSet, setCurrentSet] = useState(0);

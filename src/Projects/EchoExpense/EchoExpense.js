@@ -6,31 +6,47 @@ import xcodeLogo from '../../Projects/CodingLogos/xcode.png';
 import switftuiLogo from '../../Projects/CodingLogos/swiftui.png';
 import firebaseLogo from '../../Projects/CodingLogos/firebase.png';
 
+import LoginView from '../EchoExpense/Screenshots/EchoExpense(LoginView).png';
+import SignupView from '../EchoExpense/Screenshots/EchoExpense(SignupView).png';
 import LoadingView from '../EchoExpense/Screenshots/EchoExpense(LoadingView).png';
-import HomeView from '../EchoExpense/Screenshots/EchoExpense(HomeView).png';
-import AccountView from '../EchoExpense/Screenshots/EchoExpense(AccountView).png';
+import HomeNoBillPaydayView from '../EchoExpense/Screenshots/EchoExpense(HomeNoBillPaydayView).png';
+import NewBillPaydayMenuView from '../EchoExpense/Screenshots/EchoExpense(NewBillPaydayMenuView).png';
+import BlankNewBillPaydayView from '../EchoExpense/Screenshots/EchoExpense(BlankNewBillPaydayView).png';
 import NewBillView from '../EchoExpense/Screenshots/EchoExpense(NewBillView).png';
+import NewPaydayView from '../EchoExpense/Screenshots/EchoExpense(NewPaydayView).png';
 import NewBillView2 from '../EchoExpense/Screenshots/EchoExpense(NewBillView2).png';
+import NewBillView3 from '../EchoExpense/Screenshots/EchoExpense(NewBillView3).png';
 import HomeView2 from '../EchoExpense/Screenshots/EchoExpense(HomeView2).png';
+import AccountView from '../EchoExpense/Screenshots/EchoExpense(AccountView).png';
+import AccountView2 from '../EchoExpense/Screenshots/EchoExpense(AccountView2).png';
 import HomeView3 from '../EchoExpense/Screenshots/EchoExpense(HomeView3).png';
 import Details from '../EchoExpense/Screenshots/EchoExpense(Details).png';
 import Menu from '../EchoExpense/Screenshots/EchoExpense(Menu).png';
-import AccountView2 from '../EchoExpense/Screenshots/EchoExpense(AccountView2).png';
+import SideMenuView from '../EchoExpense/Screenshots/EchoExpense(SideMenuView).png';
+import HomeView4 from '../EchoExpense/Screenshots/EchoExpense(HomeView4).png';
 import AccountView3 from '../EchoExpense/Screenshots/EchoExpense(AccountView3).png';
 import CalendarView from '../EchoExpense/Screenshots/EchoExpense(CalendarView).png';
 
 const EchoExpense = () => {
   const EchoExpenseScreenshots = [
-    HomeView,
+    LoginView,
+    SignupView,
     LoadingView,
-    AccountView,
+    HomeNoBillPaydayView,
+    NewBillPaydayMenuView,
+    BlankNewBillPaydayView,
     NewBillView,
+    NewPaydayView,
     NewBillView2,
+    NewBillView3,
     HomeView2,
+    AccountView,
+    AccountView2,
     HomeView3,
     Details,
     Menu,
-    AccountView2,
+    SideMenuView,
+    HomeView4,
     AccountView3,
     CalendarView
   ];

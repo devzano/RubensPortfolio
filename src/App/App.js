@@ -4,7 +4,7 @@ import {isMobile} from 'react-device-detect';
 import DynamicBackground from './DynamicBackground';
 import Navbar from '../Navbar/Navbar';
 import Portfolio from '../Portfolio/Portfolio';
-import WatchlistrWeb from '../Projects/Watchlistr(Web)';
+import WatchlistrWeb from '../Projects/Watchlistr-Web/Watchlistr(Web)';
 import RecipeRealm from '../Projects/RecipeRealm/RecipeRealm';
 import WatchlistriOS from '../Projects/Watchlistr-iOS/Watchlistr(iOS)';
 import EchoExpense from '../Projects/EchoExpense/EchoExpense';

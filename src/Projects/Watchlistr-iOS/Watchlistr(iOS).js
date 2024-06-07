@@ -9,32 +9,40 @@ import switftuiLogo from '../../Projects/CodingLogos/swiftui.png';
 import firebaseLogo from '../../Projects/CodingLogos/firebase.png';
 
 import LoginView from '../Watchlistr-iOS/Screenshots/Watchlistr(LoginView).png';
-import MovieTabView from '../Watchlistr-iOS/Screenshots/Watchlistr(MovieTabView).png';
-import TVShowTabView from '../Watchlistr-iOS/Screenshots/Watchlistr(TVShowTabView).png';
+import SignupView from '../Watchlistr-iOS/Screenshots/Watchlistr(SignupView).png';
 import ProfileTabView from '../Watchlistr-iOS/Screenshots/Watchlistr(ProfileTabView).png';
+import ProfileTabViewTextColorsView from '../Watchlistr-iOS/Screenshots/Watchlistr(ProfileTabViewTextColorsView).png';
+import MovieTabView from '../Watchlistr-iOS/Screenshots/Watchlistr(MovieTabView).png';
 import BlankMovieSearchView from '../Watchlistr-iOS/Screenshots/Watchlistr(BlankMovieSearchView).png';
 import MovieSearchResultsView from '../Watchlistr-iOS/Screenshots/Watchlistr(MovieSearchResultsView).png';
 import MovieDetailsView from '../Watchlistr-iOS/Screenshots/Watchlistr(MovieDetailsView).png';
-import MovieWatchlistView from '../Watchlistr-iOS/Screenshots/Watchlistr(MovieWatchlistView).png';
+import TVShowTabView from '../Watchlistr-iOS/Screenshots/Watchlistr(TVShowTabView).png';
 import BlankTVShowSearchView from '../Watchlistr-iOS/Screenshots/Watchlistr(BlankTVShowSearchView).png';
 import TVShowSearchResultsView from '../Watchlistr-iOS/Screenshots/Watchlistr(TVShowSearchResultsView).png';
 import TVShowDetailsView from '../Watchlistr-iOS/Screenshots/Watchlistr(TVShowDetailsView).png';
+import MovieWatchlistContextMenuView from '../Watchlistr-iOS/Screenshots/Watchlistr(MovieWatchlistContextMenuView).png';
+import MovieWatchlistView from '../Watchlistr-iOS/Screenshots/Watchlistr(MovieWatchlistView).png';
+import TVShowWatchlistContextMenuView from '../Watchlistr-iOS/Screenshots/Watchlistr(TVShowWatchlistContextMenuView).png';
 import TVShowWatchlistView from '../Watchlistr-iOS/Screenshots/Watchlistr(TVShowWatchlistView).png';
 
 const WatchlistriOS = () => {
   const WatchlistrScreenshots = [
     LoginView,
-    MovieTabView,
-    TVShowTabView,
+    SignupView,
     ProfileTabView,
+    ProfileTabViewTextColorsView,
+    MovieTabView,
     BlankMovieSearchView,
     MovieSearchResultsView,
     MovieDetailsView,
-    MovieWatchlistView,
+    TVShowTabView,
     BlankTVShowSearchView,
     TVShowSearchResultsView,
     TVShowDetailsView,
-    TVShowWatchlistView
+    MovieWatchlistView,
+    MovieWatchlistContextMenuView,
+    TVShowWatchlistView,
+    TVShowWatchlistContextMenuView
   ];
 
   const [currentSet, setCurrentSet] = useState(0);

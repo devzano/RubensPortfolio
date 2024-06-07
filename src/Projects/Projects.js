@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import WatchlistrWeb from '../Projects/Watchlistr(Web)';
+import WatchlistrWeb from '../Projects/Watchlistr-Web/Watchlistr(Web)';
 import RecipeRealm from '../Projects/RecipeRealm/RecipeRealm';
 import WatchlistriOS from '../Projects/Watchlistr-iOS/Watchlistr(iOS)';
 import EchoExpense from '../Projects/EchoExpense/EchoExpense';

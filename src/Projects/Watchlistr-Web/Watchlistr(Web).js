@@ -1,11 +1,11 @@
 import React, {useState, useEffect} from 'react';
-import '../Portfolio/Portfolio.css';
-import '../Projects/Projects.css';
-import githubLogo from '../Projects/CodingLogos/github(light).png'
-import reactLogo from '../Projects/CodingLogos/react.png'
-import vsLogo from '../Projects/CodingLogos/visualstudio.png'
-import jsLogo from '../Projects/CodingLogos/javascript.png'
-import mysqlLogo from '../Projects/CodingLogos/mysql.png';
+import '../../Portfolio/Portfolio.css';
+import '../../Projects/Projects.css';
+import githubLogo from '../../Projects/CodingLogos/github(light).png'
+import reactLogo from '../../Projects/CodingLogos/react.png'
+import vsLogo from '../../Projects/CodingLogos/visualstudio.png'
+import jsLogo from '../../Projects/CodingLogos/javascript.png'
+import mysqlLogo from '../../Projects/CodingLogos/mysql.png';
 const WatchlistrWeb = () => {
   const WatchlistrWebScreens = [
     "https://github.com/devzano/Watchlistr-Web/raw/main/React/src/styles/Screenshots/LoginPage.png?raw=true",

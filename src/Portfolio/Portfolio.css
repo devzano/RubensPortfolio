@@ -18,7 +18,7 @@
 }
 
 .section {
-  background-color: #1a1a1a;
+  background-color: #1a1a1a85;
   color: #6495ed;
   padding: 20px;
   border-radius: 10px;
@@ -49,7 +49,7 @@
 }
 
 .skill {
-  background-color: #23395B;
+  background-color: #23395b85;
   color: white;
   padding: 8px 12px;
   border-radius: 5px;
@@ -58,7 +58,7 @@
 }
 
 .skill:hover {
-  background-color: #0056b3;
+  background-color: #0056b375;
   transform: scale(1.05);
   cursor: default;
 }

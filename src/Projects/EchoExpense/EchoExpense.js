@@ -86,7 +86,7 @@ const EchoExpense = () => {
         <a href="https://apps.apple.com/us/app/echoexpense/id6475660500" target="_blank" rel="noopener noreferrer" className="app-link">EchoExpense</a>
       </h1>
       <div className="centered-content">
-        <button onClick={handleAppStoreButtonClick} className="app-button">Available on the App Store</button>
+        <button onClick={handleAppStoreButtonClick} className="app-button">App Store</button>
         <div className="project">
           <div className="sections-container">
             <div className="section">

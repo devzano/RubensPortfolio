@@ -60,7 +60,7 @@ const WatchlistriOS = () => {
     window.open("https://apps.apple.com/us/app/watchlistr/id6459355223", "_blank");
   };
 
-  const handleBetaSignupButtonClick = () => {
+  const handleBetaButtonClick = () => {
     window.open("https://testflight.apple.com/join/5fAq7d4d", "_blank");
   };
 
@@ -83,9 +83,9 @@ const WatchlistriOS = () => {
         <a href="https://apps.apple.com/us/app/watchlistr/id6459355223" target="_blank" rel="noopener noreferrer" className="section-title">Watchlistr</a>
       </h1>
       <div className="centered-content">
-        <button onClick={handleAppStoreButtonClick} className="app-button">Available on the App Store</button>
+        <button onClick={handleAppStoreButtonClick} className="app-button">App Store</button>
         <p className="swipe-prompt">for a full experience of Watchlistr tap below to test!</p>
-        <button onClick={handleBetaSignupButtonClick} className="app-button">Beta</button>
+        <button onClick={handleBetaButtonClick} className="app-button">Beta</button>
         <div className="project">
           <div className="sections-container">
             <div className="section">

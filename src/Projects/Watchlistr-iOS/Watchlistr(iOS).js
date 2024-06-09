@@ -83,9 +83,12 @@ const WatchlistriOS = () => {
         <a href="https://apps.apple.com/us/app/watchlistr/id6459355223" target="_blank" rel="noopener noreferrer" className="section-title">Watchlistr</a>
       </h1>
       <div className="centered-content">
+      <div className="flex justify-center space-x-4">
         <button onClick={handleAppStoreButtonClick} className="app-button">App Store</button>
-        <p className="swipe-prompt">for a full experience of Watchlistr tap below to test!</p>
+        &nbsp;
         <button onClick={handleBetaButtonClick} className="app-button">Beta</button>
+      </div>
+        <p className="swipe-prompt">for the full experience of Watchlistr tap beta!</p>
         <div className="project">
           <div className="sections-container">
             <div className="section">

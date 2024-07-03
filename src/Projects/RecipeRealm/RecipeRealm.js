@@ -7,56 +7,48 @@ import coredataLogo from '../../Projects/CodingLogos/coredata.png';
 import switftuiLogo from '../../Projects/CodingLogos/swiftui.png';
 
 import WelcomeView from '../RecipeRealm/Screenshots/RecipeRealm(WelcomeView).png';
-import GoogleSearchView from '../RecipeRealm/Screenshots/RecipeRealm(GoogleSearchView).png';
-import NewRecipeTabView from '../RecipeRealm/Screenshots/RecipeRealm(NewRecipeTab2View).png';
-import NewRecipeTab2View from '../RecipeRealm/Screenshots/RecipeRealm(NewRecipeTabView).png';
-import NewFolderView from '../RecipeRealm/Screenshots/RecipeRealm(NewFolderView).png';
+import HomeView from '../RecipeRealm/Screenshots/RecipeRealm(HomeView).png';
+import OpenBookView from '../RecipeRealm/Screenshots/RecipeRealm(OpenBookView).png';
+import OpenBookDetailView from '../RecipeRealm/Screenshots/RecipeRealm(OpenBookDetailView).png';
 import DetailsView from '../RecipeRealm/Screenshots/RecipeRealm(DetailsView).png';
 import Details2View from '../RecipeRealm/Screenshots/RecipeRealm(Details2View).png';
 import EditDetailsView from '../RecipeRealm/Screenshots/RecipeRealm(EditDetailsView).png';
 import EditDetails2View from '../RecipeRealm/Screenshots/RecipeRealm(EditDetails2View).png';
-import RecipeContextMenuView from '../RecipeRealm/Screenshots/RecipeRealm(RecipeContextMenuView).png';
-import NestedView from '../RecipeRealm/Screenshots/RecipeRealm(NestedView).png';
-import FolderContextMenuView from '../RecipeRealm/Screenshots/RecipeRealm(FolderContextMenuView).png';
-import InsideFolderView from '../RecipeRealm/Screenshots/RecipeRealm(InsideFolderView).png';
-import InsideFolderContextMenuView from '../RecipeRealm/Screenshots/RecipeRealm(InsideFolderContextMenuView).png';
-import InsideRecipeFolderRecipeView from '../RecipeRealm/Screenshots/RecipeRealm(InsideRecipeFolderRecipeView).png';
-import InsideRecipeFolderEditRecipeView from '../RecipeRealm/Screenshots/RecipeRealm(InsideRecipeFolderEditRecipeView).png';
-import LoginView from '../RecipeRealm/Screenshots/RecipeRealm(LoginView).png';
-import CommunitySignupView from '../RecipeRealm/Screenshots/RecipeRealm(CommunitySignupView).png';
-import CommunityProfileMenuView from '../RecipeRealm/Screenshots/RecipeRealm(CommunityProfileMenuView).png';
-import CommunityNewPostView from '../RecipeRealm/Screenshots/RecipeRealm(CommunityNewPostView).png';
-import CommunityPostsSidemenuView from '../RecipeRealm/Screenshots/RecipeRealm(CommunityPostsSidemenuView).png';
-import RecipeAssistantView from '../RecipeRealm/Screenshots/RecipeRealm(RecipeAssistantView).png';
+import NewRecipeView from '../RecipeRealm/Screenshots/RecipeRealm(NewRecipeView).png';
+import NewRecipeImportView from '../RecipeRealm/Screenshots/RecipeRealm(NewRecipeImportView).png';
+import NewRecipeImageView from '../RecipeRealm/Screenshots/RecipeRealm(NewRecipeImageView).png';
+import NewRecipeBookImageView from '../RecipeRealm/Screenshots/RecipeRealm(NewRecipeBookImageView).png';
+import NewBookView from '../RecipeRealm/Screenshots/RecipeRealm(NewBookView).png';
+import RecipeContextOptionsView from '../RecipeRealm/Screenshots/RecipeRealm(RecipeContextOptionsView).png';
+import RecipeBookContextOptionsView from '../RecipeRealm/Screenshots/RecipeRealm(RecipeBookContextOptionsView).png';
+import RecipeBookContextView from '../RecipeRealm/Screenshots/RecipeRealm(RecipeBookContextView).png';
+import RandomBannerView from '../RecipeRealm/Screenshots/RecipeRealm(RandomBannerView).png';
 import OptionsView from '../RecipeRealm/Screenshots/RecipeRealm(OptionsView).png';
 import ChangeTintView from '../RecipeRealm/Screenshots/RecipeRealm(ChangeTintView).png';
+import ChangeThemeView from '../RecipeRealm/Screenshots/RecipeRealm(ChangeThemeView).png';
 
 const RecipeRealm = () => {
   const RecipeRealmScreenshots = [
     WelcomeView,
-    GoogleSearchView,
-    NewRecipeTabView,
-    NewRecipeTab2View,
+    HomeView,
+    OpenBookView,
+    OpenBookDetailView,
     DetailsView,
     Details2View,
     EditDetailsView,
     EditDetails2View,
-    NewFolderView,
-    RecipeContextMenuView,
-    NestedView,
-    FolderContextMenuView,
-    InsideFolderView,
-    InsideFolderContextMenuView,
-    InsideRecipeFolderRecipeView,
-    InsideRecipeFolderEditRecipeView,
-    LoginView,
-    CommunitySignupView,
-    CommunityProfileMenuView,
-    CommunityNewPostView,
-    CommunityPostsSidemenuView,
-    RecipeAssistantView,
+    NewRecipeView,
+    NewRecipeImageView,
+    NewRecipeBookImageView,
+    NewRecipeImportView,
+    NewBookView,
+    RecipeBookContextView,
+    RecipeBookContextOptionsView,
+    RecipeContextOptionsView,
+    RandomBannerView,
     OptionsView,
-    ChangeTintView
+    ChangeTintView,
+    ChangeThemeView
   ];
 
   const [currentSet, setCurrentSet] = useState(0);
@@ -71,9 +63,9 @@ const RecipeRealm = () => {
     }
   }, [RecipeRealmScreenshots.length]);
 
-  const handleBetaButtonClick = () => {
-    window.open("https://testflight.apple.com/join/0ox0x9Rq", "_blank");
-  };
+  const handleAppStoreButtonClick = () => {
+    window.open("https://apps.apple.com/us/app/reciperealm/id6458877177", "_blank");
+  }
 
   const calculateNumberOfImages = () => {
     return window.innerWidth <= 768 ? 2 : 4;
@@ -91,10 +83,10 @@ const RecipeRealm = () => {
   return (
     <div className="coding-background">
       <h1 className="title">
-        <a href="https://testflight.apple.com/join/0ox0x9Rq" target="_blank" rel="noopener noreferrer" className="section-title">RecipeRealm</a>
+        <a href="https://apps.apple.com/us/app/reciperealm/id6458877177" target="_blank" rel="noopener noreferrer" className="section-title">RecipeRealm</a>
       </h1>
       <div className="centered-content">
-        <button onClick={handleBetaButtonClick} className="app-button">Beta</button>
+        <button onClick={handleAppStoreButtonClick} className="app-button">App Store</button>
         <div className="project">
           <div className="sections-container">
             <div className="section">

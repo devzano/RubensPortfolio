@@ -49,6 +49,8 @@ const WatchlistriOS = () => {
   const [currentSet, setCurrentSet] = useState(0);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [feedback, setFeedback] = useState({ firstName: '', lastName: '', email: '', message: '' });
 
   useEffect(() => {
     if (WatchlistrScreenshots.length > 0) {
@@ -68,6 +70,30 @@ const WatchlistriOS = () => {
     window.open("https://testflight.apple.com/join/5fAq7d4d", "_blank");
   };
 
+  const handleFeedbackSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('/api/send-feedback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(feedback)
+      });
+
+      if (response.ok) {
+        alert('Feedback sent successfully!');
+        setIsFeedbackModalOpen(false);
+        setFeedback({ firstName: '', lastName: '', email: '', message: '' });
+      } else {
+        alert('Failed to send feedback. Please try again later.');
+      }
+    } catch (error) {
+      alert('Error sending feedback. Please try again later.');
+    }
+  };
+
   const calculateNumberOfImages = () => {
     return window.innerWidth <= 768 ? 2 : 4;
   };
@@ -75,7 +101,7 @@ const WatchlistriOS = () => {
   const numberOfImages = calculateNumberOfImages();
 
   const BuiltWithLogos = [
-    { src: xcodeLogo, alt: 'Xcode Logo', link: 'https://developer.apple.com/xcode/'},
+    { src: xcodeLogo, alt: 'Xcode Logo', link: 'https://developer.apple.com/xcode/' },
     { src: switftuiLogo, alt: 'SwiftUI Logo', link: 'https://developer.apple.com/xcode/swiftui/' },
     { src: firebaseLogo, alt: 'Firebase Logo', link: 'https://firebase.google.com/' },
     { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
@@ -86,6 +112,7 @@ const WatchlistriOS = () => {
   const closeModal = () => {
     setIsTermsModalOpen(false);
     setIsPrivacyModalOpen(false);
+    setIsFeedbackModalOpen(false);
   };
 
   return (
@@ -98,6 +125,8 @@ const WatchlistriOS = () => {
           <button onClick={handleAppStoreButtonClick} className="app-button">App Store</button>
           &nbsp;
           <button onClick={handleBetaButtonClick} className="app-button">Beta</button>
+          &nbsp;
+          <button onClick={() => setIsFeedbackModalOpen(true)} className="app-button">Send Feedback</button>
         </div>
         <p className="swipe-prompt">for the full experience of Watchlistr tap beta!</p>
         <div className="project">
@@ -149,6 +178,33 @@ const WatchlistriOS = () => {
           <div className="modal-content">
             <span className="close" onClick={closeModal}>&times;</span>
             <iframe src="https://doc-hosting.flycricket.io/watchlistr-privacy-policy/1926eb16-dda6-4138-8714-256aa79e5472/privacy" title="Privacy Policy"></iframe>
+          </div>
+        </div>
+      )}
+      {isFeedbackModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={closeModal}>&times;</span>
+            <form onSubmit={handleFeedbackSubmit} className="feedback-form">
+              <h2 className="modal-title">Send Feedback</h2>
+              <label className="form-label">
+                First Name:
+                <input type="text" value={feedback.firstName} onChange={(e) => setFeedback({ ...feedback, firstName: e.target.value })} required className="form-input"/>
+              </label>
+              <label className="form-label">
+                Last Name:
+                <input type="text" value={feedback.lastName} onChange={(e) => setFeedback({ ...feedback, lastName: e.target.value })} required className="form-input"/>
+              </label>
+              <label className="form-label">
+                Email:
+                <input type="email" value={feedback.email} onChange={(e) => setFeedback({ ...feedback, email: e.target.value })} required className="form-input"/>
+              </label>
+              <label className="form-label">
+                Message:
+                <textarea value={feedback.message} onChange={(e) => setFeedback({ ...feedback, message: e.target.value })} required className="form-input form-textarea"/>
+              </label>
+              <button type="submit" className="app-button">Submit</button>
+            </form>
           </div>
         </div>
       )}

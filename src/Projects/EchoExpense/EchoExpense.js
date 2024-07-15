@@ -5,6 +5,8 @@ import githubLogo from '../../Projects/CodingLogos/github(light).png';
 import xcodeLogo from '../../Projects/CodingLogos/xcode.png';
 import switftuiLogo from '../../Projects/CodingLogos/swiftui.png';
 import firebaseLogo from '../../Projects/CodingLogos/firebase.png';
+import privacyPolicy from '../../Projects/CodingLogos/privacy-policy.png';
+import termsConditions from '../../Projects/CodingLogos/terms-conditions.png';
 
 import LoginView from '../EchoExpense/Screenshots/EchoExpense(LoginView).png';
 import SignupView from '../EchoExpense/Screenshots/EchoExpense(SignupView).png';
@@ -52,6 +54,8 @@ const EchoExpense = () => {
   ];
 
   const [currentSet, setCurrentSet] = useState(0);
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
+  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
 
   useEffect(() => {
     if (EchoExpenseScreenshots.length > 0) {
@@ -65,7 +69,7 @@ const EchoExpense = () => {
 
   const handleAppStoreButtonClick = () => {
     window.open("https://apps.apple.com/us/app/echoexpense/id6475660500", "_blank");
-  }
+  };
 
   const calculateNumberOfImages = () => {
     return window.innerWidth <= 768 ? 2 : 4;
@@ -74,11 +78,18 @@ const EchoExpense = () => {
   const numberOfImages = calculateNumberOfImages();
 
   const BuiltWithLogos = [
-    xcodeLogo,
-    switftuiLogo,
-    firebaseLogo,
-    githubLogo
+    { src: xcodeLogo, alt: 'Xcode Logo', link: 'https://developer.apple.com/xcode/' },
+    { src: switftuiLogo, alt: 'SwiftUI Logo', link: 'https://developer.apple.com/xcode/swiftui/' },
+    { src: firebaseLogo, alt: 'Firebase Logo', link: 'https://firebase.google.com/' },
+    { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
+    { src: termsConditions, alt: 'Terms and Conditions', onClick: () => setIsTermsModalOpen(true) },
+    { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => setIsPrivacyModalOpen(true) }
   ];
+
+  const closeModal = () => {
+    setIsTermsModalOpen(false);
+    setIsPrivacyModalOpen(false);
+  };
 
   return (
     <div className="coding-background">
@@ -92,15 +103,17 @@ const EchoExpense = () => {
             <div className="section">
               <div className="project-image-container">
                 <table className="rounded-images-table centered-images-table">
-                  <tr> {
-                    Array.from({ length: numberOfImages }).map((_, i) => (
-                      <td align="center" key={i}>
-                        <img src={EchoExpenseScreenshots[i + currentSet * numberOfImages]}
-                          alt={`EchoExpense Screenshot ${i + currentSet * numberOfImages}`}
-                          width="300" />
-                      </td>
-                    ))
-                  } </tr>
+                  <tbody>
+                    <tr>
+                      {Array.from({ length: numberOfImages }).map((_, i) => (
+                        <td align="center" key={i}>
+                          <img src={EchoExpenseScreenshots[i + currentSet * numberOfImages]}
+                            alt={`EchoExpense Screenshot ${i + currentSet * numberOfImages}`}
+                            width="300" />
+                        </td>
+                      ))}
+                    </tr>
+                  </tbody>
                 </table>
               </div>
               <p className="project-description">
@@ -109,12 +122,12 @@ const EchoExpense = () => {
               <div className="logo-container">
                 {BuiltWithLogos.map((logo, index) => (
                   <span key={index}>
-                    {index === BuiltWithLogos.length - 1 ? (
-                      <a href="https://github.com/devzano" target="_blank" rel="noopener noreferrer">
-                        <img src={logo} alt={`Logo ${index + 1}`} className="logo" />
+                    {logo.link ? (
+                      <a href={logo.link} target="_blank" rel="noopener noreferrer">
+                        <img src={logo.src} alt={logo.alt} className="logo" />
                       </a>
                     ) : (
-                      <img src={logo} alt={`Logo ${index + 1}`} className="logo" />
+                      <img src={logo.src} alt={logo.alt} className="logo" onClick={logo.onClick} style={{ cursor: 'pointer' }} />
                     )}
                   </span>
                 ))}
@@ -123,6 +136,22 @@ const EchoExpense = () => {
           </div>
         </div>
       </div>
+      {isTermsModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={closeModal}>&times;</span>
+            <iframe src="" title="Terms of Use"></iframe>
+          </div>
+        </div>
+      )}
+      {isPrivacyModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={closeModal}>&times;</span>
+            <iframe src="" title="Privacy Policy"></iframe>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

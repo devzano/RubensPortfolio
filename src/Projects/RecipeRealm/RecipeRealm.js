@@ -5,6 +5,8 @@ import githubLogo from '../../Projects/CodingLogos/github(light).png';
 import xcodeLogo from '../../Projects/CodingLogos/xcode.png';
 import coredataLogo from '../../Projects/CodingLogos/coredata.png';
 import switftuiLogo from '../../Projects/CodingLogos/swiftui.png';
+import privacyPolicy from '../../Projects/CodingLogos/privacy-policy.png';
+import termsConditions from '../../Projects/CodingLogos/terms-conditions.png';
 
 import WelcomeView from '../RecipeRealm/Screenshots/RecipeRealm(WelcomeView).png';
 import HomeView from '../RecipeRealm/Screenshots/RecipeRealm(HomeView).png';
@@ -52,6 +54,8 @@ const RecipeRealm = () => {
   ];
 
   const [currentSet, setCurrentSet] = useState(0);
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
+  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
 
   useEffect(() => {
     if (RecipeRealmScreenshots.length > 0) {
@@ -65,7 +69,7 @@ const RecipeRealm = () => {
 
   const handleAppStoreButtonClick = () => {
     window.open("https://apps.apple.com/us/app/reciperealm/id6458877177", "_blank");
-  }
+  };
 
   const calculateNumberOfImages = () => {
     return window.innerWidth <= 768 ? 2 : 4;
@@ -74,11 +78,18 @@ const RecipeRealm = () => {
   const numberOfImages = calculateNumberOfImages();
 
   const BuiltWithLogos = [
-    xcodeLogo,
-    coredataLogo,
-    switftuiLogo,
-    githubLogo
+    { src: xcodeLogo, alt: 'Xcode Logo', link: 'https://developer.apple.com/xcode/' },
+    { src: coredataLogo, alt: 'CoreData Logo', link: 'https://developer.apple.com/documentation/coredata/' },
+    { src: switftuiLogo, alt: 'SwiftUI Logo', link: 'https://developer.apple.com/xcode/swiftui/' },
+    { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
+    { src: termsConditions, alt: 'Terms and Conditions', onClick: () => setIsTermsModalOpen(true) },
+    { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => setIsPrivacyModalOpen(true) }
   ];
+
+  const closeModal = () => {
+    setIsTermsModalOpen(false);
+    setIsPrivacyModalOpen(false);
+  };
 
   return (
     <div className="coding-background">
@@ -111,12 +122,12 @@ const RecipeRealm = () => {
               <div className="logo-container">
                 {BuiltWithLogos.map((logo, index) => (
                   <span key={index}>
-                    {index === BuiltWithLogos.length - 1 ? (
-                      <a href="https://github.com/devzano" target="_blank" rel="noopener noreferrer">
-                        <img src={logo} alt={`Logo ${index + 1}`} className="logo" />
+                    {logo.link ? (
+                      <a href={logo.link} target="_blank" rel="noopener noreferrer">
+                        <img src={logo.src} alt={logo.alt} className="logo" />
                       </a>
                     ) : (
-                      <img src={logo} alt={`Logo ${index + 1}`} className="logo" />
+                      <img src={logo.src} alt={logo.alt} className="logo" onClick={logo.onClick} style={{ cursor: 'pointer' }} />
                     )}
                   </span>
                 ))}
@@ -125,6 +136,22 @@ const RecipeRealm = () => {
           </div>
         </div>
       </div>
+      {isTermsModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={closeModal}>&times;</span>
+            <iframe src="" title="Terms of Use"></iframe>
+          </div>
+        </div>
+      )}
+      {isPrivacyModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={closeModal}>&times;</span>
+            <iframe src="" title="Privacy Policy"></iframe>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

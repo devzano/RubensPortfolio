@@ -6,6 +6,8 @@ import githubLogo from '../../Projects/CodingLogos/github(light).png';
 import xcodeLogo from '../../Projects/CodingLogos/xcode.png';
 import switftuiLogo from '../../Projects/CodingLogos/swiftui.png';
 import firebaseLogo from '../../Projects/CodingLogos/firebase.png';
+import privacyPolicy from '../../Projects/CodingLogos/privacy-policy.png';
+import termsConditions from '../../Projects/CodingLogos/terms-conditions.png';
 
 import LoginView from '../Watchlistr-iOS/Screenshots/Watchlistr(LoginView).png';
 import SignupView from '../Watchlistr-iOS/Screenshots/Watchlistr(SignupView).png';
@@ -45,6 +47,8 @@ const WatchlistriOS = () => {
   ];
 
   const [currentSet, setCurrentSet] = useState(0);
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
+  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
 
   useEffect(() => {
     if (WatchlistrScreenshots.length > 0) {
@@ -71,11 +75,18 @@ const WatchlistriOS = () => {
   const numberOfImages = calculateNumberOfImages();
 
   const BuiltWithLogos = [
-    xcodeLogo,
-    switftuiLogo,
-    firebaseLogo,
-    githubLogo
+    { src: xcodeLogo, alt: 'Xcode Logo', link: 'https://developer.apple.com/xcode/'},
+    { src: switftuiLogo, alt: 'SwiftUI Logo', link: 'https://developer.apple.com/xcode/swiftui/' },
+    { src: firebaseLogo, alt: 'Firebase Logo', link: 'https://firebase.google.com/' },
+    { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
+    { src: termsConditions, alt: 'Terms and Conditions', onClick: () => setIsTermsModalOpen(true) },
+    { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => setIsPrivacyModalOpen(true) }
   ];
+
+  const closeModal = () => {
+    setIsTermsModalOpen(false);
+    setIsPrivacyModalOpen(false);
+  };
 
   return (
     <div className="coding-background">
@@ -83,11 +94,11 @@ const WatchlistriOS = () => {
         <a href="https://apps.apple.com/us/app/watchlistr/id6459355223" target="_blank" rel="noopener noreferrer" className="section-title">Watchlistr</a>
       </h1>
       <div className="centered-content">
-      <div className="flex justify-center space-x-4">
-        <button onClick={handleAppStoreButtonClick} className="app-button">App Store</button>
-        &nbsp;
-        <button onClick={handleBetaButtonClick} className="app-button">Beta</button>
-      </div>
+        <div className="flex justify-center space-x-4">
+          <button onClick={handleAppStoreButtonClick} className="app-button">App Store</button>
+          &nbsp;
+          <button onClick={handleBetaButtonClick} className="app-button">Beta</button>
+        </div>
         <p className="swipe-prompt">for the full experience of Watchlistr tap beta!</p>
         <div className="project">
           <div className="sections-container">
@@ -111,12 +122,12 @@ const WatchlistriOS = () => {
               <div className="logo-container">
                 {BuiltWithLogos.map((logo, index) => (
                   <span key={index}>
-                    {index === BuiltWithLogos.length - 1 ? (
-                      <a href="https://github.com/devzano" target="_blank" rel="noopener noreferrer">
-                        <img src={logo} alt={`Logo ${index + 1}`} className="logo" />
+                    {logo.link ? (
+                      <a href={logo.link} target="_blank" rel="noopener noreferrer">
+                        <img src={logo.src} alt={logo.alt} className="logo" />
                       </a>
                     ) : (
-                      <img src={logo} alt={`Logo ${index + 1}`} className="logo" />
+                      <img src={logo.src} alt={logo.alt} className="logo" onClick={logo.onClick} style={{ cursor: 'pointer' }} />
                     )}
                   </span>
                 ))}
@@ -125,6 +136,22 @@ const WatchlistriOS = () => {
           </div>
         </div>
       </div>
+      {isTermsModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={closeModal}>&times;</span>
+            <iframe src="https://doc-hosting.flycricket.io/watchlistr-terms-of-use/3a2dbd85-0829-4f61-9560-6518d02bd07b/terms" title="Terms of Use"></iframe>
+          </div>
+        </div>
+      )}
+      {isPrivacyModalOpen && (
+        <div className="modal">
+          <div className="modal-content">
+            <span className="close" onClick={closeModal}>&times;</span>
+            <iframe src="https://doc-hosting.flycricket.io/watchlistr-privacy-policy/1926eb16-dda6-4138-8714-256aa79e5472/privacy" title="Privacy Policy"></iframe>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

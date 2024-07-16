@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
   let mailOptions = {
     from: process.env.EMAIL_USER,
     to: process.env.EMAIL_USER,
-    subject: 'New Feedback Submission',
+    subject: 'Feedback for Watchlistr App',
     text: `First Name: ${firstName}, Last Name: ${lastName}, Email: ${email}, Message: ${message}`
   };
 

@@ -119,23 +119,23 @@ img {
   justify-content: center;
   align-items: center;
   position: fixed;
-  z-index: 1000; /* Ensure the modal is on top */
+  z-index: 1000;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.6); /* Slightly darker background for better contrast */
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .modal-content {
   background-color: #fff;
   padding: 20px;
-  border-radius: 10px; /* Rounded corners for a modern look */
+  border-radius: 10px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
   width: 80%;
-  max-width: 800px; /* Adapt to larger screens */
-  max-height: 100%; /* Increase height to prevent overflow */
-  height: 80%; /* Increase height by 25% from previous 60% */
+  max-width: 800px;
+  max-height: 100%;
+  height: 80%;
   overflow-y: auto;
   position: relative;
 }
@@ -173,6 +173,8 @@ iframe {
 .form-label {
   margin-bottom: 10px;
   width: 100%;
+  color: #23395B;
+  font-weight: 600;
 }
 
 .form-input {
@@ -182,14 +184,17 @@ iframe {
   border-radius: 5px;
   border: 1px solid #ccc;
   font-size: 16px;
-  box-sizing: border-box; /* Ensure padding doesn't affect width */
+  box-sizing: border-box;
+  color: #23395B;
 }
 
 .form-textarea {
   height: 100px;
+  resize: none;
 }
 
 .modal-title {
   font-size: 24px;
   margin-bottom: 20px;
+  color: cornflowerblue;
 }

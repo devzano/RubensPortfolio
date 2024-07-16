@@ -74,7 +74,7 @@ const WatchlistriOS = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('/api/send-feedback', {
+      const response = await fetch('/api/sendMail', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

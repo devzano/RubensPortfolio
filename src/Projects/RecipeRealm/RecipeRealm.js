@@ -29,6 +29,19 @@ import OptionsView from '../RecipeRealm/Screenshots/RecipeRealm(OptionsView).png
 import ChangeTintView from '../RecipeRealm/Screenshots/RecipeRealm(ChangeTintView).png';
 import ChangeThemeView from '../RecipeRealm/Screenshots/RecipeRealm(ChangeThemeView).png';
 
+const Modal = ({ isOpen, onClose, title, children }) => {
+  if (!isOpen) return null;
+  return (
+    <div className="modal">
+      <div className="modal-content">
+        <span className="close" onClick={onClose}>&times;</span>
+        <h2>{title}</h2>
+        {children}
+      </div>
+    </div>
+  );
+};
+
 const RecipeRealm = () => {
   const RecipeRealmScreenshots = [
     WelcomeView,
@@ -40,9 +53,9 @@ const RecipeRealm = () => {
     EditDetailsView,
     EditDetails2View,
     NewRecipeView,
+    NewRecipeImportView,
     NewRecipeImageView,
     NewRecipeBookImageView,
-    NewRecipeImportView,
     NewBookView,
     RecipeBookContextView,
     RecipeBookContextOptionsView,
@@ -56,10 +69,12 @@ const RecipeRealm = () => {
   const [currentSet, setCurrentSet] = useState(0);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [feedback, setFeedback] = useState({ firstName: '', lastName: '', email: '', message: '' });
 
   useEffect(() => {
     if (RecipeRealmScreenshots.length > 0) {
-      const maxSets = window.innerWidth <= 768 ? RecipeRealmScreenshots.length / 2 : RecipeRealmScreenshots.length / 4;
+      const maxSets = Math.ceil(RecipeRealmScreenshots.length / calculateNumberOfImages());
       const interval = setInterval(() => {
         setCurrentSet(prevSet => (prevSet + 1) % maxSets);
       }, 4000);
@@ -69,6 +84,30 @@ const RecipeRealm = () => {
 
   const handleAppStoreButtonClick = () => {
     window.open("https://apps.apple.com/us/app/reciperealm/id6458877177", "_blank");
+  };
+
+  const handleFeedbackSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('/api/sendMail', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(feedback)
+      });
+
+      if (response.ok) {
+        alert('Feedback sent successfully!');
+        setIsFeedbackModalOpen(false);
+        setFeedback({ firstName: '', lastName: '', email: '', message: '' });
+      } else {
+        alert('Failed to send feedback. Please try again later.');
+      }
+    } catch (error) {
+      alert('Error sending feedback. Please try again later.');
+    }
   };
 
   const calculateNumberOfImages = () => {
@@ -86,18 +125,17 @@ const RecipeRealm = () => {
     { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => setIsPrivacyModalOpen(true) }
   ];
 
-  const closeModal = () => {
-    setIsTermsModalOpen(false);
-    setIsPrivacyModalOpen(false);
-  };
-
   return (
     <div className="coding-background">
       <h1 className="title">
         <a href="https://apps.apple.com/us/app/reciperealm/id6458877177" target="_blank" rel="noopener noreferrer" className="section-title">RecipeRealm</a>
       </h1>
       <div className="centered-content">
-        <button onClick={handleAppStoreButtonClick} className="app-button">App Store</button>
+        <div className="button-group">
+          <button onClick={handleAppStoreButtonClick} className="app-button">App Store</button>
+          &nbsp;
+          <button onClick={() => setIsFeedbackModalOpen(true)} className="app-button">Send Feedback</button>
+        </div>
         <div className="project">
           <div className="sections-container">
             <div className="section">
@@ -136,22 +174,56 @@ const RecipeRealm = () => {
           </div>
         </div>
       </div>
-      {isTermsModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={closeModal}>&times;</span>
-            <iframe src="" title="Terms of Use"></iframe>
-          </div>
-        </div>
-      )}
-      {isPrivacyModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={closeModal}>&times;</span>
-            <iframe src="" title="Privacy Policy"></iframe>
-          </div>
-        </div>
-      )}
+      <Modal isOpen={isTermsModalOpen} onClose={() => setIsTermsModalOpen(false)} title="Terms of Use">
+        <iframe src="https://doc-hosting.flycricket.io/reciperealm-terms-of-use/f5851ec4-dec8-472c-b0c2-2c90df39540f/terms" title="Terms of Use"></iframe>
+      </Modal>
+      <Modal isOpen={isPrivacyModalOpen} onClose={() => setIsPrivacyModalOpen(false)} title="Privacy Policy">
+        <iframe src="https://doc-hosting.flycricket.io/reciperealm-privacy-policy/87bce577-640c-4bf9-9820-c36d1fa03d76/privacy" title="Privacy Policy"></iframe>
+      </Modal>
+      <Modal isOpen={isFeedbackModalOpen} onClose={() => setIsFeedbackModalOpen(false)} title="Send Feedback">
+        <form onSubmit={handleFeedbackSubmit} className="feedback-form">
+          <label className="form-label">
+            First Name:
+            <input
+              type="text"
+              value={feedback.firstName}
+              onChange={(e) => setFeedback({ ...feedback, firstName: e.target.value })}
+              required
+              className="form-input"
+            />
+          </label>
+          <label className="form-label">
+            Last Name:
+            <input
+              type="text"
+              value={feedback.lastName}
+              onChange={(e) => setFeedback({ ...feedback, lastName: e.target.value })}
+              required
+              className="form-input"
+            />
+          </label>
+          <label className="form-label">
+            Email:
+            <input
+              type="email"
+              value={feedback.email}
+              onChange={(e) => setFeedback({ ...feedback, email: e.target.value })}
+              required
+              className="form-input"
+            />
+          </label>
+          <label className="form-label">
+            Message:
+            <textarea
+              value={feedback.message}
+              onChange={(e) => setFeedback({ ...feedback, message: e.target.value })}
+              required
+              className="form-input form-textarea"
+            />
+          </label>
+          <button type="submit" className="app-button">Submit</button>
+        </form>
+      </Modal>
     </div>
   );
 };

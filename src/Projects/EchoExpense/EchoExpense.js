@@ -29,6 +29,19 @@ import HomeView4 from '../EchoExpense/Screenshots/EchoExpense(HomeView4).png';
 import AccountView3 from '../EchoExpense/Screenshots/EchoExpense(AccountView3).png';
 import CalendarView from '../EchoExpense/Screenshots/EchoExpense(CalendarView).png';
 
+const Modal = ({ isOpen, onClose, title, children }) => {
+  if (!isOpen) return null;
+  return (
+    <div className="modal">
+      <div className="modal-content">
+        <span className="close" onClick={onClose}>&times;</span>
+        <h2>{title}</h2>
+        {children}
+      </div>
+    </div>
+  );
+};
+
 const EchoExpense = () => {
   const EchoExpenseScreenshots = [
     LoginView,
@@ -56,10 +69,12 @@ const EchoExpense = () => {
   const [currentSet, setCurrentSet] = useState(0);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [feedback, setFeedback] = useState({ firstName: '', lastName: '', email: '', message: '' });
 
   useEffect(() => {
     if (EchoExpenseScreenshots.length > 0) {
-      const maxSets = window.innerWidth <= 768 ? EchoExpenseScreenshots.length / 2 : EchoExpenseScreenshots.length / 4;
+      const maxSets = Math.ceil(EchoExpenseScreenshots.length / calculateNumberOfImages());
       const interval = setInterval(() => {
         setCurrentSet(prevSet => (prevSet + 1) % maxSets);
       }, 4000);
@@ -69,6 +84,30 @@ const EchoExpense = () => {
 
   const handleAppStoreButtonClick = () => {
     window.open("https://apps.apple.com/us/app/echoexpense/id6475660500", "_blank");
+  };
+
+  const handleFeedbackSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch('/api/sendMail', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(feedback)
+      });
+
+      if (response.ok) {
+        alert('Feedback sent successfully!');
+        setIsFeedbackModalOpen(false);
+        setFeedback({ firstName: '', lastName: '', email: '', message: '' });
+      } else {
+        alert('Failed to send feedback. Please try again later.');
+      }
+    } catch (error) {
+      alert('Error sending feedback. Please try again later.');
+    }
   };
 
   const calculateNumberOfImages = () => {
@@ -89,6 +128,7 @@ const EchoExpense = () => {
   const closeModal = () => {
     setIsTermsModalOpen(false);
     setIsPrivacyModalOpen(false);
+    setIsFeedbackModalOpen(false);
   };
 
   return (
@@ -97,7 +137,11 @@ const EchoExpense = () => {
         <a href="https://apps.apple.com/us/app/echoexpense/id6475660500" target="_blank" rel="noopener noreferrer" className="app-link">EchoExpense</a>
       </h1>
       <div className="centered-content">
-        <button onClick={handleAppStoreButtonClick} className="app-button">App Store</button>
+        <div className="button-group">
+          <button onClick={handleAppStoreButtonClick} className="app-button">App Store</button>
+          &nbsp;
+          <button onClick={() => setIsFeedbackModalOpen(true)} className="app-button">Send Feedback</button>
+        </div>
         <div className="project">
           <div className="sections-container">
             <div className="section">
@@ -117,7 +161,7 @@ const EchoExpense = () => {
                 </table>
               </div>
               <p className="project-description">
-                Elevate your financial management with Echo Expense, an iOS application designed to empower you in managing your bills. With Echo Expense, you can seamlessly create, edit, and organize your bills while configuring timely personalized notifications for payments, ensuring financial clarity and control. Take charge of your finances and maintain a comprehensive record of your expenses, paid bills, and notifications with the precision and convenience of Echo Expense.
+                Elevate your financial management with EchoExpense, an iOS application designed to empower you in managing your bills. With EchoExpense, you can seamlessly create, edit, and organize your bills while configuring timely personalized notifications for payments, ensuring financial clarity and control. Take charge of your finances and maintain a comprehensive record of your expenses, paid bills, and notifications with the precision and convenience of EchoExpense.
               </p>
               <div className="logo-container">
                 {BuiltWithLogos.map((logo, index) => (
@@ -136,22 +180,56 @@ const EchoExpense = () => {
           </div>
         </div>
       </div>
-      {isTermsModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={closeModal}>&times;</span>
-            <iframe src="" title="Terms of Use"></iframe>
-          </div>
-        </div>
-      )}
-      {isPrivacyModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={closeModal}>&times;</span>
-            <iframe src="" title="Privacy Policy"></iframe>
-          </div>
-        </div>
-      )}
+      <Modal isOpen={isTermsModalOpen} onClose={closeModal} title="Terms of Use">
+        <iframe src="https://doc-hosting.flycricket.io/echoexpense-terms-of-use/6d2d83d0-ac0b-4053-87d5-5237309bba5e/terms" title="Terms of Use"></iframe>
+      </Modal>
+      <Modal isOpen={isPrivacyModalOpen} onClose={closeModal} title="Privacy Policy">
+        <iframe src="https://doc-hosting.flycricket.io/echoexpense-privacy-policy/2b68a45d-2065-47dc-bb63-fbe8319c5c47/privacy" title="Privacy Policy"></iframe>
+      </Modal>
+      <Modal isOpen={isFeedbackModalOpen} onClose={closeModal} title="Send Feedback">
+        <form onSubmit={handleFeedbackSubmit} className="feedback-form">
+          <label className="form-label">
+            First Name:
+            <input
+              type="text"
+              value={feedback.firstName}
+              onChange={(e) => setFeedback({ ...feedback, firstName: e.target.value })}
+              required
+              className="form-input"
+            />
+          </label>
+          <label className="form-label">
+            Last Name:
+            <input
+              type="text"
+              value={feedback.lastName}
+              onChange={(e) => setFeedback({ ...feedback, lastName: e.target.value })}
+              required
+              className="form-input"
+            />
+          </label>
+          <label className="form-label">
+            Email:
+            <input
+              type="email"
+              value={feedback.email}
+              onChange={(e) => setFeedback({ ...feedback, email: e.target.value })}
+              required
+              className="form-input"
+            />
+          </label>
+          <label className="form-label">
+            Message:
+            <textarea
+              value={feedback.message}
+              onChange={(e) => setFeedback({ ...feedback, message: e.target.value })}
+              required
+              className="form-input form-textarea"
+            />
+          </label>
+          <button type="submit" className="app-button">Submit</button>
+        </form>
+      </Modal>
     </div>
   );
 };

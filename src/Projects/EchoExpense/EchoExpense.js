@@ -95,7 +95,13 @@ const EchoExpense = () => {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(feedback)
+        body: JSON.stringify({
+          appName: 'EchoExpense',
+          firstName: feedback.firstName,
+          lastName: feedback.lastName,
+          email: feedback.email,
+          message: feedback.message
+        })
       });
 
       if (response.ok) {

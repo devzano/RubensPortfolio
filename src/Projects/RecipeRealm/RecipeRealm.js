@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import '../../Portfolio/Portfolio.css';
 import '../../Projects/Projects.css';
 import githubLogo from '../../Projects/CodingLogos/github(light).png';
@@ -31,12 +32,36 @@ import ChangeThemeView from '../RecipeRealm/Screenshots/RecipeRealm(ChangeThemeV
 
 const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
+  let content;
+
+  if (title === "Privacy Policy") {
+    content = (
+      <iframe
+        src="https://doc-hosting.flycricket.io/reciperealm-privacy-policy/87bce577-640c-4bf9-9820-c36d1fa03d76/privacy"
+        title="Privacy Policy"
+        width="100%"
+        height="600px"
+      ></iframe>
+    );
+  } else if (title === "Terms of Use") {
+    content = (
+      <iframe
+        src="https://doc-hosting.flycricket.io/reciperealm-terms-of-use/f5851ec4-dec8-472c-b0c2-2c90df39540f/terms"
+        title="Terms of Use"
+        width="100%"
+        height="600px"
+      ></iframe>
+    );
+  } else {
+    content = children;
+  }
+
   return (
     <div className="modal">
       <div className="modal-content">
         <span className="close" onClick={onClose}>&times;</span>
         <h2>{title}</h2>
-        {children}
+        {content}
       </div>
     </div>
   );
@@ -67,10 +92,11 @@ const RecipeRealm = () => {
   ];
 
   const [currentSet, setCurrentSet] = useState(0);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
-  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [feedback, setFeedback] = useState({ firstName: '', lastName: '', email: '', message: '' });
+  const location = useLocation();
 
   useEffect(() => {
     if (RecipeRealmScreenshots.length > 0) {
@@ -81,6 +107,20 @@ const RecipeRealm = () => {
       return () => clearInterval(interval);
     }
   }, [RecipeRealmScreenshots.length]);
+
+  useEffect(() => {
+    if (location.pathname === '/reciperealm/privacy') {
+      setIsPrivacyModalOpen(true);
+    } else {
+      setIsPrivacyModalOpen(false);
+    }
+
+    if (location.pathname === '/reciperealm/terms') {
+      setIsTermsModalOpen(true);
+    } else {
+      setIsTermsModalOpen(false);
+    }
+  }, [location.pathname]);
 
   const handleAppStoreButtonClick = () => {
     window.open("https://apps.apple.com/us/app/reciperealm/id6458877177", "_blank");
@@ -127,8 +167,8 @@ const RecipeRealm = () => {
     { src: coredataLogo, alt: 'CoreData Logo', link: 'https://developer.apple.com/documentation/coredata/' },
     { src: switftuiLogo, alt: 'SwiftUI Logo', link: 'https://developer.apple.com/xcode/swiftui/' },
     { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
-    { src: termsConditions, alt: 'Terms and Conditions', onClick: () => setIsTermsModalOpen(true) },
-    { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => setIsPrivacyModalOpen(true) }
+    { src: termsConditions, alt: 'Terms and Conditions', link: '/reciperealm/terms' },
+    { src: privacyPolicy, alt: 'Privacy Policy', link: '/reciperealm/privacy' }
   ];
 
   return (
@@ -167,9 +207,9 @@ const RecipeRealm = () => {
                 {BuiltWithLogos.map((logo, index) => (
                   <span key={index}>
                     {logo.link ? (
-                      <a href={logo.link} target="_blank" rel="noopener noreferrer">
+                      <Link to={logo.link}>
                         <img src={logo.src} alt={logo.alt} className="logo" />
-                      </a>
+                      </Link>
                     ) : (
                       <img src={logo.src} alt={logo.alt} className="logo" onClick={logo.onClick} style={{ cursor: 'pointer' }} />
                     )}
@@ -180,12 +220,8 @@ const RecipeRealm = () => {
           </div>
         </div>
       </div>
-      <Modal isOpen={isTermsModalOpen} onClose={() => setIsTermsModalOpen(false)} title="Terms of Use">
-        <iframe src="https://doc-hosting.flycricket.io/reciperealm-terms-of-use/f5851ec4-dec8-472c-b0c2-2c90df39540f/terms" title="Terms of Use"></iframe>
-      </Modal>
-      <Modal isOpen={isPrivacyModalOpen} onClose={() => setIsPrivacyModalOpen(false)} title="Privacy Policy">
-        <iframe src="https://doc-hosting.flycricket.io/reciperealm-privacy-policy/87bce577-640c-4bf9-9820-c36d1fa03d76/privacy" title="Privacy Policy"></iframe>
-      </Modal>
+      <Modal isOpen={isTermsModalOpen} onClose={() => setIsTermsModalOpen(false)} title="Terms of Use" />
+      <Modal isOpen={isPrivacyModalOpen} onClose={() => setIsPrivacyModalOpen(false)} title="Privacy Policy" />
       <Modal isOpen={isFeedbackModalOpen} onClose={() => setIsFeedbackModalOpen(false)} title="Send Feedback">
         <form onSubmit={handleFeedbackSubmit} className="feedback-form">
           <label className="form-label">

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import '../../Portfolio/Portfolio.css';
 import '../../Projects/Projects.css';
 import '../../Projects/MailForm/BetaSignupForm.css';
@@ -26,6 +27,43 @@ import MovieWatchlistView from '../Watchlistr-iOS/Screenshots/Watchlistr(MovieWa
 import TVShowWatchlistContextMenuView from '../Watchlistr-iOS/Screenshots/Watchlistr(TVShowWatchlistContextMenuView).png';
 import TVShowWatchlistView from '../Watchlistr-iOS/Screenshots/Watchlistr(TVShowWatchlistView).png';
 
+const Modal = ({ isOpen, onClose, title, children }) => {
+  if (!isOpen) return null;
+  let content;
+
+  if (title === "Privacy Policy") {
+    content = (
+      <iframe
+        src="https://doc-hosting.flycricket.io/watchlistr-privacy-policy/1926eb16-dda6-4138-8714-256aa79e5472/privacy"
+        title="Privacy Policy"
+        width="100%"
+        height="600px"
+      ></iframe>
+    );
+  } else if (title === "Terms of Use") {
+    content = (
+      <iframe
+        src="https://doc-hosting.flycricket.io/watchlistr-terms-of-use/3a2dbd85-0829-4f61-9560-6518d02bd07b/terms"
+        title="Terms of Use"
+        width="100%"
+        height="600px"
+      ></iframe>
+    );
+  } else {
+    content = children;
+  }
+
+  return (
+    <div className="modal">
+      <div className="modal-content">
+        <span className="close" onClick={onClose}>&times;</span>
+        <h2>{title}</h2>
+        {content}
+      </div>
+    </div>
+  );
+};
+
 const WatchlistriOS = () => {
   const WatchlistrScreenshots = [
     LoginView,
@@ -51,16 +89,31 @@ const WatchlistriOS = () => {
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [feedback, setFeedback] = useState({ firstName: '', lastName: '', email: '', message: '' });
+  const location = useLocation();
 
   useEffect(() => {
     if (WatchlistrScreenshots.length > 0) {
-      const maxSets = window.innerWidth <= 768 ? WatchlistrScreenshots.length / 2 : WatchlistrScreenshots.length / 4;
+      const maxSets = Math.ceil(WatchlistrScreenshots.length / calculateNumberOfImages());
       const interval = setInterval(() => {
         setCurrentSet(prevSet => (prevSet + 1) % maxSets);
       }, 4000);
       return () => clearInterval(interval);
     }
   }, [WatchlistrScreenshots.length]);
+
+  useEffect(() => {
+    if (location.pathname === '/watchlistr-ios/privacy') {
+      setIsPrivacyModalOpen(true);
+    } else {
+      setIsPrivacyModalOpen(false);
+    }
+
+    if (location.pathname === '/watchlistr-ios/terms') {
+      setIsTermsModalOpen(true);
+    } else {
+      setIsTermsModalOpen(false);
+    }
+  }, [location.pathname]);
 
   const handleAppStoreButtonClick = () => {
     window.open("https://apps.apple.com/us/app/watchlistr/id6459355223", "_blank");
@@ -111,15 +164,9 @@ const WatchlistriOS = () => {
     { src: switftuiLogo, alt: 'SwiftUI Logo', link: 'https://developer.apple.com/xcode/swiftui/' },
     { src: firebaseLogo, alt: 'Firebase Logo', link: 'https://firebase.google.com/' },
     { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
-    { src: termsConditions, alt: 'Terms and Conditions', onClick: () => setIsTermsModalOpen(true) },
-    { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => setIsPrivacyModalOpen(true) }
+    { src: termsConditions, alt: 'Terms and Conditions', link: '/watchlistr-ios/terms' },
+    { src: privacyPolicy, alt: 'Privacy Policy', link: '/watchlistr-ios/privacy' }
   ];
-
-  const closeModal = () => {
-    setIsTermsModalOpen(false);
-    setIsPrivacyModalOpen(false);
-    setIsFeedbackModalOpen(false);
-  };
 
   return (
     <div className="coding-background">
@@ -146,7 +193,7 @@ const WatchlistriOS = () => {
                         <td align="center" key={i}>
                           <img src={WatchlistrScreenshots[i + currentSet * numberOfImages]}
                             alt={`Watchlistr View ${i + currentSet * numberOfImages}`}
-                            width="300" />
+                            width="300"/>
                         </td>
                       ))}
                     </tr>
@@ -158,11 +205,11 @@ const WatchlistriOS = () => {
                 {BuiltWithLogos.map((logo, index) => (
                   <span key={index}>
                     {logo.link ? (
-                      <a href={logo.link} target="_blank" rel="noopener noreferrer">
-                        <img src={logo.src} alt={logo.alt} className="logo" />
-                      </a>
+                      <Link to={logo.link}>
+                        <img src={logo.src} alt={logo.alt} className="logo"/>
+                      </Link>
                     ) : (
-                      <img src={logo.src} alt={logo.alt} className="logo" onClick={logo.onClick} style={{ cursor: 'pointer' }} />
+                      <img src={logo.src} alt={logo.alt} className="logo" onClick={logo.onClick} style={{ cursor: 'pointer' }}/>
                     )}
                   </span>
                 ))}
@@ -171,49 +218,30 @@ const WatchlistriOS = () => {
           </div>
         </div>
       </div>
-      {isTermsModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={closeModal}>&times;</span>
-            <iframe src="https://doc-hosting.flycricket.io/watchlistr-terms-of-use/3a2dbd85-0829-4f61-9560-6518d02bd07b/terms" title="Terms of Use"></iframe>
-          </div>
-        </div>
-      )}
-      {isPrivacyModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={closeModal}>&times;</span>
-            <iframe src="https://doc-hosting.flycricket.io/watchlistr-privacy-policy/1926eb16-dda6-4138-8714-256aa79e5472/privacy" title="Privacy Policy"></iframe>
-          </div>
-        </div>
-      )}
-      {isFeedbackModalOpen && (
-        <div className="modal">
-          <div className="modal-content">
-            <span className="close" onClick={closeModal}>&times;</span>
-            <form onSubmit={handleFeedbackSubmit} className="feedback-form">
-              <h2 className="modal-title">Send Feedback</h2>
-              <label className="form-label">
-                First Name:
-                <input type="text" value={feedback.firstName} onChange={(e) => setFeedback({ ...feedback, firstName: e.target.value })} required className="form-input"/>
-              </label>
-              <label className="form-label">
-                Last Name:
-                <input type="text" value={feedback.lastName} onChange={(e) => setFeedback({ ...feedback, lastName: e.target.value })} required className="form-input"/>
-              </label>
-              <label className="form-label">
-                Email:
-                <input type="email" value={feedback.email} onChange={(e) => setFeedback({ ...feedback, email: e.target.value })} required className="form-input"/>
-              </label>
-              <label className="form-label">
-                Message:
-                <textarea value={feedback.message} onChange={(e) => setFeedback({ ...feedback, message: e.target.value })} required className="form-input form-textarea"/>
-              </label>
-              <button type="submit" className="app-button">Submit</button>
-            </form>
-          </div>
-        </div>
-      )}
+      <Modal isOpen={isTermsModalOpen} onClose={() => setIsTermsModalOpen(false)} title="Terms of Use"/>
+      <Modal isOpen={isPrivacyModalOpen} onClose={() => setIsPrivacyModalOpen(false)} title="Privacy Policy"/>
+      <Modal isOpen={isFeedbackModalOpen} onClose={() => setIsFeedbackModalOpen(false)} title="Send Feedback">
+        <form onSubmit={handleFeedbackSubmit} className="feedback-form">
+          <h2 className="modal-title">Send Feedback</h2>
+          <label className="form-label">
+            First Name:
+            <input type="text" value={feedback.firstName} onChange={(e) => setFeedback({ ...feedback, firstName: e.target.value })} required className="form-input"/>
+          </label>
+          <label className="form-label">
+            Last Name:
+            <input type="text" value={feedback.lastName} onChange={(e) => setFeedback({ ...feedback, lastName: e.target.value })} required className="form-input"/>
+          </label>
+          <label className="form-label">
+            Email:
+            <input type="email" value={feedback.email} onChange={(e) => setFeedback({ ...feedback, email: e.target.value })} required className="form-input"/>
+          </label>
+          <label className="form-label">
+            Message:
+            <textarea value={feedback.message} onChange={(e) => setFeedback({ ...feedback, message: e.target.value })} required className="form-input form-textarea"/>
+          </label>
+          <button type="submit" className="app-button">Submit</button>
+        </form>
+      </Modal>
     </div>
   );
 };

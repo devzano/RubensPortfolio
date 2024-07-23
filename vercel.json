@@ -1,9 +1,0 @@
-{
-  "redirects": [
-    {
-      "source": "/app-ads.txt",
-      "destination": "https://apps.apple.com/us/developer/ruben-manzano/id1691625084",
-      "permanent": true
-    }
-  ]
-}

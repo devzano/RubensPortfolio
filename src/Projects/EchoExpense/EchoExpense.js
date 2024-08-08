@@ -60,7 +60,6 @@ const Modal = ({ isOpen, onClose, title, children }) => {
     <div className="modal">
       <div className="modal-content">
         <span className="close" onClick={onClose}>&times;</span>
-        <h2>{title}</h2>
         {content}
       </div>
     </div>
@@ -224,6 +223,7 @@ const EchoExpense = () => {
       <Modal isOpen={isPrivacyModalOpen} onClose={() => setIsPrivacyModalOpen(false)} title="Privacy Policy"/>
       <Modal isOpen={isFeedbackModalOpen} onClose={() => setIsFeedbackModalOpen(false)} title="Send Feedback">
         <form onSubmit={handleFeedbackSubmit} className="feedback-form">
+        <h2 className="modal-title">Send Feedback</h2>
           <label className="form-label">
             First Name:
             <input

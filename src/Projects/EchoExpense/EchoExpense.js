@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../../Portfolio/Portfolio.css';
 import '../../Projects/Projects.css';
 import githubLogo from '../../Projects/CodingLogos/github(light).png';
@@ -30,37 +30,17 @@ import HomeView4 from '../EchoExpense/Screenshots/EchoExpense(HomeView4).png';
 import AccountView3 from '../EchoExpense/Screenshots/EchoExpense(AccountView3).png';
 import CalendarView from '../EchoExpense/Screenshots/EchoExpense(CalendarView).png';
 
+import Privacy from './Privacy';
+import Terms from './Terms';
+
 const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
-  let content;
-
-  if (title === "Privacy Policy") {
-    content = (
-      <iframe
-        src="https://doc-hosting.flycricket.io/echoexpense-privacy-policy/2b68a45d-2065-47dc-bb63-fbe8319c5c47/privacy"
-        title="Privacy Policy"
-        width="100%"
-        height="600px"
-      ></iframe>
-    );
-  } else if (title === "Terms of Use") {
-    content = (
-      <iframe
-        src="https://doc-hosting.flycricket.io/echoexpense-terms-of-use/6d2d83d0-ac0b-4053-87d5-5237309bba5e/terms"
-        title="Terms of Use"
-        width="100%"
-        height="600px"
-      ></iframe>
-    );
-  } else {
-    content = children;
-  }
 
   return (
     <div className="modal">
-      <div className="modal-content">
-        <span className="close" onClick={onClose}>&times;</span>
-        {content}
+      <div className="modal-content" style={{ backgroundColor: '#151515', color: '#fff', padding: '20px', borderRadius: '10px' }}>
+        <span className="close" onClick={onClose} style={{ cursor: 'pointer', fontSize: '24px', color: '#fff' }}>&times;</span>
+        {title === "Privacy Policy" ? <Privacy /> : title === "Terms of Use" ? <Terms /> : children}
       </div>
     </div>
   );
@@ -95,7 +75,9 @@ const EchoExpense = () => {
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [feedback, setFeedback] = useState({ firstName: '', lastName: '', email: '', message: '' });
+
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (EchoExpenseScreenshots.length > 0) {
@@ -155,6 +137,13 @@ const EchoExpense = () => {
     }
   };
 
+  const handleCloseModal = (modalSetter) => {
+    modalSetter(false);
+    if (location.pathname === '/echoexpense/privacy' || location.pathname === '/echoexpense/terms') {
+      navigate('/echoexpense');
+    }
+  };
+
   const calculateNumberOfImages = () => {
     return window.innerWidth <= 768 ? 2 : 4;
   };
@@ -166,8 +155,8 @@ const EchoExpense = () => {
     { src: switftuiLogo, alt: 'SwiftUI Logo', link: 'https://developer.apple.com/xcode/swiftui/' },
     { src: firebaseLogo, alt: 'Firebase Logo', link: 'https://firebase.google.com/' },
     { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
-    { src: termsConditions, alt: 'Terms and Conditions', onClick: () => setIsTermsModalOpen(true) },
-    { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => setIsPrivacyModalOpen(true) }
+    { src: termsConditions, alt: 'Terms and Conditions', onClick: () => navigate('/echoexpense/terms') },
+    { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => navigate('/echoexpense/privacy') }
   ];
 
   return (
@@ -192,7 +181,7 @@ const EchoExpense = () => {
                         <td align="center" key={i}>
                           <img src={EchoExpenseScreenshots[i + currentSet * numberOfImages]}
                             alt={`EchoExpense Screenshot ${i + currentSet * numberOfImages}`}
-                            width="300"/>
+                            width="300" />
                         </td>
                       ))}
                     </tr>
@@ -207,10 +196,10 @@ const EchoExpense = () => {
                   <span key={index}>
                     {logo.link ? (
                       <Link to={logo.link}>
-                        <img src={logo.src} alt={logo.alt} className="logo"/>
+                        <img src={logo.src} alt={logo.alt} className="logo" />
                       </Link>
                     ) : (
-                      <img src={logo.src} alt={logo.alt} className="logo" onClick={logo.onClick} style={{ cursor: 'pointer' }}/>
+                      <img src={logo.src} alt={logo.alt} className="logo" onClick={logo.onClick} style={{ cursor: 'pointer' }} />
                     )}
                   </span>
                 ))}
@@ -219,11 +208,23 @@ const EchoExpense = () => {
           </div>
         </div>
       </div>
-      <Modal isOpen={isTermsModalOpen} onClose={() => setIsTermsModalOpen(false)} title="Terms of Use"/>
-      <Modal isOpen={isPrivacyModalOpen} onClose={() => setIsPrivacyModalOpen(false)} title="Privacy Policy"/>
-      <Modal isOpen={isFeedbackModalOpen} onClose={() => setIsFeedbackModalOpen(false)} title="Send Feedback">
+      <Modal
+        isOpen={isTermsModalOpen}
+        onClose={() => handleCloseModal(setIsTermsModalOpen)}
+        title="Terms of Use"
+      />
+      <Modal
+        isOpen={isPrivacyModalOpen}
+        onClose={() => handleCloseModal(setIsPrivacyModalOpen)}
+        title="Privacy Policy"
+      />
+      <Modal
+        isOpen={isFeedbackModalOpen}
+        onClose={() => setIsFeedbackModalOpen(false)}
+        title="Send Feedback"
+      >
         <form onSubmit={handleFeedbackSubmit} className="feedback-form">
-        <h2 className="modal-title">Send Feedback</h2>
+          <h2 className="modal-title">Send Feedback</h2>
           <label className="form-label">
             First Name:
             <input

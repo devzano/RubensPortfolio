@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../../Portfolio/Portfolio.css';
 import '../../Projects/Projects.css';
-import '../../Projects/MailForm/BetaSignupForm.css';
 import githubLogo from '../../Projects/CodingLogos/github(light).png';
 import xcodeLogo from '../../Projects/CodingLogos/xcode.png';
 import switftuiLogo from '../../Projects/CodingLogos/swiftui.png';
@@ -27,37 +26,17 @@ import MovieWatchlistView from '../Watchlistr-iOS/Screenshots/Watchlistr(MovieWa
 import TVShowWatchlistContextMenuView from '../Watchlistr-iOS/Screenshots/Watchlistr(TVShowWatchlistContextMenuView).png';
 import TVShowWatchlistView from '../Watchlistr-iOS/Screenshots/Watchlistr(TVShowWatchlistView).png';
 
+import Privacy from './Privacy';
+import Terms from './Terms';
+
 const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
-  let content;
-
-  if (title === "Privacy Policy") {
-    content = (
-      <iframe
-        src="https://doc-hosting.flycricket.io/watchlistr-privacy-policy/1926eb16-dda6-4138-8714-256aa79e5472/privacy"
-        title="Privacy Policy"
-        width="100%"
-        height="600px"
-      ></iframe>
-    );
-  } else if (title === "Terms of Use") {
-    content = (
-      <iframe
-        src="https://doc-hosting.flycricket.io/watchlistr-terms-of-use/3a2dbd85-0829-4f61-9560-6518d02bd07b/terms"
-        title="Terms of Use"
-        width="100%"
-        height="600px"
-      ></iframe>
-    );
-  } else {
-    content = children;
-  }
 
   return (
     <div className="modal">
-      <div className="modal-content">
-        <span className="close" onClick={onClose}>&times;</span>
-        {content}
+      <div className="modal-content" style={{ backgroundColor: '#151515', color: '#fff', padding: '20px', borderRadius: '10px' }}>
+        <span className="close" onClick={onClose} style={{ cursor: 'pointer', fontSize: '24px', color: '#fff' }}>&times;</span>
+        {title === "Privacy Policy" ? <Privacy /> : title === "Terms of Use" ? <Terms /> : children}
       </div>
     </div>
   );
@@ -88,7 +67,9 @@ const WatchlistriOS = () => {
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [feedback, setFeedback] = useState({ firstName: '', lastName: '', email: '', message: '' });
+
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (WatchlistrScreenshots.length > 0) {
@@ -152,6 +133,13 @@ const WatchlistriOS = () => {
     }
   };
 
+  const handleCloseModal = (modalSetter) => {
+    modalSetter(false);
+    if (location.pathname === '/watchlistr-ios/privacy' || location.pathname === '/watchlistr-ios/terms') {
+      navigate('/watchlistr-ios');
+    }
+  };
+
   const calculateNumberOfImages = () => {
     return window.innerWidth <= 768 ? 2 : 4;
   };
@@ -163,8 +151,8 @@ const WatchlistriOS = () => {
     { src: switftuiLogo, alt: 'SwiftUI Logo', link: 'https://developer.apple.com/xcode/swiftui/' },
     { src: firebaseLogo, alt: 'Firebase Logo', link: 'https://firebase.google.com/' },
     { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
-    { src: termsConditions, alt: 'Terms and Conditions', link: '/watchlistr-ios/terms' },
-    { src: privacyPolicy, alt: 'Privacy Policy', link: '/watchlistr-ios/privacy' }
+    { src: termsConditions, alt: 'Terms and Conditions', onClick: () => navigate('/watchlistr-ios/terms') },
+    { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => navigate('/watchlistr-ios/privacy') }
   ];
 
   return (
@@ -217,9 +205,21 @@ const WatchlistriOS = () => {
           </div>
         </div>
       </div>
-      <Modal isOpen={isTermsModalOpen} onClose={() => setIsTermsModalOpen(false)} title="Terms of Use"/>
-      <Modal isOpen={isPrivacyModalOpen} onClose={() => setIsPrivacyModalOpen(false)} title="Privacy Policy"/>
-      <Modal isOpen={isFeedbackModalOpen} onClose={() => setIsFeedbackModalOpen(false)} title="Send Feedback">
+      <Modal
+        isOpen={isTermsModalOpen}
+        onClose={() => handleCloseModal(setIsTermsModalOpen)}
+        title="Terms of Use"
+      />
+      <Modal
+        isOpen={isPrivacyModalOpen}
+        onClose={() => handleCloseModal(setIsPrivacyModalOpen)}
+        title="Privacy Policy"
+      />
+      <Modal
+        isOpen={isFeedbackModalOpen}
+        onClose={() => setIsFeedbackModalOpen(false)}
+        title="Send Feedback"
+      >
         <form onSubmit={handleFeedbackSubmit} className="feedback-form">
           <h2 className="modal-title">Send Feedback</h2>
           <label className="form-label">

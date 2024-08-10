@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import '../../Portfolio/Portfolio.css';
 import '../../Projects/Projects.css';
 import githubLogo from '../../Projects/CodingLogos/github(light).png';
@@ -30,37 +30,17 @@ import OptionsView from '../RecipeRealm/Screenshots/RecipeRealm(OptionsView).png
 import ChangeTintView from '../RecipeRealm/Screenshots/RecipeRealm(ChangeTintView).png';
 import ChangeThemeView from '../RecipeRealm/Screenshots/RecipeRealm(ChangeThemeView).png';
 
+import Terms from './Terms';
+import Privacy from './Privacy';
+
 const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
-  let content;
-
-  if (title === "Privacy Policy") {
-    content = (
-      <iframe
-        src="https://doc-hosting.flycricket.io/reciperealm-privacy-policy/87bce577-640c-4bf9-9820-c36d1fa03d76/privacy"
-        title="Privacy Policy"
-        width="100%"
-        height="600px"
-      ></iframe>
-    );
-  } else if (title === "Terms of Use") {
-    content = (
-      <iframe
-        src="https://doc-hosting.flycricket.io/reciperealm-terms-of-use/f5851ec4-dec8-472c-b0c2-2c90df39540f/terms"
-        title="Terms of Use"
-        width="100%"
-        height="600px"
-      ></iframe>
-    );
-  } else {
-    content = children;
-  }
 
   return (
     <div className="modal">
-      <div className="modal-content">
-        <span className="close" onClick={onClose}>&times;</span>
-        {content}
+      <div className="modal-content" style={{ backgroundColor: '#151515', color: '#fff', padding: '20px', borderRadius: '10px' }}>
+        <span className="close" onClick={onClose} style={{ cursor: 'pointer', fontSize: '24px', color: '#fff' }}>&times;</span>
+        {title === "Privacy Policy" ? <Privacy /> : title === "Terms of Use" ? <Terms /> : children}
       </div>
     </div>
   );
@@ -95,7 +75,9 @@ const RecipeRealm = () => {
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [feedback, setFeedback] = useState({ firstName: '', lastName: '', email: '', message: '' });
+
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (RecipeRealmScreenshots.length > 0) {
@@ -155,6 +137,13 @@ const RecipeRealm = () => {
     }
   };
 
+  const handleCloseModal = (modalSetter) => {
+    modalSetter(false);
+    if (location.pathname === '/reciperealm/privacy' || location.pathname === '/reciperealm/terms') {
+      navigate('/reciperealm');
+    }
+  };
+
   const calculateNumberOfImages = () => {
     return window.innerWidth <= 768 ? 2 : 4;
   };
@@ -166,8 +155,8 @@ const RecipeRealm = () => {
     { src: coredataLogo, alt: 'CoreData Logo', link: 'https://developer.apple.com/documentation/coredata/' },
     { src: switftuiLogo, alt: 'SwiftUI Logo', link: 'https://developer.apple.com/xcode/swiftui/' },
     { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
-    { src: termsConditions, alt: 'Terms and Conditions', link: '/reciperealm/terms' },
-    { src: privacyPolicy, alt: 'Privacy Policy', link: '/reciperealm/privacy' }
+    { src: termsConditions, alt: 'Terms and Conditions', onClick: () => navigate('/reciperealm/terms') },
+    { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => navigate('/reciperealm/privacy') }
   ];
 
   return (
@@ -219,11 +208,23 @@ const RecipeRealm = () => {
           </div>
         </div>
       </div>
-      <Modal isOpen={isTermsModalOpen} onClose={() => setIsTermsModalOpen(false)} title="Terms of Use" />
-      <Modal isOpen={isPrivacyModalOpen} onClose={() => setIsPrivacyModalOpen(false)} title="Privacy Policy" />
-      <Modal isOpen={isFeedbackModalOpen} onClose={() => setIsFeedbackModalOpen(false)} title="Send Feedback">
+      <Modal
+        isOpen={isTermsModalOpen}
+        onClose={() => handleCloseModal(setIsTermsModalOpen)}
+        title="Terms of Use"
+      />
+      <Modal
+        isOpen={isPrivacyModalOpen}
+        onClose={() => handleCloseModal(setIsPrivacyModalOpen)}
+        title="Privacy Policy"
+      />
+      <Modal
+        isOpen={isFeedbackModalOpen}
+        onClose={() => setIsFeedbackModalOpen(false)}
+        title="Send Feedback"
+      >
         <form onSubmit={handleFeedbackSubmit} className="feedback-form">
-        <h2 className="modal-title">Send Feedback</h2>
+          <h2 className="modal-title">Send Feedback</h2>
           <label className="form-label">
             First Name:
             <input

@@ -26,8 +26,9 @@ const DynamicSpaceBackground = () => {
 
     camera.position.z = 5;
 
-    let mouseX = 0;
-    let mouseY = 0;
+    let mouseX = 0.305;
+    let mouseY = 0.305;
+
     const onMouseMove = (event) => {
       mouseX = (event.clientX / window.innerWidth) * 2 - 1;
       mouseY = -(event.clientY / window.innerHeight) * 2 + 1;

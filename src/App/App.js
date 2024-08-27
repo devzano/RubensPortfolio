@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { isMobile } from 'react-device-detect';
-import DynamicBackground from './DynamicBackground';
+// import { isMobile } from 'react-device-detect';
+import DynamicSpaceBackground from './DynamicSpaceBackground';
 import Navbar from '../Navbar/Navbar';
 import Portfolio from '../Portfolio/Portfolio';
 import WatchlistrWeb from '../Projects/Watchlistr-Web/Watchlistr(Web)';
@@ -16,21 +16,17 @@ import '../Navbar/Navbar.css';
 const App = () => {
   return (
     <Router>
-      <Navbar/>
+      <Navbar />
       <div className="App">
-        {isMobile ? (
-          <div className="mobile"></div>
-        ) : (
-          <DynamicBackground/>
-        )}
+        <DynamicSpaceBackground />
         <Routes>
-          <Route path="/" element={<Portfolio/>}/>
-          <Route path="/watchlistr-web" element={<WatchlistrWeb/>}/>
-          <Route path="/reciperealm/*" element={<RecipeRealm/>}/>
-          <Route path="/watchlistr-ios/*" element={<WatchlistriOS/>}/>
-          <Route path="/echoexpense/*" element={<EchoExpense/>}/>
-          <Route path="/projects" element={<Projects/>}/>
-          <Route path="*" element={<ErrorPage/>}/>
+          <Route path="/" element={<Portfolio />} />
+          <Route path="/watchlistr-web" element={<WatchlistrWeb />} />
+          <Route path="/reciperealm/*" element={<RecipeRealm />} />
+          <Route path="/watchlistr-ios/*" element={<WatchlistriOS />} />
+          <Route path="/echoexpense/*" element={<EchoExpense />} />
+          <Route path="/projects" element={<Projects />} />
+          <Route path="*" element={<ErrorPage />} />
         </Routes>
       </div>
     </Router>

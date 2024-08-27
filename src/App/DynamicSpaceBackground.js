@@ -1,13 +1,13 @@
-import React, {useRef, useEffect} from 'react';
+import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 
-const DynamicBackground = () => {
+const DynamicSpaceBackground = () => {
   const mountRef = useRef(null);
 
   useEffect(() => {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({alpha: true});
+    const renderer = new THREE.WebGLRenderer({ alpha: true });
     renderer.setSize(window.innerWidth, document.body.scrollHeight);
 
     mountRef.current.appendChild(renderer.domElement);
@@ -20,7 +20,7 @@ const DynamicBackground = () => {
       particleData[i] = (Math.random() - 0.5) * 25;
     }
     particles.setAttribute('position', new THREE.BufferAttribute(particleData, 3));
-    const particleMaterial = new THREE.PointsMaterial({color: 0xAAAAAA, size: 0.02});
+    const particleMaterial = new THREE.PointsMaterial({ color: 0xAAAAAA, size: 0.02 });
     const particleSystem = new THREE.Points(particles, particleMaterial);
     scene.add(particleSystem);
 
@@ -43,31 +43,41 @@ const DynamicBackground = () => {
     };
     animate();
 
-    window.addEventListener('resize', () => {
+    const onResize = () => {
       const newWidth = window.innerWidth;
       const newHeight = document.body.scrollHeight;
       camera.aspect = newWidth / newHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(newWidth, newHeight);
-    });
-    return() => {
-      window.removeEventListener('resize', () => {});
+    };
+
+    window.addEventListener('resize', onResize);
+
+    return () => {
+      window.removeEventListener('resize', onResize);
       window.removeEventListener('mousemove', onMouseMove);
       currentRef.removeChild(renderer.domElement);
+      scene.remove(particleSystem);
+      particles.dispose();
+      particleMaterial.dispose();
+      renderer.dispose();
     };
   }, []);
-  return <div ref={mountRef}
-    style={
-      {
+
+  return (
+    <div
+      ref={mountRef}
+      style={{
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
         zIndex: 0,
-        pointerEvents: 'none'
-      }
-    }/>;
+        pointerEvents: 'none',
+      }}
+    />
+  );
 };
 
-export default DynamicBackground;
+export default DynamicSpaceBackground;

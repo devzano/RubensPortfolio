@@ -13,15 +13,11 @@
   top: 0;
   left: 0;
   height: auto;
-  width: 100px;
+  width: 150px;
   background-color: #1a1a1a95;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.3);
   transition: width 0.3s;
   z-index: 2;
-}
-
-.navbar:hover {
-  width: 150px;
 }
 
 .navbar-list {
@@ -34,7 +30,9 @@
   text-decoration: none;
   cursor: default;
   color: #fff;
-  display: block;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 15px 20px;
   transition: background-color 0.3s;
 }
@@ -63,4 +61,15 @@
 
 .dropdown .navbar-link {
   padding: 10px 15px;
+}
+
+.navbar-dropdown.ios .dropdown {
+  min-width: 200px;
+}
+
+.navbar-icon-img {
+  width: 24px;
+  height: 24px;
+  margin-left: 8px;
+  border-radius: 10%;
 }

@@ -87,15 +87,10 @@ const WatchlistrWeb = () => {
                 <img src={WatchlistrWebScreens[watchlistrIndex]} alt={`Project ${watchlistrIndex + 1}`} className="project-image" style={{ width: '100%', maxHeight: '500px' }} />
               </div>
               <p className="project-description">
-                Embarking on my journey into project development, I created Watchlistr as a platform to enhance your entertainment experience. Initially, it was only a website, and I have now seamlessly integrated it with my <a href="https://www.rubenmanzano.com/watchlistr-ios" target="_blank" rel="noopener noreferrer">iOS app</a>, allowing users to enjoy a unified experience. You can easily login or create an account on either platform.
+                Embarking on my journey into development, I created Watchlistr as a platform to enhance one's entertainment experience. Initially, it was only a website, and I have now seamlessly integrated it with my <a href="https://www.rubenmanzano.com/watchlistr-ios" target="_blank" rel="noopener noreferrer">iOS app</a>, allowing users to enjoy a unified experience. You can easily login or create an account on either platform.
               </p>
-
               <p className="project-description">
-                Watchlistr makes it simple for you to create personal accounts and curate your own Movie and TV Show watchlists. Discover upcoming releases, explore popular picks, and check out top-rated media, all in one place.
-              </p>
-
-              <p className="project-description">
-                My mission is to empower you to collect and save all those must-see and classic titles for your future viewing pleasure. Join today and never miss out on the media you love!
+                Watchlistr makes it simple for you to create personal watchlists and track your favorite Movies and TV Shows. Discover upcoming releases, explore popular picks, and check out top-rated media, all in one place. My mission is to empower you to collect and save all those must-see and classic titles for your future viewing pleasure. Join today and never miss out on the media you love!
               </p>
               <div className="logo-container">
                 {builtWithLogos.map((logo, index) => (

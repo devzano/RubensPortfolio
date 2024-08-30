@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 // import { isMobile } from 'react-device-detect';
 import DynamicSpaceBackground from './DynamicSpaceBackground';
+import UFO from './UFO';
 import Navbar from '../Navbar/Navbar';
 import Portfolio from '../Portfolio/Portfolio';
 import WatchlistrWeb from '../Projects/Watchlistr-Web/Watchlistr(Web)';
@@ -19,6 +20,7 @@ const App = () => {
       <Navbar />
       <div className="App">
         <DynamicSpaceBackground />
+        <UFO />
         <Routes>
           <Route path="/" element={<Portfolio />} />
           <Route path="/watchlistr-web" element={<WatchlistrWeb />} />

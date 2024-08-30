@@ -1,8 +1,11 @@
 import React, { useRef, useEffect } from 'react';
 import * as THREE from 'three';
 
-const DynamicSpaceBackground = () => {
+const DynamicSpaceBackground = ({ isPaused }) => {
   const mountRef = useRef(null);
+  const animationRef = useRef();
+  const particlesRef = useRef();
+  const velocitiesRef = useRef();
 
   useEffect(() => {
     const scene = new THREE.Scene();
@@ -56,6 +59,9 @@ const DynamicSpaceBackground = () => {
 
     camera.position.z = 30;
 
+    particlesRef.current = particles;
+    velocitiesRef.current = particleVelocities;
+
     let mouseX = 0;
     let mouseY = 0;
 
@@ -67,26 +73,28 @@ const DynamicSpaceBackground = () => {
     window.addEventListener('mousemove', onMouseMove);
 
     const animate = () => {
-      requestAnimationFrame(animate);
+      if (!isPaused) {
+        const positions = particlesRef.current.attributes.position.array;
+        const velocities = velocitiesRef.current;
 
-      const positions = particles.attributes.position.array;
+        for (let i = 0; i < particleCount; i++) {
+          positions[i * 3 + 2] += velocities[i];
 
-      for (let i = 0; i < particleCount; i++) {
-        positions[i * 3 + 2] += particleVelocities[i];
-
-        if (positions[i * 3 + 2] > 30) {
-          positions[i * 3 + 2] = Math.random() * -200;
-          positions[i * 3] = (Math.random() - 0.5) * 100;
-          positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
+          if (positions[i * 3 + 2] > 30) {
+            positions[i * 3 + 2] = Math.random() * -200;
+            positions[i * 3] = (Math.random() - 0.5) * 100;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 100;
+          }
         }
+
+        particleSystem.rotation.x += mouseY * 0.005;
+        particleSystem.rotation.y += mouseX * 0.005;
+
+        particlesRef.current.attributes.position.needsUpdate = true;
       }
 
-      particleSystem.rotation.x += mouseY * 0.005;
-      particleSystem.rotation.y += mouseX * 0.005;
-
-      particles.attributes.position.needsUpdate = true;
-
       renderer.render(scene, camera);
+      animationRef.current = requestAnimationFrame(animate);
     };
     animate();
 
@@ -108,8 +116,9 @@ const DynamicSpaceBackground = () => {
       particles.dispose();
       particleMaterial.dispose();
       renderer.dispose();
+      cancelAnimationFrame(animationRef.current);
     };
-  }, []);
+  }, [isPaused]);
 
   return (
     <div

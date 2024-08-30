@@ -5,7 +5,7 @@ import Watchlistr_Icon from '../Projects/CodingLogos/watchlistr(icon).png';
 import RecipeRealm_Icon from '../Projects/CodingLogos/reciperealm(icon).png';
 import EchoExpense_Icon from '../Projects/CodingLogos/echoexpense(icon).png';
 
-const Navbar = () => {
+const Navbar = ({ onTogglePause }) => {
   const [state, setState] = useState({
     isOpen: false,
     activeDropdown: null,
@@ -45,7 +45,29 @@ const Navbar = () => {
 
   return (
     <div className="navbar-container" ref={navbarRef}>
-      {state.isOpen ? (
+      <div className="navbar-icon-container">
+        <div
+          className="navbar-icon"
+          onClick={toggleMenu}
+          onKeyDown={(e) => handleKeyDown(e, toggleMenu)}
+          tabIndex="0"
+          role="button"
+          aria-label="Toggle Menu"
+        >
+          &#9776;
+        </div>
+      </div>
+
+      <button
+        className="pause-animation-icon"
+        onClick={onTogglePause}
+        aria-label="Pause Background Animation"
+        title="Pause Background Animation"
+      >
+        𐫰
+      </button>
+
+      {state.isOpen && (
         <div className="navbar">
           <div className="navbar-list">
             <Link
@@ -147,17 +169,6 @@ const Navbar = () => {
               All Projects
             </Link>
           </div>
-        </div>
-      ) : (
-        <div
-          className="navbar-icon"
-          onClick={toggleMenu}
-          onKeyDown={(e) => handleKeyDown(e, toggleMenu)}
-          tabIndex="0"
-          role="button"
-          aria-label="Toggle Menu"
-        >
-          &#9776;
         </div>
       )}
     </div>

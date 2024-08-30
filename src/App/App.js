@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-// import { isMobile } from 'react-device-detect';
 import DynamicSpaceBackground from './DynamicSpaceBackground';
 import UFO from './UFO';
 import Navbar from '../Navbar/Navbar';
@@ -15,11 +14,17 @@ import './App.css';
 import '../Navbar/Navbar.css';
 
 const App = () => {
+  const [isPaused, setIsPaused] = useState(false);
+
+  const togglePause = () => {
+    setIsPaused((prevPaused) => !prevPaused);
+  };
+
   return (
     <Router>
-      <Navbar />
+      <Navbar onTogglePause={togglePause} />
       <div className="App">
-        <DynamicSpaceBackground />
+        <DynamicSpaceBackground isPaused={isPaused} />
         <UFO />
         <Routes>
           <Route path="/" element={<Portfolio />} />

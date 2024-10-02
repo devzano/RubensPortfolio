@@ -10,16 +10,7 @@ const Privacy = () => {
 
       <h2>Information Collection and Use</h2>
       <p>
-        The Application collects information when you download and use it. This information may include:
-      </p>
-      <ul>
-        <li>Your device's Internet Protocol address (e.g., IP address)</li>
-        <li>The pages of the Application that you visit, the time and date of your visit, the time spent on those pages</li>
-        <li>The time spent on the Application</li>
-        <li>The operating system you use on your mobile device</li>
-      </ul>
-      <p>
-        The Application does not collect precise information about the location of your mobile device.
+        The Application does not collect information or about the location of your mobile device.
       </p>
       <p>
         The Service Provider may use the information you provide to contact you from time to time to provide important information, required notices, or marketing promotions.
@@ -80,7 +71,7 @@ const Privacy = () => {
         By using the Application, you consent to the processing of your information as set forth in this Privacy Policy, including any amendments made by the Service Provider.
       </p>
 
-      <h2>Contact Us</h2>
+      <h2>Contact Me</h2>
       <p>
         If you have any questions regarding privacy while using the Application, or if you have questions about the Service Provider's practices, please contact them via email at <a href="mailto:rmanzano.se@gmail.com">rmanzano.se@gmail.com</a>.
       </p>

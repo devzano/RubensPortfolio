@@ -8,6 +8,7 @@ import WatchlistrWeb from '../Projects/Watchlistr-Web/Watchlistr(Web)';
 import RecipeRealm from '../Projects/RecipeRealm/RecipeRealm';
 import WatchlistriOS from '../Projects/Watchlistr-iOS/Watchlistr(iOS)';
 import EchoExpense from '../Projects/EchoExpense/EchoExpense';
+import OtakuHive from '../Projects/OtakuHive/OtakuHive';
 import Projects from '../Projects/Projects';
 import ErrorPage from './ErrorPage';
 import './App.css';
@@ -32,6 +33,7 @@ const App = () => {
           <Route path="/reciperealm/*" element={<RecipeRealm />} />
           <Route path="/watchlistr-ios/*" element={<WatchlistriOS />} />
           <Route path="/echoexpense/*" element={<EchoExpense />} />
+          <Route path="/otakuhive/*" element={<OtakuHive />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>

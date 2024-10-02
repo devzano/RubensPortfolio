@@ -3,6 +3,7 @@ import WatchlistrWeb from '../Projects/Watchlistr-Web/Watchlistr(Web)';
 import RecipeRealm from '../Projects/RecipeRealm/RecipeRealm';
 import WatchlistriOS from '../Projects/Watchlistr-iOS/Watchlistr(iOS)';
 import EchoExpense from '../Projects/EchoExpense/EchoExpense';
+import OtakuHive from './OtakuHive/OtakuHive';
 import '../Projects/Projects.css';
 import '../Portfolio/Portfolio.css';
 
@@ -11,7 +12,7 @@ const Projects = () => {
   const [startX, setStartX] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [offsetX, setOffsetX] = useState(0);
-  const slides = [<WatchlistrWeb />, <RecipeRealm />, <WatchlistriOS />, <EchoExpense />];
+  const slides = [<WatchlistrWeb />, <RecipeRealm />, <WatchlistriOS />, <EchoExpense />, <OtakuHive />];
   const sliderRef = useRef(null);
 
   const handleStart = (clientX) => {

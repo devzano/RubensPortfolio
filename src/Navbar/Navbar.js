@@ -4,6 +4,7 @@ import './Navbar.css';
 import Watchlistr_Icon from '../Projects/CodingLogos/watchlistr(icon).png';
 import RecipeRealm_Icon from '../Projects/CodingLogos/reciperealm(icon).png';
 import EchoExpense_Icon from '../Projects/CodingLogos/echoexpense(icon).png';
+import OtakuHive_Icon from '../Projects/CodingLogos/otakuhive(icon).png';
 
 const Navbar = ({ onTogglePause }) => {
   const [state, setState] = useState({
@@ -154,6 +155,17 @@ const Navbar = ({ onTogglePause }) => {
                   >
                     EchoExpense
                     <img src={EchoExpense_Icon} alt="EchoExpense Icon" className="navbar-icon-img" />
+                  </Link>
+                  <Link
+                    className="navbar-link"
+                    to="/otakuhive"
+                    onClick={toggleMenu}
+                    onKeyDown={(e) => handleKeyDown(e, toggleMenu)}
+                    role="menuitem"
+                    tabIndex="0"
+                  >
+                    OtakuHive
+                    <img src={OtakuHive_Icon} alt="OtakuHive Icon" className="navbar-icon-img" />
                   </Link>
                 </div>
               )}

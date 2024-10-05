@@ -70,7 +70,7 @@ const OtakuHive = () => {
     }
   }, [location.pathname]);
 
-  const handleAppStoreButtonClick = () => {
+  const handleTestFlightButtonClick = () => {
     window.open("https://testflight.apple.com/join/sRsqfd9y", "_blank");
   };
 
@@ -132,7 +132,7 @@ const OtakuHive = () => {
       </h1>
       <div className="centered-content">
       <div className="button-group">
-          <button onClick={handleAppStoreButtonClick} className="app-button">App Store</button>
+          <button onClick={handleTestFlightButtonClick} className="app-button">TestFlight</button>
           &nbsp;
           <button onClick={() => setIsFeedbackModalOpen(true)} className="app-button">Send Feedback</button>
         </div>

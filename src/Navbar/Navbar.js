@@ -5,6 +5,8 @@ import Watchlistr_Icon from '../Projects/CodingLogos/watchlistr(icon).png';
 import RecipeRealm_Icon from '../Projects/CodingLogos/reciperealm(icon).png';
 import EchoExpense_Icon from '../Projects/CodingLogos/echoexpense(icon).png';
 import OtakuHive_Icon from '../Projects/CodingLogos/otakuhive(icon).png';
+import SunshineKeyWestChallenge_Icon from '../Projects/CodingLogos/sunshinekeywestchallenge(icon).png';
+import StarshipPixelscape_Icon from '../Projects/CodingLogos/starship-pixelscape(icon).png'
 
 const Navbar = ({ onTogglePause }) => {
   const [state, setState] = useState({
@@ -167,9 +169,59 @@ const Navbar = ({ onTogglePause }) => {
                     OtakuHive
                     <img src={OtakuHive_Icon} alt="OtakuHive Icon" className="navbar-icon-img" />
                   </Link>
+                  {/* <Link
+                    className="navbar-link"
+                    to="/sunshinekeywestchallenge"
+                    onClick={toggleMenu}
+                    onKeyDown={(e) => handleKeyDown(e, toggleMenu)}
+                    role="menuitem"
+                    tabIndex="0"
+                  >
+                    Sunshine Key West Challenge
+                    <img src={SunshineKeyWestChallenge_Icon} alt="Sunshine Key West Challenge Icon" className="navbar-icon-img" />
+                  </Link> */}
+                  <Link
+                    className="navbar-link"
+                    to="/starship-pixelscape"
+                    onClick={toggleMenu}
+                    onKeyDown={(e) => handleKeyDown(e, toggleMenu)}
+                    role="menuitem"
+                    tabIndex="0"
+                  >
+                    Starship Pixelscape
+                    <img src={StarshipPixelscape_Icon} alt="Starship Pixelscape Icon" className="navbar-icon-img" />
+                  </Link>
                 </div>
               )}
             </div>
+            {/* <div
+              className={`navbar-dropdown android ${state.activeDropdown === 'android' ? 'active' : ''}`}
+              onMouseEnter={() => handleMouseEnter('android')}
+              onMouseLeave={handleMouseLeave}
+              onTouchStart={() => handleMouseEnter('android')}
+              tabIndex="0"
+              role="menuitem"
+              aria-haspopup="true"
+              aria-expanded={state.activeDropdown === 'android'}
+              onKeyDown={(e) => handleKeyDown(e, () => handleMouseEnter('android'))}
+            >
+              <span className="navbar-link">Android</span>
+              {state.activeDropdown === 'android' && (
+                <div className="dropdown">
+                   <Link
+                    className="navbar-link"
+                    to="/sunshinekeywestchallenge"
+                    onClick={toggleMenu}
+                    onKeyDown={(e) => handleKeyDown(e, toggleMenu)}
+                    role="menuitem"
+                    tabIndex="0"
+                  >
+                    Sunshine Key West Challenge
+                    <img src={SunshineKeyWestChallenge_Icon} alt="Sunshine Key West Challenge Icon" className="navbar-icon-img" />
+                  </Link>
+                </div>
+              )}
+            </div> */}
             <Link
               className="navbar-link"
               to="/projects"

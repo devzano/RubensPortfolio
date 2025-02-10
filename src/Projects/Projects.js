@@ -4,6 +4,8 @@ import RecipeRealm from '../Projects/RecipeRealm/RecipeRealm';
 import WatchlistriOS from '../Projects/Watchlistr-iOS/Watchlistr(iOS)';
 import EchoExpense from '../Projects/EchoExpense/EchoExpense';
 import OtakuHive from './OtakuHive/OtakuHive';
+import SunshineKeyWestChallenge from './SunshineKeyWestChallenge/SunshineKeyWestChallenge'
+import StarshipPixelscape from './StarshipPixelscape/StarshipPixelscape';
 import '../Projects/Projects.css';
 import '../Portfolio/Portfolio.css';
 
@@ -12,7 +14,14 @@ const Projects = () => {
   const [startX, setStartX] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const [offsetX, setOffsetX] = useState(0);
-  const slides = [<WatchlistrWeb />, <RecipeRealm />, <WatchlistriOS />, <EchoExpense />, <OtakuHive />];
+  const slides = [
+  <WatchlistrWeb />,
+  <RecipeRealm />,
+  <WatchlistriOS />,
+  <EchoExpense />,
+  <OtakuHive />,
+  // <SunshineKeyWestChallenge />,
+  <StarshipPixelscape />];
   const sliderRef = useRef(null);
 
   const handleStart = (clientX) => {
@@ -69,7 +78,7 @@ const Projects = () => {
     >
       <h2 className="section-title">Projects</h2>
       <div className="slider">
-        <p className="swipe-prompt">Swipe to see more projects</p>
+        <p className="swipe-prompt">swipe to see more projects</p>
         <div className="slide-container" style={{ transform: slideTransform }}>
           {slides.map((slide, index) => (
             <div key={index} className={index === currentSlide ? 'current-slide' : 'next-slide'}>

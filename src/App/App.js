@@ -9,10 +9,12 @@ import RecipeRealm from '../Projects/RecipeRealm/RecipeRealm';
 import WatchlistriOS from '../Projects/Watchlistr-iOS/Watchlistr(iOS)';
 import EchoExpense from '../Projects/EchoExpense/EchoExpense';
 import OtakuHive from '../Projects/OtakuHive/OtakuHive';
+import SunshineKeyWestChallenge from '../Projects/SunshineKeyWestChallenge/SunshineKeyWestChallenge';
 import Projects from '../Projects/Projects';
 import ErrorPage from './ErrorPage';
 import './App.css';
 import '../Navbar/Navbar.css';
+import StarshipPixelscape from '../Projects/StarshipPixelscape/StarshipPixelscape';
 
 const App = () => {
   const [isPaused, setIsPaused] = useState(false);
@@ -34,6 +36,8 @@ const App = () => {
           <Route path="/watchlistr-ios/*" element={<WatchlistriOS />} />
           <Route path="/echoexpense/*" element={<EchoExpense />} />
           <Route path="/otakuhive/*" element={<OtakuHive />} />
+          <Route path='/sunshinekeywestchallenge/*' element={<SunshineKeyWestChallenge />} />
+          <Route path='/starship-pixelscape/*' element={<StarshipPixelscape />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>

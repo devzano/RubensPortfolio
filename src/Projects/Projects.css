@@ -32,10 +32,13 @@
 
 .project-description {
   font-size: 18px;
-  margin: 20px 0;
+  margin: 20px auto;
   text-align: center;
   color: cornflowerblue;
   line-height: 1.4;
+  max-width: 900px;
+  padding: 10px;
+  border-radius: 10px;
 }
 
 .app-button {

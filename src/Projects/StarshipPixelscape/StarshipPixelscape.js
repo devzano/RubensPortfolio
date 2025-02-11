@@ -74,10 +74,6 @@ const StarshipPixelscape = () => {
     window.open("https://apps.apple.com/us/app/starship-pixelscape/id6741517533", "_blank");
   };
 
-  const handleBetaButtonClick = () => {
-    window.open("https://testflight.apple.com/join/DC2jXUnh", "_blank");
-  };
-
   const handleFeedbackSubmit = async (e) => {
     e.preventDefault();
 
@@ -136,9 +132,7 @@ const StarshipPixelscape = () => {
       </h1>
       <div className="centered-content">
         <div className="flex justify-center space-x-4">
-          {/* <button onClick={handleAppStoreButtonClick} className="app-button">App Store</button>
-          &nbsp; */}
-          <button onClick={handleBetaButtonClick} className="app-button">Beta</button>
+          <button onClick={handleAppStoreButtonClick} className="app-button">App Store</button>
           &nbsp;
           <button onClick={() => setIsFeedbackModalOpen(true)} className="app-button">Send Feedback</button>
         </div>

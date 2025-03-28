@@ -5,26 +5,27 @@ import '../../Projects/Projects.css';
 import githubLogo from '../../Projects/CodingLogos/github(light).png';
 import xcodeLogo from '../../Projects/CodingLogos/xcode.png';
 import switftuiLogo from '../../Projects/CodingLogos/swiftui.png';
+import expoLogo from '../CodingLogos/expodevinv.png'
 import firebaseLogo from '../../Projects/CodingLogos/firebase.png';
 import privacyPolicy from '../../Projects/CodingLogos/privacy-policy.png';
 import termsConditions from '../../Projects/CodingLogos/terms-conditions.png';
 
-import LoginView from '../Watchlistr-iOS/Screenshots/Watchlistr(LoginView).png';
-import SignupView from '../Watchlistr-iOS/Screenshots/Watchlistr(SignupView).png';
-import ProfileTabView from '../Watchlistr-iOS/Screenshots/Watchlistr(ProfileTabView).png';
-import ProfileTabViewTextColorsView from '../Watchlistr-iOS/Screenshots/Watchlistr(ProfileTabViewTextColorsView).png';
-import MovieTabView from '../Watchlistr-iOS/Screenshots/Watchlistr(MovieTabView).png';
-import BlankMovieSearchView from '../Watchlistr-iOS/Screenshots/Watchlistr(BlankMovieSearchView).png';
-import MovieSearchResultsView from '../Watchlistr-iOS/Screenshots/Watchlistr(MovieSearchResultsView).png';
-import MovieDetailsView from '../Watchlistr-iOS/Screenshots/Watchlistr(MovieDetailsView).png';
-import TVShowTabView from '../Watchlistr-iOS/Screenshots/Watchlistr(TVShowTabView).png';
-import BlankTVShowSearchView from '../Watchlistr-iOS/Screenshots/Watchlistr(BlankTVShowSearchView).png';
-import TVShowSearchResultsView from '../Watchlistr-iOS/Screenshots/Watchlistr(TVShowSearchResultsView).png';
-import TVShowDetailsView from '../Watchlistr-iOS/Screenshots/Watchlistr(TVShowDetailsView).png';
-import MovieWatchlistContextMenuView from '../Watchlistr-iOS/Screenshots/Watchlistr(MovieWatchlistContextMenuView).png';
-import MovieWatchlistView from '../Watchlistr-iOS/Screenshots/Watchlistr(MovieWatchlistView).png';
-import TVShowWatchlistContextMenuView from '../Watchlistr-iOS/Screenshots/Watchlistr(TVShowWatchlistContextMenuView).png';
-import TVShowWatchlistView from '../Watchlistr-iOS/Screenshots/Watchlistr(TVShowWatchlistView).png';
+import LoginView from './Screenshots/Watchlistr(LoginView).png';
+import SignupView from './Screenshots/Watchlistr(SignupView).png';
+import ProfileTabView from './Screenshots/Watchlistr(ProfileTabView).png';
+import ProfileTabViewTextColorsView from './Screenshots/Watchlistr(ProfileTabViewTextColorsView).png';
+import MovieTabView from './Screenshots/Watchlistr(MovieTabView).png';
+import BlankMovieSearchView from './Screenshots/Watchlistr(BlankMovieSearchView).png';
+import MovieSearchResultsView from './Screenshots/Watchlistr(MovieSearchResultsView).png';
+import MovieDetailsView from './Screenshots/Watchlistr(MovieDetailsView).png';
+import TVShowTabView from './Screenshots/Watchlistr(TVShowTabView).png';
+import BlankTVShowSearchView from './Screenshots/Watchlistr(BlankTVShowSearchView).png';
+import TVShowSearchResultsView from './Screenshots/Watchlistr(TVShowSearchResultsView).png';
+import TVShowDetailsView from './Screenshots/Watchlistr(TVShowDetailsView).png';
+import MovieWatchlistContextMenuView from './Screenshots/Watchlistr(MovieWatchlistContextMenuView).png';
+import MovieWatchlistView from './Screenshots/Watchlistr(MovieWatchlistView).png';
+import TVShowWatchlistContextMenuView from './Screenshots/Watchlistr(TVShowWatchlistContextMenuView).png';
+import TVShowWatchlistView from './Screenshots/Watchlistr(TVShowWatchlistView).png';
 
 import Privacy from './Privacy';
 import Terms from './Terms';
@@ -42,7 +43,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
   );
 };
 
-const WatchlistriOS = () => {
+const WatchlistrMobile = () => {
   const WatchlistrScreenshots = [
     LoginView,
     SignupView,
@@ -95,13 +96,17 @@ const WatchlistriOS = () => {
     }
   }, [location.pathname]);
 
-  const handleAppStoreButtonClick = () => {
+  const handleAppleStoreButtonClick = () => {
     window.open("https://apps.apple.com/us/app/watchlistr/id6459355223", "_blank");
   };
 
-  const handleBetaButtonClick = () => {
+  const handleTestFlightButtonClick = () => {
     window.open("https://testflight.apple.com/join/5fAq7d4d", "_blank");
   };
+
+  // const handlePlayStoreButtonClick = () => {
+  //   window.open("https://apps.apple.com/us/app/watchlistr/id6459355223", "_blank");
+  // };
 
   const handleFeedbackSubmit = async (e) => {
     e.preventDefault();
@@ -147,10 +152,11 @@ const WatchlistriOS = () => {
   const numberOfImages = calculateNumberOfImages();
 
   const BuiltWithLogos = [
+    { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
     { src: xcodeLogo, alt: 'Xcode Logo', link: 'https://developer.apple.com/xcode/' },
     { src: switftuiLogo, alt: 'SwiftUI Logo', link: 'https://developer.apple.com/xcode/swiftui/' },
+    { src: expoLogo, alt: 'Expo Logo', link: 'https://docs.expo.dev/' },
     { src: firebaseLogo, alt: 'Firebase Logo', link: 'https://firebase.google.com/' },
-    { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
     { src: termsConditions, alt: 'Terms and Conditions', onClick: () => navigate('/watchlistr-ios/terms') },
     { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => navigate('/watchlistr-ios/privacy') }
   ];
@@ -162,9 +168,11 @@ const WatchlistriOS = () => {
       </h1>
       <div className="centered-content">
         <div className="flex justify-center space-x-4">
-          <button onClick={handleAppStoreButtonClick} className="app-button">App Store</button>
+          <button onClick={handleAppleStoreButtonClick} className="app-button">Apple Store</button>
           &nbsp;
-          <button onClick={handleBetaButtonClick} className="app-button">Beta</button>
+          <button onClick={handleTestFlightButtonClick} className="app-button">TestFlight</button>
+          {/* &nbsp;
+          <button onClick={handlePlayButtonClick} className="app-button">Play Store</button> */}
           &nbsp;
           <button onClick={() => setIsFeedbackModalOpen(true)} className="app-button">Send Feedback</button>
         </div>
@@ -245,4 +253,4 @@ const WatchlistriOS = () => {
   );
 };
 
-export default WatchlistriOS;
+export default WatchlistrMobile;

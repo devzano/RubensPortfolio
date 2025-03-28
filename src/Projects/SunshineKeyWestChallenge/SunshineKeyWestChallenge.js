@@ -4,8 +4,7 @@ import '../../Portfolio/Portfolio.css';
 import '../../Projects/Projects.css';
 import githubLogo from '../../Projects/CodingLogos/github(light).png';
 import reactnativeLogo from '../../Projects/CodingLogos/reactnative.png';
-import switftuiLogo from '../../Projects/CodingLogos/swiftui.png';
-import androidstudioLogo from '../../Projects/CodingLogos/androidstudio.png';
+import expoLogo from '../CodingLogos/expodevinv.png';
 import firebaseLogo from '../../Projects/CodingLogos/firebase.png';
 import privacyPolicy from '../../Projects/CodingLogos/privacy-policy.png';
 // import termsConditions from '../../Projects/CodingLogos/terms-conditions.png';
@@ -68,12 +67,12 @@ const SunshineKeyWestChallenge = () => {
     // }
   }, [location.pathname]);
 
-  const handleAppStoreButtonClick = () => {
+  const handleAppleStoreButtonClick = () => {
     window.open("https://apps.apple.com/us/app/sunshine-key-west-challenge/id6737530954", "_blank");
   };
 
   const handlePlayStoreButtonClick = () => {
-    window.open("https://apps.apple.com/us/app/sunshine-key-west-challenge/id6737530954", "_blank");
+    window.open("https://play.google.com/store/apps/details?id=com.devzano.SunshineKeyWestChallenge", "_blank");
   };
 
   const handleFeedbackSubmit = async (e) => {
@@ -122,8 +121,7 @@ const SunshineKeyWestChallenge = () => {
   const BuiltWithLogos = [
     { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
     { src: reactnativeLogo, alt: 'React Native Logo', link: 'https://reactnative.dev/' },
-    { src: switftuiLogo, alt: 'SwiftUI Logo', link: 'https://developer.apple.com/xcode/swiftui/' },
-    { src: androidstudioLogo, alt: 'Android Studio Logo', link: 'https://developer.android.com/studio' },
+    { src: expoLogo, alt: 'Expo Logo', link: 'https://docs.expo.dev/' },
     { src: firebaseLogo, alt: 'Firebase Logo', link: 'https://firebase.google.com/' },
     { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => navigate('/sunshinekeywestchallenge/privacy') },
     // { src: termsConditions, alt: 'Terms and Conditions', onClick: () => navigate('/sunshinekeywestchallenge/terms') }
@@ -132,11 +130,11 @@ const SunshineKeyWestChallenge = () => {
   return (
     <div className="coding-background">
       <h1 className="title">
-        <a href="https://apps.apple.com/us/app/sunshine-key-west-challenge/id6737530954" target="_blank" rel="noopener noreferrer" className="app-link">Sunshine Key West Challenge</a>
+        <a href="https://www.rubenmanzano.com/sunshinekeywestchallenge" target="_blank" rel="noopener noreferrer" className="app-link">Sunshine Key West Challenge</a>
       </h1>
       <div className="centered-content">
         <div className="button-group">
-          <button onClick={handleAppStoreButtonClick} className="app-button">App Store</button>
+          <button onClick={handleAppleStoreButtonClick} className="app-button">Apple Store</button>
           &nbsp;
           <button onClick={handlePlayStoreButtonClick} className="app-button">Play Store</button>
           &nbsp;

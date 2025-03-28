@@ -103,7 +103,7 @@ const EchoExpense = () => {
     }
   }, [location.pathname]);
 
-  const handleAppStoreButtonClick = () => {
+  const handleAppleStoreButtonClick = () => {
     window.open("https://apps.apple.com/us/app/echoexpense/id6475660500", "_blank");
   };
 
@@ -151,10 +151,10 @@ const EchoExpense = () => {
   const numberOfImages = calculateNumberOfImages();
 
   const BuiltWithLogos = [
+    { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
     { src: xcodeLogo, alt: 'Xcode Logo', link: 'https://developer.apple.com/xcode/' },
     { src: switftuiLogo, alt: 'SwiftUI Logo', link: 'https://developer.apple.com/xcode/swiftui/' },
     { src: firebaseLogo, alt: 'Firebase Logo', link: 'https://firebase.google.com/' },
-    { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
     { src: termsConditions, alt: 'Terms and Conditions', onClick: () => navigate('/echoexpense/terms') },
     { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => navigate('/echoexpense/privacy') }
   ];
@@ -166,7 +166,7 @@ const EchoExpense = () => {
       </h1>
       <div className="centered-content">
         <div className="button-group">
-          <button onClick={handleAppStoreButtonClick} className="app-button">App Store</button>
+          <button onClick={handleAppleStoreButtonClick} className="app-button">Apple Store</button>
           &nbsp;
           <button onClick={() => setIsFeedbackModalOpen(true)} className="app-button">Send Feedback</button>
         </div>

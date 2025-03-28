@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import WatchlistrWeb from '../Projects/Watchlistr-Web/Watchlistr(Web)';
 import RecipeRealm from '../Projects/RecipeRealm/RecipeRealm';
-import WatchlistriOS from '../Projects/Watchlistr-iOS/Watchlistr(iOS)';
+import WatchlistrMobile from '../Projects/Watchlistr-Mobile/Watchlistr(Mobile)';
 import EchoExpense from '../Projects/EchoExpense/EchoExpense';
 import OtakuHive from './OtakuHive/OtakuHive';
 import SunshineKeyWestChallenge from './SunshineKeyWestChallenge/SunshineKeyWestChallenge'
@@ -17,10 +17,10 @@ const Projects = () => {
   const slides = [
   <WatchlistrWeb />,
   <RecipeRealm />,
-  <WatchlistriOS />,
+  <WatchlistrMobile />,
   <EchoExpense />,
   <OtakuHive />,
-  // <SunshineKeyWestChallenge />,
+  <SunshineKeyWestChallenge />,
   <StarshipPixelscape />];
   const sliderRef = useRef(null);
 

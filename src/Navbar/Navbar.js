@@ -112,22 +112,22 @@ const Navbar = ({ onTogglePause }) => {
               )}
             </div>
             <div
-              className={`navbar-dropdown ios ${state.activeDropdown === 'ios' ? 'active' : ''}`}
-              onMouseEnter={() => handleMouseEnter('ios')}
+              className={`navbar-dropdown ${state.activeDropdown === 'mobile' ? 'active' : ''}`}
+              onMouseEnter={() => handleMouseEnter('mobile')}
               onMouseLeave={handleMouseLeave}
-              onTouchStart={() => handleMouseEnter('ios')}
+              onTouchStart={() => handleMouseEnter('mobile')}
               tabIndex="0"
               role="menuitem"
               aria-haspopup="true"
-              aria-expanded={state.activeDropdown === 'ios'}
-              onKeyDown={(e) => handleKeyDown(e, () => handleMouseEnter('ios'))}
+              aria-expanded={state.activeDropdown === 'mobile'}
+              onKeyDown={(e) => handleKeyDown(e, () => handleMouseEnter('mobile'))}
             >
-              <span className="navbar-link">iOS</span>
-              {state.activeDropdown === 'ios' && (
+              <span className="navbar-link">Mobile</span>
+              {state.activeDropdown === 'mobile' && (
                 <div className="dropdown">
                   <Link
                     className="navbar-link"
-                    to="/watchlistr-ios"
+                    to="/watchlistr-mobile"
                     onClick={toggleMenu}
                     onKeyDown={(e) => handleKeyDown(e, toggleMenu)}
                     role="menuitem"
@@ -169,17 +169,6 @@ const Navbar = ({ onTogglePause }) => {
                     OtakuHive
                     <img src={OtakuHive_Icon} alt="OtakuHive Icon" className="navbar-icon-img" />
                   </Link>
-                  {/* <Link
-                    className="navbar-link"
-                    to="/sunshinekeywestchallenge"
-                    onClick={toggleMenu}
-                    onKeyDown={(e) => handleKeyDown(e, toggleMenu)}
-                    role="menuitem"
-                    tabIndex="0"
-                  >
-                    Sunshine Key West Challenge
-                    <img src={SunshineKeyWestChallenge_Icon} alt="Sunshine Key West Challenge Icon" className="navbar-icon-img" />
-                  </Link> */}
                   <Link
                     className="navbar-link"
                     to="/starship-pixelscape"
@@ -190,6 +179,17 @@ const Navbar = ({ onTogglePause }) => {
                   >
                     Starship Pixelscape
                     <img src={StarshipPixelscape_Icon} alt="Starship Pixelscape Icon" className="navbar-icon-img" />
+                  </Link>
+                  <Link
+                    className="navbar-link"
+                    to="/sunshinekeywestchallenge"
+                    onClick={toggleMenu}
+                    onKeyDown={(e) => handleKeyDown(e, toggleMenu)}
+                    role="menuitem"
+                    tabIndex="0"
+                  >
+                    Sunshine Key West Challenge
+                    <img src={SunshineKeyWestChallenge_Icon} alt="Sunshine Key West Challenge Icon" className="navbar-icon-img" />
                   </Link>
                 </div>
               )}

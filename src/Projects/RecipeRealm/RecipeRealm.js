@@ -103,7 +103,7 @@ const RecipeRealm = () => {
     }
   }, [location.pathname]);
 
-  const handleAppStoreButtonClick = () => {
+  const handleAppleStoreButtonClick = () => {
     window.open("https://apps.apple.com/us/app/reciperealm/id6458877177", "_blank");
   };
 
@@ -151,10 +151,10 @@ const RecipeRealm = () => {
   const numberOfImages = calculateNumberOfImages();
 
   const BuiltWithLogos = [
+    { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
     { src: xcodeLogo, alt: 'Xcode Logo', link: 'https://developer.apple.com/xcode/' },
     { src: coredataLogo, alt: 'CoreData Logo', link: 'https://developer.apple.com/documentation/coredata/' },
     { src: switftuiLogo, alt: 'SwiftUI Logo', link: 'https://developer.apple.com/xcode/swiftui/' },
-    { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
     { src: termsConditions, alt: 'Terms and Conditions', onClick: () => navigate('/reciperealm/terms') },
     { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => navigate('/reciperealm/privacy') }
   ];
@@ -166,7 +166,7 @@ const RecipeRealm = () => {
       </h1>
       <div className="centered-content">
         <div className="button-group">
-          <button onClick={handleAppStoreButtonClick} className="app-button">App Store</button>
+          <button onClick={handleAppleStoreButtonClick} className="app-button">Apple Store</button>
           &nbsp;
           <button onClick={() => setIsFeedbackModalOpen(true)} className="app-button">Send Feedback</button>
         </div>

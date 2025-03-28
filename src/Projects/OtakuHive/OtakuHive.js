@@ -118,9 +118,9 @@ const OtakuHive = () => {
   const numberOfImages = calculateNumberOfImages();
 
   const BuiltWithLogos = [
+    { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
     { src: xcodeLogo, alt: 'Xcode Logo', link: 'https://developer.apple.com/xcode/' },
     { src: switftuiLogo, alt: 'SwiftUI Logo', link: 'https://developer.apple.com/xcode/swiftui/' },
-    { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
     { src: termsConditions, alt: 'Terms and Conditions', onClick: () => navigate('/otakuhive/terms') },
     { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => navigate('/otakuhive/privacy') }
   ];

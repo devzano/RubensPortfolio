@@ -6,7 +6,7 @@ import Navbar from '../Navbar/Navbar';
 import Portfolio from '../Portfolio/Portfolio';
 import WatchlistrWeb from '../Projects/Watchlistr-Web/Watchlistr(Web)';
 import RecipeRealm from '../Projects/RecipeRealm/RecipeRealm';
-import WatchlistriOS from '../Projects/Watchlistr-iOS/Watchlistr(iOS)';
+import WatchlistrMobile from '../Projects/Watchlistr-Mobile/Watchlistr(Mobile)';
 import EchoExpense from '../Projects/EchoExpense/EchoExpense';
 import OtakuHive from '../Projects/OtakuHive/OtakuHive';
 import SunshineKeyWestChallenge from '../Projects/SunshineKeyWestChallenge/SunshineKeyWestChallenge';
@@ -33,7 +33,7 @@ const App = () => {
           <Route path="/" element={<Portfolio />} />
           <Route path="/watchlistr-web" element={<WatchlistrWeb />} />
           <Route path="/reciperealm/*" element={<RecipeRealm />} />
-          <Route path="/watchlistr-ios/*" element={<WatchlistriOS />} />
+          <Route path="/watchlistr-mobile/*" element={<WatchlistrMobile />} />
           <Route path="/echoexpense/*" element={<EchoExpense />} />
           <Route path="/otakuhive/*" element={<OtakuHive />} />
           <Route path='/sunshinekeywestchallenge/*' element={<SunshineKeyWestChallenge />} />

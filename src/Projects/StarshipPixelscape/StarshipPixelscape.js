@@ -10,8 +10,12 @@ import termsConditions from '../../Projects/CodingLogos/terms-conditions.png';
 
 import MainMenuView from '../StarshipPixelscape/Screenshots/StarshipPixelscape(MainMenuView).png';
 import GameSettingsView from '../StarshipPixelscape/Screenshots/StarshipPixelscape(GameSettingsView).png';
+import GameSettings2View from '../StarshipPixelscape/Screenshots/StarshipPixelscape(GameSettings2View).png';
 import GamePlayView from '../StarshipPixelscape/Screenshots/StarshipPixelscape(GamePlayView).png';
 import GamePlay2View from '../StarshipPixelscape/Screenshots/StarshipPixelscape(GamePlay2View).png';
+import GamePlay3View from '../StarshipPixelscape/Screenshots/StarshipPixelscape(GamePlay3View).png';
+import GamePlayBossView from '../StarshipPixelscape/Screenshots/StarshipPixelscape(GamePlayBossView).png';
+import GameOverView from '../StarshipPixelscape/Screenshots/StarshipPixelscape(GameOverView).png';
 
 import Privacy from './Privacy';
 import Terms from './Terms';
@@ -33,8 +37,12 @@ const StarshipPixelscape = () => {
   const StarshipPixelscapeScreenshots = [
     MainMenuView,
     GameSettingsView,
+    GameSettings2View,
     GamePlayView,
-    GamePlay2View
+    GamePlay2View,
+    GamePlay3View,
+    GamePlayBossView,
+    GameOverView
   ];
 
   const [currentSet, setCurrentSet] = useState(0);
@@ -70,7 +78,7 @@ const StarshipPixelscape = () => {
     }
   }, [location.pathname]);
 
-  const handleAppStoreButtonClick = () => {
+  const handleAppleStoreButtonClick = () => {
     window.open("https://apps.apple.com/us/app/starship-pixelscape/id6741517533", "_blank");
   };
 
@@ -118,9 +126,9 @@ const StarshipPixelscape = () => {
   const numberOfImages = calculateNumberOfImages();
 
   const BuiltWithLogos = [
+    { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
     { src: xcodeLogo, alt: 'Xcode Logo', link: 'https://developer.apple.com/xcode/' },
     { src: switftuiLogo, alt: 'SwiftUI Logo', link: 'https://developer.apple.com/xcode/swiftui/' },
-    { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
     { src: termsConditions, alt: 'Terms and Conditions', onClick: () => navigate('/starship-pixelscape/terms') },
     { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => navigate('/starship-pixelscape/privacy') }
   ];
@@ -132,7 +140,7 @@ const StarshipPixelscape = () => {
       </h1>
       <div className="centered-content">
         <div className="flex justify-center space-x-4">
-          <button onClick={handleAppStoreButtonClick} className="app-button">App Store</button>
+          <button onClick={handleAppleStoreButtonClick} className="app-button">Apple Store</button>
           &nbsp;
           <button onClick={() => setIsFeedbackModalOpen(true)} className="app-button">Send Feedback</button>
         </div>

@@ -83,13 +83,13 @@ const WatchlistrMobile = () => {
   }, [WatchlistrScreenshots.length]);
 
   useEffect(() => {
-    if (location.pathname === '/watchlistr-ios/privacy') {
+    if (location.pathname === '/watchlistr-mobile/privacy') {
       setIsPrivacyModalOpen(true);
     } else {
       setIsPrivacyModalOpen(false);
     }
 
-    if (location.pathname === '/watchlistr-ios/terms') {
+    if (location.pathname === '/watchlistr-mobile/terms') {
       setIsTermsModalOpen(true);
     } else {
       setIsTermsModalOpen(false);
@@ -140,8 +140,8 @@ const WatchlistrMobile = () => {
 
   const handleCloseModal = (modalSetter) => {
     modalSetter(false);
-    if (location.pathname === '/watchlistr-ios/privacy' || location.pathname === '/watchlistr-ios/terms') {
-      navigate('/watchlistr-ios');
+    if (location.pathname === '/watchlistr-mobile/privacy' || location.pathname === '/watchlistr-mobile/terms') {
+      navigate('/watchlistr-mobile');
     }
   };
 
@@ -157,8 +157,8 @@ const WatchlistrMobile = () => {
     { src: switftuiLogo, alt: 'SwiftUI Logo', link: 'https://developer.apple.com/xcode/swiftui/' },
     { src: expoLogo, alt: 'Expo Logo', link: 'https://docs.expo.dev/' },
     { src: firebaseLogo, alt: 'Firebase Logo', link: 'https://firebase.google.com/' },
-    { src: termsConditions, alt: 'Terms and Conditions', onClick: () => navigate('/watchlistr-ios/terms') },
-    { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => navigate('/watchlistr-ios/privacy') }
+    { src: termsConditions, alt: 'Terms and Conditions', onClick: () => navigate('/watchlistr-mobile/terms') },
+    { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => navigate('/watchlistr-mobile/privacy') }
   ];
 
   return (

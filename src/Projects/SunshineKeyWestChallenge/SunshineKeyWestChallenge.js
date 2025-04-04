@@ -7,9 +7,9 @@ import reactnativeLogo from '../../Projects/CodingLogos/reactnative.png';
 import expoLogo from '../CodingLogos/expodevinv.png';
 import firebaseLogo from '../../Projects/CodingLogos/firebase.png';
 import privacyPolicy from '../../Projects/CodingLogos/privacy-policy.png';
-// import termsConditions from '../../Projects/CodingLogos/terms-conditions.png';
+import termsConditions from '../../Projects/CodingLogos/terms-conditions.png';
 import Privacy from './Privacy';
-// import Terms from './Terms';
+import Terms from './Terms';
 
 import Home from '../SunshineKeyWestChallenge/Screenshots/SunshineKeyWestChallenge(Home).png'
 import Contact from '../SunshineKeyWestChallenge/Screenshots/SunshineKeyWestChallenge(Contact).png'
@@ -36,7 +36,7 @@ const SunshineKeyWestChallenge = () => {
 
   const [currentSet, setCurrentSet] = useState(0);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
-  // const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [feedback, setFeedback] = useState({ firstName: '', lastName: '', email: '', message: '' });
 
@@ -60,11 +60,11 @@ const SunshineKeyWestChallenge = () => {
       setIsPrivacyModalOpen(false);
     }
 
-    // if (location.pathname === '/sunshinekeywestchallenge/terms') {
-    //   setIsTermsModalOpen(true);
-    // } else {
-    //   setIsTermsModalOpen(false);
-    // }
+    if (location.pathname === '/sunshinekeywestchallenge/terms') {
+      setIsTermsModalOpen(true);
+    } else {
+      setIsTermsModalOpen(false);
+    }
   }, [location.pathname]);
 
   const handleAppleStoreButtonClick = () => {
@@ -107,7 +107,7 @@ const SunshineKeyWestChallenge = () => {
 
   const handleCloseModal = (modalSetter) => {
     modalSetter(false);
-    if (location.pathname === '/sunshinekeywestchallenge/privacy') {
+    if (location.pathname === '/sunshinekeywestchallenge/privacy' || location.pathname === '/sunshinekeywestchallenge/terms') {
       navigate('/sunshinekeywestchallenge');
     }
   };
@@ -124,7 +124,7 @@ const SunshineKeyWestChallenge = () => {
     { src: expoLogo, alt: 'Expo Logo', link: 'https://docs.expo.dev/' },
     { src: firebaseLogo, alt: 'Firebase Logo', link: 'https://firebase.google.com/' },
     { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => navigate('/sunshinekeywestchallenge/privacy') },
-    // { src: termsConditions, alt: 'Terms and Conditions', onClick: () => navigate('/sunshinekeywestchallenge/terms') }
+    { src: termsConditions, alt: 'Terms and Conditions', onClick: () => navigate('/sunshinekeywestchallenge/terms') }
   ];
 
   return (
@@ -178,11 +178,11 @@ const SunshineKeyWestChallenge = () => {
           </div>
         </div>
       </div>
-      {/* <Modal
+      <Modal
         isOpen={isTermsModalOpen}
         onClose={() => handleCloseModal(setIsTermsModalOpen)}
         title="Terms of Use"
-      /> */}
+      />
       <Modal
         isOpen={isPrivacyModalOpen}
         onClose={() => handleCloseModal(setIsPrivacyModalOpen)}

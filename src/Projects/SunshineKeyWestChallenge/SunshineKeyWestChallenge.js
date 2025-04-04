@@ -23,7 +23,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
     <div className="modal">
       <div className="modal-content" style={{ backgroundColor: '#151515', color: '#fff', padding: '20px', borderRadius: '10px' }}>
         <span className="close" onClick={onClose} style={{ cursor: 'pointer', fontSize: '24px', color: '#fff' }}>&times;</span>
-        {title === "Privacy Policy" ? <Privacy /> : children}
+        {title === "Privacy Policy" ? <Privacy /> : title === "Terms of Use" ? <Terms /> : children}
       </div>
     </div>
   );

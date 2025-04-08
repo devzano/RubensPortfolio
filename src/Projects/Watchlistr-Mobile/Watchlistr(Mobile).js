@@ -5,27 +5,34 @@ import '../../Projects/Projects.css';
 import githubLogo from '../../Projects/CodingLogos/github(light).png';
 import xcodeLogo from '../../Projects/CodingLogos/xcode.png';
 import switftuiLogo from '../../Projects/CodingLogos/swiftui.png';
-import expoLogo from '../CodingLogos/expodevinv.png'
+import expoLogo from '../CodingLogos/expodevinv.png';
 import firebaseLogo from '../../Projects/CodingLogos/firebase.png';
 import privacyPolicy from '../../Projects/CodingLogos/privacy-policy.png';
 import termsConditions from '../../Projects/CodingLogos/terms-conditions.png';
 
-import LoginView from './Screenshots/Watchlistr(LoginView).png';
-import SignupView from './Screenshots/Watchlistr(SignupView).png';
-import ProfileTabView from './Screenshots/Watchlistr(ProfileTabView).png';
-import ProfileTabViewTextColorsView from './Screenshots/Watchlistr(ProfileTabViewTextColorsView).png';
-import MovieTabView from './Screenshots/Watchlistr(MovieTabView).png';
-import BlankMovieSearchView from './Screenshots/Watchlistr(BlankMovieSearchView).png';
-import MovieSearchResultsView from './Screenshots/Watchlistr(MovieSearchResultsView).png';
-import MovieDetailsView from './Screenshots/Watchlistr(MovieDetailsView).png';
-import TVShowTabView from './Screenshots/Watchlistr(TVShowTabView).png';
-import BlankTVShowSearchView from './Screenshots/Watchlistr(BlankTVShowSearchView).png';
-import TVShowSearchResultsView from './Screenshots/Watchlistr(TVShowSearchResultsView).png';
-import TVShowDetailsView from './Screenshots/Watchlistr(TVShowDetailsView).png';
-import MovieWatchlistContextMenuView from './Screenshots/Watchlistr(MovieWatchlistContextMenuView).png';
-import MovieWatchlistView from './Screenshots/Watchlistr(MovieWatchlistView).png';
-import TVShowWatchlistContextMenuView from './Screenshots/Watchlistr(TVShowWatchlistContextMenuView).png';
-import TVShowWatchlistView from './Screenshots/Watchlistr(TVShowWatchlistView).png';
+
+import LoginViewiPhone from './Screenshots/login(iphone).png';
+import SignupViewiPhone from './Screenshots/signup(iphone).png';
+import ProfileTabViewiPhone from './Screenshots/profile(iphone).png';
+import ProfileTabView2iPhone from './Screenshots/profile2(iphone).png';
+import NotificationsView2iPhone from './Screenshots/notifications(iphone).png';
+import MovieTabViewiPhone from './Screenshots/movie-tab(iphone).png';
+import MovieDetailsViewiPhone from './Screenshots/movie-details(iphone).png';
+import TVShowTabViewiPhone from './Screenshots/tvshow-tab(iphone).png';
+import TVShowDetailsViewiPhone from './Screenshots/tvshow-details(iphone).png';
+import MovieWatchlistViewiPhone from './Screenshots/movie-watchlist(iphone).png';
+import TVShowWatchlistViewiPhone from './Screenshots/tvshow-watchlist(iphone).png';
+import LoginViewAndroid from './Screenshots/login(android).png';
+import SignupViewAndroid from './Screenshots/signup(android).png';
+import ProfileTabViewAndroid from './Screenshots/profile(android).png';
+import MovieTabViewAndroid from './Screenshots/movie-tab(android).png';
+import MovieDetailsViewAndroid from './Screenshots/movie-details(android).png';
+import TVShowTabViewAndroid from './Screenshots/tvshow-tab(android).png';
+import TVShowDetailsViewAndroid from './Screenshots/tvshow-details(android).png';
+import SearchAndroid from './Screenshots/search(android).png';
+import SearchGenreAndroid from './Screenshots/search-genre(android).png';
+import MovieWatchlistViewAndroid from './Screenshots/movie-watchlist(android).png';
+import TVShowWatchlistViewAndroid from './Screenshots/tvshow-watchlist(android).png';
 
 import Privacy from './Privacy';
 import Terms from './Terms';
@@ -45,22 +52,28 @@ const Modal = ({ isOpen, onClose, title, children }) => {
 
 const WatchlistrMobile = () => {
   const WatchlistrScreenshots = [
-    LoginView,
-    SignupView,
-    ProfileTabView,
-    ProfileTabViewTextColorsView,
-    MovieTabView,
-    BlankMovieSearchView,
-    MovieSearchResultsView,
-    MovieDetailsView,
-    TVShowTabView,
-    BlankTVShowSearchView,
-    TVShowSearchResultsView,
-    TVShowDetailsView,
-    MovieWatchlistView,
-    MovieWatchlistContextMenuView,
-    TVShowWatchlistView,
-    TVShowWatchlistContextMenuView
+    LoginViewiPhone,
+    SignupViewiPhone,
+    ProfileTabViewiPhone,
+    ProfileTabView2iPhone,
+    NotificationsView2iPhone,
+    MovieTabViewiPhone,
+    MovieDetailsViewiPhone,
+    TVShowTabViewiPhone,
+    TVShowDetailsViewiPhone,
+    MovieWatchlistViewiPhone,
+    TVShowWatchlistViewiPhone,
+    LoginViewAndroid,
+    SignupViewAndroid,
+    ProfileTabViewAndroid,
+    MovieTabViewAndroid,
+    MovieDetailsViewAndroid,
+    TVShowTabViewAndroid,
+    TVShowDetailsViewAndroid,
+    SearchAndroid,
+    SearchGenreAndroid,
+    MovieWatchlistViewAndroid,
+    TVShowWatchlistViewAndroid
   ];
 
   const [currentSet, setCurrentSet] = useState(0);
@@ -188,7 +201,7 @@ const WatchlistrMobile = () => {
                         <td align="center" key={i}>
                           <img src={WatchlistrScreenshots[i + currentSet * numberOfImages]}
                             alt={`Watchlistr View ${i + currentSet * numberOfImages}`}
-                            width="300"/>
+                            width="300" />
                         </td>
                       ))}
                     </tr>
@@ -201,10 +214,10 @@ const WatchlistrMobile = () => {
                   <span key={index}>
                     {logo.link ? (
                       <Link to={logo.link}>
-                        <img src={logo.src} alt={logo.alt} className="logo"/>
+                        <img src={logo.src} alt={logo.alt} className="logo" />
                       </Link>
                     ) : (
-                      <img src={logo.src} alt={logo.alt} className="logo" onClick={logo.onClick} style={{ cursor: 'pointer' }}/>
+                      <img src={logo.src} alt={logo.alt} className="logo" onClick={logo.onClick} style={{ cursor: 'pointer' }} />
                     )}
                   </span>
                 ))}
@@ -232,19 +245,19 @@ const WatchlistrMobile = () => {
           <h2 className="modal-title">Send Feedback</h2>
           <label className="form-label">
             First Name:
-            <input type="text" value={feedback.firstName} onChange={(e) => setFeedback({ ...feedback, firstName: e.target.value })} required className="form-input"/>
+            <input type="text" value={feedback.firstName} onChange={(e) => setFeedback({ ...feedback, firstName: e.target.value })} required className="form-input" />
           </label>
           <label className="form-label">
             Last Name:
-            <input type="text" value={feedback.lastName} onChange={(e) => setFeedback({ ...feedback, lastName: e.target.value })} required className="form-input"/>
+            <input type="text" value={feedback.lastName} onChange={(e) => setFeedback({ ...feedback, lastName: e.target.value })} required className="form-input" />
           </label>
           <label className="form-label">
             Email:
-            <input type="email" value={feedback.email} onChange={(e) => setFeedback({ ...feedback, email: e.target.value })} required className="form-input"/>
+            <input type="email" value={feedback.email} onChange={(e) => setFeedback({ ...feedback, email: e.target.value })} required className="form-input" />
           </label>
           <label className="form-label">
             Message:
-            <textarea value={feedback.message} onChange={(e) => setFeedback({ ...feedback, message: e.target.value })} required className="form-input form-textarea"/>
+            <textarea value={feedback.message} onChange={(e) => setFeedback({ ...feedback, message: e.target.value })} required className="form-input form-textarea" />
           </label>
           <button type="submit" className="app-button">Submit</button>
         </form>

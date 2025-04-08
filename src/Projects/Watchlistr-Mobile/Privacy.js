@@ -4,140 +4,122 @@ const Privacy = () => {
   return (
     <div style={{ padding: "20px", maxWidth: "800px", margin: "auto" }}>
       <h1 style={{ textAlign: "center", marginBottom: "20px" }}>Privacy Policy</h1>
+      <p>Last updated: April 08, 2025</p>
       <p>
-        This Privacy Policy applies to the Watchlistr mobile application
-        ("Application") created by devzano ("Service Provider") as an ad-supported
-        service. The Application is provided for use "AS IS."
+        This Privacy Policy applies to the Watchlistr mobile application developed by devzano. Watchlistr is
+        an ad-supported mobile app designed to help users browse, track, and manage
+        movies and tv shows. The app is intended for personal use only.
+      </p>
+      <p>
+        Watchlistr uses Firebase for authentication and data storage, including secure sign-in via Apple or Google accounts. It also uses Google AdMob to display ads and the TMDB API to provide media content.
+      </p>
+      <p>
+        By using Watchlistr, you agree to the practices described in this Privacy Policy.
       </p>
 
       <h2>Information Collection and Use</h2>
       <p>
-        The Application collects certain information automatically when you
-        download and use it. This information may include:
+        When you create an account or sign in to Watchlistr using Apple or Google, we collect limited personal information to support your experience in the app. This includes:
       </p>
       <ul>
-        <li>Your device's Internet Protocol (IP) address</li>
-        <li>Pages you visit within the Application, along with the time and date of your visit</li>
-        <li>Time spent on each page and overall time spent on the Application</li>
-        <li>The operating system used on your mobile device</li>
+        <li><strong>Email Address</strong> – used to identify your account and enable sign-in across devices</li>
+        <li><strong>Username</strong> – used to personalize your profile</li>
+        <li><strong>Notification Token</strong> – used to deliver reminders and push notifications you’ve scheduled</li>
+        <li><strong>Profile Picture URL</strong> – used to display a custom or Gravatar-based profile image</li>
       </ul>
       <p>
-        The Application does not collect precise location data from your mobile
-        device. However, it does gather approximate location information to:
-      </p>
-      <ul>
-        <li>
-          <strong>Geolocation Services:</strong> Offer personalized content, relevant
-          recommendations, and location-based services.
-        </li>
-        <li>
-          <strong>Analytics and Improvements:</strong> Use aggregated and anonymized
-          location data to analyze user behavior, identify trends, and enhance
-          the overall performance and functionality of the Application.
-        </li>
-        <li>
-          <strong>Third-Party Services:</strong> Occasionally transmit anonymized location
-          data to external services to help improve the Application and optimize
-          the offerings.
-        </li>
-      </ul>
-      <p>
-        The Service Provider may also use the information you provide to contact
-        you with important information, required notices, or marketing
-        promotions.
+        This information is securely stored in Firebase and is not shared with third parties for advertising or tracking purposes.
       </p>
       <p>
-        For an enhanced user experience, the Application may require you to
-        provide certain personally identifiable information, such as your email
-        address (e.g., rmanzano.se@gmail.com). This information will be retained
-        and used as described in this Privacy Policy.
+        Watchlistr does <strong>not</strong> collect your location, contact list, microphone input, or behavioral analytics. If you choose to upload a profile picture using your device’s camera, the app will request permission to access your camera. This is only used to capture your chosen photo and is never accessed without your consent.
       </p>
 
-      <h2>Third-Party Access</h2>
+      <h2>Third-Party Services</h2>
       <p>
-        Only aggregated and anonymized data is shared with external services to
-        help improve the Application and related services. The Service Provider
-        may share your information with third parties as described in this
-        privacy statement.
-      </p>
-      <p>
-        Please note that the Application uses third-party services that have
-        their own privacy policies regarding data handling. Below are links to
-        the privacy policies of these third-party service providers:
+        Watchlistr uses a few trusted third-party services to provide core functionality. These services may collect anonymized or technical data according to their own privacy policies:
       </p>
       <ul>
-        <li>AdMob</li>
+        <li><strong>Firebase</strong> – used for user authentication, secure data storage (e.g., watchlist, and profile information)</li>
+        <li><strong>Google AdMob</strong> – used to display in-app ads</li>
+        <li><strong>TMDB (The Movie Database)</strong> – used to display media information (we do not send your personal data to TMDB)</li>
+      </ul>
+      <p>
+        These services may use cookies or device identifiers to support functionality or improve performance. We recommend reviewing their privacy policies for more details:
+      </p>
+      <ul>
+        <li><a href="https://firebase.google.com/support/privacy" target="_blank" rel="noopener noreferrer">Firebase Privacy Policy</a></li>
+        <li><a href="https://transparency.google/intl/en_US/our-policies/product-terms/google-admob/" target="_blank" rel="noopener noreferrer">Google AdMob Privacy Policy</a></li>
+        <li><a href="https://www.themoviedb.org/privacy-policy" target="_blank" rel="noopener noreferrer">TMDB Privacy Policy</a></li>
       </ul>
 
       <h2>Disclosure of Information</h2>
       <p>
-        The Service Provider may disclose information provided by users or
-        collected automatically:
+        I do not sell or share your personal information with third parties for marketing purposes.
+      </p>
+      <p>
+        I may disclose limited information in the following situations:
       </p>
       <ul>
-        <li>As required by law, such as to comply with a subpoena or similar legal process</li>
-        <li>When they believe in good faith that disclosure is necessary to protect their rights, your safety or the safety of others, investigate fraud, or respond to a government request</li>
-        <li>To trusted service providers who work on their behalf, provided they adhere to the terms set forth in this privacy statement</li>
+        <li><strong>Legal Compliance:</strong> If required by law, such as to comply with a subpoena, court order, or other legal process.</li>
+        <li><strong>Security or Safety:</strong> If necessary to investigate fraud, protect our rights, safeguard user safety, or respond to a government request.</li>
+        <li><strong>Service Providers:</strong> Your data is stored and processed by Firebase, which acts as a secure backend service on my behalf.</li>
       </ul>
 
       <h2>Opt-Out Rights</h2>
       <p>
-        You can stop all information collection by the Application easily by
-        uninstalling it. Use the standard uninstall processes available as part
-        of your mobile device or through the application marketplace or network.
+        You have full control over your Watchlistr experience. At any time, you may:
       </p>
+      <ul>
+        <li><strong>Disable Notifications</strong> - by turning them off in your device settings.</li>
+        <li><strong>Delete Your Account</strong> - directly from the Profile screen in the app. This will permanently remove your saved data from Firebase.</li>
+        <li><strong>Uninstall The App</strong> - to stop all data storage and push notifications.</li>
+      </ul>
 
       <h2>Data Retention Policy</h2>
       <p>
-        The Service Provider will retain user-provided data as long as you use
-        the Application and for a reasonable time thereafter. If you wish to
-        delete data you have provided via the Application, please contact the
-        Service Provider at rmanzano.se@gmail.com, and they will respond within a
-        reasonable timeframe.
+        Your data is stored securely in Firebase and retained only while your account is active.
+      </p>
+      <p>
+        If you choose to delete your account from within the app, all associated data (including your watchlist, profile info, and notification preferences) will be permanently removed.
+      </p>
+      <p>
+        No personal data is stored outside of Firebase, and I do not retain any data once your account is deleted.
       </p>
 
-      <h2>Children's Privacy</h2>
+      <h2>Children’s Privacy</h2>
       <p>
-        The Service Provider does not knowingly collect personally identifiable
-        information from children under 13 years of age. The Application is not
-        intended for use by children under 13. If the Service Provider discovers
-        that a child under 13 has provided personal information, they will
-        immediately delete this information from their servers. If you are a
-        parent or guardian and you believe your child has provided personal
-        information, please contact the Service Provider at
-        rmanzano.se@gmail.com so that they can take the necessary actions.
+        Watchlistr is not intended for use by children under the age of 13. I do not knowingly collect personal information from users under 13 years old.
+      </p>
+      <p>
+        If I learn that an account has been created by someone under 13, it will be deleted in accordance with the data policies.
+      </p>
+      <p>
+        If you are a parent or guardian and believe your child has created an account, please contact me at <a href="mailto:rmanzano.se@gmail.com">rmanzano.se@gmail.com</a> so I can take appropriate action.
       </p>
 
       <h2>Security</h2>
       <p>
-        The Service Provider is committed to protecting the confidentiality of
-        your information. They implement physical, electronic, and procedural
-        safeguards to protect the information processed and maintained by the
-        Application.
+        I take the security of your personal data seriously. Watchlistr uses Firebase to store all user-related data, which includes built-in security features like authentication safeguards, encrypted storage, and access controls.
+      </p>
+      <p>
+        While no system can be 100% secure, I rely on trusted platforms and best practices to help protect your account information and personal preferences from unauthorized access or misuse.
       </p>
 
-      <h2>Changes to This Privacy Policy</h2>
-      <p>
-        This Privacy Policy may be updated periodically. The Service Provider
-        will notify you of any changes by posting the updated Privacy Policy on
-        this page. You are encouraged to review this Privacy Policy regularly, as
-        continued use of the Application signifies your acceptance of any
-        changes.
-      </p>
+      <h2>Changes to this Privacy Policy</h2>
+      <p>I may update this Privacy Policy from time to time. Any changes will be reflected on this page with an updated revision date at the top.</p>
+      <p>I recommend checking this page occasionally to stay informed about how the app handles permissions and data-related features.</p>
 
       <h2>Your Consent</h2>
       <p>
-        By using the Application, you consent to the processing of your
-        information as outlined in this Privacy Policy, including any future
-        amendments.
+        By using Watchlistr, you agree to the terms outlined in this Privacy Policy, including how your information is stored and used. Your continued use of the app after any updates means you accept those changes.
       </p>
 
       <h2>Contact Me</h2>
-      <p>
-        If you have any questions or concerns about this Privacy Policy or the
-        Application’s data practices, please contact the Service Provider via
-        email at rmanzano.se@gmail.com.
-      </p>
+      <p>If you have any questions or concerns about this Privacy Policy, feel free to reach out:</p>
+      <ul>
+        <li><strong>Email:</strong> rmanzano.se@gmail.com</li>
+        <li><strong>Website:</strong> <a href="https://www.rubenmanzano.com/watchlistr-mobile" target="_blank" rel="noopener noreferrer">https://www.rubenmanzano.com/watchlistr-mobile</a></li>
+      </ul>
     </div>
   );
 };

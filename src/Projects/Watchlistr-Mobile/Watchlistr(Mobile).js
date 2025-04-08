@@ -17,11 +17,13 @@ import ProfileTabViewiPhone from './Screenshots/profile(iphone).png';
 import ProfileTabView2iPhone from './Screenshots/profile2(iphone).png';
 import NotificationsView2iPhone from './Screenshots/notifications(iphone).png';
 import MovieTabViewiPhone from './Screenshots/movie-tab(iphone).png';
+import MovieTrendingViewiPhone from './Screenshots/movie-trending(iphone).png';
 import MovieDetailsViewiPhone from './Screenshots/movie-details(iphone).png';
 import TVShowTabViewiPhone from './Screenshots/tvshow-tab(iphone).png';
 import TVShowDetailsViewiPhone from './Screenshots/tvshow-details(iphone).png';
 import MovieWatchlistViewiPhone from './Screenshots/movie-watchlist(iphone).png';
 import TVShowWatchlistViewiPhone from './Screenshots/tvshow-watchlist(iphone).png';
+import AboutDeveloperViewiPhone from './Screenshots/about-developer(iphone).png';
 import LoginViewAndroid from './Screenshots/login(android).png';
 import SignupViewAndroid from './Screenshots/signup(android).png';
 import ProfileTabViewAndroid from './Screenshots/profile(android).png';
@@ -58,11 +60,13 @@ const WatchlistrMobile = () => {
     ProfileTabView2iPhone,
     NotificationsView2iPhone,
     MovieTabViewiPhone,
+    MovieTrendingViewiPhone,
     MovieDetailsViewiPhone,
     TVShowTabViewiPhone,
     TVShowDetailsViewiPhone,
     MovieWatchlistViewiPhone,
     TVShowWatchlistViewiPhone,
+    AboutDeveloperViewiPhone,
     LoginViewAndroid,
     SignupViewAndroid,
     ProfileTabViewAndroid,

@@ -38,6 +38,7 @@ import TVShowWatchlistViewAndroid from './Screenshots/tvshow-watchlist(android).
 
 import Privacy from './Privacy';
 import Terms from './Terms';
+import FeedbackModal from '../MailForm/FeedbackModal';
 
 const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
@@ -52,7 +53,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
   );
 };
 
-const WatchlistrMobile = () => {
+const WatchlistrMobile = ({ showArrows, nextSlide, prevSlide }) => {
   const WatchlistrScreenshots = [
     LoginViewiPhone,
     SignupViewiPhone,
@@ -180,9 +181,28 @@ const WatchlistrMobile = () => {
 
   return (
     <div className="coding-background">
-      <h1 className="title">
-        <a href="https://apps.apple.com/us/app/watchlistr/id6459355223" target="_blank" rel="noopener noreferrer" className="section-title">Watchlistr</a>
-      </h1>
+      <div className="title-with-arrows">
+        {showArrows && (
+          <button className="small-nav-arrow" onClick={prevSlide} aria-label="Previous Project">
+            &#10094;
+          </button>
+        )}
+        <h1 className="title">
+          <a
+            href="https://apps.apple.com/us/app/watchlistr/id6459355223"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="section-title"
+          >
+            Watchlistr
+          </a>
+        </h1>
+        {showArrows && (
+          <button className="small-nav-arrow" onClick={nextSlide} aria-label="Next Project">
+            &#10095;
+          </button>
+        )}
+      </div>
       <div className="centered-content">
         <div className="flex justify-center space-x-4">
           <button onClick={handleAppleStoreButtonClick} className="app-button">Apple Store</button>
@@ -193,7 +213,7 @@ const WatchlistrMobile = () => {
           &nbsp;
           <button onClick={() => setIsFeedbackModalOpen(true)} className="app-button">Send Feedback</button>
         </div>
-        <p className="swipe-prompt">for the full experience of Watchlistr tap beta!</p>
+        <p className="swipe-prompt">for the full experience of Watchlistr tap TestFlight!</p>
         <div className="project">
           <div className="sections-container">
             <div className="section">
@@ -212,7 +232,26 @@ const WatchlistrMobile = () => {
                   </tbody>
                 </table>
               </div>
-              <p className="project-description">Watchlistr is designed from my initial website with a different implantation, with the help of Apple & Google, I am able to let users create an account to keep track of their favorite movies and TV shows when added to their Watchlist. With an intuitive UI and easy-to-navigate tabs, users can effortlessly browse through movies, TV shows, and even see where they can watch them based on available providers.</p>
+              <p className="project-description">
+                <strong>Discover and track your favorite movies and shows with <span style={{ color: 'cornflowerblue' }}>Watchlistr</span> — your personalized hub for keeping up with the latest releases, hidden gems, and timeless classics.</strong> With an intuitive design, powerful search tools, and smart watchlist management, Watchlistr makes it effortless to stay on top of your entertainment journey.
+
+                <br /><br />
+
+                <strong>Features:</strong>
+                <ul className="features-list">
+                  <li><strong>Browse & Discover:</strong> Explore the latest blockbusters, classic films, and binge-worthy series. Enjoy curated lists, streaming service breakdowns, and dedicated TV show sections highlighting what’s airing today and tomorrow. Sort your content your way with flexible sorting options.</li>
+                  <li><strong>Smart Search:</strong> Quickly find movies, shows, actors, or genres with a powerful search feature — complete with search history for fast access. View collections when available for movies and preview genre-based media selections.</li>
+                  <li><strong>Detailed Media Info:</strong> Tap into rich details for any title — from episode counts to streaming availability. Jump directly into streaming apps (if installed) or view details on TMDB. Easily explore collections, discover related media through cast connections, and enjoy smart suggestions based on your interests.</li>
+                  <li><strong>Share Your Favorites:</strong> Share media directly from its detail page. The recipient is taken straight to the media’s page within the app for seamless sharing and discovery.</li>
+                  <li><strong>Custom Notifications:</strong> Stay in the loop with reminders for new releases, upcoming episodes, or rewatch plans — all delivered with a unique notification sound to make your alerts stand out.</li>
+                  <li><strong>Manage Your Watchlist:</strong> Mark movies or individual episodes as “watched” and track your progress with badges. Long-press to set reminders, mark as “Watching,” or toggle back to “Done Watching.” Automatically highlight shows with “New Episode” badges and keep your list sorted by status, alphabetically, or by added date. Organize your watchlist into folders and sort by genre for easy management.</li>
+                  <li><strong>Personalized Profile:</strong> Customize your profile with a photo, adjust text colors, and choose between light or dark mode. Track how many movies and episodes you’ve watched, view your scheduled notifications, and keep an eye on your new episode counts. Select your default app launch tab — Movies, Profile, or TV Shows.</li>
+                  <li><strong>Secure Sign-In Options:</strong> Sign up or log in using Apple or Google for a secure, streamlined experience. Link your provider to your Firebase account for unified login. Not ready to sign up? Try Watchlistr as a guest with the temp user option and explore the features freely.</li>
+                </ul>
+
+                <strong>Embark on your cinematic journey — track, discover, and enjoy like never before!</strong>
+              </p>
+
               <div className="logo-container">
                 {BuiltWithLogos.map((logo, index) => (
                   <span key={index}>
@@ -240,32 +279,14 @@ const WatchlistrMobile = () => {
         onClose={() => handleCloseModal(setIsPrivacyModalOpen)}
         title="Privacy Policy"
       />
-      <Modal
+      <FeedbackModal
         isOpen={isFeedbackModalOpen}
         onClose={() => setIsFeedbackModalOpen(false)}
-        title="Send Feedback"
-      >
-        <form onSubmit={handleFeedbackSubmit} className="feedback-form">
-          <h2 className="modal-title">Send Feedback</h2>
-          <label className="form-label">
-            First Name:
-            <input type="text" value={feedback.firstName} onChange={(e) => setFeedback({ ...feedback, firstName: e.target.value })} required className="form-input" />
-          </label>
-          <label className="form-label">
-            Last Name:
-            <input type="text" value={feedback.lastName} onChange={(e) => setFeedback({ ...feedback, lastName: e.target.value })} required className="form-input" />
-          </label>
-          <label className="form-label">
-            Email:
-            <input type="email" value={feedback.email} onChange={(e) => setFeedback({ ...feedback, email: e.target.value })} required className="form-input" />
-          </label>
-          <label className="form-label">
-            Message:
-            <textarea value={feedback.message} onChange={(e) => setFeedback({ ...feedback, message: e.target.value })} required className="form-input form-textarea" />
-          </label>
-          <button type="submit" className="app-button">Submit</button>
-        </form>
-      </Modal>
+        onSubmit={handleFeedbackSubmit}
+        feedback={feedback}
+        setFeedback={setFeedback}
+        appName="Watchlistr(Mobile)"
+      />
     </div>
   );
 };

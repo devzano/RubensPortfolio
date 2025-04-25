@@ -5,7 +5,7 @@ const Terms = () => {
     <div style={{ padding: "20px", maxWidth: "800px", margin: "auto" }}>
       <h1 style={{ textAlign: "center", marginBottom: "20px" }}>Terms & Conditions</h1>
       <p>
-        These terms and conditions apply to the OtakuHive app ("Application") for mobile devices that was created by devzano ("Service Provider") as a Free service.
+        These terms and conditions apply to the OtakuHive app ("Application") for mobile devices that was created by devzano ("Service Provider") as an Ad Supported service.
       </p>
 
       <p>
@@ -21,11 +21,18 @@ const Terms = () => {
       </p>
 
       <p>
+        Please note that the Application utilizes third-party services that have their own Terms and Conditions. Below are the links to the Terms and Conditions of the third-party service providers used by the Application:
+      </p>
+      <ul>
+        <li>AdMob</li>
+      </ul>
+
+      <p>
         Please be aware that the Service Provider does not assume responsibility for certain aspects. Some functions of the Application require an active internet connection, which can be Wi-Fi or provided by your mobile network provider. The Service Provider cannot be held responsible if the Application does not function at full capacity due to lack of access to Wi-Fi or if you have exhausted your data allowance.
       </p>
 
       <p>
-        If you are using the application outside of a Wi-Fi area, please be aware that your mobile network provider's agreement terms still apply. Consequently, you may incur charges from your mobile provider for data usage during the connection to the application, or other third-party charges. By using the application, you accept responsibility for any such charges, including roaming data charges if you use the Application outside of your home territory (i.e., region or country) without disabling data roaming. If you are not the bill payer for the device on which you are using the Application, they assume that you have obtained permission from the bill payer.
+        If you are using the application outside of a Wi-Fi area, please be aware that your mobile network provider's agreement terms still apply. Consequently, you may incur charges from your mobile provider for data usage during the connection to the Application, or other third-party charges. By using the application, you accept responsibility for any such charges, including roaming data charges if you use the Application outside of your home territory (i.e., region or country) without disabling data roaming. If you are not the bill payer for the device on which you are using the Application, they assume that you have obtained permission from the bill payer.
       </p>
 
       <p>
@@ -46,7 +53,7 @@ const Terms = () => {
       </p>
 
       <p>
-        These terms and conditions are effective as of 2024-10-02.
+        These terms and conditions are effective as of 2024-09-23.
       </p>
 
       <h2>Contact Me</h2>

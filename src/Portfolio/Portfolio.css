@@ -21,7 +21,8 @@
   background-color: #1a1a1a85;
   color: #6495ed;
   padding: 20px;
-  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
   margin: 20px;
   text-align: center;
   z-index: 1;

@@ -12,8 +12,9 @@ import SignupPage from '../Watchlistr-Web/Screenshots/WatchlistrWeb(SignupPage).
 import HomePage from '../Watchlistr-Web/Screenshots/WatchlistrWeb(HomePage).png';
 import MoviesPage from '../Watchlistr-Web/Screenshots/WatchlistrWeb(MoviesPage).png';
 import TVShowsPage from '../Watchlistr-Web/Screenshots/WatchlistrWeb(TVShowsPage).png';
+import FeedbackModal from '../MailForm/FeedbackModal';
 
-const WatchlistrWeb = () => {
+const WatchlistrWeb = ({ showArrows, nextSlide, prevSlide }) => {
   const WatchlistrWebScreens = [
     LoginPage,
     SignupPage,
@@ -73,11 +74,33 @@ const WatchlistrWeb = () => {
 
   return (
     <div className="coding-background">
-      <div className="centered-content">
+      <div className="title-with-arrows">
+        {showArrows && (
+          <button className="small-nav-arrow" onClick={prevSlide} aria-label="Previous Project">
+            &#10094;
+          </button>
+        )}
         <h1 className="title">
-          <a href="https://watchlistrweb.vercel.app" target="_blank" rel="noopener noreferrer" className="section-title">Watchlistr</a>
+          <a
+            href="https://watchlistrweb.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="section-title"
+          >
+            Watchlistr
+          </a>
         </h1>
+        {showArrows && (
+          <button className="small-nav-arrow" onClick={nextSlide} aria-label="Next Project">
+            &#10095;
+          </button>
+        )}
+      </div>
+
+      <div className="centered-content">
         <div className="flex justify-center space-x-4">
+          <button onClick={() => window.open('https://www.watchlistr.app/', '_blank')} className="app-button">Landing Page</button>
+          &nbsp;
           <button onClick={() => setIsFeedbackModalOpen(true)} className="app-button">Send Feedback</button>
         </div>
         <div className="project">
@@ -87,11 +110,24 @@ const WatchlistrWeb = () => {
                 <img src={WatchlistrWebScreens[watchlistrIndex]} alt={`Project ${watchlistrIndex + 1}`} className="project-image" style={{ width: '100%', maxHeight: '500px' }} />
               </div>
               <p className="project-description">
-                Embarking on my journey into development, I created Watchlistr as a platform to enhance one's entertainment experience. Initially, it was only a website, and I have now seamlessly integrated it with my <a href="https://www.rubenmanzano.com/watchlistr-ios" target="_blank" rel="noopener noreferrer">iOS app</a>, allowing users to enjoy a unified experience. You can easily login or create an account on either platform.
+                <strong>Enhance your entertainment experience with <span style={{ color: 'cornflowerblue' }}>Watchlistr</span> — a platform designed to help you track, discover, and organize your favorite Movies and TV Shows across web and iOS.</strong> What began as a personal web project has now evolved into a seamless, integrated experience between the <a href="https://www.watchlistr.app/" target="_blank" rel="noopener noreferrer">web platform</a> and the <a href="https://www.rubenmanzano.com/watchlistr-ios" target="_blank" rel="noopener noreferrer">iOS app</a>, allowing you to stay connected to your watchlist anywhere.
+
+                <br /><br />
+
+                <strong>Features:</strong>
+                <ul className="features-list">
+                  <li><strong>Unified Experience:</strong> Log in or create an account on either platform — your watchlists stay in sync between the web and mobile apps.</li>
+                  <li><strong>Personal Watchlists:</strong> Build and manage your own custom watchlists. Keep track of the movies and shows you're watching, have finished, or plan to watch.</li>
+                  <li><strong>Discover New Content:</strong> Browse upcoming releases, explore popular picks, and check out top-rated titles, all conveniently in one place.</li>
+                  <li><strong>Streaming Availability:</strong> Quickly find out where your favorite movies and shows are available to stream or rent.</li>
+                  <li><strong>Intuitive Browsing:</strong> Sort and filter content to explore the latest blockbusters, binge-worthy series, and hidden gems across various genres.</li>
+                  <li><strong>Seamless Account Integration:</strong> Whether on desktop or mobile, your watchlist and preferences stay consistent for a hassle-free viewing experience.</li>
+                </ul>
+
+                <strong>Why Watchlistr?</strong> <br />
+                Empower yourself to never miss out on the movies and TV shows you love. Join today, create your personalized watchlist, and enjoy a smarter way to track your entertainment journey!
               </p>
-              <p className="project-description">
-                Watchlistr makes it simple for you to create personal watchlists and track your favorite Movies and TV Shows. Discover upcoming releases, explore popular picks, and check out top-rated media, all in one place. My mission is to empower you to collect and save all those must-see and classic titles for your future viewing pleasure. Join today and never miss out on the media you love!
-              </p>
+
               <div className="logo-container">
                 {builtWithLogos.map((logo, index) => (
                   <span key={index}>
@@ -109,41 +145,14 @@ const WatchlistrWeb = () => {
           </div>
         </div>
       </div>
-      <Modal isOpen={isFeedbackModalOpen} onClose={() => setIsFeedbackModalOpen(false)} title="Send Feedback">
-        <form onSubmit={handleFeedbackSubmit} className="feedback-form">
-          <h2 className="modal-title">Send Feedback</h2>
-          <label className="form-label">
-            First Name:
-            <input type="text" value={feedback.firstName} onChange={(e) => setFeedback({ ...feedback, firstName: e.target.value })} required className="form-input"/>
-          </label>
-          <label className="form-label">
-            Last Name:
-            <input type="text" value={feedback.lastName} onChange={(e) => setFeedback({ ...feedback, lastName: e.target.value })} required className="form-input"/>
-          </label>
-          <label className="form-label">
-            Email:
-            <input type="email" value={feedback.email} onChange={(e) => setFeedback({ ...feedback, email: e.target.value })} required className="form-input"/>
-          </label>
-          <label className="form-label">
-            Message:
-            <textarea value={feedback.message} onChange={(e) => setFeedback({ ...feedback, message: e.target.value })} required className="form-input form-textarea"/>
-          </label>
-          <button type="submit" className="app-button">Submit</button>
-        </form>
-      </Modal>
-    </div>
-  );
-};
-
-const Modal = ({ isOpen, onClose, title, children }) => {
-  if (!isOpen) return null;
-
-  return (
-    <div className="modal">
-      <div className="modal-content">
-        <span className="close" onClick={onClose}>&times;</span>
-        {children}
-      </div>
+      <FeedbackModal
+        isOpen={isFeedbackModalOpen}
+        onClose={() => setIsFeedbackModalOpen(false)}
+        onSubmit={handleFeedbackSubmit}
+        feedback={feedback}
+        setFeedback={setFeedback}
+        appName="Watchlistr(Web)"
+      />
     </div>
   );
 };

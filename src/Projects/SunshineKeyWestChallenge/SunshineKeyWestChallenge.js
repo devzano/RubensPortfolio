@@ -11,10 +11,11 @@ import termsConditions from '../../Projects/CodingLogos/terms-conditions.png';
 import Privacy from './Privacy';
 import Terms from './Terms';
 
-import Home from '../SunshineKeyWestChallenge/Screenshots/SunshineKeyWestChallenge(Home).png'
-import Contact from '../SunshineKeyWestChallenge/Screenshots/SunshineKeyWestChallenge(Contact).png'
-import Events from '../SunshineKeyWestChallenge/Screenshots/SunshineKeyWestChallenge(Events).png'
-import Maps from '../SunshineKeyWestChallenge/Screenshots/SunshineKeyWestChallenge(Maps).png'
+import Home from '../SunshineKeyWestChallenge/Screenshots/SunshineKeyWestChallenge(Home).png';
+import Contact from '../SunshineKeyWestChallenge/Screenshots/SunshineKeyWestChallenge(Contact).png';
+import Events from '../SunshineKeyWestChallenge/Screenshots/SunshineKeyWestChallenge(Events).png';
+import Maps from '../SunshineKeyWestChallenge/Screenshots/SunshineKeyWestChallenge(Maps).png';
+import FeedbackModal from '../MailForm/FeedbackModal';
 
 const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
@@ -29,7 +30,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
   );
 };
 
-const SunshineKeyWestChallenge = () => {
+const SunshineKeyWestChallenge = ({ showArrows, nextSlide, prevSlide }) => {
   const SunshineKeyWestChallengeScreenshots = [
     Home, Contact, Events, Maps
   ];
@@ -129,9 +130,29 @@ const SunshineKeyWestChallenge = () => {
 
   return (
     <div className="coding-background">
-      <h1 className="title">
-        <a href="https://www.rubenmanzano.com/sunshinekeywestchallenge" target="_blank" rel="noopener noreferrer" className="app-link">Sunshine Key West Challenge</a>
-      </h1>
+      <div className="title-with-arrows">
+        {showArrows && (
+          <button className="small-nav-arrow" onClick={prevSlide} aria-label="Previous Project">
+            &#10094;
+          </button>
+        )}
+        <h1 className="title">
+          <a
+            href="https://apps.apple.com/us/app/sunshine-key-west-challenge/id6737530954"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="app-link"
+          >
+            Sunshine Key West Challenge
+          </a>
+        </h1>
+        {showArrows && (
+          <button className="small-nav-arrow" onClick={nextSlide} aria-label="Next Project">
+            &#10095;
+          </button>
+        )}
+      </div>
+
       <div className="centered-content">
         <div className="button-group">
           <button onClick={handleAppleStoreButtonClick} className="app-button">Apple Store</button>
@@ -159,8 +180,23 @@ const SunshineKeyWestChallenge = () => {
                 </table>
               </div>
               <p className="project-description">
-              The Sunshine Key West Challenge app brings the excitement and purpose of this cherished annual tournament right to your fingertips! Learn more about the inspiring history of the tournament, founded to support the Diabetes Research Institute’s mission to find a cure for Type 1 diabetes. Discover a detailed schedule of the tournament events, explore unique auction items, and browse a gallery of memorable angler photos. Stay close to the action with a handy Nearby section, offering food recommendations around the event’s location. With every tap, feel the spirit of camaraderie and community at the Sunshine Key West Challenge.
+                <strong>Experience the excitement and heart of the <span style={{ color: 'cornflowerblue' }}>Sunshine Key West Challenge</span> — a cherished annual fishing tournament dedicated to supporting the Diabetes Research Institute’s mission to find a cure for Type 1 diabetes.</strong> Stay connected to the tournament’s purpose, schedule, and community right from your fingertips.
+
+                <br /><br />
+
+                <strong>Features:</strong>
+                <ul className="features-list">
+                  <li><strong>Tournament History:</strong> Learn about the inspiring story behind the Sunshine Key West Challenge and its mission-driven partnership with the Diabetes Research Institute.</li>
+                  <li><strong>Event Schedule:</strong> Access a detailed, easy-to-follow schedule of tournament events so you never miss a moment of the action.</li>
+                  <li><strong>Exclusive Auction Items:</strong> Browse and explore unique auction listings — all supporting the event’s charitable cause.</li>
+                  <li><strong>Photo Gallery:</strong> Relive memorable moments with a collection of angler photos captured throughout past and current tournaments.</li>
+                  <li><strong>Nearby Recommendations:</strong> Discover local food spots and recommendations near the event location, making your stay even more enjoyable.</li>
+                  <li><strong>Feel the Community Spirit:</strong> With every tap, connect to the passion, camaraderie, and shared purpose that make this event so special.</li>
+                </ul>
+
+                <strong>A community united for a cause — celebrating the sport, the spirit, and the mission to make a difference.</strong>
               </p>
+
               <div className="logo-container">
                 {BuiltWithLogos.map((logo, index) => (
                   <span key={index}>
@@ -188,55 +224,14 @@ const SunshineKeyWestChallenge = () => {
         onClose={() => handleCloseModal(setIsPrivacyModalOpen)}
         title="Privacy Policy"
       />
-      <Modal
+      <FeedbackModal
         isOpen={isFeedbackModalOpen}
         onClose={() => setIsFeedbackModalOpen(false)}
-        title="Send Feedback"
-      >
-        <form onSubmit={handleFeedbackSubmit} className="feedback-form">
-          <h2 className="modal-title">Send Feedback</h2>
-          <label className="form-label">
-            First Name:
-            <input
-              type="text"
-              value={feedback.firstName}
-              onChange={(e) => setFeedback({ ...feedback, firstName: e.target.value })}
-              required
-              className="form-input"
-            />
-          </label>
-          <label className="form-label">
-            Last Name:
-            <input
-              type="text"
-              value={feedback.lastName}
-              onChange={(e) => setFeedback({ ...feedback, lastName: e.target.value })}
-              required
-              className="form-input"
-            />
-          </label>
-          <label className="form-label">
-            Email:
-            <input
-              type="email"
-              value={feedback.email}
-              onChange={(e) => setFeedback({ ...feedback, email: e.target.value })}
-              required
-              className="form-input"
-            />
-          </label>
-          <label className="form-label">
-            Message:
-            <textarea
-              value={feedback.message}
-              onChange={(e) => setFeedback({ ...feedback, message: e.target.value })}
-              required
-              className="form-input form-textarea"
-            />
-          </label>
-          <button type="submit" className="app-button">Submit</button>
-        </form>
-      </Modal>
+        onSubmit={handleFeedbackSubmit}
+        feedback={feedback}
+        setFeedback={setFeedback}
+        appName="Sunshine Key West Challenge"
+      />
     </div>
   );
 };

@@ -1,11 +1,11 @@
 import React from 'react';
 
-const TermsADs = () => {
+const Terms = () => {
   return (
     <div style={{ padding: "20px", maxWidth: "800px", margin: "auto" }}>
-      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>Terms & Conditions</h1>
+      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>Terms of Use</h1>
       <p>
-        These terms and conditions apply to the OtakuHive app ("Application") for mobile devices that was created by devzano ("Service Provider") as an Ad Supported service.
+        These terms and conditions apply to the AutoArchive app ("Application") for mobile devices that was created by devzano ("Service Provider") as an Ad Supported service.
       </p>
 
       <p>
@@ -32,19 +32,19 @@ const TermsADs = () => {
       </p>
 
       <p>
-        If you are using the application outside of a Wi-Fi area, please be aware that your mobile network provider's agreement terms still apply. Consequently, you may incur charges from your mobile provider for data usage during the connection to the Application, or other third-party charges. By using the application, you accept responsibility for any such charges, including roaming data charges if you use the Application outside of your home territory (i.e., region or country) without disabling data roaming. If you are not the bill payer for the device on which you are using the Application, they assume that you have obtained permission from the bill payer.
+        If you are using the application outside of a Wi-Fi area, please be aware that your mobile network provider's agreement terms still apply. Consequently, you may incur charges from your mobile provider for data usage during the connection to the application, or other third-party charges. By using the application, you accept responsibility for any such charges, including roaming data charges if you use the application outside of your home territory (i.e., region or country) without disabling data roaming. If you are not the bill payer for the device on which you are using the application, they assume that you have obtained permission from the bill payer.
       </p>
 
       <p>
-        Similarly, the Service Provider cannot always assume responsibility for your usage of the Application. For instance, it is your responsibility to ensure that your device remains charged. If your device runs out of battery and you are unable to access the Service, the Service Provider cannot be held responsible.
+        Similarly, the Service Provider cannot always assume responsibility for your usage of the application. For instance, it is your responsibility to ensure that your device remains charged. If your device runs out of battery and you are unable to access the Service, the Service Provider cannot be held responsible.
       </p>
 
       <p>
-        In terms of the Service Provider's responsibility for your use of the Application, it is important to note that while they strive to ensure that it is updated and accurate at all times, they do rely on third parties to provide information to them so that they can make it available to you. The Service Provider accepts no liability for any loss, direct or indirect, that you experience as a result of relying entirely on this functionality of the Application.
+        In terms of the Service Provider's responsibility for your use of the application, it is important to note that while they strive to ensure that it is updated and accurate at all times, they do rely on third parties to provide information to them so that they can make it available to you. The Service Provider accepts no liability for any loss, direct or indirect, that you experience as a result of relying entirely on this functionality of the application.
       </p>
 
       <p>
-        The Service Provider may wish to update the Application at some point. The Application is currently available as per the requirements for the operating system (and for any additional systems they decide to extend the availability of the Application to) may change, and you will need to download the updates if you want to continue using the Application. The Service Provider does not guarantee that it will always update the Application so that it is relevant to you and/or compatible with the particular operating system version installed on your device. However, you agree to always accept updates to the Application when offered to you. The Service Provider may also wish to cease providing the Application and may terminate its use at any time without providing termination notice to you. Unless they inform you otherwise, upon any termination, (a) the rights and licenses granted to you in these terms will end; (b) you must cease using the Application, and (if necessary) delete it from your device.
+        The Service Provider may wish to update the application at some point. The application is currently available as per the requirements for the operating system (and for any additional systems they decide to extend the availability of the application to) may change, and you will need to download the updates if you want to continue using the application. The Service Provider does not guarantee that it will always update the application so that it is relevant to you and/or compatible with the particular operating system version installed on your device. However, you agree to always accept updates to the application when offered to you. The Service Provider may also wish to cease providing the application and may terminate its use at any time without providing termination notice to you. Unless they inform you otherwise, upon any termination, (a) the rights and licenses granted to you in these terms will end; (b) you must cease using the application, and (if necessary) delete it from your device.
       </p>
 
       <h2>Changes to These Terms and Conditions</h2>
@@ -53,7 +53,7 @@ const TermsADs = () => {
       </p>
 
       <p>
-        These terms and conditions are effective as of 2024-09-23.
+        These terms and conditions are effective as of 2025-04-24
       </p>
 
       <h2>Contact Me</h2>
@@ -64,4 +64,4 @@ const TermsADs = () => {
   );
 };
 
-export default TermsADs;
+export default Terms;

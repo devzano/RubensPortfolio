@@ -8,14 +8,10 @@ import switftuiLogo from '../../Projects/CodingLogos/swiftui.png';
 import privacyPolicy from '../../Projects/CodingLogos/privacy-policy.png';
 import termsConditions from '../../Projects/CodingLogos/terms-conditions.png';
 
-import MainMenuView from '../StarshipPixelscape/Screenshots/StarshipPixelscape(MainMenuView).png';
-import GameSettingsView from '../StarshipPixelscape/Screenshots/StarshipPixelscape(GameSettingsView).png';
-import GameSettings2View from '../StarshipPixelscape/Screenshots/StarshipPixelscape(GameSettings2View).png';
-import GamePlayView from '../StarshipPixelscape/Screenshots/StarshipPixelscape(GamePlayView).png';
-import GamePlay2View from '../StarshipPixelscape/Screenshots/StarshipPixelscape(GamePlay2View).png';
-import GamePlay3View from '../StarshipPixelscape/Screenshots/StarshipPixelscape(GamePlay3View).png';
-import GamePlayBossView from '../StarshipPixelscape/Screenshots/StarshipPixelscape(GamePlayBossView).png';
-import GameOverView from '../StarshipPixelscape/Screenshots/StarshipPixelscape(GameOverView).png';
+import HomeView from '../AutoArchive/Screenshots/AutoArchive(HomeView).png';
+import NewVehicleView from '../AutoArchive/Screenshots/AutoArchive(NewVehicleView).png';
+import VehicleDetailsView from '../AutoArchive/Screenshots/AutoArchive(VehicleDetailsView).png';
+import ServiceLogView from '../AutoArchive/Screenshots/AutoArchive(ServiceLogView).png';
 
 import Privacy from './Privacy';
 import Terms from './Terms';
@@ -34,16 +30,12 @@ const Modal = ({ isOpen, onClose, title, children }) => {
   );
 };
 
-const StarshipPixelscape = ({ showArrows, nextSlide, prevSlide }) => {
-  const StarshipPixelscapeScreenshots = [
-    MainMenuView,
-    GameSettingsView,
-    GameSettings2View,
-    GamePlayView,
-    GamePlay2View,
-    GamePlay3View,
-    GamePlayBossView,
-    GameOverView
+const AutoArchive = ({ showArrows, nextSlide, prevSlide }) => {
+  const AutoArchiveScreenshots = [
+    HomeView,
+    NewVehicleView,
+    VehicleDetailsView,
+    ServiceLogView
   ];
 
   const [currentSet, setCurrentSet] = useState(0);
@@ -56,23 +48,23 @@ const StarshipPixelscape = ({ showArrows, nextSlide, prevSlide }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (StarshipPixelscapeScreenshots.length > 0) {
-      const maxSets = Math.ceil(StarshipPixelscapeScreenshots.length / calculateNumberOfImages());
+    if (AutoArchiveScreenshots.length > 0) {
+      const maxSets = Math.ceil(AutoArchiveScreenshots.length / calculateNumberOfImages());
       const interval = setInterval(() => {
         setCurrentSet(prevSet => (prevSet + 1) % maxSets);
       }, 4000);
       return () => clearInterval(interval);
     }
-  }, [StarshipPixelscapeScreenshots.length]);
+  }, [AutoArchiveScreenshots.length]);
 
   useEffect(() => {
-    if (location.pathname === '/starship-pixelscape/privacy') {
+    if (location.pathname === '/autoarchive/privacy') {
       setIsPrivacyModalOpen(true);
     } else {
       setIsPrivacyModalOpen(false);
     }
 
-    if (location.pathname === '/starship-pixelscape/terms') {
+    if (location.pathname === '/autoarchive/terms') {
       setIsTermsModalOpen(true);
     } else {
       setIsTermsModalOpen(false);
@@ -80,7 +72,7 @@ const StarshipPixelscape = ({ showArrows, nextSlide, prevSlide }) => {
   }, [location.pathname]);
 
   const handleAppleStoreButtonClick = () => {
-    window.open("https://apps.apple.com/us/app/starship-pixelscape/id6741517533", "_blank");
+    window.open("https://apps.apple.com/us/app/autoarchive/id6744589503", "_blank");
   };
 
   const handleFeedbackSubmit = async (e) => {
@@ -93,7 +85,7 @@ const StarshipPixelscape = ({ showArrows, nextSlide, prevSlide }) => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          appName: 'Starship Pixelscape',
+          appName: 'AutoArchive',
           firstName: feedback.firstName,
           lastName: feedback.lastName,
           email: feedback.email,
@@ -115,8 +107,8 @@ const StarshipPixelscape = ({ showArrows, nextSlide, prevSlide }) => {
 
   const handleCloseModal = (modalSetter) => {
     modalSetter(false);
-    if (location.pathname === '/starship-pixelscape/privacy' || location.pathname === '/starship-pixelscape/terms') {
-      navigate('/starship-pixelscape');
+    if (location.pathname === '/autoarchive/privacy' || location.pathname === '/autoarchive/terms') {
+      navigate('/autoarchive');
     }
   };
 
@@ -130,8 +122,8 @@ const StarshipPixelscape = ({ showArrows, nextSlide, prevSlide }) => {
     { src: githubLogo, alt: 'GitHub Logo', link: 'https://github.com/devzano' },
     { src: xcodeLogo, alt: 'Xcode Logo', link: 'https://developer.apple.com/xcode/' },
     { src: switftuiLogo, alt: 'SwiftUI Logo', link: 'https://developer.apple.com/xcode/swiftui/' },
-    { src: termsConditions, alt: 'Terms and Conditions', onClick: () => navigate('/starship-pixelscape/terms') },
-    { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => navigate('/starship-pixelscape/privacy') }
+    { src: termsConditions, alt: 'Terms and Conditions', onClick: () => navigate('/autoarchive/terms') },
+    { src: privacyPolicy, alt: 'Privacy Policy', onClick: () => navigate('/autoarchive/privacy') }
   ];
 
   return (
@@ -144,12 +136,12 @@ const StarshipPixelscape = ({ showArrows, nextSlide, prevSlide }) => {
         )}
         <h1 className="title">
           <a
-            href="https://apps.apple.com/us/app/starship-pixelscape/id6741517533"
+            href="https://apps.apple.com/us/app/autoarchive/id6744589503"
             target="_blank"
             rel="noopener noreferrer"
             className="section-title"
           >
-            Starship Pixelscape
+            AutoArchive
           </a>
         </h1>
         {showArrows && (
@@ -174,8 +166,8 @@ const StarshipPixelscape = ({ showArrows, nextSlide, prevSlide }) => {
                     <tr>
                       {Array.from({ length: numberOfImages }).map((_, i) => (
                         <td align="center" key={i}>
-                          <img src={StarshipPixelscapeScreenshots[i + currentSet * numberOfImages]}
-                            alt={`Starship Pixelscape View ${i + currentSet * numberOfImages}`}
+                          <img src={AutoArchiveScreenshots[i + currentSet * numberOfImages]}
+                            alt={`AutoArchive View ${i + currentSet * numberOfImages}`}
                             width="300" />
                         </td>
                       ))}
@@ -183,23 +175,24 @@ const StarshipPixelscape = ({ showArrows, nextSlide, prevSlide }) => {
                   </tbody>
                 </table>
               </div>
+
               <p className="project-description">
-                <strong>Blast off into an action-packed adventure with <span style={{ color: 'cornflowerblue' }}>Spaceship Pixelscape</span> — a retro-inspired journey through the pixelated cosmos!</strong> Dodge, blast, and conquer your way across the galaxy in a universe packed with danger, challenges, and endless excitement. Whether you're chasing high scores or testing your skills, Spaceship Pixelscape delivers the cosmic thrills you're looking for.
+                <strong>Stay in control of your car care with <span style={{ color: 'cornflowerblue' }}>AutoArchive</span> — your all-in-one solution for managing vehicle maintenance and service records.</strong> Whether you're tracking a single vehicle or an entire fleet, AutoArchive keeps everything organized, accessible, and right at your fingertips. Say goodbye to messy paperwork — your glovebox just went digital.
 
                 <br /><br />
 
                 <strong>Features:</strong>
                 <ul className="features-list">
-                  <li><strong>Choose Your Spaceship:</strong> Select from a lineup of unique spaceships, each designed to help you take on the galaxy your way.</li>
-                  <li><strong>Shoot Meteors:</strong> Hone your reflexes and aim as meteors rain down in an endless cosmic storm — survive as long as you can!</li>
-                  <li><strong>Intuitive Controls:</strong> Play your way with flexible control options — choose between smooth drag controls or classic joystick mode for that authentic arcade feel.</li>
-                  <li><strong>Power Up:</strong> Collect game-changing power-ups to boost your ship’s abilities and increase your odds of survival during intense battles.</li>
-                  <li><strong>Enemy Ship Encounters:</strong> Engage in fast-paced dogfights with hostile UFOs. Outsmart and outmaneuver your enemies to stay in the fight.</li>
-                  <li><strong>Boss Battles:</strong> Face off against colossal bosses that will test your endurance, reflexes, and precision in epic showdowns.</li>
-                  <li><strong>Leaderboard Challenge:</strong> Compete for a spot in the Top 10! Track your score and prove you’re the best pilot in the galaxy.</li>
+                  <li>Create detailed vehicle profiles — automatically populate make, model, and year using the VIN.</li>
+                  <li>Log service records with cost, mileage, notes, and multiple photo attachments for clear documentation.</li>
+                  <li>Track vital details: registration, inspection, insurance dates, oil life, tire pressure, battery health, and more.</li>
+                  <li>Store important part numbers for filters, tires, brakes, and other vehicle components — all in one place.</li>
+                  <li>Organize your data with custom tags and personal notes to keep things your way.</li>
+                  <li>Set flexible reminders for upcoming maintenance, renewals, or any vehicle-related task.</li>
                 </ul>
 
-                <strong>Are you ready to take on the galaxy?</strong>
+                <strong>Why AutoArchive?</strong> <br />
+                Keep your vehicles running smoothly with streamlined record-keeping, smart reminders, and quick access to the information you need — anytime, anywhere.
               </p>
 
               <div className="logo-container">
@@ -235,10 +228,10 @@ const StarshipPixelscape = ({ showArrows, nextSlide, prevSlide }) => {
         onSubmit={handleFeedbackSubmit}
         feedback={feedback}
         setFeedback={setFeedback}
-        appName="Starship Pixelscape"
+        appName="AutoArchive"
       />
     </div>
   );
 };
 
-export default StarshipPixelscape;
+export default AutoArchive;

@@ -32,6 +32,7 @@ import CalendarView from '../EchoExpense/Screenshots/EchoExpense(CalendarView).p
 
 import Privacy from './Privacy';
 import Terms from './Terms';
+import FeedbackModal from '../MailForm/FeedbackModal';
 
 const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
@@ -46,7 +47,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
   );
 };
 
-const EchoExpense = () => {
+const EchoExpense = ({ showArrows, nextSlide, prevSlide }) => {
   const EchoExpenseScreenshots = [
     LoginView,
     SignupView,
@@ -161,9 +162,29 @@ const EchoExpense = () => {
 
   return (
     <div className="coding-background">
-      <h1 className="title">
-        <a href="https://apps.apple.com/us/app/echoexpense/id6475660500" target="_blank" rel="noopener noreferrer" className="app-link">EchoExpense</a>
-      </h1>
+      <div className="title-with-arrows">
+        {showArrows && (
+          <button className="small-nav-arrow" onClick={prevSlide} aria-label="Previous Project">
+            &#10094;
+          </button>
+        )}
+        <h1 className="title">
+          <a
+            href="https://apps.apple.com/us/app/echoexpense/id6475660500"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="app-link"
+          >
+            EchoExpense
+          </a>
+        </h1>
+        {showArrows && (
+          <button className="small-nav-arrow" onClick={nextSlide} aria-label="Next Project">
+            &#10095;
+          </button>
+        )}
+      </div>
+
       <div className="centered-content">
         <div className="button-group">
           <button onClick={handleAppleStoreButtonClick} className="app-button">Apple Store</button>
@@ -189,8 +210,34 @@ const EchoExpense = () => {
                 </table>
               </div>
               <p className="project-description">
-                Elevate your financial management with EchoExpense, an iOS application designed to empower you in managing your bills. With EchoExpense, you can seamlessly create, edit, and organize your bills while configuring timely personalized notifications for payments, ensuring financial clarity and control. Take charge of your finances and maintain a comprehensive record of your expenses, paid bills, and notifications with the precision and convenience of EchoExpense.
+                <strong>Stay on top of your current and upcoming bills in style with <span style={{ color: 'cornflowerblue' }}>EchoExpense</span> — your all-in-one solution for effortless bill management and financial clarity.</strong> Easily review past payments, manage notifications, and keep your finances organized with an intuitive and modern interface.
+
+                <br /><br />
+
+                <strong>Features:</strong>
+                <ul className="features-list">
+                  <li><strong>Manage Bills:</strong> Quickly create bills, view details, edit, mark as paid, and track payment history. Customize notifications to fit your schedule.</li>
+                  <li><strong>Bill Details View:</strong> Minimal yet powerful. Access three intuitive actions:
+                    <ul className="features-sublist">
+                      <li>🟡 <strong>Menu Icon:</strong> View bill history and manage notifications.</li>
+                      <li>🔵 <strong>Notepad Icon:</strong> Edit bill details and save updates easily.</li>
+                      <li>🟢 <strong>Banknote Icon:</strong> Mark bills as paid or unpaid. Categorize payments as "On Time" or "Late" for accurate record-keeping.</li>
+                    </ul>
+                  </li>
+                  <li><strong>Payday Management:</strong> Add paydays and track your income with end-of-month calculations that help you manage deductions, taxes, and financial overviews.</li>
+                  <li><strong>Calendar History:</strong> View both past and upcoming bills alongside paydays. Tap on any day to see its associated bills for better planning and history review.</li>
+                  <li><strong>Profile Insights:</strong> Personalize your profile with a photo or initials. Instantly see your total remaining balance, amount paid, and projected profits for the current and upcoming months. Easily edit account details and link your Google or Apple account.</li>
+                  <li><strong>Paid / Unpaid Bills Logic:</strong> Automatically generate the next bill upon marking one as paid. Enable auto-pay for confirmation alerts, or let unpaid bills revert to upcoming/past-due status to stay informed.</li>
+                  <li><strong>Smart Notifications:</strong> Choose your preferred alert time (8 AM, 12 PM, or 4 PM). Get a last-chance reminder at 3 PM on the due date if a bill remains unpaid, with proactive reminders leading up to the due date.</li>
+                  <li><strong>Smart Savings Bundle:</strong> Take control of your finances with budget creation, savings tracking, and intuitive progress monitoring through the Smart Savings feature.</li>
+                  <li><strong>Feedback UI:</strong> Help shape EchoExpense by submitting feedback or feature requests directly within the app.</li>
+                  <li><strong>Seamless Sign-In:</strong> Enjoy easy account creation and login with Apple or Google for a smooth, hassle-free experience.</li>
+                </ul>
+
+                <strong>Why EchoExpense?</strong> <br />
+                Keep your finances organized, stay ahead of your bills, and confidently manage your payments — all in one place.
               </p>
+
               <div className="logo-container">
                 {BuiltWithLogos.map((logo, index) => (
                   <span key={index}>
@@ -218,55 +265,14 @@ const EchoExpense = () => {
         onClose={() => handleCloseModal(setIsPrivacyModalOpen)}
         title="Privacy Policy"
       />
-      <Modal
+      <FeedbackModal
         isOpen={isFeedbackModalOpen}
         onClose={() => setIsFeedbackModalOpen(false)}
-        title="Send Feedback"
-      >
-        <form onSubmit={handleFeedbackSubmit} className="feedback-form">
-          <h2 className="modal-title">Send Feedback</h2>
-          <label className="form-label">
-            First Name:
-            <input
-              type="text"
-              value={feedback.firstName}
-              onChange={(e) => setFeedback({ ...feedback, firstName: e.target.value })}
-              required
-              className="form-input"
-            />
-          </label>
-          <label className="form-label">
-            Last Name:
-            <input
-              type="text"
-              value={feedback.lastName}
-              onChange={(e) => setFeedback({ ...feedback, lastName: e.target.value })}
-              required
-              className="form-input"
-            />
-          </label>
-          <label className="form-label">
-            Email:
-            <input
-              type="email"
-              value={feedback.email}
-              onChange={(e) => setFeedback({ ...feedback, email: e.target.value })}
-              required
-              className="form-input"
-            />
-          </label>
-          <label className="form-label">
-            Message:
-            <textarea
-              value={feedback.message}
-              onChange={(e) => setFeedback({ ...feedback, message: e.target.value })}
-              required
-              className="form-input form-textarea"
-            />
-          </label>
-          <button type="submit" className="app-button">Submit</button>
-        </form>
-      </Modal>
+        onSubmit={handleFeedbackSubmit}
+        feedback={feedback}
+        setFeedback={setFeedback}
+        appName="EchoExpense"
+      />
     </div>
   );
 };

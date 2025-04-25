@@ -15,6 +15,7 @@ import SearchView from '../OtakuHive/Screenshots/OtakuHive(SearchView).png';
 
 import Privacy from './Privacy';
 import Terms from './Terms';
+import FeedbackModal from '../MailForm/FeedbackModal';
 
 const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
@@ -29,7 +30,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
   );
 };
 
-const OtakuHive = () => {
+const OtakuHive = ({ showArrows, nextSlide, prevSlide }) => {
   const OtakuHiveScreenshots = [
     MangaDetailView,
     FullScreenReader,
@@ -127,11 +128,31 @@ const OtakuHive = () => {
 
   return (
     <div className="coding-background">
-      <h1 className="title">
-        <a href=" " target="_blank" rel="noopener noreferrer" className="section-title">OtakuHive</a>
-      </h1>
+      <div className="title-with-arrows">
+        {showArrows && (
+          <button className="small-nav-arrow" onClick={prevSlide} aria-label="Previous Project">
+            &#10094;
+          </button>
+        )}
+        <h1 className="title">
+          <a
+            href="https://testflight.apple.com/join/sRsqfd9y"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="section-title"
+          >
+            OtakuHive
+          </a>
+        </h1>
+        {showArrows && (
+          <button className="small-nav-arrow" onClick={nextSlide} aria-label="Next Project">
+            &#10095;
+          </button>
+        )}
+      </div>
+
       <div className="centered-content">
-      <div className="button-group">
+        <div className="button-group">
           <button onClick={handleTestFlightButtonClick} className="app-button">TestFlight</button>
           &nbsp;
           <button onClick={() => setIsFeedbackModalOpen(true)} className="app-button">Send Feedback</button>
@@ -147,23 +168,39 @@ const OtakuHive = () => {
                         <td align="center" key={i}>
                           <img src={OtakuHiveScreenshots[i + currentSet * numberOfImages]}
                             alt={`OtakuHive View ${i + currentSet * numberOfImages}`}
-                            width="300"/>
+                            width="300" />
                         </td>
                       ))}
                     </tr>
                   </tbody>
                 </table>
               </div>
-              <p className="project-description">Discover a world of manga like never before with OtakuHive, a sleek and powerful manga reader app that connects directly to MangaDex. With an intuitive interface and unique features, OtakuHive makes it easier than ever to explore, read, and save your favorite manga!</p>
+              <p className="project-description">
+                <strong>Discover a world of manga like never before with <span style={{ color: 'cornflowerblue' }}>OtakuHive</span> — a sleek, powerful manga reader that connects directly to MangaDex.</strong> With a clean interface and smooth functionality, OtakuHive makes it effortless to explore, read, and organize your favorite manga titles.
+
+                <br /><br />
+
+                <strong>Features:</strong>
+                <ul className="features-list">
+                  <li><strong>Powered by MangaDex:</strong> Enjoy access to a massive, ever-growing manga library, sourced in real time from the MangaDex database.</li>
+                  <li><strong>Random & Latest Manga:</strong> Dive into something new with the Random tab, or keep up with the freshest releases via the Latest Mangas section — updated as soon as new chapters drop.</li>
+                  <li><strong>Smart Search:</strong> Looking for something specific? Quickly find any manga by title using the Search tab.</li>
+                  <li><strong>Saved Manga:</strong> Bookmark your favorite manga in the Saved tab for easy access anytime — no more scrolling through lists to find what you love.</li>
+                  <li><strong>Reading Progress Bookmarks:</strong> OtakuHive remembers your spot! Bookmarks save your page and auto-scroll you back when you reopen a chapter, so you can pick up right where you left off.</li>
+                </ul>
+
+                <strong>Your next manga obsession awaits.</strong>
+              </p>
+
               <div className="logo-container">
                 {BuiltWithLogos.map((logo, index) => (
                   <span key={index}>
                     {logo.link ? (
                       <Link to={logo.link}>
-                        <img src={logo.src} alt={logo.alt} className="logo"/>
+                        <img src={logo.src} alt={logo.alt} className="logo" />
                       </Link>
                     ) : (
-                      <img src={logo.src} alt={logo.alt} className="logo" onClick={logo.onClick} style={{ cursor: 'pointer' }}/>
+                      <img src={logo.src} alt={logo.alt} className="logo" onClick={logo.onClick} style={{ cursor: 'pointer' }} />
                     )}
                   </span>
                 ))}
@@ -182,32 +219,14 @@ const OtakuHive = () => {
         onClose={() => handleCloseModal(setIsPrivacyModalOpen)}
         title="Privacy Policy"
       />
-      <Modal
+      <FeedbackModal
         isOpen={isFeedbackModalOpen}
         onClose={() => setIsFeedbackModalOpen(false)}
-        title="Send Feedback"
-      >
-        <form onSubmit={handleFeedbackSubmit} className="feedback-form">
-          <h2 className="modal-title">Send Feedback</h2>
-          <label className="form-label">
-            First Name:
-            <input type="text" value={feedback.firstName} onChange={(e) => setFeedback({ ...feedback, firstName: e.target.value })} required className="form-input"/>
-          </label>
-          <label className="form-label">
-            Last Name:
-            <input type="text" value={feedback.lastName} onChange={(e) => setFeedback({ ...feedback, lastName: e.target.value })} required className="form-input"/>
-          </label>
-          <label className="form-label">
-            Email:
-            <input type="email" value={feedback.email} onChange={(e) => setFeedback({ ...feedback, email: e.target.value })} required className="form-input"/>
-          </label>
-          <label className="form-label">
-            Message:
-            <textarea value={feedback.message} onChange={(e) => setFeedback({ ...feedback, message: e.target.value })} required className="form-input form-textarea"/>
-          </label>
-          <button type="submit" className="app-button">Submit</button>
-        </form>
-      </Modal>
+        onSubmit={handleFeedbackSubmit}
+        feedback={feedback}
+        setFeedback={setFeedback}
+        appName="OtakuHive"
+      />
     </div>
   );
 };

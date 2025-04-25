@@ -7,6 +7,7 @@ import EchoExpense_Icon from '../Projects/CodingLogos/echoexpense(icon).png';
 import OtakuHive_Icon from '../Projects/CodingLogos/otakuhive(icon).png';
 import SunshineKeyWestChallenge_Icon from '../Projects/CodingLogos/sunshinekeywestchallenge(icon).png';
 import StarshipPixelscape_Icon from '../Projects/CodingLogos/starship-pixelscape(icon).png'
+import AutoArchive_Icon from '../Projects/CodingLogos/autoarchive(icon).png'
 
 const Navbar = ({ onTogglePause }) => {
   const [state, setState] = useState({
@@ -188,8 +189,19 @@ const Navbar = ({ onTogglePause }) => {
                     role="menuitem"
                     tabIndex="0"
                   >
-                    Sunshine Key West Challenge
+                    SKWC
                     <img src={SunshineKeyWestChallenge_Icon} alt="Sunshine Key West Challenge Icon" className="navbar-icon-img" />
+                  </Link>
+                  <Link
+                    className="navbar-link"
+                    to="/autoarchive"
+                    onClick={toggleMenu}
+                    onKeyDown={(e) => handleKeyDown(e, toggleMenu)}
+                    role="menuitem"
+                    tabIndex="0"
+                  >
+                    AutoArchive
+                    <img src={AutoArchive_Icon} alt="AutoArchive Icon" className="navbar-icon-img" />
                   </Link>
                 </div>
               )}

@@ -32,6 +32,7 @@ import ChangeThemeView from '../RecipeRealm/Screenshots/RecipeRealm(ChangeThemeV
 
 import Terms from './Terms';
 import Privacy from './Privacy';
+import FeedbackModal from '../MailForm/FeedbackModal';
 
 const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
@@ -46,7 +47,7 @@ const Modal = ({ isOpen, onClose, title, children }) => {
   );
 };
 
-const RecipeRealm = () => {
+const RecipeRealm = ({ showArrows, nextSlide, prevSlide }) => {
   const RecipeRealmScreenshots = [
     WelcomeView,
     HomeView,
@@ -161,9 +162,29 @@ const RecipeRealm = () => {
 
   return (
     <div className="coding-background">
-      <h1 className="title">
-        <a href="https://apps.apple.com/us/app/reciperealm/id6458877177" target="_blank" rel="noopener noreferrer" className="section-title">RecipeRealm</a>
-      </h1>
+      <div className="title-with-arrows">
+        {showArrows && (
+          <button className="small-nav-arrow" onClick={prevSlide} aria-label="Previous Project">
+            &#10094;
+          </button>
+        )}
+        <h1 className="title">
+          <a
+            href="https://apps.apple.com/us/app/reciperealm/id6458877177"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="section-title"
+          >
+            RecipeRealm
+          </a>
+        </h1>
+        {showArrows && (
+          <button className="small-nav-arrow" onClick={nextSlide} aria-label="Next Project">
+            &#10095;
+          </button>
+        )}
+      </div>
+
       <div className="centered-content">
         <div className="button-group">
           <button onClick={handleAppleStoreButtonClick} className="app-button">Apple Store</button>
@@ -189,8 +210,32 @@ const RecipeRealm = () => {
                 </table>
               </div>
               <p className="project-description">
-                Discover a world of flavors with RecipeRealm. Easily create, store, and edit diverse recipes with images, prep/cook times, ingredients, and detailed steps. Explore new recipes with the in-app browser and capture its ingredient list from the web page from the scan button! Find your recipes quickly with the search bar. I’ve included one of my own recipes when you first install, hope you enjoy! I made my app customizable by letting you change the tint color, share and import recipes with each other, also create folders to group recipes. Elevate your cooking journey today!
+                <strong>Discover a world of flavors with <span style={{ color: 'cornflowerblue' }}>RecipeRealm</span> — your go-to app for creating, saving, and sharing culinary creations with ease.</strong> Whether you’re a home cook or a seasoned chef, RecipeRealm helps you organize your recipes beautifully, explore new dishes, and customize your cooking journey.
+
+                <br /><br />
+
+                <strong>Features:</strong>
+                <ul className="features-list">
+                  <li><strong>Store & Browse:</strong> Save your favorite recipes, from appetizers to desserts, with prep and cook times, images, ingredients, and step-by-step instructions — all in one place.</li>
+                  <li><strong>In-App Browser & Ingredient Capture:</strong> Search for new recipes directly through the app's browser. Found one you like? Tap the scan button to quickly grab the ingredient list right from the webpage.</li>
+                  <li><strong>Images Made Easy:</strong> Upload photos from your library, take new ones, or use Google image search to find the perfect picture for your recipe.</li>
+                  <li><strong>Edit Anytime:</strong> Need to make updates? Edit recipes effortlessly — update any section, tweak steps, or crop photos as needed.</li>
+                  <li><strong>Step-by-Step Tracking:</strong> Stay organized while cooking. Mark off ingredients and steps as you go, then reset and reuse for your next cooking session.</li>
+                  <li><strong>Quick Search & Filters:</strong> Easily find your saved recipes using the search bar. Filter by cook time or cuisine type to discover your favorites faster.</li>
+                  <li><strong>Dietary Preferences:</strong> Tag recipes for specific dietary needs like gluten-free, sugar-free, and more for easy sorting.</li>
+                  <li><strong>Share the Flavor:</strong> Share your creations with friends via built-in sharing options. Recipients can copy and import recipes directly into their app — perfect for collaborative cooking!</li>
+                  <li><strong>Easy Additions:</strong> Quickly import recipes by copying details, including images from your clipboard, directly into the app.</li>
+                  <li><strong>RecipeRealm Community:</strong> Connect with fellow food enthusiasts, discover new dishes, and share your favorite creations with an active and inspiring community.</li>
+                  <li><strong>Recipe Assistant (Exclusive):</strong> Powered by OpenAI, the Chefs Assistant helps answer your cooking questions. Community members enjoy up to 12 messages per day for personalized guidance in the kitchen.</li>
+                  <li><strong>Random Recipe Banner:</strong> Get inspired each time you open the app with a random featured recipe. Tap to view details, copy, and import it seamlessly.</li>
+                  <li><strong>My Recipe Starter:</strong> Enjoy one of my personal recipes included at install — a tasty way to jumpstart your culinary journey.</li>
+                  <li><strong>Recipe Books:</strong> Organize recipes into customizable books. Drag, drop, and manage your collection intuitively with easy sorting actions.</li>
+                  <li><strong>Color UI:</strong> Personalize your app experience by choosing your preferred tint color for a look that matches your style.</li>
+                </ul>
+
+                <strong>Your kitchen adventure awaits.</strong>
               </p>
+
               <div className="logo-container">
                 {BuiltWithLogos.map((logo, index) => (
                   <span key={index}>
@@ -218,55 +263,14 @@ const RecipeRealm = () => {
         onClose={() => handleCloseModal(setIsPrivacyModalOpen)}
         title="Privacy Policy"
       />
-      <Modal
+      <FeedbackModal
         isOpen={isFeedbackModalOpen}
         onClose={() => setIsFeedbackModalOpen(false)}
-        title="Send Feedback"
-      >
-        <form onSubmit={handleFeedbackSubmit} className="feedback-form">
-          <h2 className="modal-title">Send Feedback</h2>
-          <label className="form-label">
-            First Name:
-            <input
-              type="text"
-              value={feedback.firstName}
-              onChange={(e) => setFeedback({ ...feedback, firstName: e.target.value })}
-              required
-              className="form-input"
-            />
-          </label>
-          <label className="form-label">
-            Last Name:
-            <input
-              type="text"
-              value={feedback.lastName}
-              onChange={(e) => setFeedback({ ...feedback, lastName: e.target.value })}
-              required
-              className="form-input"
-            />
-          </label>
-          <label className="form-label">
-            Email:
-            <input
-              type="email"
-              value={feedback.email}
-              onChange={(e) => setFeedback({ ...feedback, email: e.target.value })}
-              required
-              className="form-input"
-            />
-          </label>
-          <label className="form-label">
-            Message:
-            <textarea
-              value={feedback.message}
-              onChange={(e) => setFeedback({ ...feedback, message: e.target.value })}
-              required
-              className="form-input form-textarea"
-            />
-          </label>
-          <button type="submit" className="app-button">Submit</button>
-        </form>
-      </Modal>
+        onSubmit={handleFeedbackSubmit}
+        feedback={feedback}
+        setFeedback={setFeedback}
+        appName="RecipeRealm"
+      />
     </div>
   );
 };

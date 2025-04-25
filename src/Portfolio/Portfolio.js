@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Projects from '../Projects/Projects';
 import './Portfolio.css';
 
 const skills = [
@@ -40,7 +41,9 @@ const Portfolio = () => {
         <div className="sections-container">
           <section className="section">
             <h2 className="section-title">About Me</h2>
-            <p>Motivated and driven, with a passion for software engineering. Currently seeking an entry-level position to acquire valuable experience in the field. Eager to contribute to a team and collaborate towards the attainment of company objectives.</p>
+            <p>
+              Motivated and driven, with a passion for software engineering. Currently seeking an entry-level position to acquire valuable experience in the field. Eager to contribute to a team and collaborate towards the attainment of company objectives.
+            </p>
             <br/>
             <br/>
             <h2 className="section-title">Contact</h2>
@@ -55,6 +58,7 @@ const Portfolio = () => {
               <a href="sms:3053232827" target="_blank" rel="noopener noreferrer">Text</a>
             </p>
           </section>
+
           <section className="section">
             <h2 className="section-title">Skills</h2>
             <ul className="skills-list">
@@ -64,6 +68,10 @@ const Portfolio = () => {
             </ul>
           </section>
         </div>
+      </div>
+
+      <div className="projects-section">
+        <Projects />
       </div>
     </div>
   );

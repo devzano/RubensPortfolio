@@ -136,7 +136,7 @@ const SunshineKeyWestChallenge = ({ showArrows, nextSlide, prevSlide }) => {
             &#10094;
           </button>
         )}
-        <h1 style={{ fontSize: 32, margin: 0 }}>
+        <h1 className="title" style={{ fontSize: 32, margin: 0 }}>
           <a
             href="https://apps.apple.com/us/app/sunshine-key-west-challenge/id6737530954"
             target="_blank"

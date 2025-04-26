@@ -142,7 +142,7 @@ const StarshipPixelscape = ({ showArrows, nextSlide, prevSlide }) => {
             &#10094;
           </button>
         )}
-        <h1 className="title">
+        <h1 style={{ fontSize: 32, margin: 0 }}>
           <a
             href="https://apps.apple.com/us/app/starship-pixelscape/id6741517533"
             target="_blank"

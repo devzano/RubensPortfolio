@@ -136,7 +136,7 @@ const SunshineKeyWestChallenge = ({ showArrows, nextSlide, prevSlide }) => {
             &#10094;
           </button>
         )}
-        <h1 className="title">
+        <h1 style={{ fontSize: 32, margin: 0 }}>
           <a
             href="https://apps.apple.com/us/app/sunshine-key-west-challenge/id6737530954"
             target="_blank"
@@ -158,8 +158,8 @@ const SunshineKeyWestChallenge = ({ showArrows, nextSlide, prevSlide }) => {
           <button onClick={handleAppleStoreButtonClick} className="app-button">Apple Store</button>
           &nbsp;
           <button onClick={handlePlayStoreButtonClick} className="app-button">Play Store</button>
-          <br/>
-          <br/>
+          <br />
+          <br />
           <button onClick={() => setIsFeedbackModalOpen(true)} className="app-button">Send Feedback</button>
         </div>
         <div className="project">

@@ -80,7 +80,7 @@ const WatchlistrWeb = ({ showArrows, nextSlide, prevSlide }) => {
             &#10094;
           </button>
         )}
-        <h1 className="title">
+        <h1 style={{ fontSize: 32, margin: 0 }}>
           <a
             href="https://watchlistrweb.vercel.app"
             target="_blank"

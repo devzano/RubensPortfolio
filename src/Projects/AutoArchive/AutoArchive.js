@@ -134,7 +134,7 @@ const AutoArchive = ({ showArrows, nextSlide, prevSlide }) => {
             &#10094;
           </button>
         )}
-        <h1 className="title">
+        <h1 style={{ fontSize: 32, margin: 0 }}>
           <a
             href="https://apps.apple.com/us/app/autoarchive/id6744589503"
             target="_blank"

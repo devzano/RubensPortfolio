@@ -26,7 +26,7 @@ const App = () => {
   return (
     <Router>
       <Navbar onTogglePause={togglePause} />
-      <div className="App" style={{marginTop: 25}}>
+      <div className="App" style={{marginTop: 30}}>
         <DynamicSpaceBackground isPaused={isPaused} />
         <UFO />
         <Routes>

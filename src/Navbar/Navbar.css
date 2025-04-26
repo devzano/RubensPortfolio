@@ -8,6 +8,7 @@
   --transition-speed: 0.3s;
 }
 
+/* Container */
 .vertical-navbar-container {
   position: fixed;
   top: 20px;
@@ -15,9 +16,10 @@
   z-index: 999;
 }
 
+/* Hamburger Icon */
 .hamburger-icon {
-  width: 25px;
-  height: 15px;
+  width: 30px;
+  height: 18px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -25,6 +27,7 @@
   background: none;
   border: none;
   padding: 0;
+  z-index: 1002;
 }
 
 .hamburger-icon span {
@@ -48,6 +51,32 @@
   transform: rotate(-45deg) translate(6px, -6px);
 }
 
+/* Pause Button */
+.pause-button {
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  color: cornflowerblue;
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  z-index: 1001;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pause-button:hover {
+  background-color: rgba(100, 149, 237, 0.2);
+  border-color: slateblue;
+}
+
+/* Navbar dropdown menu */
 .vertical-navbar {
   margin-top: 12px;
   background: none;
@@ -81,27 +110,7 @@
   }
 }
 
-.pause-button {
-  position: fixed;
-  top: 10px;
-  right: 20px;
-  background: none;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 50%;
-  width: 50px;
-  height: 50px;
-  color: cornflowerblue;
-  font-size: 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 1001;
-}
-
-.pause-button:hover {
-  background-color: rgba(100, 149, 237, 0.2);
-  border-color: slateblue;
-}
-
+/* Navbar link icons */
 .navbar-links {
   display: flex;
   flex-direction: column;
@@ -137,6 +146,7 @@
   transform: scale(1.1);
 }
 
+/* Section labels */
 .nav-section-label {
   color: cornflowerblue;
   font-size: 12px;
@@ -145,4 +155,20 @@
   margin-top: 10px;
   margin-bottom: 4px;
   font-weight: 600;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .pause-button {
+    top: 10px;
+    right: 10px;
+    width: 45px;
+    height: 45px;
+    font-size: 20px;
+  }
+
+  .hamburger-icon {
+    width: 35px;
+    height: 22px;
+  }
 }

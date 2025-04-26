@@ -210,7 +210,8 @@ const WatchlistrMobile = ({ showArrows, nextSlide, prevSlide }) => {
           <button onClick={handleTestFlightButtonClick} className="app-button">TestFlight</button>
           {/* &nbsp;
           <button onClick={handlePlayButtonClick} className="app-button">Play Store</button> */}
-          &nbsp;
+          <br/>
+          <br/>
           <button onClick={() => setIsFeedbackModalOpen(true)} className="app-button">Send Feedback</button>
         </div>
         <p className="prompt">for the full experience of Watchlistr tap TestFlight!</p>

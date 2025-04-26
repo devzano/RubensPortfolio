@@ -158,7 +158,8 @@ const SunshineKeyWestChallenge = ({ showArrows, nextSlide, prevSlide }) => {
           <button onClick={handleAppleStoreButtonClick} className="app-button">Apple Store</button>
           &nbsp;
           <button onClick={handlePlayStoreButtonClick} className="app-button">Play Store</button>
-          &nbsp;
+          <br/>
+          <br/>
           <button onClick={() => setIsFeedbackModalOpen(true)} className="app-button">Send Feedback</button>
         </div>
         <div className="project">

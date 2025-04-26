@@ -161,21 +161,22 @@ const AutoArchive = ({ showArrows, nextSlide, prevSlide }) => {
           <div className="sections-container">
             <div>
               <div className="project-image-container">
-                <table className="rounded-images-table centered-images-table">
-                  <tbody>
-                    <tr>
-                      {Array.from({ length: numberOfImages }).map((_, i) => (
-                        <td align="center" key={i}>
-                          <img src={AutoArchiveScreenshots[i + currentSet * numberOfImages]}
-                            alt={`AutoArchive View ${i + currentSet * numberOfImages}`}
-                            width="300" />
-                        </td>
-                      ))}
-                    </tr>
-                  </tbody>
-                </table>
+                <div className="image-table-background">
+                  <table className="rounded-images-table centered-images-table">
+                    <tbody>
+                      <tr>
+                        {Array.from({ length: numberOfImages }).map((_, i) => (
+                          <td align="center" key={i}>
+                            <img src={AutoArchiveScreenshots[i + currentSet * numberOfImages]}
+                              alt={`AutoArchive View ${i + currentSet * numberOfImages}`}
+                              width="300" />
+                          </td>
+                        ))}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
-
               <p className="project-description">
                 <strong>Stay in control of your car care with <span style={{ color: 'cornflowerblue' }}>AutoArchive</span> — your all-in-one solution for managing vehicle maintenance and service records.</strong> Whether you're tracking a single vehicle or an entire fleet, AutoArchive keeps everything organized, accessible, and right at your fingertips. Say goodbye to messy paperwork — your glovebox just went digital.
 

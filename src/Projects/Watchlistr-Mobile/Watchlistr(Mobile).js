@@ -218,19 +218,23 @@ const WatchlistrMobile = ({ showArrows, nextSlide, prevSlide }) => {
           <div className="sections-container">
             <div>
               <div className="project-image-container">
-                <table className="rounded-images-table centered-images-table">
-                  <tbody>
-                    <tr>
-                      {Array.from({ length: numberOfImages }).map((_, i) => (
-                        <td align="center" key={i}>
-                          <img src={WatchlistrScreenshots[i + currentSet * numberOfImages]}
-                            alt={`Watchlistr View ${i + currentSet * numberOfImages}`}
-                            width="300" />
-                        </td>
-                      ))}
-                    </tr>
-                  </tbody>
-                </table>
+                <div className="image-table-background">
+                  <table className="rounded-images-table centered-images-table">
+                    <tbody>
+                      <tr>
+                        {Array.from({ length: numberOfImages }).map((_, i) => (
+                          <td align="center" key={i}>
+                            <img
+                              src={WatchlistrScreenshots[i + currentSet * numberOfImages]}
+                              alt={`Watchlistr View ${i + currentSet * numberOfImages}`}
+                              width="300"
+                            />
+                          </td>
+                        ))}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
               <p className="project-description">
                 <strong>Discover and track your favorite movies and shows with <span style={{ color: 'cornflowerblue' }}>Watchlistr</span> — your personalized hub for keeping up with the latest releases, hidden gems, and timeless classics.</strong> With an intuitive design, powerful search tools, and smart watchlist management, Watchlistr makes it effortless to stay on top of your entertainment journey.

@@ -107,7 +107,14 @@ const WatchlistrWeb = ({ showArrows, nextSlide, prevSlide }) => {
           <div className="sections-container">
             <div>
               <div className="project-image-container">
-                <img src={WatchlistrWebScreens[watchlistrIndex]} alt={`Project ${watchlistrIndex + 1}`} className="project-image" style={{ width: '100%', maxHeight: '500px' }} />
+                <div className="image-table-background">
+                  <img
+                    src={WatchlistrWebScreens[watchlistrIndex]}
+                    alt={`Project ${watchlistrIndex + 1}`}
+                    className="project-image"
+                    style={{ width: '100%', maxHeight: '500px' }}
+                  />
+                </div>
               </div>
               <p className="project-description">
                 <strong>Enhance your entertainment experience with <span style={{ color: 'cornflowerblue' }}>Watchlistr</span> — a platform designed to help you track, discover, and organize your favorite Movies and TV Shows across web and iOS.</strong> What began as a personal web project has now evolved into a seamless, integrated experience between the <a href="https://www.watchlistr.app/" target="_blank" rel="noopener noreferrer">web platform</a> and the <a href="https://www.rubenmanzano.com/watchlistr-ios" target="_blank" rel="noopener noreferrer">iOS app</a>, allowing you to stay connected to your watchlist anywhere.

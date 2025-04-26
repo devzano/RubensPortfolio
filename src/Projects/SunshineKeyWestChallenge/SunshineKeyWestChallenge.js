@@ -165,19 +165,21 @@ const SunshineKeyWestChallenge = ({ showArrows, nextSlide, prevSlide }) => {
           <div className="sections-container">
             <div>
               <div className="project-image-container">
-                <table className="rounded-images-table centered-images-table">
-                  <tbody>
-                    <tr>
-                      {Array.from({ length: numberOfImages }).map((_, i) => (
-                        <td align="center" key={i}>
-                          <img src={SunshineKeyWestChallengeScreenshots[i + currentSet * numberOfImages]}
-                            alt={`SunshineKeyWestChallenge Screenshot ${i + currentSet * numberOfImages}`}
-                            width="300" />
-                        </td>
-                      ))}
-                    </tr>
-                  </tbody>
-                </table>
+                <div className="image-table-background">
+                  <table className="rounded-images-table centered-images-table">
+                    <tbody>
+                      <tr>
+                        {Array.from({ length: numberOfImages }).map((_, i) => (
+                          <td align="center" key={i}>
+                            <img src={SunshineKeyWestChallengeScreenshots[i + currentSet * numberOfImages]}
+                              alt={`SunshineKeyWestChallenge Screenshot ${i + currentSet * numberOfImages}`}
+                              width="300" />
+                          </td>
+                        ))}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
               <p className="project-description">
                 <strong>Experience the excitement and heart of the <span style={{ color: 'cornflowerblue' }}>Sunshine Key West Challenge</span> — a cherished annual fishing tournament dedicated to supporting the Diabetes Research Institute’s mission to find a cure for Type 1 diabetes.</strong> Stay connected to the tournament’s purpose, schedule, and community right from your fingertips.

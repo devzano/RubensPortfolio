@@ -195,19 +195,21 @@ const EchoExpense = ({ showArrows, nextSlide, prevSlide }) => {
           <div className="sections-container">
             <div>
               <div className="project-image-container">
-                <table className="rounded-images-table centered-images-table">
-                  <tbody>
-                    <tr>
-                      {Array.from({ length: numberOfImages }).map((_, i) => (
-                        <td align="center" key={i}>
-                          <img src={EchoExpenseScreenshots[i + currentSet * numberOfImages]}
-                            alt={`EchoExpense Screenshot ${i + currentSet * numberOfImages}`}
-                            width="300" />
-                        </td>
-                      ))}
-                    </tr>
-                  </tbody>
-                </table>
+                <div className="image-table-background">
+                  <table className="rounded-images-table centered-images-table">
+                    <tbody>
+                      <tr>
+                        {Array.from({ length: numberOfImages }).map((_, i) => (
+                          <td align="center" key={i}>
+                            <img src={EchoExpenseScreenshots[i + currentSet * numberOfImages]}
+                              alt={`EchoExpense Screenshot ${i + currentSet * numberOfImages}`}
+                              width="300" />
+                          </td>
+                        ))}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
               <p className="project-description">
                 <strong>Stay on top of your current and upcoming bills in style with <span style={{ color: 'cornflowerblue' }}>EchoExpense</span> — your all-in-one solution for effortless bill management and financial clarity.</strong> Easily review past payments, manage notifications, and keep your finances organized with an intuitive and modern interface.

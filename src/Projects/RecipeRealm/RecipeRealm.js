@@ -195,19 +195,21 @@ const RecipeRealm = ({ showArrows, nextSlide, prevSlide }) => {
           <div className="sections-container">
             <div>
               <div className="project-image-container">
-                <table className="rounded-images-table centered-images-table">
-                  <tbody>
-                    <tr>
-                      {Array.from({ length: numberOfImages }).map((_, i) => (
-                        <td align="center" key={i}>
-                          <img src={RecipeRealmScreenshots[i + currentSet * numberOfImages]}
-                            alt={`RecipeRealm View ${i + currentSet * numberOfImages}`}
-                            width="300" />
-                        </td>
-                      ))}
-                    </tr>
-                  </tbody>
-                </table>
+                <div className="image-table-background">
+                  <table className="rounded-images-table centered-images-table">
+                    <tbody>
+                      <tr>
+                        {Array.from({ length: numberOfImages }).map((_, i) => (
+                          <td align="center" key={i}>
+                            <img src={RecipeRealmScreenshots[i + currentSet * numberOfImages]}
+                              alt={`RecipeRealm View ${i + currentSet * numberOfImages}`}
+                              width="300" />
+                          </td>
+                        ))}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
               <p className="project-description">
                 <strong>Discover a world of flavors with <span style={{ color: 'cornflowerblue' }}>RecipeRealm</span> — your go-to app for creating, saving, and sharing culinary creations with ease.</strong> Whether you’re a home cook or a seasoned chef, RecipeRealm helps you organize your recipes beautifully, explore new dishes, and customize your cooking journey.

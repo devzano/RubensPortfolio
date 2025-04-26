@@ -26,6 +26,22 @@
   transition: opacity 1s;
 }
 
+.image-table-background {
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(1px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  margin: 20px auto;
+  max-width: 900px;
+  transition: all 0.3s ease;
+}
+
+.image-table-background:hover {
+  box-shadow: 0 8px 32px rgba(100, 149, 237, 0.4);
+  border-color: cornflowerblue;
+}
+
 .centered-images-table {
   margin: 0 auto;
 }

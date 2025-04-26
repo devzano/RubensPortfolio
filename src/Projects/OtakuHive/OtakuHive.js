@@ -161,19 +161,21 @@ const OtakuHive = ({ showArrows, nextSlide, prevSlide }) => {
           <div className="sections-container">
             <div>
               <div className="project-image-container">
-                <table className="rounded-images-table centered-images-table">
-                  <tbody>
-                    <tr>
-                      {Array.from({ length: numberOfImages }).map((_, i) => (
-                        <td align="center" key={i}>
-                          <img src={OtakuHiveScreenshots[i + currentSet * numberOfImages]}
-                            alt={`OtakuHive View ${i + currentSet * numberOfImages}`}
-                            width="300" />
-                        </td>
-                      ))}
-                    </tr>
-                  </tbody>
-                </table>
+                <div className="image-table-background">
+                  <table className="rounded-images-table centered-images-table">
+                    <tbody>
+                      <tr>
+                        {Array.from({ length: numberOfImages }).map((_, i) => (
+                          <td align="center" key={i}>
+                            <img src={OtakuHiveScreenshots[i + currentSet * numberOfImages]}
+                              alt={`OtakuHive View ${i + currentSet * numberOfImages}`}
+                              width="300" />
+                          </td>
+                        ))}
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
               <p className="project-description">
                 <strong>Discover a world of manga like never before with <span style={{ color: 'cornflowerblue' }}>OtakuHive</span> — a sleek, powerful manga reader that connects directly to MangaDex.</strong> With a clean interface and smooth functionality, OtakuHive makes it effortless to explore, read, and organize your favorite manga titles.

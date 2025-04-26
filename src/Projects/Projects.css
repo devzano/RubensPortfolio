@@ -271,7 +271,7 @@ img {
 @media (max-width: 768px) {
   .title-with-arrows {
     flex-direction: row;
-    gap: 10px;
+    gap: 4px;
   }
 
   .small-nav-arrow {

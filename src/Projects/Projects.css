@@ -35,7 +35,7 @@
   margin: 20px auto;
   max-width: 900px;
   transition: all 0.3s ease;
-  width: 100%;
+  width: auto;
   box-sizing: border-box;
 }
 
@@ -51,7 +51,7 @@
 /* Responsive adjustments for mobile */
 @media (max-width: 768px) {
   .image-table-background {
-    max-width: 95%;
+    max-width: 85%;
     padding: 15px;
     margin: 10px auto;
     backdrop-filter: blur(5px);
@@ -59,7 +59,7 @@
   }
 
   .project-image-container img {
-    max-width: 100%;
+    max-width: 95%;
     max-height: 300px;
     height: auto;
     width: auto;
@@ -266,4 +266,15 @@ img {
   height: 80%;
   overflow-y: auto;
   position: relative;
+}
+
+@media (max-width: 768px) {
+  .title-with-arrows {
+    flex-direction: row;
+    gap: 10px;
+  }
+
+  .small-nav-arrow {
+    font-size: 20px;
+  }
 }

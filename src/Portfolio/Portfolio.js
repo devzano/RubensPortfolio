@@ -70,7 +70,7 @@ const Portfolio = () => {
         </div>
       </div>
 
-      <div className="projects-section">
+      <div className="section">
         <Projects />
       </div>
     </div>

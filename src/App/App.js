@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import DynamicSpaceBackground from './DynamicSpaceBackground';
 import UFO from './UFO';
-// import Navbar from '../Navbar/Navbar';
-import GlassyNavbar from '../Navbar/GlassyNavbar';
+import Navbar from '../Navbar/Navbar';
 import Portfolio from '../Portfolio/Portfolio';
 import WatchlistrWeb from '../Projects/Watchlistr-Web/Watchlistr(Web)';
 import RecipeRealm from '../Projects/RecipeRealm/RecipeRealm';
@@ -26,8 +25,8 @@ const App = () => {
 
   return (
     <Router>
-      <GlassyNavbar onTogglePause={togglePause} />
-      <div className="App">
+      <Navbar onTogglePause={togglePause} />
+      <div className="App" style={{marginTop: 25}}>
         <DynamicSpaceBackground isPaused={isPaused} />
         <UFO />
         <Routes>

@@ -167,7 +167,7 @@ const StarshipPixelscape = ({ showArrows, nextSlide, prevSlide }) => {
         </div>
         <div className="project">
           <div className="sections-container">
-            <div className="section">
+            <div>
               <div className="project-image-container">
                 <table className="rounded-images-table centered-images-table">
                   <tbody>

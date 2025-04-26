@@ -213,10 +213,10 @@ const WatchlistrMobile = ({ showArrows, nextSlide, prevSlide }) => {
           &nbsp;
           <button onClick={() => setIsFeedbackModalOpen(true)} className="app-button">Send Feedback</button>
         </div>
-        <p className="swipe-prompt">for the full experience of Watchlistr tap TestFlight!</p>
+        <p className="prompt">for the full experience of Watchlistr tap TestFlight!</p>
         <div className="project">
           <div className="sections-container">
-            <div className="section">
+            <div>
               <div className="project-image-container">
                 <table className="rounded-images-table centered-images-table">
                   <tbody>

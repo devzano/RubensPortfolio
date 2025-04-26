@@ -173,7 +173,7 @@
   font-size: 32px;
 }
 
-.swipe-prompt {
+.prompt {
   text-align: center;
   font-style: italic;
   color: cornflowerblue;
@@ -226,63 +226,4 @@ img {
   height: 80%;
   overflow-y: auto;
   position: relative;
-}
-
-.close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  color: #aaa;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: color 0.3s;
-}
-
-.close:hover,
-.close:focus {
-  color: #000;
-  text-decoration: none;
-}
-
-iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-}
-
-.feedback-form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
-}
-
-.form-label {
-  margin-bottom: 10px;
-  width: 100%;
-  color: #23395B;
-  font-weight: 600;
-}
-
-.form-input {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-  box-sizing: border-box;
-  color: #23395B;
-}
-
-.form-textarea {
-  height: 100px;
-  resize: none;
-}
-
-.modal-title {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: cornflowerblue;
 }

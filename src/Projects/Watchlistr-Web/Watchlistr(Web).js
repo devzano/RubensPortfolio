@@ -105,7 +105,7 @@ const WatchlistrWeb = ({ showArrows, nextSlide, prevSlide }) => {
         </div>
         <div className="project">
           <div className="sections-container">
-            <div className="section">
+            <div>
               <div className="project-image-container">
                 <img src={WatchlistrWebScreens[watchlistrIndex]} alt={`Project ${watchlistrIndex + 1}`} className="project-image" style={{ width: '100%', maxHeight: '500px' }} />
               </div>

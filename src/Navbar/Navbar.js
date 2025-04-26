@@ -31,7 +31,7 @@ const Navbar = ({ onTogglePause }) => {
   };
 
   return (
-    <div className="vertical-navbar-container" ref={menuRef}>
+    <>
       <button
         className="pause-button"
         onClick={onTogglePause}
@@ -40,58 +40,60 @@ const Navbar = ({ onTogglePause }) => {
         𐫰
       </button>
 
-      <button
-        className={`hamburger-icon ${isOpen ? 'open' : ''}`}
-        onClick={() => setIsOpen(!isOpen)}
-        aria-label="Toggle Navigation"
-      >
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
+      <div className="vertical-navbar-container" ref={menuRef}>
+        <button
+          className={`hamburger-icon ${isOpen ? 'open' : ''}`}
+          onClick={() => setIsOpen(!isOpen)}
+          aria-label="Toggle Navigation"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
 
-      {isOpen && (
-        <div className="vertical-navbar">
-          <div className="navbar-links">
-            <Link to="/" className="nav-icon" title="Home" onClick={handleNavClick}>
-              <img src={Home_Icon} alt="Home" />
-            </Link>
+        {isOpen && (
+          <div className="vertical-navbar">
+            <div className="navbar-links">
+              <Link to="/" className="nav-icon" title="Home" onClick={handleNavClick}>
+                <img src={Home_Icon} alt="Home" />
+              </Link>
 
-            <div className="nav-section-label">Web</div>
-            <Link to="/watchlistr-web" className="nav-icon" title="Watchlistr Web" onClick={handleNavClick}>
-              <img src={Watchlistr_Icon} alt="Watchlistr Web" />
-            </Link>
+              <div className="nav-section-label">Web</div>
+              <Link to="/watchlistr-web" className="nav-icon" title="Watchlistr Web" onClick={handleNavClick}>
+                <img src={Watchlistr_Icon} alt="Watchlistr Web" />
+              </Link>
 
-            <div className="nav-section-label">Mobile</div>
-            <Link to="/watchlistr-mobile" className="nav-icon" title="Watchlistr Mobile" onClick={handleNavClick}>
-              <img src={Watchlistr_Icon} alt="Watchlistr Mobile" />
-            </Link>
-            <Link to="/reciperealm" className="nav-icon" title="RecipeRealm" onClick={handleNavClick}>
-              <img src={RecipeRealm_Icon} alt="RecipeRealm" />
-            </Link>
-            <Link to="/echoexpense" className="nav-icon" title="EchoExpense" onClick={handleNavClick}>
-              <img src={EchoExpense_Icon} alt="EchoExpense" />
-            </Link>
-            <Link to="/otakuhive" className="nav-icon" title="OtakuHive" onClick={handleNavClick}>
-              <img src={OtakuHive_Icon} alt="OtakuHive" />
-            </Link>
-            <Link to="/starship-pixelscape" className="nav-icon" title="Pixelscape" onClick={handleNavClick}>
-              <img src={StarshipPixelscape_Icon} alt="Pixelscape" />
-            </Link>
-            <Link to="/autoarchive" className="nav-icon" title="AutoArchive" onClick={handleNavClick}>
-              <img src={AutoArchive_Icon} alt="AutoArchive" />
-            </Link>
-            <Link to="/sunshinekeywestchallenge" className="nav-icon" title="SKWC" onClick={handleNavClick}>
-              <img src={SunshineKeyWestChallenge_Icon} alt="SKWC" />
-            </Link>
+              <div className="nav-section-label">Mobile</div>
+              <Link to="/watchlistr-mobile" className="nav-icon" title="Watchlistr Mobile" onClick={handleNavClick}>
+                <img src={Watchlistr_Icon} alt="Watchlistr Mobile" />
+              </Link>
+              <Link to="/reciperealm" className="nav-icon" title="RecipeRealm" onClick={handleNavClick}>
+                <img src={RecipeRealm_Icon} alt="RecipeRealm" />
+              </Link>
+              <Link to="/echoexpense" className="nav-icon" title="EchoExpense" onClick={handleNavClick}>
+                <img src={EchoExpense_Icon} alt="EchoExpense" />
+              </Link>
+              <Link to="/otakuhive" className="nav-icon" title="OtakuHive" onClick={handleNavClick}>
+                <img src={OtakuHive_Icon} alt="OtakuHive" />
+              </Link>
+              <Link to="/starship-pixelscape" className="nav-icon" title="Pixelscape" onClick={handleNavClick}>
+                <img src={StarshipPixelscape_Icon} alt="Pixelscape" />
+              </Link>
+              <Link to="/autoarchive" className="nav-icon" title="AutoArchive" onClick={handleNavClick}>
+                <img src={AutoArchive_Icon} alt="AutoArchive" />
+              </Link>
+              <Link to="/sunshinekeywestchallenge" className="nav-icon" title="SKWC" onClick={handleNavClick}>
+                <img src={SunshineKeyWestChallenge_Icon} alt="SKWC" />
+              </Link>
 
-            <Link to="/projects" className="nav-icon" title="All Projects" onClick={handleNavClick}>
-              <img src={AllProjects_Icon} alt="All Projects" />
-            </Link>
+              <Link to="/projects" className="nav-icon" title="All Projects" onClick={handleNavClick}>
+                <img src={AllProjects_Icon} alt="All Projects" />
+              </Link>
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -122,9 +122,9 @@ const WatchlistrMobile = ({ showArrows, nextSlide, prevSlide }) => {
     window.open("https://testflight.apple.com/join/5fAq7d4d", "_blank");
   };
 
-  // const handlePlayStoreButtonClick = () => {
-  //   window.open("https://apps.apple.com/us/app/watchlistr/id6459355223", "_blank");
-  // };
+  const handlePlayStoreButtonClick = () => {
+    window.open("https://apps.apple.com/us/app/watchlistr/id6459355223", "_blank");
+  };
 
   const handleFeedbackSubmit = async (e) => {
     e.preventDefault();
@@ -207,14 +207,15 @@ const WatchlistrMobile = ({ showArrows, nextSlide, prevSlide }) => {
         <div className="flex justify-center space-x-4">
           <button onClick={handleAppleStoreButtonClick} className="app-button">Apple Store</button>
           &nbsp;
+          <button onClick={handlePlayStoreButtonClick} className="app-button">Play Store</button>
+          &nbsp;
+          <br />
+          <br />
           <button onClick={handleTestFlightButtonClick} className="app-button">TestFlight</button>
-          {/* &nbsp;
-          <button onClick={handlePlayButtonClick} className="app-button">Play Store</button> */}
-          <br />
-          <br />
+          &nbsp;
           <button onClick={() => setIsFeedbackModalOpen(true)} className="app-button">Send Feedback</button>
         </div>
-        <p className="prompt">for the full experience of Watchlistr tap TestFlight!</p>
+        <p className="prompt">for the full iOS experience of Watchlistr tap TestFlight!</p>
         <div className="project">
           <div className="sections-container">
             <div>

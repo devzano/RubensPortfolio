@@ -11,6 +11,7 @@ import OtakuHive_Icon from '../Projects/CodingLogos/otakuhive(icon).png';
 import SunshineKeyWestChallenge_Icon from '../Projects/CodingLogos/sunshinekeywestchallenge(icon).png';
 import StarshipPixelscape_Icon from '../Projects/CodingLogos/starship-pixelscape(icon).png';
 import AutoArchive_Icon from '../Projects/CodingLogos/autoarchive(icon).png';
+import Steda_Icon from '../Projects/CodingLogos/steda(icon).png';
 
 const Navbar = ({ onTogglePause }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -79,6 +80,9 @@ const Navbar = ({ onTogglePause }) => {
             </Link>
             <Link to="/autoarchive" className="nav-icon" title="AutoArchive" onClick={handleNavClick}>
               <img src={AutoArchive_Icon} alt="AutoArchive" />
+            </Link>
+            <Link to="/steda" className="nav-icon" title="Steda" onClick={handleNavClick}>
+              <img src={Steda_Icon} alt="Steda" />
             </Link>
             <Link to="/sunshinekeywestchallenge" className="nav-icon" title="SKWC" onClick={handleNavClick}>
               <img src={SunshineKeyWestChallenge_Icon} alt="SKWC" />

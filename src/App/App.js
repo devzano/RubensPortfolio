@@ -12,6 +12,7 @@ import OtakuHive from '../Projects/OtakuHive/OtakuHive';
 import SunshineKeyWestChallenge from '../Projects/SunshineKeyWestChallenge/SunshineKeyWestChallenge';
 import StarshipPixelscape from '../Projects/StarshipPixelscape/StarshipPixelscape';
 import AutoArchive from '../Projects/AutoArchive/AutoArchive';
+import Steda from '../Projects/Steda/Steda';
 import Projects from '../Projects/Projects';
 import ErrorPage from './ErrorPage';
 import './App.css';
@@ -39,6 +40,7 @@ const App = () => {
           <Route path='/sunshinekeywestchallenge/*' element={<SunshineKeyWestChallenge />} />
           <Route path='/starship-pixelscape/*' element={<StarshipPixelscape />} />
           <Route path="/autoarchive/*" element={<AutoArchive />} />
+          <Route path="/steda/*" element={<Steda />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>

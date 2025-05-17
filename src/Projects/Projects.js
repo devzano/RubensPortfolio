@@ -7,6 +7,7 @@ import OtakuHive from './OtakuHive/OtakuHive';
 import SunshineKeyWestChallenge from './SunshineKeyWestChallenge/SunshineKeyWestChallenge';
 import StarshipPixelscape from './StarshipPixelscape/StarshipPixelscape';
 import AutoArchive from './AutoArchive/AutoArchive';
+import Steda from './Steda/Steda';
 import '../Projects/Projects.css';
 import '../Portfolio/Portfolio.css';
 
@@ -26,7 +27,8 @@ const Projects = () => {
     <OtakuHive showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />,
     <SunshineKeyWestChallenge showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />,
     <StarshipPixelscape showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />,
-    <AutoArchive showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />
+    <AutoArchive showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />,
+    <Steda showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />
   ];
 
   useEffect(() => {
@@ -37,7 +39,7 @@ const Projects = () => {
 
   return (
     <div className="coding-background">
-      <h2 className="section-title">All Projects</h2>
+      <h2 className="section-title-all">All Projects</h2>
       <div className="slider" style={{ height: containerHeight, transition: 'height 0.5s ease' }}>
         <div className="slide-container">
           {slides.map((slide, index) => (

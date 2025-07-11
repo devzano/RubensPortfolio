@@ -12,6 +12,7 @@ import SunshineKeyWestChallenge_Icon from '../Projects/CodingLogos/sunshinekeywe
 import StarshipPixelscape_Icon from '../Projects/CodingLogos/starship-pixelscape(icon).png';
 import AutoArchive_Icon from '../Projects/CodingLogos/autoarchive(icon).png';
 import Steda_Icon from '../Projects/CodingLogos/steda(icon).png';
+import ManzanosPopShop_Icon from '../Projects/CodingLogos/manzanos-popshop(icon).png';
 
 const Navbar = ({ onTogglePause }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -83,6 +84,9 @@ const Navbar = ({ onTogglePause }) => {
             </Link>
             <Link to="/steda" className="nav-icon" title="Steda" onClick={handleNavClick}>
               <img src={Steda_Icon} alt="Steda" />
+            </Link>
+            <Link to="/manzanos-popshop" className="nav-icon" title="Manzanos PopShop" onClick={handleNavClick}>
+              <img src={ManzanosPopShop_Icon} alt="Manzanos PopShop" />
             </Link>
             <Link to="/sunshinekeywestchallenge" className="nav-icon" title="SKWC" onClick={handleNavClick}>
               <img src={SunshineKeyWestChallenge_Icon} alt="SKWC" />

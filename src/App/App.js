@@ -13,6 +13,7 @@ import SunshineKeyWestChallenge from '../Projects/SunshineKeyWestChallenge/Sunsh
 import StarshipPixelscape from '../Projects/StarshipPixelscape/StarshipPixelscape';
 import AutoArchive from '../Projects/AutoArchive/AutoArchive';
 import Steda from '../Projects/Steda/Steda';
+import ManzanosPopShop from '../Projects/ManzanosPopShop/ManzanosPopShop';
 import Projects from '../Projects/Projects';
 import ErrorPage from './ErrorPage';
 import './App.css';
@@ -41,6 +42,7 @@ const App = () => {
           <Route path='/starship-pixelscape/*' element={<StarshipPixelscape />} />
           <Route path="/autoarchive/*" element={<AutoArchive />} />
           <Route path="/steda/*" element={<Steda />} />
+          <Route path="/manzanos-popshop/*" element={<ManzanosPopShop />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>

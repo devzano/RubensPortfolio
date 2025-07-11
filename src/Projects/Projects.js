@@ -8,6 +8,7 @@ import SunshineKeyWestChallenge from './SunshineKeyWestChallenge/SunshineKeyWest
 import StarshipPixelscape from './StarshipPixelscape/StarshipPixelscape';
 import AutoArchive from './AutoArchive/AutoArchive';
 import Steda from './Steda/Steda';
+import ManzanosPopShop from './ManzanosPopShop/ManzanosPopShop';
 import '../Projects/Projects.css';
 import '../Portfolio/Portfolio.css';
 
@@ -28,7 +29,8 @@ const Projects = () => {
     <SunshineKeyWestChallenge showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />,
     <StarshipPixelscape showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />,
     <AutoArchive showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />,
-    <Steda showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />
+    <Steda showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />,
+    <ManzanosPopShop showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />
   ];
 
   useEffect(() => {

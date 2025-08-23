@@ -73,12 +73,8 @@ const ManzanosPopShop = ({ showArrows, nextSlide, prevSlide }) => {
     }
   }, [location.pathname]);
 
-  // const handleAppleStoreButtonClick = () => {
-  //   window.open("", "_blank");
-  // };
-
-  const handleTestFlightButtonClick = () => {
-    window.open("https://testflight.apple.com/join/RcZRAt7V", "_blank");
+  const handleAppleStoreButtonClick = () => {
+    window.open("https://apps.apple.com/us/app/manzanos-popshop/id6747915168", "_blank");
   };
 
   // const handlePlayStoreButtonClick = () => {
@@ -164,13 +160,12 @@ const ManzanosPopShop = ({ showArrows, nextSlide, prevSlide }) => {
       </div>
       <div className="centered-content">
         <div className="flex justify-center space-x-4">
-          {/* <button onClick={handleAppleStoreButtonClick} className="app-button">Apple Store</button>
+          <button onClick={handleAppleStoreButtonClick} className="app-button">Apple Store</button>
           &nbsp;
-          <button onClick={handlePlayStoreButtonClick} className="app-button">Play Store</button>
+          {/* <button onClick={handlePlayStoreButtonClick} className="app-button">Play Store</button>
           &nbsp;
           <br /> */}
           <br />
-          <button onClick={handleTestFlightButtonClick} className="app-button">TestFlight</button>
           &nbsp;
           <button onClick={() => setIsFeedbackModalOpen(true)} className="app-button">Send Feedback</button>
         </div>
@@ -197,7 +192,7 @@ const ManzanosPopShop = ({ showArrows, nextSlide, prevSlide }) => {
                 </div>
               </div>
               <p className="project-description">
-                <strong>Shop, collect, and show off your favorite Funko Pops with <span style={{ color: 'mediumvioletred' }}>Manzanos PopShop</span> — a unique storefront powered by passion, built for collectors, and curated straight from my personal vault of iconic vinyl figures.</strong> Whether you're a casual fan or a serious collector it's easy to browse, buy, and build your collection.
+                <strong>Shop, collect, and show off your favorite Funko Pops with <span style={{ color: 'slateblue' }}>Manzanos PopShop</span> — a unique storefront powered by passion, built for collectors, and curated straight from my personal vault of iconic vinyl figures.</strong> Whether you're a casual fan or a serious collector it's easy to browse, buy, and build your collection.
 
                 <br /><br />
 
@@ -207,13 +202,11 @@ const ManzanosPopShop = ({ showArrows, nextSlide, prevSlide }) => {
                   <li><strong>Secure Checkout with Stripe:</strong> Enjoy fast and secure payments using Stripe. Your orders are processed smoothly, and stock is reserved instantly to ensure you don’t miss out on your favorite Pop.</li>
                   <li><strong>Favorite Your Picks:</strong> Not ready to buy? Mark Pops as favorites and build your dream list. Your favorites are saved to your profile for easy access later.</li>
                   <li><strong>Modern Order Management:</strong> Track your past orders, view full order details (with thumbnails and status), and automatically regain items in your cart if a payment fails or times out.</li>
-                  <li><strong>Personalized Profile:</strong> Upload a profile picture, manage your shipping addresses (with nicknames like “Home” or “Work”), and securely update your details at any time.</li>
-                  <li><strong>Thoughtful UX:</strong> Choose between dark or light mode to match your vibe. Animations, page transitions, and visual cues make the experience feel premium. Enjoy modern interactions like swipe-to-delete for orders and full-screen Pop previews.</li>
-                  <li><strong>One-Tap Sign-In:</strong> Get started with Apple, Google, or email login — or browse as a guest to explore the shop before signing up. All personal data is stored securely with Supabase.</li>
-                  <li><strong>Collector-First Experience:</strong> Manzanos PopShop isn’t just a store — it’s a celebration of Pop culture. You’re not just buying; you’re adding a story to your shelf.</li>
+                  <li><strong>Personalized Profile:</strong> Upload a profile picture, manage your shipping addresses (with nicknames like “Home” or “Work”), and securely update your details at any time. Choose between dark or light mode to match your vibe.</li>
+                  <li><strong>One-Tap Sign-In:</strong> Get started with Google or email login — or browse as a guest to explore the shop before signing up. All personal data is stored securely with Supabase.</li>
                 </ul>
 
-                <strong>Join the hunt — shop, collect, and celebrate what you love with Manzanos PopShop!</strong>
+                <strong><span style={{ color: 'slateblue' }}>Manzanos PopShop</span> isn’t just a store — it’s a celebration of Pop culture. You’re not just buying; you’re adding a story to your shelf. &nbsp; Join the hunt — shop, collect, and celebrate what you love with <span style={{ color: 'slateblue' }}>Manzanos PopShop</span>!</strong>
               </p>
               <div className="logo-container">
                 {BuiltWithLogos.map((logo, index) => (

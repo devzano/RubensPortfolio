@@ -1,144 +1,149 @@
-import React from "react";
+const LAST_UPDATED = "August 23, 2025";
+const SUPPORT_EMAIL = "rmanzano.se@gmail.com";
+// const SUPPORT_EMAIL = "support@manzanospopshop.com";
+
+const listStyle = { marginLeft: 20, lineHeight: 1.7 };
+const container = { padding: 20, maxWidth: 900, margin: "40px auto" };
+const h1Style = { textAlign: "center", marginBottom: 8 };
+const muted = { textAlign: "center", color: "#777", marginBottom: 24 };
 
 const Privacy = () => {
   return (
-    <div style={{ padding: "20px", maxWidth: "800px", margin: "auto" }}>
-      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>Privacy Policy</h1>
+    <main style={container}>
+      <h1 style={h1Style}>Privacy Policy for Manzanos PopShop</h1>
+      <p style={muted}>Last updated: {LAST_UPDATED}</p>
+
       <p>
-        This Privacy Policy applies to the Manzanos PopShop mobile application
-        ("Application") created by devzano ("Service Provider") as an ad-supported
-        service. The Application is provided for use "AS IS."
+        Manzanos PopShop (“we,” “our,” or “us”) respects your privacy. This
+        Privacy Policy explains how we collect, use, and protect your information
+        when you use our mobile application.
       </p>
 
-      <h2>Information Collection and Use</h2>
-      <p>
-        The Application collects certain information automatically when you
-        download and use it. This information may include:
-      </p>
-      <ul>
-        <li>Your device's Internet Protocol (IP) address</li>
-        <li>Pages you visit within the Application, along with the time and date of your visit</li>
-        <li>Time spent on each page and overall time spent on the Application</li>
-        <li>The operating system used on your mobile device</li>
-      </ul>
-      <p>
-        The Application does not collect precise location data from your mobile
-        device. However, it does gather approximate location information to:
-      </p>
-      <ul>
+      <h2>1. Information We Collect</h2>
+      <ul style={listStyle}>
         <li>
-          <strong>Geolocation Services:</strong> Offer personalized content, relevant
-          recommendations, and location-based services.
+          <strong>Account Information:</strong> Email, username, and password
+          (stored securely). If you sign in with Google or Apple, we collect your
+          full name, email, and username.
         </li>
         <li>
-          <strong>Analytics and Improvements:</strong> Use aggregated and anonymized
-          location data to analyze user behavior, identify trends, and enhance
-          the overall performance and functionality of the Application.
+          <strong>Profile Image:</strong> If available, your Gravatar image may be
+          stored in our database.
         </li>
         <li>
-          <strong>Third-Party Services:</strong> Occasionally transmit anonymized location
-          data to external services to help improve the Application and optimize
-          the offerings.
+          <strong>Shipping Address:</strong> Provided by you for order fulfillment.
+        </li>
+        <li>
+          <strong>Order Information:</strong> Details of your purchases.
+        </li>
+        <li>
+          <strong>Payment Information:</strong> Handled exclusively by Stripe. We
+          do not store or process your card details directly.
         </li>
       </ul>
+
+      <h2>2. How We Use Information</h2>
+      <ul style={listStyle}>
+        <li>Provide account access and app functionality</li>
+        <li>Process and ship orders</li>
+        <li>Send notifications (e.g., order updates, system notifications)</li>
+        <li>Maintain purchase records for your account</li>
+        <li>Securely process payments via Stripe</li>
+      </ul>
+      <p>We do not use your information for marketing or personalized ads.</p>
+
+      <h2>3. Third-Party Services</h2>
+      <p>We rely on trusted third-party providers to deliver services:</p>
+      <ul style={listStyle}>
+        <li>Supabase – authentication, database, and secure storage</li>
+        <li>Stripe – secure payment processing</li>
+        <li>Expo Notifications – push notifications</li>
+        <li>Google AdMob – in-app ads (non-personalized)</li>
+      </ul>
       <p>
-        The Service Provider may also use the information you provide to contact
-        you with important information, required notices, or marketing
-        promotions.
-      </p>
-      <p>
-        For an enhanced user experience, the Application may require you to
-        provide certain personally identifiable information, such as your email
-        address (e.g., rmanzano.se@gmail.com). This information will be retained
-        and used as described in this Privacy Policy.
+        These providers may collect limited data as necessary to perform their
+        services in compliance with their own privacy policies.
       </p>
 
-      <h2>Third-Party Access</h2>
+      <h2>4. Data Sharing</h2>
       <p>
-        Only aggregated and anonymized data is shared with external services to
-        help improve the Application and related services. The Service Provider
-        may share your information with third parties as described in this
-        privacy statement.
+        We do not sell, rent, or share your personal information with any third
+        parties, except as required by law or to process payments/shipping.
       </p>
-      <p>
-        Please note that the Application uses third-party services that have
-        their own privacy policies regarding data handling. Below are links to
-        the privacy policies of these third-party service providers:
-      </p>
-      <ul>
-        <li>AdMob</li>
+
+      <h2>5. Data Retention</h2>
+      <ul style={listStyle}>
+        <li>
+          <strong>Account Data:</strong> Retained until you delete your account
+          (you can delete it directly in-app).
+        </li>
+        <li>
+          <strong>Order Data:</strong> Retained indefinitely for purchase records
+          and legal compliance.
+        </li>
       </ul>
 
-      <h2>Disclosure of Information</h2>
+      <h2>6. Your Rights</h2>
+      <p>Depending on your location, you may have rights to:</p>
+      <ul style={listStyle}>
+        <li>Access, update, or delete your personal data</li>
+        <li>Request account deletion (available directly in the app)</li>
+        <li>Opt-out of certain types of data processing</li>
+      </ul>
       <p>
-        The Service Provider may disclose information provided by users or
-        collected automatically:
+        To exercise additional rights, contact us at:{" "}
+        <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
       </p>
-      <ul>
-        <li>As required by law, such as to comply with a subpoena or similar legal process</li>
-        <li>When they believe in good faith that disclosure is necessary to protect their rights, your safety or the safety of others, investigate fraud, or respond to a government request</li>
-        <li>To trusted service providers who work on their behalf, provided they adhere to the terms set forth in this privacy statement</li>
+
+      <h2>7. GDPR (EU/UK Users)</h2>
+      <p>If you are located in the EU/UK, you have additional rights under the GDPR, including:</p>
+      <ul style={listStyle}>
+        <li>The right to request a copy of your personal data</li>
+        <li>The right to restrict or object to processing</li>
+        <li>The right to withdraw consent at any time</li>
+      </ul>
+      <p>
+        Legal basis for processing your data: contract performance (order
+        fulfillment) and legitimate interest (security and fraud prevention).
+      </p>
+
+      <h2>8. CCPA (California Residents)</h2>
+      <p>If you are a resident of California, you have rights under the CCPA, including:</p>
+      <ul style={listStyle}>
+        <li>The right to know what personal data we collect and how it is used</li>
+        <li>The right to request deletion of your personal data</li>
+        <li>
+          The right to opt-out of the sale of your personal data (we do not sell
+          data)
+        </li>
       </ul>
 
-      <h2>Opt-Out Rights</h2>
+      <h2>9. Children’s Privacy</h2>
       <p>
-        You can stop all information collection by the Application easily by
-        uninstalling it. Use the standard uninstall processes available as part
-        of your mobile device or through the application marketplace or network.
+        Manzanos PopShop is intended for adults and is not directed at children
+        under 13 (or 16 in certain regions). We do not knowingly collect
+        information from children.
       </p>
 
-      <h2>Data Retention Policy</h2>
+      <h2>10. Data Security</h2>
       <p>
-        The Service Provider will retain user-provided data as long as you use
-        the Application and for a reasonable time thereafter. If you wish to
-        delete data you have provided via the Application, please contact the
-        Service Provider at rmanzano.se@gmail.com, and they will respond within a
-        reasonable timeframe.
+        We implement reasonable technical and organizational measures to protect
+        your data, including encryption and secure authentication.
       </p>
 
-      <h2>Children's Privacy</h2>
+      <h2>11. Changes to this Policy</h2>
       <p>
-        The Service Provider does not knowingly collect personally identifiable
-        information from children under 13 years of age. The Application is not
-        intended for use by children under 13. If the Service Provider discovers
-        that a child under 13 has provided personal information, they will
-        immediately delete this information from their servers. If you are a
-        parent or guardian and you believe your child has provided personal
-        information, please contact the Service Provider at
-        rmanzano.se@gmail.com so that they can take the necessary actions.
+        We may update this Privacy Policy from time to time. Updates will be
+        posted in-app and should be reviewed periodically.
       </p>
 
-      <h2>Security</h2>
+      <h2>12. Contact Us</h2>
       <p>
-        The Service Provider is committed to protecting the confidentiality of
-        your information. They implement physical, electronic, and procedural
-        safeguards to protect the information processed and maintained by the
-        Application.
+        If you have any questions about this Privacy Policy or how your data is
+        handled, you can contact us at:{" "}
+        <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
       </p>
-
-      <h2>Changes to This Privacy Policy</h2>
-      <p>
-        This Privacy Policy may be updated periodically. The Service Provider
-        will notify you of any changes by posting the updated Privacy Policy on
-        this page. You are encouraged to review this Privacy Policy regularly, as
-        continued use of the Application signifies your acceptance of any
-        changes.
-      </p>
-
-      <h2>Your Consent</h2>
-      <p>
-        By using the Application, you consent to the processing of your
-        information as outlined in this Privacy Policy, including any future
-        amendments.
-      </p>
-
-      <h2>Contact Us</h2>
-      <p>
-        If you have any questions or concerns about this Privacy Policy or the
-        Application’s data practices, please contact the Service Provider via
-        email at rmanzano.se@gmail.com.
-      </p>
-    </div>
+    </main>
   );
 };
 

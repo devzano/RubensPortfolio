@@ -121,7 +121,7 @@ const Privacy = () => {
       <h2>9. Children’s Privacy</h2>
       <p>
         Manzanos PopShop is intended for adults and is not directed at children
-        under 13 (or 16 in certain regions). We do not knowingly collect
+        under 13. We do not knowingly collect
         information from children.
       </p>
 

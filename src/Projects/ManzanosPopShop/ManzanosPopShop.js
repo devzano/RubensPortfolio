@@ -77,9 +77,9 @@ const ManzanosPopShop = ({ showArrows, nextSlide, prevSlide }) => {
     window.open("https://apps.apple.com/us/app/manzanos-popshop/id6747915168", "_blank");
   };
 
-  // const handlePlayStoreButtonClick = () => {
-  //   window.open("", "_blank");
-  // };
+  const handlePlayStoreButtonClick = () => {
+    window.open("https://play.google.com/store/apps/details?id=com.devzano.manzanospopshop", "_blank");
+  };
 
   const handleFeedbackSubmit = async (e) => {
     e.preventDefault();
@@ -159,14 +159,12 @@ const ManzanosPopShop = ({ showArrows, nextSlide, prevSlide }) => {
         )}
       </div>
       <div className="centered-content">
-        <div className="flex justify-center space-x-4">
+        <div className="button-group">
           <button onClick={handleAppleStoreButtonClick} className="app-button">Apple Store</button>
           &nbsp;
-          {/* <button onClick={handlePlayStoreButtonClick} className="app-button">Play Store</button>
-          &nbsp;
-          <br /> */}
+          <button onClick={handlePlayStoreButtonClick} className="app-button">Play Store</button>
           <br />
-          &nbsp;
+          <br />
           <button onClick={() => setIsFeedbackModalOpen(true)} className="app-button">Send Feedback</button>
         </div>
         <div className="project">

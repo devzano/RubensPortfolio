@@ -87,7 +87,7 @@ const Terms = () => {
 
       <h2>8. Intellectual Property</h2>
       <p>
-        All content in the app (logo, design, product images, etc.) is owned by
+        All content in the app (logo, design, etc.) is owned by
         Manzanos PopShop or licensed to us. You may not copy, distribute, or use
         our content without permission.
       </p>
@@ -126,7 +126,7 @@ const Terms = () => {
       </p>
 
       <h2>13. Governing Law</h2>
-      <p>These Terms are governed by the laws of [Your Country/State].</p>
+      <p>These Terms are governed by the laws of United States, Florida.</p>
 
       <h2>14. Contact Us</h2>
       <p>

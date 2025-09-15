@@ -9,6 +9,7 @@ import StarshipPixelscape from './StarshipPixelscape/StarshipPixelscape';
 import AutoArchive from './AutoArchive/AutoArchive';
 import Steda from './Steda/Steda';
 import ManzanosPopShop from './ManzanosPopShop/ManzanosPopShop';
+import Logiqo from './Logiqo/Logiqo';
 import '../Projects/Projects.css';
 import '../Portfolio/Portfolio.css';
 
@@ -30,7 +31,8 @@ const Projects = () => {
     <StarshipPixelscape showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />,
     <AutoArchive showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />,
     <Steda showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />,
-    <ManzanosPopShop showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />
+    <ManzanosPopShop showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />,
+    <Logiqo showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />
   ];
 
   useEffect(() => {

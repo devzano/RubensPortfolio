@@ -14,6 +14,7 @@ import StarshipPixelscape from '../Projects/StarshipPixelscape/StarshipPixelscap
 import AutoArchive from '../Projects/AutoArchive/AutoArchive';
 import Steda from '../Projects/Steda/Steda';
 import ManzanosPopShop from '../Projects/ManzanosPopShop/ManzanosPopShop';
+import Logiqo from '../Projects/Logiqo/Logiqo';
 import Projects from '../Projects/Projects';
 import ErrorPage from './ErrorPage';
 import './App.css';
@@ -43,6 +44,7 @@ const App = () => {
           <Route path="/autoarchive/*" element={<AutoArchive />} />
           <Route path="/steda/*" element={<Steda />} />
           <Route path="/manzanos-popshop/*" element={<ManzanosPopShop />} />
+          <Route path="/logiqo/*" element={<Logiqo />} />
           <Route path="/projects" element={<Projects />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>

@@ -13,6 +13,7 @@ import StarshipPixelscape_Icon from '../Projects/CodingLogos/starship-pixelscape
 import AutoArchive_Icon from '../Projects/CodingLogos/autoarchive(icon).png';
 import Steda_Icon from '../Projects/CodingLogos/steda(icon).png';
 import ManzanosPopShop_Icon from '../Projects/CodingLogos/manzanos-popshop(icon).png';
+import Logiqo_Icon from '../Projects/CodingLogos/logiqo(icon).png';
 
 const Navbar = ({ onTogglePause }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -87,6 +88,9 @@ const Navbar = ({ onTogglePause }) => {
             </Link>
             <Link to="/manzanos-popshop" className="nav-icon" title="Manzanos PopShop" onClick={handleNavClick}>
               <img src={ManzanosPopShop_Icon} alt="Manzanos PopShop" />
+            </Link>
+            <Link to="/logiqo" className="nav-icon" title="Logiqo" onClick={handleNavClick}>
+              <img src={Logiqo_Icon} alt="Logiqo" />
             </Link>
             <Link to="/sunshinekeywestchallenge" className="nav-icon" title="SKWC" onClick={handleNavClick}>
               <img src={SunshineKeyWestChallenge_Icon} alt="SKWC" />

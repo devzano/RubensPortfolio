@@ -1,78 +1,95 @@
+// src/components/Projects/Watchlistr-Mobile/Terms.tsx
+"use client";
+
 import React from "react";
+import DocShell from "../DocShell";
 
-const Terms = () => {
+const LAST_UPDATED = "April 04, 2025";
+const SUPPORT_EMAIL = "rmanzano.se@gmail.com";
+const SITE_URL = "https://www.rubenmanzano.com/watchlistr-mobile";
+
+export default function Terms() {
   return (
-    <div style={{ padding: "20px", maxWidth: "800px", margin: "auto" }}>
-      <h1 style={{ textAlign: "center", marginBottom: "20px" }}>Terms of Service</h1>
-      <p>Last updated: April 04, 2025</p>
+    <DocShell title="Terms of Service" lastUpdated={LAST_UPDATED}>
       <p>
-        These Terms of Use apply to the Watchlistr mobile app, developed by devzano, and made available as an ad-supported service. By downloading or using Watchlistr, you agree to these terms.
+        These Terms of Use apply to the Watchlistr mobile app, developed by devzano, and made available as an
+        ad-supported service. By downloading or using Watchlistr, you agree to these terms.
       </p>
 
-      <h2>Use of the App</h2>
-      <p>
-        Watchlistr is designed to help you browse, track, and manage your favorite movies and tv shows. You agree to use the app for personal, non-commercial purposes only.
-      </p>
-      <p>
-        You may not copy, modify, or attempt to extract the source code of the app. All trademarks, code, and intellectual property belong to me or the respective content providers.
-      </p>
+      <div>
+        <h2 className="mb-2 text-lg font-semibold text-slate-100">Use of the App</h2>
+        <p>
+          Watchlistr helps you browse, track, and manage your favorite movies and TV shows. Use the app for personal,
+          non-commercial purposes only. You may not copy, modify, or attempt to extract the source code. All trademarks,
+          code, and IP belong to me or respective providers.
+        </p>
+      </div>
 
-      <h2>Accounts & Data</h2>
-      <p>
-        When you sign in using Apple or Google or create an account using your email address, your account info is securely stored using Firebase. You are responsible for keeping your device and account safe.
-      </p>
-      <p>
-        If you choose to upload a profile picture or schedule notifications, those settings are tied to your account and stored in the cloud.
-      </p>
+      <div>
+        <h2 className="mb-2 text-lg font-semibold text-slate-100">Accounts &amp; Data</h2>
+        <p>
+          When you sign in with Apple/Google or email, your account info is securely stored via Firebase. You’re
+          responsible for keeping your device and account safe. If you upload a profile picture or schedule
+          notifications, those settings are tied to your account and stored in the cloud.
+        </p>
+      </div>
 
-      <h2>Third-Party Services</h2>
-      <p>
-        Watchlistr uses a few trusted services to function properly:
-      </p>
-      <ul>
-        <li><strong>Firebase</strong> – for secure authentication and storing watchlist data</li>
-        <li><strong>Google AdMob</strong> – for displaying ads</li>
-        <li><strong>TMDB (The Movie Database)</strong> – for providing movie and tv information</li>
-      </ul>
-      <p>
-        Each of these services has its own Terms of Use and Privacy Policy. I recommend reviewing them for more info.
-      </p>
+      <div>
+        <h2 className="mb-2 text-lg font-semibold text-slate-100">Third-Party Services</h2>
+        <p>Watchlistr relies on trusted services:</p>
+        <ul className="list-disc space-y-2 pl-6 marker:text-sky-400">
+          <li><strong className="text-slate-100">Firebase</strong> — authentication &amp; storing watchlist data</li>
+          <li><strong className="text-slate-100">Google AdMob</strong> — displaying ads</li>
+          <li><strong className="text-slate-100">TMDB</strong> — media information</li>
+        </ul>
+        <p className="mt-2">Each has its own Terms and Privacy Policy; please review them.</p>
+      </div>
 
-      <h2>Internet & Connectivity</h2>
-      <p>
-        Some features require an internet connection. I’m not responsible for any issues caused by lack of connectivity, roaming charges, or mobile data usage.
-      </p>
+      <div>
+        <h2 className="mb-2 text-lg font-semibold text-slate-100">Internet &amp; Connectivity</h2>
+        <p>
+          Some features require internet access. I’m not responsible for issues from lack of connectivity, roaming
+          charges, or data usage.
+        </p>
+      </div>
 
-      <h2>Device Responsibility</h2>
-      <p>
-        It’s your responsibility to keep your device charged, up-to-date, and functioning. I’m not liable for any loss of access due to technical issues on your device.
-      </p>
+      <div>
+        <h2 className="mb-2 text-lg font-semibold text-slate-100">Device Responsibility</h2>
+        <p>
+          Keep your device charged, updated, and functioning. I’m not liable for loss of access due to device issues.
+        </p>
+      </div>
 
-      <h2>Content Accuracy</h2>
-      <p>
-        While I strive to display accurate and up-to-date info from TMDB, I can’t guarantee its completeness or reliability. I’m not responsible for any issues that arise from relying on that content.
-      </p>
+      <div>
+        <h2 className="mb-2 text-lg font-semibold text-slate-100">Content Accuracy</h2>
+        <p>
+          Information from TMDB is provided as-is. While I aim for accuracy, I can’t guarantee completeness or
+          reliability and am not responsible for issues arising from reliance on that content.
+        </p>
+      </div>
 
-      <h2>Updates & Termination</h2>
-      <p>
-        I may update the app or these terms at any time. If the app is no longer supported, I may remove it from app stores and end service without notice. If that happens, your access to the app and any associated data will end.
-      </p>
+      <div>
+        <h2 className="mb-2 text-lg font-semibold text-slate-100">Updates &amp; Termination</h2>
+        <p>
+          I may update the app or these terms at any time. If the app is no longer supported, I may remove it from app
+          stores and end service without notice; your access and associated data will end accordingly.
+        </p>
+      </div>
 
-      <h2>Changes to These Terms</h2>
-      <p>
-        These Terms of Use may be updated from time to time. I’ll post updates here with the new effective date. Continued use of the app means you accept the updated terms.
-      </p>
+      <div>
+        <h2 className="mb-2 text-lg font-semibold text-slate-100">Changes to These Terms</h2>
+        <p>
+          Updates may be posted here with a new effective date. Continued use means you accept the updated terms.
+        </p>
+      </div>
 
-      <h2>Contact Me</h2>
-      <p>
-        If you have any questions or suggestions about these terms, feel free to reach out:
-      </p>
-      <ul>
-        <li><strong>Email:</strong> rmanzano.se@gmail.com</li>
-        <li><strong>Website:</strong> <a href="https://www.rubenmanzano.com/watchlistr-mobile" target="_blank" rel="noopener noreferrer">https://www.rubenmanzano.com/watchlistr-mobile</a></li>
-      </ul>
-    </div>
+      <div>
+        <h2 className="mb-2 text-lg font-semibold text-slate-100">Contact Me</h2>
+        <ul className="list-disc space-y-1 pl-6 marker:text-sky-400">
+          <li><strong>Email:</strong> <a href={`mailto:${SUPPORT_EMAIL}`} className="text-sky-400 hover:underline underline-offset-4">{SUPPORT_EMAIL}</a></li>
+          <li><strong>Website:</strong> <a href={SITE_URL} target="_blank" rel="noopener noreferrer" className="text-sky-400 hover:underline underline-offset-4">{SITE_URL}</a></li>
+        </ul>
+      </div>
+    </DocShell>
   );
-};
-
-export default Terms;
+}

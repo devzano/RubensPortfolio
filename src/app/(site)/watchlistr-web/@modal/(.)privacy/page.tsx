@@ -12,7 +12,7 @@ export default function PrivacyModalOverlay() {
       isOpen
       onClose={close}
       title="Privacy Policy"
-      contentClassName="modal-content glassy-effect"
+      contentClassName="glassy-effect"
     >
       <Privacy />
     </Modal>

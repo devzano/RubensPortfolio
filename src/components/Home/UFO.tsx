@@ -103,7 +103,7 @@ const UFO: React.FC<Props> = ({ isPaused = false }) => {
     scene.add(spotLight);
 
     // Motion state
-    let velocity = new THREE.Vector3(0.02, 0.02, 0.02);
+    const velocity = new THREE.Vector3(0.02, 0.02, 0.02);
     let hoverT = 0;
     let rafId = 0;
 

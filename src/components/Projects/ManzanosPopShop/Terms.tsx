@@ -1,140 +1,171 @@
+"use client";
+
+import React from "react";
+
 const LAST_UPDATED = "August 23, 2025";
 const SUPPORT_EMAIL = "rmanzano.se@gmail.com";
 // const SUPPORT_EMAIL = "support@manzanospopshop.com";
 
-const container = { padding: 20, maxWidth: 900, margin: "40px auto" };
-const h1Style = { textAlign: "center", marginBottom: 8 };
-const muted = { textAlign: "center", color: "#777", marginBottom: 24 };
-const listStyle = { marginLeft: 20, lineHeight: 1.7 };
-
-const Terms = () => {
+export default function Terms() {
   return (
-    <main style={container}>
-      <h1 style={h1Style}>Terms of Service for Manzanos PopShop</h1>
-      <p style={muted}>Last updated: {LAST_UPDATED}</p>
+    <main className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
+      <article className="rounded-2xl border border-white/10 bg-white/5 p-6 sm:p-8 text-slate-200 shadow-2xl shadow-black/40 ring-1 ring-white/10 backdrop-blur-md">
+        <header className="mb-4 text-center">
+          <h1 className="text-2xl sm:text-3xl font-semibold tracking-tight">
+            Terms of Service for Manzanos PopShop
+          </h1>
+          <p className="mt-1 text-sm text-slate-400">Last updated: {LAST_UPDATED}</p>
+          <div className="mx-auto mt-3 h-px w-24 bg-gradient-to-r from-transparent via-sky-400/60 to-transparent" />
+        </header>
 
-      <p>
-        Welcome to Manzanos PopShop (“we,” “our,” or “us”). By using our app,
-        you (“you,” “user,” or “customer”) agree to these Terms of Service.
-        Please read them carefully before using the app.
-      </p>
+        <section className="space-y-6 leading-relaxed">
+          <p>
+            Welcome to Manzanos PopShop (&ldquo;we,&rdquo; &ldquo;our,&rdquo; or
+            &nbsp;&ldquo;us&rdquo;). By using our app, you (&ldquo;you,&rdquo; &ldquo;user,&rdquo; or
+            &nbsp;&ldquo;customer&rdquo;) agree to these Terms of Service. Please read them carefully before
+            using the app.
+          </p>
 
-      <h2>1. Acceptance of Terms</h2>
-      <p>
-        By creating an account, making a purchase, or otherwise using the app,
-        you agree to be bound by these Terms. If you do not agree, please do not
-        use the app.
-      </p>
+          <div>
+            <h2 className="mb-2 text-lg font-semibold text-slate-100">1. Acceptance of Terms</h2>
+            <p>
+              By creating an account, making a purchase, or otherwise using the app, you agree to be bound
+              by these Terms. If you do not agree, please do not use the app.
+            </p>
+          </div>
 
-      <h2>2. Eligibility</h2>
-      <p>You must be at least 18 years old to use this app.</p>
-      <p>By using the app, you confirm that you meet this requirement.</p>
+          <div>
+            <h2 className="mb-2 text-lg font-semibold text-slate-100">2. Eligibility</h2>
+            <p>You must be at least 18 years old to use this app.</p>
+            <p>By using the app, you confirm that you meet this requirement.</p>
+          </div>
 
-      <h2>3. Accounts</h2>
-      <ul style={listStyle}>
-        <li>You must create an account to browse and purchase items.</li>
-        <li>
-          You are responsible for maintaining the confidentiality of your login
-          credentials.
-        </li>
-        <li>
-          You agree to provide accurate information and keep it up to date.
-        </li>
-        <li>You are responsible for all activity under your account.</li>
-      </ul>
+          <div>
+            <h2 className="mb-2 text-lg font-semibold text-slate-100">3. Accounts</h2>
+            <ul className="list-disc space-y-2 pl-6 marker:text-sky-400">
+              <li>You must create an account to browse and purchase items.</li>
+              <li>You are responsible for maintaining the confidentiality of your login credentials.</li>
+              <li>You agree to provide accurate information and keep it up to date.</li>
+              <li>You are responsible for all activity under your account.</li>
+            </ul>
+          </div>
 
-      <h2>4. Purchases & Payments</h2>
-      <ul style={listStyle}>
-        <li>
-          All payments are processed securely through Stripe (and in the future,
-          may include Google Pay or Apple Pay).
-        </li>
-        <li>Prices are listed in the app and may change without notice.</li>
-        <li>
-          Once an order is placed, it cannot be canceled unless specifically
-          allowed under our refund policy.
-        </li>
-      </ul>
+          <div>
+            <h2 className="mb-2 text-lg font-semibold text-slate-100">4. Purchases &amp; Payments</h2>
+            <ul className="list-disc space-y-2 pl-6 marker:text-sky-400">
+              <li>
+                All payments are processed securely through Stripe (and in the future, may include Google
+                Pay or Apple Pay).
+              </li>
+              <li>Prices are listed in the app and may change without notice.</li>
+              <li>
+                Once an order is placed, it cannot be canceled unless specifically allowed under our refund
+                policy.
+              </li>
+            </ul>
+          </div>
 
-      <h2>5. Shipping & Delivery</h2>
-      <ul style={listStyle}>
-        <li>You are responsible for providing accurate shipping information.</li>
-        <li>
-          We are not responsible for delays or losses caused by incorrect
-          addresses or third-party carriers.
-        </li>
-        <li>Delivery times are estimates and not guaranteed.</li>
-      </ul>
+          <div>
+            <h2 className="mb-2 text-lg font-semibold text-slate-100">5. Shipping &amp; Delivery</h2>
+            <ul className="list-disc space-y-2 pl-6 marker:text-sky-400">
+              <li>You are responsible for providing accurate shipping information.</li>
+              <li>
+                We are not responsible for delays or losses caused by incorrect addresses or third-party
+                carriers.
+              </li>
+              <li>Delivery times are estimates and not guaranteed.</li>
+            </ul>
+          </div>
 
-      <h2>6. Refunds & Returns</h2>
-      <ul style={listStyle}>
-        <li>All sales are final, unless otherwise stated (e.g., defective items).</li>
-        <li>
-          To request a return or refund, contact us at{" "}
-          <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>.
-        </li>
-        <li>Approved refunds will be issued to the original payment method.</li>
-      </ul>
+          <div>
+            <h2 className="mb-2 text-lg font-semibold text-slate-100">6. Refunds &amp; Returns</h2>
+            <ul className="list-disc space-y-2 pl-6 marker:text-sky-400">
+              <li>All sales are final, unless otherwise stated (e.g., defective items).</li>
+              <li>
+                To request a return or refund, contact us at{" "}
+                <a href={`mailto:${SUPPORT_EMAIL}`} className="text-sky-400 underline-offset-4 hover:underline">
+                  {SUPPORT_EMAIL}
+                </a>
+                .
+              </li>
+              <li>Approved refunds will be issued to the original payment method.</li>
+            </ul>
+          </div>
 
-      <h2>7. User Conduct</h2>
-      <p>You agree not to:</p>
-      <ul style={listStyle}>
-        <li>Use the app for any unlawful purpose.</li>
-        <li>Attempt to hack, reverse engineer, or disrupt the app.</li>
-        <li>Misuse the app in ways that harm us or other users.</li>
-      </ul>
-      <p>We may suspend or terminate accounts that violate these terms.</p>
+          <div>
+            <h2 className="mb-2 text-lg font-semibold text-slate-100">7. User Conduct</h2>
+            <p>You agree not to:</p>
+            <ul className="list-disc space-y-2 pl-6 marker:text-sky-400">
+              <li>Use the app for any unlawful purpose.</li>
+              <li>Attempt to hack, reverse engineer, or disrupt the app.</li>
+              <li>Misuse the app in ways that harm us or other users.</li>
+            </ul>
+            <p>We may suspend or terminate accounts that violate these terms.</p>
+          </div>
 
-      <h2>8. Intellectual Property</h2>
-      <p>
-        All content in the app (logo, design, etc.) is owned by
-        Manzanos PopShop or licensed to us. You may not copy, distribute, or use
-        our content without permission.
-      </p>
+          <div>
+            <h2 className="mb-2 text-lg font-semibold text-slate-100">8. Intellectual Property</h2>
+            <p>
+              All content in the app (logo, design, etc.) is owned by Manzanos PopShop or licensed to us.
+              You may not copy, distribute, or use our content without permission.
+            </p>
+          </div>
 
-      <h2>9. Third-Party Services</h2>
-      <p>The app integrates with third-party services such as:</p>
-      <ul style={listStyle}>
-        <li>Supabase – account management, database, storage</li>
-        <li>Stripe – payment processing</li>
-        <li>Expo Notifications – push notifications</li>
-        <li>Google AdMob – ads</li>
-      </ul>
-      <p>
-        By using the app, you also agree to the terms of these third-party
-        providers.
-      </p>
+          <div>
+            <h2 className="mb-2 text-lg font-semibold text-slate-100">9. Third-Party Services</h2>
+            <p>The app integrates with third-party services such as:</p>
+            <ul className="list-disc space-y-2 pl-6 marker:text-sky-400">
+              <li>Supabase &mdash; account management, database, storage</li>
+              <li>Stripe &mdash; payment processing</li>
+              <li>Expo Notifications &mdash; push notifications</li>
+              <li>Google AdMob &mdash; ads</li>
+            </ul>
+            <p className="mt-3">
+              By using the app, you also agree to the terms of these third-party providers.
+            </p>
+          </div>
 
-      <h2>10. Limitation of Liability</h2>
-      <p>
-        To the maximum extent permitted by law, we are not liable for any
-        damages arising from use of the app, including lost profits or data, or
-        issues caused by third-party services, shipping carriers, or payment
-        providers.
-      </p>
+          <div>
+            <h2 className="mb-2 text-lg font-semibold text-slate-100">10. Limitation of Liability</h2>
+            <p>
+              To the maximum extent permitted by law, we are not liable for any damages arising from use of
+              the app, including lost profits or data, or issues caused by third-party services, shipping
+              carriers, or payment providers.
+            </p>
+          </div>
 
-      <h2>11. Termination</h2>
-      <p>
-        We may suspend or terminate your account at any time if you violate
-        these Terms or misuse the app.
-      </p>
+          <div>
+            <h2 className="mb-2 text-lg font-semibold text-slate-100">11. Termination</h2>
+            <p>
+              We may suspend or terminate your account at any time if you violate these Terms or misuse the
+              app.
+            </p>
+          </div>
 
-      <h2>12. Changes to Terms</h2>
-      <p>
-        We may update these Terms from time to time. Updates will be posted
-        in-app, and continued use of the app means you accept the revised Terms.
-      </p>
+          <div>
+            <h2 className="mb-2 text-lg font-semibold text-slate-100">12. Changes to Terms</h2>
+            <p>
+              We may update these Terms from time to time. Updates will be posted in-app, and continued use
+              of the app means you accept the revised Terms.
+            </p>
+          </div>
 
-      <h2>13. Governing Law</h2>
-      <p>These Terms are governed by the laws of United States, Florida.</p>
+          <div>
+            <h2 className="mb-2 text-lg font-semibold text-slate-100">13. Governing Law</h2>
+            <p>These Terms are governed by the laws of United States, Florida.</p>
+          </div>
 
-      <h2>14. Contact Us</h2>
-      <p>
-        If you have any questions about these Terms, please contact us at:{" "}
-        <a href={`mailto:${SUPPORT_EMAIL}`}>{SUPPORT_EMAIL}</a>
-      </p>
+          <div>
+            <h2 className="mb-2 text-lg font-semibold text-slate-100">14. Contact Us</h2>
+            <p>
+              If you have any questions about these Terms, please contact us at:&nbsp;
+              <a href={`mailto:${SUPPORT_EMAIL}`} className="text-sky-400 underline-offset-4 hover:underline">
+                {SUPPORT_EMAIL}
+              </a>
+            </p>
+          </div>
+        </section>
+      </article>
     </main>
   );
-};
-
-export default Terms;
+}

@@ -1,12 +1,12 @@
-// app/(site)/reciperealm/@modal/(.)privacy/page.tsx
+// app/(site)/reciperealm/terms/page.tsx
 "use client";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/Modal";
-import Privacy from "@/components/Projects/RecipeRealm/Privacy";
+import Terms from "@/components/Projects/RecipeRealm/Terms";
 
-export default function PrivacyModalOverlay() {
+export default function TermsStandalone() {
   const router = useRouter();
-  const close = () => router.back();
+  const close = () => router.push("/reciperealm", { scroll: false });
   return (
     <Modal
       isOpen
@@ -14,7 +14,7 @@ export default function PrivacyModalOverlay() {
       title="RecipeRealm"
       contentClassName="modal-content glassy-effect"
     >
-      <Privacy />
+      <Terms />
     </Modal>
   );
 }

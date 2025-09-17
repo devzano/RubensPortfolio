@@ -1,12 +1,12 @@
-// app/(site)/reciperealm/@modal/(.)privacy/page.tsx
+// app/(site)/reciperealm/privacy/page.tsx
 "use client";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/Modal";
 import Privacy from "@/components/Projects/RecipeRealm/Privacy";
 
-export default function PrivacyModalOverlay() {
+export default function PrivacyStandalone() {
   const router = useRouter();
-  const close = () => router.back();
+  const close = () => router.push("/reciperealm", { scroll: false });
   return (
     <Modal
       isOpen

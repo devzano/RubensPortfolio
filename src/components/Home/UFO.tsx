@@ -178,8 +178,8 @@ const UFO: React.FC<Props> = ({ isPaused = false }) => {
     };
 
     // -------- Roam waypoint scheduler (no jitter) ----------
-    let roamStart = new THREE.Vector3(0, 0, 0);
-    let roamGoal = new THREE.Vector3(0, 0, 0);
+    const roamStart = new THREE.Vector3(0, 0, 0);
+    const roamGoal = new THREE.Vector3(0, 0, 0);
     let roamStartTime = performance.now();
     let roamDuration = 2600; // ms
 
@@ -407,7 +407,7 @@ const UFO: React.FC<Props> = ({ isPaused = false }) => {
 
       renderer.render(scene, camera);
     };
-    let rafID = requestAnimationFrame(animate);
+    const rafID = requestAnimationFrame(animate);
 
     // Resize
     const onResize = () => {

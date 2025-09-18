@@ -51,26 +51,26 @@ export default function HeroVisual({ items }: { items: readonly HeroItem[]; }) {
                     href="https://watchlistr.app"
                     aria-label="Watchlistr (web)"
                     title="Watchlistr (web)"
-                    className="aspect-video w-full max-w-sm bg-neutral-100 dark:bg-neutral-800/80 ring-1 ring-black/5 dark:ring-white/5 flex items-center justify-center transition-transform duration-200 hover:scale-[1.02]"
+                    className="aspect-video w-full max-w-sm dark:bg-neutral-800/80 ring-1 ring-black/5 dark:ring-white/5 flex items-center justify-center transition-transform duration-200 hover:scale-[1.02]"
                   >
                     {c.icon ? (
-                      <Image
-                        src={c.icon}
-                        alt=""
-                        width={44}
-                        height={44}
-                        className="rounded-md pb-5 ring-black/10 dark:ring-white/10"
-                      />
-                    ) : (
-                      <span className="text-sm text-neutral-500">Watchlistr</span>
-                    )}
+                    <Image
+                      src={c.icon}
+                      alt=""
+                      width={44}
+                      height={44}
+                      className="rounded-md mb-5 hover:ring-1 hover:ring-black/10 hover:dark:ring-white/10"
+                    />
+                  ) : (
+                    <span className="text-[10px] text-neutral-500">{c.title}</span>
+                  )}
                   </Link>
                 )
               )}
             </div>
           </div>
 
-          {/* Phone frame (MOBILE grid preview) */}
+          {/* Phone frame (MOBILE) */}
           <div className="absolute right-6 bottom-6 h-[68%] w-[32%] rounded-[2rem] bg-white/80 dark:bg-neutral-900/80 border border-neutral-200/70 dark:border-neutral-800/70 shadow-xl p-3 z-10">
             <div className="h-6" /> {/* notch space */}
             <div className="grid grid-cols-3 gap-2 px-1">
@@ -80,7 +80,7 @@ export default function HeroVisual({ items }: { items: readonly HeroItem[]; }) {
                   href={c.href}
                   aria-label={c.title}
                   title={c.title}
-                  className="aspect-square rounded-xl bg-neutral-100 dark:bg-neutral-800/80 ring-1 ring-black/5 dark:ring-white/5 flex items-center justify-center transition-transform duration-200 hover:scale-[1.03]"
+                  className="aspect-square rounded-xl hover:dark:bg-neutral-800/80 hover:ring-1 hover:ring-black/5 hover:dark:ring-white/5 flex items-center justify-center transition-transform duration-200 hover:scale-[1.03]"
                 >
                   {c.icon ? (
                     <Image
@@ -88,7 +88,7 @@ export default function HeroVisual({ items }: { items: readonly HeroItem[]; }) {
                       alt=""
                       width={28}
                       height={28}
-                      className="rounded-md ring-1 ring-black/10 dark:ring-white/10"
+                      className="rounded-md hover:ring-1 hover:ring-black/10 hover:dark:ring-white/10"
                     />
                   ) : (
                     <span className="text-[10px] text-neutral-500">{c.title}</span>

@@ -18,7 +18,8 @@ const UFO: React.FC<Props> = ({ isPaused = false }) => {
 
     // Renderer / Scene / Camera
     const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    const setDPR = () => renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    const setDPR = () =>
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     setDPR();
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.outputColorSpace = THREE.SRGBColorSpace;
@@ -30,35 +31,60 @@ const UFO: React.FC<Props> = ({ isPaused = false }) => {
     mount.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(
+      75,
+      window.innerWidth / window.innerHeight,
+      0.1,
+      1000
+    );
     camera.position.z = 12;
 
     // Model
     const ufoBodyGeometry = new THREE.CylinderGeometry(3, 3, 0.7, 64);
-    const bodyMaterial = new THREE.MeshStandardMaterial({ color: 0x666666, metalness: 0.9, roughness: 0.2 });
+    const bodyMaterial = new THREE.MeshStandardMaterial({
+      color: 0x666666,
+      metalness: 0.9,
+      roughness: 0.2,
+    });
     const body = new THREE.Mesh(ufoBodyGeometry, bodyMaterial);
 
     const cockpitGeometry = new THREE.SphereGeometry(1.2, 32, 32);
     const cockpitMaterial = new THREE.MeshStandardMaterial({
-      color: 0x333333, metalness: 0.9, roughness: 0.4, opacity: 0.5, transparent: true,
+      color: 0x333333,
+      metalness: 0.9,
+      roughness: 0.4,
+      opacity: 0.5,
+      transparent: true,
     });
     const cockpit = new THREE.Mesh(cockpitGeometry, cockpitMaterial);
     cockpit.position.y = 0.85;
     body.add(cockpit);
 
     const cockpitDetailGeometry = new THREE.TorusGeometry(1.2, 0.1, 16, 100);
-    const cockpitDetailMaterial = new THREE.MeshStandardMaterial({ color: 0x333333, metalness: 0.5, roughness: 0.7 });
-    const cockpitDetail = new THREE.Mesh(cockpitDetailGeometry, cockpitDetailMaterial);
+    const cockpitDetailMaterial = new THREE.MeshStandardMaterial({
+      color: 0x333333,
+      metalness: 0.5,
+      roughness: 0.7,
+    });
+    const cockpitDetail = new THREE.Mesh(
+      cockpitDetailGeometry,
+      cockpitDetailMaterial
+    );
     cockpitDetail.rotation.x = Math.PI / 2;
     cockpitDetail.position.y = 0.85;
     body.add(cockpitDetail);
 
+    // Rim lights
     const lightGeometry = new THREE.SphereGeometry(0.2, 16, 16);
-    const lights: Array<THREE.Mesh<THREE.SphereGeometry, THREE.MeshStandardMaterial>> = [];
+    const lights: Array<
+      THREE.Mesh<THREE.SphereGeometry, THREE.MeshStandardMaterial>
+    > = [];
     for (let i = 0; i < 12; i++) {
       const angle = (i / 12) * Math.PI * 2;
       const mat = new THREE.MeshStandardMaterial({
-        color: 0x6495ed, emissive: 0x6a5acd, emissiveIntensity: 3,
+        color: 0x6495ed,
+        emissive: 0x6a5acd,
+        emissiveIntensity: 3,
       });
       const light = new THREE.Mesh(lightGeometry, mat);
       light.position.set(Math.cos(angle) * 2.8, -0.35, Math.sin(angle) * 2.8);
@@ -87,12 +113,25 @@ const UFO: React.FC<Props> = ({ isPaused = false }) => {
       window.matchMedia &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // Tuned presets (slower, smoother follow)
+    // Tuned presets (calm follow, snappy swoosh, smooth roam)
     const presets = {
-      roam:   { followStrength: 2.7, damping: 0.83, maxAccel: 0.19, spin: 0.004, driftScale: 1.13,  maxSpeed: 0.79, moveScale: 70, targetLerp: 0.65 },
+      // Drift disabled in roam to prevent fighting the spring/target
+      roam:   { followStrength: 2.6, damping: 0.92,  maxAccel: 0.16, spin: 0.004,  driftScale: 0.0,  maxSpeed: 0.80, moveScale: 58, targetLerp: 1.0 },
       follow: { followStrength: 3.2, damping: 0.935, maxAccel: 0.14, spin: 0.0055, driftScale: 0.15, maxSpeed: 0.75, moveScale: 36, targetLerp: 0.12 },
-      swoosh: { followStrength: 10.5, damping: 0.84, maxAccel: 0.50, spin: 0.009,  driftScale: 0.20, maxSpeed: 1.30, moveScale: 58, targetLerp: 0.40 },
+      swoosh: { followStrength:10.5, damping: 0.84,  maxAccel: 0.50, spin: 0.009,  driftScale: 0.20, maxSpeed: 1.30, moveScale: 58, targetLerp: 0.40 },
     } as const;
+
+    // Deadband to settle near the target (follow/swoosh)
+    const DEADBAND = 0.6;
+    const SNAPBAND = 0.22;
+
+    // Idle → roam after this long without pointer movement
+    const IDLE_TO_ROAM_MS = 1200;
+    let lastPointerTs = performance.now();
+
+    // "Sleep" when essentially at target (roam)
+    const SPEED_SLEEP = 0.02;
+    const DIST_SLEEP = 0.06;
 
     // Scratch
     const raycaster = new THREE.Raycaster();
@@ -121,7 +160,11 @@ const UFO: React.FC<Props> = ({ isPaused = false }) => {
       z: 6,
     });
 
-    const screenToWorld = (clientX: number, clientY: number, out: THREE.Vector3) => {
+    const screenToWorld = (
+      clientX: number,
+      clientY: number,
+      out: THREE.Vector3
+    ) => {
       ndc.x = (clientX / window.innerWidth) * 2 - 1;
       ndc.y = -(clientY / window.innerHeight) * 2 + 1;
       raycaster.setFromCamera(ndc, camera);
@@ -134,29 +177,52 @@ const UFO: React.FC<Props> = ({ isPaused = false }) => {
       );
     };
 
-    const roamPhase = {
-      x1: Math.random() * Math.PI * 2, x2: Math.random() * Math.PI * 2,
-      y1: Math.random() * Math.PI * 2, y2: Math.random() * Math.PI * 2,
-    };
-    const roamUpdateTarget = (t: number) => {
+    // -------- Roam waypoint scheduler (no jitter) ----------
+    let roamStart = new THREE.Vector3(0, 0, 0);
+    let roamGoal = new THREE.Vector3(0, 0, 0);
+    let roamStartTime = performance.now();
+    let roamDuration = 2600; // ms
+
+    const randIn = (min: number, max: number) => min + Math.random() * (max - min);
+
+    const pickRoamGoal = () => {
       const b = bounds();
-      const rx = Math.sin(t * 0.15 + roamPhase.x1) * 0.6 + Math.sin(t * 0.07 + roamPhase.x2) * 0.4;
-      const ry = Math.cos(t * 0.13 + roamPhase.y1) * 0.6 + Math.cos(t * 0.05 + roamPhase.y2) * 0.4;
-      temp.set(rx * (b.x * 0.7), ry * (b.y * 0.6), 0);
-      target.lerp(temp, presets.roam.targetLerp);
+      roamStart.copy(target); // start from current target
+      roamGoal.set(
+        randIn(-b.x * 0.7, b.x * 0.7),
+        randIn(-b.y * 0.55, b.y * 0.55),
+        0
+      );
+      roamStartTime = performance.now();
+      roamDuration = randIn(2200, 3600); // 2.2–3.6s
+    };
+
+    const enterRoam = () => {
+      mode = "roam";
+      // soften any residual motion and schedule a fresh waypoint
+      springVel.multiplyScalar(0.6);
+      pickRoamGoal();
+    };
+
+    // Tiny “alive” swirl that’s extremely low amplitude
+    const applySwirl = (v: THREE.Vector3, tSec: number) => {
+      const amp = 0.10; // keep small to avoid visible jitter
+      v.x += Math.sin(tSec * 0.7) * amp;
+      v.y += Math.cos(tSec * 0.6) * amp;
     };
 
     // Events
     const onPointerMove = (x: number, y: number) => {
+      lastPointerTs = performance.now();
       if (prefersReducedMotion) return;
       screenToWorld(x, y, temp);
-      // Heavier smoothing in follow mode for calmer motion
       const t = mode === "swoosh" ? presets.swoosh.targetLerp : presets.follow.targetLerp;
       target.lerp(temp, t);
       if (mode !== "swoosh") mode = "follow";
     };
 
     const onPointerTap = (x: number, y: number) => {
+      lastPointerTs = performance.now();
       if (prefersReducedMotion) return;
       screenToWorld(x, y, temp);
       target.copy(temp);
@@ -170,28 +236,50 @@ const UFO: React.FC<Props> = ({ isPaused = false }) => {
     const handleMouseMove = (e: MouseEvent) => onPointerMove(e.clientX, e.clientY);
     const handleMouseDown = (e: MouseEvent) => onPointerTap(e.clientX, e.clientY);
     const handleTouchMove = (e: TouchEvent) => {
-      const t0 = e.touches[0]; if (!t0) return;
+      const t0 = e.touches[0];
+      if (!t0) return;
       onPointerMove(t0.clientX, t0.clientY);
     };
     const handleTouchStart = (e: TouchEvent) => {
-      const t = e.touches[0] ?? e.changedTouches[0]; if (!t) return;
+      const t = e.touches[0] ?? e.changedTouches[0];
+      if (!t) return;
       onPointerTap(t.clientX, t.clientY);
     };
 
     const onMouseOut = (e: MouseEvent) => {
       if (!e.relatedTarget || (e.relatedTarget as Node) === document.documentElement) {
-        mode = "roam";
+        enterRoam();
       }
     };
 
     let running = true;
     let rafId = 0;
-    const stopLoop = () => { running = false; if (rafId) cancelAnimationFrame(rafId); };
-    const startLoop = () => { if (!running) { running = true; rafId = requestAnimationFrame(animate); } };
+    const stopLoop = () => {
+      running = false;
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+    const startLoop = () => {
+      if (!running) {
+        running = true;
+        rafId = requestAnimationFrame(animate);
+      }
+    };
 
-    const onBlur = () => { mode = "roam"; stopLoop(); };
-    const onFocus = () => { startLoop(); };
-    const onVisibility = () => { if (document.hidden) { mode = "roam"; stopLoop(); } else { startLoop(); } };
+    const onBlur = () => {
+      enterRoam();
+      stopLoop();
+    };
+    const onFocus = () => {
+      startLoop();
+    };
+    const onVisibility = () => {
+      if (document.hidden) {
+        enterRoam();
+        stopLoop();
+      } else {
+        startLoop();
+      }
+    };
 
     window.addEventListener("mousemove", handleMouseMove, { passive: true });
     window.addEventListener("mousedown", handleMouseDown, { passive: true });
@@ -204,6 +292,7 @@ const UFO: React.FC<Props> = ({ isPaused = false }) => {
 
     // Init
     target.set(0, 0, 0);
+    pickRoamGoal();
 
     // Loop
     const animate = () => {
@@ -215,43 +304,87 @@ const UFO: React.FC<Props> = ({ isPaused = false }) => {
         return;
       }
 
-      const dt = Math.min(0.033, clock.getDelta());
+      const nowMs = performance.now();
+      const dt = Math.min(0.033, clock.getDelta()); // <=33ms
 
-      if (mode === "swoosh" && performance.now() > modeUntil) mode = "follow";
-      if (mode === "roam") roamUpdateTarget(performance.now() * 0.001);
+      // Idle → roam
+      if (mode === "follow" && nowMs - lastPointerTs > IDLE_TO_ROAM_MS) {
+        enterRoam();
+      }
+
+      if (mode === "swoosh" && nowMs > modeUntil) mode = "follow";
+
+      // Smooth waypoint-driven roam (no per-frame target jitter)
+      if (mode === "roam") {
+        let u = (nowMs - roamStartTime) / roamDuration;
+        if (u >= 1) {
+          // arrived → next goal
+          roamStart.copy(roamGoal);
+          pickRoamGoal();
+          u = 0;
+        }
+        // Quintic smoothstep for C2-continuous velocity (very smooth)
+        const s = u * u * u * (u * (6 * u - 15) + 10);
+        temp.lerpVectors(roamStart, roamGoal, s);
+        applySwirl(temp, nowMs * 0.001); // tiny life motion
+        target.copy(temp);
+      }
 
       // Hover wobble
       hoverT += 0.9 * dt;
       const hoverY = hoverBaseY + Math.sin(hoverT) * 0.5;
 
-      // Mode params
-      const { followStrength, damping, maxAccel, spin, driftScale, maxSpeed, moveScale } = presets[mode];
+      // Params by mode
+      const { followStrength, damping, maxAccel, spin, driftScale, maxSpeed, moveScale } =
+        presets[mode];
 
-      // Drift (less in follow so it doesn't fight cursor)
-      const b = bounds();
-      body.position.x += driftVel.x * driftScale * dt * 60;
-      body.position.y += driftVel.y * driftScale * dt * 60;
-      body.position.z += driftVel.z * driftScale * dt * 60;
-      if (body.position.x > b.x || body.position.x < -b.x) driftVel.x *= -1;
-      if (body.position.y > b.y || body.position.y < -b.y) driftVel.y *= -1;
-      if (body.position.z > b.z || body.position.z < -b.z) driftVel.z *= -1;
-
-      // Spring toward target (slower, clamped)
+      // Vector to target
       toTarget.subVectors(target, body.position);
+      const dist = toTarget.length();
+
+      // Drift:
+      // - Disabled entirely in roam (driftScale=0)
+      // - In follow: disabled inside deadband so we can settle
+      const b = bounds();
+      const driftActive = !(mode === "follow" && dist < DEADBAND) && driftScale > 0;
+      if (driftActive) {
+        body.position.x += driftVel.x * driftScale * dt * 60;
+        body.position.y += driftVel.y * driftScale * dt * 60;
+        body.position.z += driftVel.z * driftScale * dt * 60;
+        if (body.position.x > b.x || body.position.x < -b.x) driftVel.x *= -1;
+        if (body.position.y > b.y || body.position.y < -b.y) driftVel.y *= -1;
+        if (body.position.z > b.z || body.position.z < -b.z) driftVel.z *= -1;
+      }
+
+      // Spring toward target (accel and speed clamped)
       accel.copy(toTarget).multiplyScalar(followStrength * dt);
       if (accel.length() > maxAccel) accel.setLength(maxAccel);
       springVel.add(accel);
 
-      // Extra damping near target to kill oscillation
-      const dist = toTarget.length();
-      const near = dist < 0.8;
-      const nearFactor = near ? 0.85 : 1.0;
+      // Extra damping near target to kill oscillation (follow/swoosh)
+      const near = dist < DEADBAND && mode !== "roam";
+      const nearFactor = near ? 0.80 : 1.0;
       springVel.multiplyScalar(damping * nearFactor);
 
-      // Clamp speed so it can't overshoot wildly
-      if (springVel.length() > maxSpeed) springVel.setLength(maxSpeed);
+      // Optional micro-snap when extremely close (follow/swoosh)
+      if (dist < SNAPBAND && mode !== "roam") {
+        body.position.lerp(target, 0.35);
+        springVel.set(0, 0, 0);
+      } else {
+        // Clamp speed
+        if (springVel.length() > maxSpeed) springVel.setLength(maxSpeed);
+        body.position.addScaledVector(springVel, dt * moveScale);
+      }
 
-      body.position.addScaledVector(springVel, dt * moveScale);
+      // Sleep in roam when essentially parked at target (prevents micro-jitter)
+      if (
+        mode === "roam" &&
+        springVel.length() < SPEED_SLEEP &&
+        dist < DIST_SLEEP
+      ) {
+        springVel.set(0, 0, 0);
+        body.position.copy(target);
+      }
 
       // Maintain hover baseline
       body.position.y = THREE.MathUtils.lerp(body.position.y, hoverY, 0.12);
@@ -261,7 +394,7 @@ const UFO: React.FC<Props> = ({ isPaused = false }) => {
       spinBoost = THREE.MathUtils.damp(spinBoost, 0, 20, dt);
 
       // Lights
-      const now = performance.now() * 0.001;
+      const now = nowMs * 0.001;
       for (let i = 0; i < lights.length; i++) {
         const t = (Math.sin(now + i) + 1) / 2;
         emissiveColor.lerpColors(c1, c2, t);
@@ -274,7 +407,7 @@ const UFO: React.FC<Props> = ({ isPaused = false }) => {
 
       renderer.render(scene, camera);
     };
-    rafId = requestAnimationFrame(animate);
+    let rafID = requestAnimationFrame(animate);
 
     // Resize
     const onResize = () => {
@@ -298,7 +431,7 @@ const UFO: React.FC<Props> = ({ isPaused = false }) => {
       document.removeEventListener("visibilitychange", onVisibility);
 
       renderer.domElement.removeEventListener("webglcontextlost", onContextLost);
-      if (rafId) cancelAnimationFrame(rafId);
+      if (rafID) cancelAnimationFrame(rafID);
 
       scene.remove(body);
       if (mount.contains(renderer.domElement)) mount.removeChild(renderer.domElement);

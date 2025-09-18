@@ -123,14 +123,14 @@ export default function ScreenshotGridRotator({
         {Array.from({ length: variant === "web" ? 1 : 4 }).map((_, i) => (
           <div
             key={i}
-            className={`aspect-[${variant === "web" ? webAspect : aspect}] animate-pulse rounded-lg border border-white/10 bg-white/5`}
+            style={{ aspectRatio: (variant === "web" ? webAspect : aspect) as unknown as number }}
+            className="animate-pulse rounded-lg border border-white/10 bg-white/5"
           />
         ))}
       </div>
     );
   }
 
-  // swipe handlers (both variants)
   const onPointerDown: React.PointerEventHandler<HTMLDivElement> = (e) => {
     if (pointerIdRef.current !== null) return;
     pointerIdRef.current = e.pointerId;
@@ -138,7 +138,6 @@ export default function ScreenshotGridRotator({
     startYRef.current = e.clientY;
     draggingRef.current = true;
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
-    // pause during drag
     if (intervalRef.current) {
       window.clearInterval(intervalRef.current);
       intervalRef.current = null;
@@ -159,7 +158,6 @@ export default function ScreenshotGridRotator({
       });
     }
 
-    // resume auto-rotate
     if (!intervalRef.current) {
       intervalRef.current = window.setInterval(() => {
         setCurrentSet((s) => ((s + 1) % maxSets));
@@ -170,12 +168,12 @@ export default function ScreenshotGridRotator({
   const touchActionClass = "touch-pan-y";
 
   if (variant === "web") {
-    // Single wide hero with 16/9 (default), full-bleed cell, swipe + arrows + dots
     const src = images[currentSet]!;
     return (
       <div className={`mx-auto w-full ${className}`}>
         <div
-          className={`relative mx-auto aspect-[${webAspect}] w-full max-w-5xl overflow-hidden rounded-xl border border-white/10 bg-white/5 ${touchActionClass}`}
+          style={{ aspectRatio: webAspect as unknown as number }}
+          className={`relative mx-auto w-full max-w-5xl overflow-hidden rounded-xl border border-white/10 bg-white/5 ${touchActionClass}`}
           aria-live="polite"
           onPointerDown={onPointerDown}
           onPointerUp={onPointerUp}
@@ -190,7 +188,6 @@ export default function ScreenshotGridRotator({
             priority
             draggable={false}
           />
-
           {showArrows && maxSets > 1 && (
             <>
               <button
@@ -245,7 +242,8 @@ export default function ScreenshotGridRotator({
         {visible.map((src, i) => (
           <div
             key={`${start + i}-${typeof src === "string" ? src : src.src}`}
-            className={`relative aspect-[${aspect}] overflow-hidden rounded-xl border border-white/10 bg-white/5`}
+            style={{ aspectRatio: aspect as unknown as number }}
+            className="relative overflow-hidden rounded-xl border border-white/10 bg-white/5"
           >
             <Image
               src={src}

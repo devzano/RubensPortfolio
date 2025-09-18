@@ -4,7 +4,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import Image, { StaticImageData } from "next/image";
 
-type ColsConfig = { mobile?: number; desktop?: number };
+type ColsConfig = { mobile?: number; desktop?: number; };
 
 export type ScreenshotGridRotatorProps = {
   images: (StaticImageData | string)[];
@@ -85,28 +85,37 @@ export default function ScreenshotGridRotator({
   const next = () => goTo(currentSet + 1);
   const prev = () => goTo(currentSet - 1);
 
-  // auto-rotate
   useEffect(() => {
     if (!mounted || images.length === 0) return;
-    if (intervalRef.current) window.clearInterval(intervalRef.current);
-    intervalRef.current = window.setInterval(next, intervalMs) as unknown as number;
+
+    const id = window.setInterval(() => {
+      setCurrentSet((s) => {
+        const max = Math.max(1, Math.ceil(images.length / Math.max(1, imagesPerSet)));
+        return (s + 1) % max;
+      });
+    }, intervalMs) as unknown as number;
+
+    intervalRef.current = id;
     return () => {
       if (intervalRef.current) window.clearInterval(intervalRef.current);
       intervalRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mounted, images.length, imagesPerSet, intervalMs]);
 
-  // keyboard support (web variant)
   useEffect(() => {
     if (variant !== "web" || !mounted) return;
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft") prev();
-      else if (e.key === "ArrowRight") next();
+      if (e.key === "ArrowLeft") {
+        setCurrentSet((s) => ((s - 1 + maxSets) % maxSets));
+      } else if (e.key === "ArrowRight") {
+        setCurrentSet((s) => ((s + 1) % maxSets));
+      }
     };
+
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [variant, mounted, currentSet]);
+  }, [variant, mounted, maxSets]);
 
   if (deferUntilMounted && !mounted) {
     return (
@@ -144,12 +153,17 @@ export default function ScreenshotGridRotator({
     pointerIdRef.current = null;
 
     if (Math.abs(dx) > Math.abs(dy) * 1.5 && Math.abs(dx) > swipeThreshold) {
-      if (dx < 0) next();
-      else prev();
+      setCurrentSet((s) => {
+        const max = maxSets;
+        return dx < 0 ? ((s + 1) % max) : ((s - 1 + max) % max);
+      });
     }
-    // resume auto
+
+    // resume auto-rotate
     if (!intervalRef.current) {
-      intervalRef.current = window.setInterval(next, intervalMs) as unknown as number;
+      intervalRef.current = window.setInterval(() => {
+        setCurrentSet((s) => ((s + 1) % maxSets));
+      }, intervalMs) as unknown as number;
     }
   };
 
@@ -204,9 +218,8 @@ export default function ScreenshotGridRotator({
                 key={idx}
                 aria-label={`Go to ${idx + 1}`}
                 onClick={() => goTo(idx)}
-                className={`h-2.5 w-2.5 rounded-full transition ${
-                  idx === currentSet ? "bg-sky-400" : "bg-white/20 hover:bg-white/40"
-                }`}
+                className={`h-2.5 w-2.5 rounded-full transition ${idx === currentSet ? "bg-sky-400" : "bg-white/20 hover:bg-white/40"
+                  }`}
               />
             ))}
           </div>
@@ -222,9 +235,8 @@ export default function ScreenshotGridRotator({
   return (
     <div className={`mx-auto max-w-5xl ${className}`}>
       <div
-        className={`grid gap-4 ${
-          imagesPerSet === (cols.mobile ?? 2) ? "grid-cols-2" : "grid-cols-4"
-        } ${touchActionClass}`}
+        className={`grid gap-4 ${imagesPerSet === (cols.mobile ?? 2) ? "grid-cols-2" : "grid-cols-4"
+          } ${touchActionClass}`}
         aria-live="polite"
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
@@ -255,9 +267,8 @@ export default function ScreenshotGridRotator({
               key={idx}
               aria-label={`Go to set ${idx + 1}`}
               onClick={() => goTo(idx)}
-              className={`h-2.5 w-2.5 rounded-full transition ${
-                idx === currentSet ? "bg-sky-400" : "bg-white/20 hover:bg-white/40"
-              }`}
+              className={`h-2.5 w-2.5 rounded-full transition ${idx === currentSet ? "bg-sky-400" : "bg-white/20 hover:bg-white/40"
+                }`}
             />
           ))}
         </div>

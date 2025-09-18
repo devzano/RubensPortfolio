@@ -73,7 +73,7 @@ export default function Page({
         nextSlide={nextSlide}
         prevSlide={prevSlide}
         actions={[
-          { label: "TestFlight", onClick: () => window.open("https://testflight.apple.com/join/sRsqfd9y", "_blank"), variant: "accent" },
+          { label: "TestFlight", onClick: handleTestFlight, variant: "accent" },
           { label: "Send Feedback", onClick: () => setIsFeedbackModalOpen(true), variant: "secondary" },
         ]}
       />

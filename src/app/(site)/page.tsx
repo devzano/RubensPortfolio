@@ -1,8 +1,6 @@
 // src/app/(site)/page.tsx
-import Link from "next/link";
-import Image, { StaticImageData } from "next/image";
+import { StaticImageData } from "next/image";
 import AppImages from "@/constants/images";
-import FXAndNav from "@/components/Home/FXAndNav";
 import GetInTouchCTA from "@/components/Home/GetInTouchCTA";
 import ProjectsMenuCTA from "@/components/Home/ProjectsMenuCTA";
 import HeroVisual from "@/components/Home/HeroVisual";

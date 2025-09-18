@@ -103,7 +103,7 @@ export default function DynamicSpaceBackground({ isPaused = false }: Props) {
         points.rotation.x += mouseY * 0.005;
         points.rotation.y += mouseX * 0.005;
 
-        (posAttr as any).needsUpdate = true;
+        posAttr.needsUpdate = true;
       }
 
       renderer.render(scene, camera);

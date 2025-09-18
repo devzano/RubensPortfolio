@@ -6,6 +6,7 @@ import {
   useRef,
   useState,
   useLayoutEffect,
+  useCallback,
   type ReactNode,
   type CSSProperties,
 } from "react";
@@ -118,20 +119,11 @@ export default function PopoverButton({
       ? `${baseCommon} ${linkShared}`
       : `${baseCommon} ${pillShared} ${variant === "solid" ? pillSolid : pillOutline}`;
 
-  // Align preference (used as starting position before clamping)
-  const alignOffset = (triggerRect: DOMRect, panelW: number) => {
-    if (align === "start") return triggerRect.left;
-    if (align === "end") return triggerRect.right - panelW;
-    // center
-    return triggerRect.left + triggerRect.width / 2 - panelW / 2;
-  };
-
-  // Smart position the panel inside the viewport.
-  const positionPanel = () => {
+  const positionPanel = useCallback(() => {
     if (!wrapRef.current || !triggerRef.current || !panelRef.current) return;
 
     const margin = 8; // viewport padding
-    const gap = 8; // gap between trigger and panel
+    const gap = 8;    // gap between trigger and panel
     const vw = window.innerWidth;
     const vh = window.innerHeight;
 
@@ -148,31 +140,31 @@ export default function PopoverButton({
     const panelW = panel.offsetWidth;
     const panelH = panel.offsetHeight;
 
-    // Horizontal: preferred based on align, then clamped to viewport.
+    // Horizontal: preferred based on align, then clamp to viewport.
+    const alignOffset = (triggerRect: DOMRect, panelW: number) => {
+      if (align === "start") return triggerRect.left;
+      if (align === "end") return triggerRect.right - panelW;
+      return triggerRect.left + triggerRect.width / 2 - panelW / 2; // center
+    };
+
     let leftViewport = alignOffset(triggerRect, panelW);
     leftViewport = Math.max(margin, Math.min(leftViewport, vw - margin - panelW));
-
-    // Convert to wrapper-relative left
     const left = Math.round(leftViewport - wrapRect.left);
 
-    // Vertical: prefer below, flip to top if overflow
+    // Vertical: prefer below, flip to top if overflow.
     let place: "top" | "bottom" = "bottom";
     let topViewport = triggerRect.bottom + gap;
     if (topViewport + panelH > vh - margin) {
-      // try above
       const tryTop = triggerRect.top - gap - panelH;
       if (tryTop >= margin || vh - (triggerRect.bottom + gap) < vh / 3) {
         place = "top";
         topViewport = Math.max(margin, tryTop);
       }
     }
-    // Convert to wrapper-relative top
     const top = Math.round(topViewport - wrapRect.top);
 
-    // Max width so it never overflows horizontally
-    const maxWidthPx = Math.max(160, vw - margin * 2); // floor to something sensible
+    const maxWidthPx = Math.max(160, vw - margin * 2);
 
-    // Apply
     setSide(place);
     setPanelStyle({
       left,
@@ -183,13 +175,20 @@ export default function PopoverButton({
     // Restore temporary styles
     panel.style.display = prevDisplay;
     panel.style.visibility = prevVisibility;
-  };
+  }, [align]);
 
-  // Reposition when opening, and on resize/scroll while open
+  // Reposition when opening (and when align changes)
   useLayoutEffect(() => {
     if (!open) return;
     positionPanel();
-  }, [open, align, children]);
+  }, [open, positionPanel]);
+  //   useEffect(() => {
+  //   if (!open || !panelRef.current) return;
+  //   const ro = new ResizeObserver(() => positionPanel());
+  //   ro.observe(panelRef.current);
+  //   return () => ro.disconnect();
+  // }, [open, positionPanel]);
+
 
   useEffect(() => {
     if (!open) return;
@@ -200,7 +199,7 @@ export default function PopoverButton({
       window.removeEventListener("resize", onWin);
       window.removeEventListener("scroll", onWin);
     };
-  }, [open]);
+  }, [open, positionPanel]); // ✅
 
   // Hover retention on trigger
   const triggerMouseEnter = () => {

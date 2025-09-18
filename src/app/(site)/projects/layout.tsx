@@ -3,7 +3,6 @@ export const metadata = { title: "All Projects" };
 
 export default function Layout({
   children,
-  modal,
 }: {
   children: React.ReactNode;
   modal: React.ReactNode;
@@ -11,7 +10,6 @@ export default function Layout({
   return (
     <>
       {children}
-      {modal}
     </>
   );
 }

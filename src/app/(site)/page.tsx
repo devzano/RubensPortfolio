@@ -1,9 +1,10 @@
+// src/app/(site)/page.tsx
 import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
 import AppImages from "@/constants/images";
-import FXAndNav from "@/components/FXAndNav";
-import GetInTouchCTA from "@/components/GetInTouchCTA";
-import ProjectsMenuCTA from "@/components/ProjectsMenuCTA";
+import FXAndNav from "@/components/Home/FXAndNav";
+import GetInTouchCTA from "@/components/Home/GetInTouchCTA";
+import ProjectsMenuCTA from "@/components/Home/ProjectsMenuCTA";
 import HeroVisual from "@/components/Home/HeroVisual";
 
 type Variant = { label: "mobile" | "web"; href: "/watchlistr-mobile" | "/watchlistr-web"; };
@@ -40,14 +41,8 @@ export default function Home() {
 
   return (
     <div className="min-h-dvh flex flex-col">
-      {/* Fixed FX + Navbar (position:fixed, doesn't affect layout height) */}
-      <FXAndNav />
-
-      {/* Foreground content (offset for fixed navbar via CSS var) */}
       <div className="relative z-10 flex flex-col pt-[var(--nav-h,56px)] min-h-[calc(100dvh-var(--nav-h,56px))]">
-        {/* Center the hero within the remaining viewport */}
         <main className="flex-1 grid place-items-center">
-          {/* Only horizontal padding to avoid vertical scroll inflation */}
           <section className="w-full px-6 sm:px-10">
             <div className="mx-auto max-w-6xl grid gap-8 lg:grid-cols-2 items-center will-change-transform motion-reduce:translate-y-0">
               <div>
@@ -89,13 +84,11 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Visual */}
               <HeroVisual items={cards} />
             </div>
           </section>
         </main>
 
-        {/* Footer pinned to bottom because parent has min-h = viewport - nav height */}
         <footer className="px-6 sm:px-10 py-10">
           <div className="mx-auto max-w-6xl text-sm text-neutral-600 dark:text-neutral-400 flex items-center justify-between">
             <p>© {new Date().getFullYear()} devzano</p>

@@ -1,5 +1,5 @@
 // app/(site)/logiqo/layout.tsx
-export const metadata = { title: "Logiqo — Ruben Manzano" };
+export const metadata = { title: "Logiqo" };
 
 export default function Layout({
   children,

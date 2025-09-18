@@ -1,5 +1,5 @@
 // app/(site)/steda/layout.tsx
-export const metadata = { title: "Steda — Ruben Manzano" };
+export const metadata = { title: "Steda" };
 
 export default function Layout({
   children,

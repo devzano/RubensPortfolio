@@ -1,5 +1,5 @@
 // app/(site)/starship-pixelscape/layout.tsx
-export const metadata = { title: "Starship Pixelscape — Ruben Manzano" };
+export const metadata = { title: "Starship Pixelscape" };
 
 export default function Layout({
   children,

@@ -16,7 +16,7 @@ export default function HeroVisual({ items }: { items: readonly HeroItem[]; }) {
   return (
     <div className="relative aspect-[4/3] w-full">
       {/* Outer glass panel */}
-      <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-neutral-100 to-white dark:from-neutral-900 dark:to-neutral-950 ring-1 ring-neutral-200/70 dark:ring-neutral-800" />
+      {/* <div className="absolute inset-0 rounded-3xl bg-gradient-to-b from-neutral-100 to-white dark:from-neutral-900 dark:to-neutral-950 ring-1 ring-neutral-200/70 dark:ring-neutral-800" /> */}
       <div className="absolute inset-0 p-4 sm:p-6">
         <div className="relative h-full w-full rounded-2xl overflow-hidden bg-white/60 dark:bg-neutral-900/60 backdrop-blur-md ring-1 ring-neutral-200/70 dark:ring-neutral-800/70">
           {/* Browser frame (WEB) */}

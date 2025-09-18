@@ -1,5 +1,5 @@
 // app/(site)/autoarchive/layout.tsx
-export const metadata = { title: "AutoArchive — Ruben Manzano" };
+export const metadata = { title: "AutoArchive" };
 
 export default function Layout({
   children,

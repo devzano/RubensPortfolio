@@ -1,5 +1,5 @@
 // app/(site)/otakuhive/layout.tsx
-export const metadata = { title: "OtakuHive — Ruben Manzano" };
+export const metadata = { title: "OtakuHive" };
 
 export default function Layout({
   children,

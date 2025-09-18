@@ -1,29 +1,27 @@
 // app/(site)/watchlistr-web/page.tsx
 "use client";
-
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-
 import LoginPage from "@/components/Projects/Watchlistr-Web/Screenshots/WatchlistrWeb_LoginPage.png";
 import SignupPage from "@/components/Projects/Watchlistr-Web/Screenshots/WatchlistrWeb_SignupPage.png";
 import HomePage from "@/components/Projects/Watchlistr-Web/Screenshots/WatchlistrWeb_HomePage.png";
 import MoviesPage from "@/components/Projects/Watchlistr-Web/Screenshots/WatchlistrWeb_MoviesPage.png";
 import TVShowsPage from "@/components/Projects/Watchlistr-Web/Screenshots/WatchlistrWeb_TVShowsPage.png";
-
 import FeedbackModal from "@/components/MailForm/FeedbackModal";
 import AppImages from "@/constants/images";
 import { Feedback, SlideNavProps } from "@/types/types";
+import ScreenshotGridRotator from "@/components/Projects/ScreenshotGridRotator";
+import ProjectHeader from "@/components/Projects/ProjectHeader";
 
 export default function Page({
   showArrows = false,
   nextSlide = () => { },
   prevSlide = () => { },
 }: SlideNavProps) {
+  const router = useRouter();
   const screens = useMemo(() => [LoginPage, SignupPage, HomePage, MoviesPage, TVShowsPage], []);
-
-  const [index, setIndex] = useState(0);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [feedback, setFeedback] = useState<Feedback>({
     firstName: "",
@@ -31,12 +29,6 @@ export default function Page({
     email: "",
     message: "",
   });
-  const router = useRouter();
-
-  useEffect(() => {
-    const id = setInterval(() => setIndex((p) => (p + 1) % screens.length), 4000);
-    return () => clearInterval(id);
-  }, [screens.length]);
 
   const handleFeedbackSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -77,95 +69,39 @@ export default function Page({
 
   return (
     <div className="relative mx-auto max-w-6xl px-4 py-12 sm:py-16">
-      {/* Title + Arrows */}
-      <div className="mb-8 flex w-full items-center justify-center">
-        <div className="flex max-w-full flex-nowrap items-center gap-4">
-          {/* Left chevron */}
-          <button
-            className={`h-12 w-12 shrink-0 rounded-full border border-white/10 bg-white/5 text-slate-200 shadow-lg shadow-black/20 backdrop-blur-md transition hover:scale-110 hover:text-sky-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/60 ${showArrows ? "" : "invisible"}`}
-            onClick={prevSlide}
-            aria-label="Previous Project"
-          >
-            <span className="select-none text-3xl leading-none">‹</span>
-          </button>
+      <ProjectHeader
+        title="Watchlistr"
+        titleLink="https://watchlistr.app"
+        showArrows={showArrows}
+        nextSlide={nextSlide}
+        prevSlide={prevSlide}
+        actions={[
+          {
+            label: "Landing Page",
+            href: "https://www.watchlistr.app/",
+            external: true,
+            variant: "primary",
+          },
+          {
+            label: "Send Feedback",
+            onClick: () => setIsFeedbackModalOpen(true),
+            variant: "secondary",
+          },
+        ]}
+      />
 
-          {/* Title */}
-          <h1 className="relative min-w-0 text-center">
-            <a
-            href="https://watchlistr.app"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex max-w-full items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 py-3 shadow-lg shadow-black/20 ring-1 ring-white/10 backdrop-blur-md"
-            >
-              <span className="bg-gradient-to-br from-sky-300 via-sky-400 to-violet-400 bg-clip-text text-transparent text-2xl font-semibold tracking-tight sm:text-3xl whitespace-nowrap">
-                Watchlistr
-              </span>
-              {/* tiny ↗ hint (hide on xs to save space) */}
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                className="ml-2 hidden h-4 w-4 opacity-60 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:opacity-100 sm:block"
-              >
-                <path
-                  d="M7 17L17 7M9 7h8v8"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </a>
-
-            {/* subtle gradient underline */}
-            <span className="pointer-events-none absolute inset-x-8 -bottom-1 h-px bg-gradient-to-r from-transparent via-sky-400/60 to-transparent" />
-          </h1>
-
-          {/* Right chevron */}
-          <button
-            className={`h-12 w-12 shrink-0 rounded-full border border-white/10 bg-white/5 text-slate-200 shadow-lg shadow-black/20 backdrop-blur-md transition hover:scale-110 hover:text-sky-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/60 ${showArrows ? "" : "invisible"}`}
-            onClick={nextSlide}
-            aria-label="Next Project"
-          >
-            <span className="select-none text-3xl leading-none">›</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Actions */}
-      <div className="mb-8 flex items-center justify-center gap-4">
-        <button
-          onClick={() => window.open("https://www.watchlistr.app/", "_blank")}
-          className="rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-900/30 transition hover:-translate-y-0.5 hover:shadow-indigo-900/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/70"
-        >
-          Landing Page
-        </button>
-        <button
-          onClick={() => setIsFeedbackModalOpen(true)}
-          className="rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-semibold text-slate-100 backdrop-blur-md shadow-lg shadow-black/20 transition hover:-translate-y-0.5 hover:border-sky-400/40 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70"
-        >
-          Send Feedback
-        </button>
-      </div>
-
-      {/* Card */}
       <div className="mx-auto w-full">
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4 shadow-2xl shadow-black/40 backdrop-blur-md ring-1 ring-white/10">
-          {/* Screenshot */}
-          <div className="rounded-xl border border-white/10 bg-black/30 p-2 shadow-inner">
-            <div className="relative mx-auto aspect-[16/9] w-full max-w-5xl overflow-hidden rounded-lg">
-              <Image
-                src={screens[index]}
-                alt={`Watchlistr Web screen ${index + 1}`}
-                fill
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1024px"
-                className="object-contain"
-                priority
-              />
-            </div>
-          </div>
+          <ScreenshotGridRotator
+            images={screens}
+            variant="web"
+            webAspect="16/9"
+            webSizes="(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px"
+            fit="cover"
+            intervalMs={4000}
+            showArrows
+          />
 
-          {/* Copy */}
           <div className="mx-auto mt-6 max-w-4xl rounded-xl border border-white/10 bg-white/5 p-6 text-slate-200 shadow-lg shadow-black/20">
             <p className="leading-relaxed">
               <strong className="font-semibold text-sky-400">
@@ -238,7 +174,6 @@ export default function Page({
             </div>
           </div>
 
-          {/* Built with */}
           <div className="mx-auto mt-6 flex max-w-2xl flex-wrap items-center justify-center gap-4">
             {BuiltWithLogos.map((logo, index) => {
               const img = (
@@ -276,7 +211,6 @@ export default function Page({
         </div>
       </div>
 
-      {/* Feedback Modal */}
       <FeedbackModal
         isOpen={isFeedbackModalOpen}
         onClose={() => setIsFeedbackModalOpen(false)}

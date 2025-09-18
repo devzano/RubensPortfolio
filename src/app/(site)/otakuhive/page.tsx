@@ -1,52 +1,38 @@
 // app/(site)/otakuhive/page.tsx
 "use client";
-
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-
 import MangaDetailView from "@/components/Projects/OtakuHive/Screenshots/OtakuHive_MangaDetailView.png";
 import FullScreenReader from "@/components/Projects/OtakuHive/Screenshots/OtakuHive_FullScreenReader.png";
 import SavedView from "@/components/Projects/OtakuHive/Screenshots/OtakuHive_SavedView.png";
 import SearchView from "@/components/Projects/OtakuHive/Screenshots/OtakuHive_SearchView.png";
-
 import FeedbackModal from "@/components/MailForm/FeedbackModal";
 import AppImages from "@/constants/images";
 import { Feedback, SlideNavProps } from "@/types/types";
+import ScreenshotGridRotator from "@/components/Projects/ScreenshotGridRotator";
+import ProjectHeader from "@/components/Projects/ProjectHeader";
 
 export default function Page({
   showArrows = false,
   nextSlide = () => { },
   prevSlide = () => { },
 }: SlideNavProps) {
-  const screenshots = useMemo(
-    () => [MangaDetailView, FullScreenReader, SavedView, SearchView],
-    []
-  );
-
-  const [currentSet, setCurrentSet] = useState(0);
-  const [imagesPerSet, setImagesPerSet] = useState(4); // 4 desktop, 2 mobile
-  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
-  const [feedback, setFeedback] = useState<Feedback>({ firstName: "", lastName: "", email: "", message: "" });
-
   const router = useRouter();
-
-  // responsive columns
-  useEffect(() => {
-    const compute = () => setImagesPerSet(window.innerWidth <= 768 ? 2 : 4);
-    compute();
-    window.addEventListener("resize", compute);
-    return () => window.removeEventListener("resize", compute);
-  }, []);
-
-  // auto-rotate sets
-  useEffect(() => {
-    if (!screenshots.length) return;
-    const maxSets = Math.ceil(screenshots.length / imagesPerSet);
-    const id = setInterval(() => setCurrentSet((p) => (p + 1) % maxSets), 4000);
-    return () => clearInterval(id);
-  }, [screenshots.length, imagesPerSet]);
+  const screenshots = useMemo(() => [
+    MangaDetailView,
+    FullScreenReader,
+    SavedView,
+    SearchView
+  ], []);
+  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [feedback, setFeedback] = useState<Feedback>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    message: ""
+  });
 
   const handleTestFlight = () => window.open("https://testflight.apple.com/join/sRsqfd9y", "_blank");
 
@@ -70,9 +56,6 @@ export default function Page({
     }
   };
 
-  const start = currentSet * imagesPerSet;
-  const visible = screenshots.slice(start, start + imagesPerSet);
-
   const BuiltWithLogos = [
     { src: AppImages.githubLight, alt: "GitHub", link: "https://github.com/devzano" },
     { src: AppImages.xcode, alt: "Xcode", link: "https://developer.apple.com/xcode/" },
@@ -83,98 +66,31 @@ export default function Page({
 
   return (
     <div className="relative mx-auto max-w-6xl px-4 py-12 sm:py-16">
-      {/* Title + Arrows */}
-      <div className="mb-8 flex w-full items-center justify-center">
-        <div className="flex max-w-full flex-nowrap items-center gap-4">
-          {/* Left chevron */}
-          <button
-            className={`h-12 w-12 shrink-0 rounded-full border border-white/10 bg-white/5 text-slate-200 shadow-lg shadow-black/20 backdrop-blur-md transition hover:scale-110 hover:text-sky-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/60 ${showArrows ? "" : "invisible"}`}
-            onClick={prevSlide}
-            aria-label="Previous Project"
-          >
-            <span className="select-none text-3xl leading-none">‹</span>
-          </button>
+      <ProjectHeader
+        title="OtakuHive"
+        titleLink="https://testflight.apple.com/join/sRsqfd9y"
+        showArrows={showArrows}
+        nextSlide={nextSlide}
+        prevSlide={prevSlide}
+        actions={[
+          { label: "TestFlight", onClick: () => window.open("https://testflight.apple.com/join/sRsqfd9y", "_blank"), variant: "accent" },
+          { label: "Send Feedback", onClick: () => setIsFeedbackModalOpen(true), variant: "secondary" },
+        ]}
+      />
 
-          {/* Title */}
-          <h1 className="relative min-w-0 text-center">
-            <a
-              href="https://testflight.apple.com/join/sRsqfd9y"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group inline-flex max-w-full items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 py-3 shadow-lg shadow-black/20 ring-1 ring-white/10 backdrop-blur-md"
-            >
-              <span className="bg-gradient-to-br from-sky-300 via-sky-400 to-violet-400 bg-clip-text text-transparent text-2xl font-semibold tracking-tight sm:text-3xl whitespace-nowrap">
-                OtakuHive
-              </span>
-              {/* tiny ↗ hint (hide on xs to save space) */}
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                className="ml-2 hidden h-4 w-4 opacity-60 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:opacity-100 sm:block"
-              >
-                <path
-                  d="M7 17L17 7M9 7h8v8"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </a>
-
-            {/* subtle gradient underline */}
-            <span className="pointer-events-none absolute inset-x-8 -bottom-1 h-px bg-gradient-to-r from-transparent via-sky-400/60 to-transparent" />
-          </h1>
-
-          {/* Right chevron */}
-          <button
-            className={`h-12 w-12 shrink-0 rounded-full border border-white/10 bg-white/5 text-slate-200 shadow-lg shadow-black/20 backdrop-blur-md transition hover:scale-110 hover:text-sky-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/60 ${showArrows ? "" : "invisible"}`}
-            onClick={nextSlide}
-            aria-label="Next Project"
-          >
-            <span className="select-none text-3xl leading-none">›</span>
-          </button>
-        </div>
-      </div>
-      {/* Actions */}
-      <div className="mb-4 flex flex-wrap items-center justify-center gap-4">
-        <button
-          onClick={handleTestFlight}
-          className="rounded-full bg-gradient-to-br from-sky-500 to-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-900/30 transition hover:-translate-y-0.5 hover:shadow-blue-900/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70"
-        >
-          TestFlight
-        </button>
-        <button
-          onClick={() => setIsFeedbackModalOpen(true)}
-          className="rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-semibold text-slate-100 shadow-lg shadow-black/20 backdrop-blur-md transition hover:-translate-y-0.5 hover:border-sky-400/40 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70"
-        >
-          Send Feedback
-        </button>
-      </div>
-
-      {/* Card */}
       <div className="mx-auto w-full">
         <div className="rounded-2xl border border-white/10 bg-white/5 p-4 shadow-2xl shadow-black/40 backdrop-blur-md ring-1 ring-white/10">
-          {/* Screenshots grid */}
           <div className="rounded-xl border border-white/10 bg-black/30 p-4 shadow-inner">
-            <div className={`mx-auto grid max-w-5xl gap-4 ${imagesPerSet === 2 ? "grid-cols-2" : "grid-cols-4"}`}>
-              {visible.map((src, i) => (
-                <div key={i} className="relative aspect-[9/19] overflow-hidden rounded-lg border border-white/10 bg-white/5">
-                  <Image
-                    src={src}
-                    alt={`OtakuHive View ${start + i + 1}`}
-                    fill
-                    className="object-contain"
-                    sizes="(max-width: 1024px) 45vw, 240px"
-                    priority={i === 0}
-                  />
-                </div>
-              ))}
-            </div>
+            <ScreenshotGridRotator
+              images={screenshots}
+              intervalMs={4000}
+              cols={{ mobile: 2, desktop: 4 }}
+              aspect="9/19"
+              sizes="(max-width: 768px) 45vw, (max-width: 1024px) 25vw, 240px"
+              deferUntilMounted
+            />
           </div>
 
-          {/* Copy */}
           <div className="mx-auto mt-6 max-w-4xl rounded-xl border border-white/10 bg-white/5 p-6 text-slate-200 shadow-lg shadow-black/20">
             <p className="leading-relaxed">
               <strong className="font-semibold text-sky-400">
@@ -199,7 +115,6 @@ export default function Page({
             </div>
           </div>
 
-          {/* Built with */}
           <div className="mx-auto mt-6 flex max-w-2xl flex-wrap items-center justify-center gap-4">
             {BuiltWithLogos.map((logo, index) => {
               const img = (
@@ -237,7 +152,6 @@ export default function Page({
         </div>
       </div>
 
-      {/* Feedback modal only (Privacy/Terms are provided by @modal routes) */}
       <FeedbackModal
         isOpen={isFeedbackModalOpen}
         onClose={() => setIsFeedbackModalOpen(false)}

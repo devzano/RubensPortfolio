@@ -1,5 +1,5 @@
 // app/(site)/echoexpense/layout.tsx
-export const metadata = { title: "EchoExpense — Ruben Manzano" };
+export const metadata = { title: "EchoExpense" };
 
 export default function Layout({
   children,

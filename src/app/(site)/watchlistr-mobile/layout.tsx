@@ -1,5 +1,5 @@
 // app/(site)/watchlistr-mobile/layout.tsx
-export const metadata = { title: "Watchlistr Mobile — Ruben Manzano" };
+export const metadata = { title: "Watchlistr Mobile" };
 
 export default function Layout({
   children,

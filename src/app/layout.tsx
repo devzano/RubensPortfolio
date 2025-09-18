@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://rubenmanzano.com"),
   title: {
     default: "Ruben Manzano — Portfolio",
-    template: "%s — Ruben Manzano",
+    template: "%s — Devzano",
   },
   description:
     "Portfolio of Ruben Manzano. Motivated software engineer seeking an entry-level role. About, contact (LinkedIn, email, phone), and skills including HTML, CSS, JavaScript, Python, React, Swift, Flask, Express, Node.js, Git, PostgreSQL, MySQL, data analysis, algorithms, UI/UX, debugging, testing, and full-stack development.",
@@ -63,6 +63,11 @@ export const metadata: Metadata = {
     icon: "/favicon.ico",
     shortcut: "/favicon.ico",
     apple: "/apple-touch-icon.png",
+  },
+  appleWebApp: {
+    capable: true,
+    title: "Devzano's Portfolio",
+    statusBarStyle: "black-translucent",
   },
 };
 

@@ -1,5 +1,5 @@
 // app/(site)/reciperealm/layout.tsx
-export const metadata = { title: "RecipeRealm — Ruben Manzano" };
+export const metadata = { title: "RecipeRealm" };
 
 export default function Layout({
   children,

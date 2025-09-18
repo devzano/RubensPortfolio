@@ -1,6 +1,6 @@
 // src/app/(site)/layout.tsx
 import type { ReactNode } from "react";
-import FXAndNav from "@/components/FXAndNav";
+import FXAndNav from "@/components/Home/FXAndNav";
 
 export default function SiteLayout({ children }: { children: ReactNode; }) {
   return (

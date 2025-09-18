@@ -1,5 +1,5 @@
-// app/(site)/sunshinekeywestchallenge/layout.tsx
-export const metadata = { title: "Sunshine Key West Challenge" };
+// app/(site)/projects/layout.tsx
+export const metadata = { title: "All Projects" };
 
 export default function Layout({
   children,

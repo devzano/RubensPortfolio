@@ -8,7 +8,6 @@ import ProjectHeader, { type ProjectHeaderProps } from "@/components/Projects/Pr
 import ScreenshotGridRotator, { type ScreenshotGridRotatorProps } from "@/components/Projects/ScreenshotGridRotator";
 import FeedbackModal from "@/components/MailForm/FeedbackModal";
 import useIconAccent from "@/hooks/useIconAccent";
-// ✅ add the Feedback type so we can type state & props cleanly
 import type { Feedback } from "@/types/types";
 
 export type BuiltWithLogo = {
@@ -58,14 +57,13 @@ export default function ProjectPage({
   screenshots,
   screenshotProps,
   description,
-  featureTitle = "Features",   // ✅ keep
+  featureTitle = "Features",
   features,
   builtWith = [],
   className = "",
 }: ProjectPageProps) {
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
 
-  // ✅ strongly type local feedback state
   const [feedback, setFeedback] = useState<Feedback>({
     firstName: "",
     lastName: "",
@@ -141,9 +139,7 @@ export default function ProjectPage({
 
               {features && features.length > 0 && (
                 <div className="mt-5">
-                  {/* ✅ actually use featureTitle to fix the 'assigned but never used' warning */}
                   <h3 className="mb-2 text-lg font-semibold text-slate-100">{featureTitle}</h3>
-                  {/* ✅ safer arbitrary value for marker color */}
                   <ul className="list-disc space-y-2 pl-6 text-slate-300 marker:text-[var(--accent-deep)]">
                     {features.map((f, i) => (
                       <li key={i}>{f}</li>
@@ -198,7 +194,6 @@ export default function ProjectPage({
         onClose={() => setIsFeedbackModalOpen(false)}
         onSubmit={handleFeedbackSubmit}
         feedback={feedback}
-        // ✅ no 'as any' needed now that state is typed
         setFeedback={setFeedback}
         appName={appName}
       />

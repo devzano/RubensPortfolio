@@ -42,8 +42,9 @@ const classesForVariant = (v: ActionSpec["variant"]) => {
   }
 };
 
-function ActionButton({ a }: { a: ActionSpec }) {
-  const base = "relative will-change-transform hover:ring-4 hover:ring-[color:var(--accent-softer)]";
+function ActionButton({ a }: { a: ActionSpec; }) {
+  const base =
+    "relative will-change-transform hover:ring-4 hover:ring-[var(--accent-softer)] hover:alien-float";
   const cls = `${classesForVariant(a.variant)} ${base}`;
   if (a.href) {
     const isExternal = a.external ?? /^https?:\/\//i.test(a.href);
@@ -68,8 +69,8 @@ export default function ProjectHeader({
   title,
   titleLink,
   showArrows = false,
-  nextSlide = () => {},
-  prevSlide = () => {},
+  nextSlide = () => { },
+  prevSlide = () => { },
   actions = [],
   subtle,
   className = "",
@@ -113,7 +114,7 @@ export default function ProjectHeader({
         <div className="flex max-w-full flex-nowrap items-center gap-4">
           {/* Left chevron */}
           <button
-            className={`h-12 w-12 shrink-0 rounded-full border border-white/10 bg-white/5 text-slate-200 shadow-lg shadow-black/20 backdrop-blur-md transition hover:scale-110 focus:outline-none focus-visible:ring-2 ${showArrows ? "" : "invisible"}`}
+            className={`h-12 w-12 shrink-0 rounded-full border border-white/10 bg-white/5 text-slate-200 shadow-lg shadow-black/20 backdrop-blur-md transition hover:scale-110 hover:alien-float focus:outline-none focus-visible:ring-2 ${showArrows ? "" : "invisible"}`}
             onClick={prevSlide}
             aria-label="Previous Project"
             style={{ color: "var(--accent)" }}
@@ -183,7 +184,7 @@ export default function ProjectHeader({
             <span
               className="pointer-events-none absolute inset-x-8 -bottom-1 h-px"
               style={{
-                background: `linear-gradient(to right, transparent, var(--accent), transparent)`,
+                background: `linear-gradient(to right, transparent, var(--accent-deep), transparent)`,
                 opacity: 0.6,
               }}
             />
@@ -214,7 +215,7 @@ export default function ProjectHeader({
       {/* Subtle text */}
       {subtle && (
         <div className="mb-6 text-center">
-          <div className="italic" style={{ color: "var(--accent)" }}>
+          <div className="italic" style={{ color: "var(--accent-deep)" }}>
             {subtle}
           </div>
         </div>

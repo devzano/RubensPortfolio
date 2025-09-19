@@ -1,7 +1,7 @@
 // app/(site)/sunshinekeywestchallenge/@modal/(.)terms/page.tsx
 "use client";
 import { useRouter } from "next/navigation";
-import Modal from "@/components/Modal";
+import Modal from "@/components/ui/Modal";
 import Terms from "@/components/Projects/SunshineKeyWestChallenge/Terms";
 
 export default function TermsModalOverlay() {

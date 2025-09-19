@@ -22,12 +22,11 @@ export default function Navbar({ onTogglePause }: Props) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Keep a --nav-h CSS var synced to the top row’s visual bottom (height + top offset)
   useEffect(() => {
     const apply = () => {
       if (!topRowRef.current) return;
       const rect = topRowRef.current.getBoundingClientRect();
-      const bottom = Math.ceil(rect.bottom); // includes top offset (e.g., top-2.5)
+      const bottom = Math.ceil(rect.bottom);
       document.documentElement.style.setProperty("--nav-h", `${bottom}px`);
     };
     apply();
@@ -52,12 +51,10 @@ export default function Navbar({ onTogglePause }: Props) {
       ref={menuRef}
       className="fixed top-2.5 inset-x-0 z-[999] pointer-events-none"
     >
-      {/* Top row */}
       <div
         ref={topRowRef}
         className="flex items-center justify-between px-2 pointer-events-auto"
       >
-        {/* Left cluster (menu) */}
         <div className="relative inline-flex items-center gap-2">
           <button
             type="button"
@@ -96,7 +93,6 @@ export default function Navbar({ onTogglePause }: Props) {
             />
           </button>
 
-          {/* Vertical panel */}
           {isOpen && (
             <div
               id="vertical-navbar"
@@ -109,7 +105,7 @@ export default function Navbar({ onTogglePause }: Props) {
                 backdrop-blur-md shadow-2xl
                 flex flex-col items-center gap-3
                 transition-all duration-200
-                pointer-events-auto
+                pointer-events-auto scroll no-scrollbar
               "
             >
               {/* glow behind panel head */}
@@ -438,7 +434,6 @@ export default function Navbar({ onTogglePause }: Props) {
           )}
         </div>
 
-        {/* Right cluster (pause) */}
         <button
           type="button"
           title="Pause Animation"

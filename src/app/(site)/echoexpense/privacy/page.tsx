@@ -1,7 +1,7 @@
 // app/(site)/echoexpense/privacy/page.tsx
 "use client";
 import { useRouter } from "next/navigation";
-import Modal from "@/components/Modal";
+import Modal from "@/components/ui/Modal";
 import Privacy from "@/components/Projects/EchoExpense/Privacy";
 
 export default function PrivacyStandalone() {
@@ -12,7 +12,7 @@ export default function PrivacyStandalone() {
       isOpen
       onClose={close}
       title="EchoExpense"
-      contentClassName="modal-content glassy-effect"
+      contentClassName="glassy-effect"
     >
       <Privacy />
     </Modal>

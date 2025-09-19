@@ -1,7 +1,7 @@
 // app/(site)/steda/terms/page.tsx
 "use client";
 import { useRouter } from "next/navigation";
-import Modal from "@/components/Modal";
+import Modal from "@/components/ui/Modal";
 import Terms from "@/components/Projects/Steda/Terms";
 
 export default function TermsStandalone() {
@@ -12,7 +12,7 @@ export default function TermsStandalone() {
       isOpen
       onClose={close}
       title="Steda"
-      contentClassName="modal-content glassy-effect"
+      contentClassName="glassy-effect"
     >
       <Terms />
     </Modal>

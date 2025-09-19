@@ -1,8 +1,8 @@
-// src/components/Projects/DocShell.tsx
+// src/components/Projects/LegalDocShell.tsx
 "use client";
 import React from "react";
 
-export default function DocShell({
+export default function LegalDocShell({
   title,
   lastUpdated,
   children,

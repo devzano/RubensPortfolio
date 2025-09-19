@@ -1,7 +1,7 @@
 // src/components/Projects/ManzanosPopShop/Privacy.tsx
 "use client";
 import React from "react";
-import DocShell from "@/components/Projects/DocShell";
+import DocShell from "@/components/Projects/LegalDocShell";
 
 const LAST_UPDATED = "August 23, 2025";
 const SUPPORT_EMAIL = "rmanzano.se@gmail.com";

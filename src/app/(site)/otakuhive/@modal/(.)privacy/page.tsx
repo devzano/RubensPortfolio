@@ -1,7 +1,7 @@
 // app/(site)/otakuhive/@modal/(.)privacy/page.tsx
 "use client";
 import { useRouter } from "next/navigation";
-import Modal from "@/components/Modal";
+import Modal from "@/components/ui/Modal";
 import Privacy from "@/components/Projects/OtakuHive/Privacy";
 
 export default function PrivacyModalOverlay() {

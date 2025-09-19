@@ -1,7 +1,7 @@
 // app/(site)/watchlistr-mobile/terms/page.tsx
 "use client";
 import { useRouter } from "next/navigation";
-import Modal from "@/components/Modal";
+import Modal from "@/components/ui/Modal";
 import Terms from "@/components/Projects/Watchlistr-Mobile/Terms";
 
 export default function TermsStandalone() {
@@ -12,7 +12,7 @@ export default function TermsStandalone() {
       isOpen
       onClose={close}
       title="Terms of Use"
-      contentClassName="modal-content glassy-effect"
+      contentClassName="glassy-effect"
     >
       <Terms />
     </Modal>

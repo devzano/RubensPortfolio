@@ -58,7 +58,7 @@ export default function FeedbackModal({
                 setFeedback((prev) => ({ ...prev, firstName: e.target.value }))
               }
               required
-              className="form-input"
+              className="w-full form-input"
             />
           </label>
 
@@ -71,7 +71,7 @@ export default function FeedbackModal({
                 setFeedback((prev) => ({ ...prev, lastName: e.target.value }))
               }
               required
-              className="form-input"
+              className="w-full form-input"
             />
           </label>
 
@@ -84,7 +84,7 @@ export default function FeedbackModal({
                 setFeedback((prev) => ({ ...prev, email: e.target.value }))
               }
               required
-              className="form-input"
+              className="w-full form-input"
             />
           </label>
 
@@ -96,11 +96,11 @@ export default function FeedbackModal({
                 setFeedback((prev) => ({ ...prev, message: e.target.value }))
               }
               required
-              className="form-input form-textarea"
+              className="w-full form-input form-textarea"
             />
           </label>
 
-          <button type="submit" className="app-button enhanced-button">
+          <button type="submit" className="w-full enhanced-button">
             Submit Feedback
           </button>
         </form>

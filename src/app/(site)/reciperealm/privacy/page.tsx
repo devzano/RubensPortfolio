@@ -1,7 +1,7 @@
 // app/(site)/reciperealm/privacy/page.tsx
 "use client";
 import { useRouter } from "next/navigation";
-import Modal from "@/components/Modal";
+import Modal from "@/components/ui/Modal";
 import Privacy from "@/components/Projects/RecipeRealm/Privacy";
 
 export default function PrivacyStandalone() {
@@ -12,7 +12,7 @@ export default function PrivacyStandalone() {
       isOpen
       onClose={close}
       title="RecipeRealm"
-      contentClassName="modal-content glassy-effect"
+      contentClassName="glassy-effect"
     >
       <Privacy />
     </Modal>

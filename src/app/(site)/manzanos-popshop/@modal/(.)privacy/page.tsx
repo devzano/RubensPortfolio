@@ -1,7 +1,7 @@
 // app/(site)/manzanos-popshop/@modal/(.)privacy/page.tsx
 "use client";
 import { useRouter } from "next/navigation";
-import Modal from "@/components/Modal";
+import Modal from "@/components/ui/Modal";
 import Privacy from "@/components/Projects/ManzanosPopShop/Privacy";
 
 export default function PrivacyModalOverlay() {

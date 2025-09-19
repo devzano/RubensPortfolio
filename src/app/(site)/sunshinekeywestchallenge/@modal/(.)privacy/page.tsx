@@ -1,7 +1,7 @@
 // app/(site)/sunshinekeywestchallenge/@modal/(.)privacy/page.tsx
 "use client";
 import { useRouter } from "next/navigation";
-import Modal from "@/components/Modal";
+import Modal from "@/components/ui/Modal";
 import Privacy from "@/components/Projects/SunshineKeyWestChallenge/Privacy";
 
 export default function PrivacyModalOverlay() {

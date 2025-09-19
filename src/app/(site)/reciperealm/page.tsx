@@ -1,9 +1,13 @@
 // app/(site)/reciperealm/page.tsx
 "use client";
-import React, { useMemo, useState } from "react";
-import Link from "next/link";
+
+import React from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
+import type { SlideNavProps } from "@/types/types";
+import AppImages from "@/constants/images";
+import ProjectPage from "@/components/Projects/ProjectsPage";
+
+// Screenshots
 import WelcomeView from "@/components/Projects/RecipeRealm/Screenshots/RecipeRealm_WelcomeView.png";
 import HomeView from "@/components/Projects/RecipeRealm/Screenshots/RecipeRealm_HomeView.png";
 import OpenBookView from "@/components/Projects/RecipeRealm/Screenshots/RecipeRealm_OpenBookView.png";
@@ -24,189 +28,127 @@ import RandomBannerView from "@/components/Projects/RecipeRealm/Screenshots/Reci
 import OptionsView from "@/components/Projects/RecipeRealm/Screenshots/RecipeRealm_OptionsView.png";
 import ChangeTintView from "@/components/Projects/RecipeRealm/Screenshots/RecipeRealm_ChangeTintView.png";
 import ChangeThemeView from "@/components/Projects/RecipeRealm/Screenshots/RecipeRealm_ChangeThemeView.png";
-import FeedbackModal from "@/components/MailForm/FeedbackModal";
-import AppImages from "@/constants/images";
-import { Feedback, SlideNavProps } from "@/types/types";
-import ScreenshotGridRotator from "@/components/Projects/ScreenshotGridRotator";
-import ProjectHeader from "@/components/Projects/ProjectHeader";
 
 export default function Page({
   showArrows = false,
-  nextSlide = () => { },
-  prevSlide = () => { },
+  nextSlide,
+  prevSlide,
 }: SlideNavProps) {
   const router = useRouter();
-  const screenshots = useMemo(
-    () => [
-      WelcomeView,
-      HomeView,
-      OpenBookView,
-      OpenBookDetailView,
-      DetailsView,
-      Details2View,
-      EditDetailsView,
-      EditDetails2View,
-      NewRecipeView,
-      NewRecipeImportView,
-      NewRecipeImageView,
-      NewRecipeBookImageView,
-      NewBookView,
-      RecipeBookContextView,
-      RecipeBookContextOptionsView,
-      RecipeContextOptionsView,
-      RandomBannerView,
-      OptionsView,
-      ChangeTintView,
-      ChangeThemeView,
-    ],
-    []
-  );
-  const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
-  const [feedback, setFeedback] = useState<Feedback>({ firstName: "", lastName: "", email: "", message: "" });
 
-  const handleAppleStoreButtonClick = () =>
-    window.open("https://apps.apple.com/us/app/reciperealm/id6458877177", "_blank");
-
-  const handleFeedbackSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    try {
-      const response = await fetch("/api/sendMail", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          appName: "RecipeRealm",
-          firstName: feedback.firstName,
-          lastName: feedback.lastName,
-          email: feedback.email,
-          message: feedback.message,
-        }),
-      });
-      if (response.ok) {
-        alert("Feedback sent successfully!");
-        setIsFeedbackModalOpen(false);
-        setFeedback({ firstName: "", lastName: "", email: "", message: "" });
-      } else {
-        alert("Failed to send feedback. Please try again later.");
-      }
-    } catch {
-      alert("Error sending feedback. Please try again later.");
-    }
-  };
-
-  const BuiltWithLogos = [
-    { src: AppImages.githubLight, alt: "GitHub", link: "https://github.com/devzano" },
-    { src: AppImages.xcode, alt: "Xcode", link: "https://developer.apple.com/xcode/" },
-    { src: AppImages.coredata, alt: "Core Data", link: "https://developer.apple.com/documentation/coredata/" },
-    { src: AppImages.swiftui, alt: "SwiftUI", link: "https://developer.apple.com/xcode/swiftui/" },
-    { src: AppImages.termsConditions, alt: "Terms", onClick: () => router.push("/reciperealm/terms") },
-    { src: AppImages.privacyPolicy, alt: "Privacy", onClick: () => router.push("/reciperealm/privacy") },
+  const screenshots = [
+    WelcomeView,
+    HomeView,
+    OpenBookView,
+    OpenBookDetailView,
+    DetailsView,
+    Details2View,
+    EditDetailsView,
+    EditDetails2View,
+    NewRecipeView,
+    NewRecipeImportView,
+    NewRecipeImageView,
+    NewRecipeBookImageView,
+    NewBookView,
+    RecipeBookContextView,
+    RecipeBookContextOptionsView,
+    RecipeContextOptionsView,
+    RandomBannerView,
+    OptionsView,
+    ChangeTintView,
+    ChangeThemeView,
   ];
 
   return (
-    <div className="relative mx-auto max-w-6xl px-4 py-12 sm:py-16">
-      <ProjectHeader
-        title="RecipeRealm"
-        titleLink="https://apps.apple.com/us/app/reciperealm/id6458877177"
-        showArrows={showArrows}
-        nextSlide={nextSlide}
-        prevSlide={prevSlide}
-        actions={[
-          { label: "Apple Store", onClick: handleAppleStoreButtonClick, variant: "primary" },
-          { label: "Send Feedback", onClick: () => setIsFeedbackModalOpen(true), variant: "secondary" },
-        ]}
-      />
-
-      <div className="mx-auto w-full">
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-4 shadow-2xl shadow-black/40 backdrop-blur-md ring-1 ring-white/10">
-          <div className="rounded-xl border border-white/10 bg-black/30 p-4 shadow-inner">
-            <ScreenshotGridRotator
-              images={screenshots}
-              intervalMs={4000}
-              cols={{ mobile: 2, desktop: 4 }}
-              aspect="9/19"
-              sizes="(max-width: 768px) 45vw, (max-width: 1024px) 25vw, 240px"
-              deferUntilMounted
-            />
-          </div>
-
-          <div className="mx-auto mt-6 max-w-4xl rounded-xl border border-white/10 bg-white/5 p-6 text-slate-200 shadow-lg shadow-black/20">
-            <p className="leading-relaxed">
-              <strong className="font-semibold text-sky-400">
-                Discover a world of flavors with <span className="text-sky-400">RecipeRealm</span>
-              </strong>{" "}
-              — create, save, and share culinary creations with ease. Organize beautifully, explore new dishes, and customize your cooking.
-            </p>
-
-            <div className="mt-5">
-              <h3 className="mb-2 text-lg font-semibold text-slate-100">Features</h3>
-              <ul className="list-disc space-y-2 pl-6 text-slate-300 marker:text-sky-400">
-                <li><strong className="text-slate-100">Store & Browse:</strong> Full recipe cards with times, images, ingredients, and steps.</li>
-                <li><strong className="text-slate-100">In-App Browser & Ingredient Capture:</strong> Scan ingredients from web pages.</li>
-                <li><strong className="text-slate-100">Images Made Easy:</strong> Library, camera, or Google image search.</li>
-                <li><strong className="text-slate-100">Edit Anytime:</strong> Update sections and crop photos effortlessly.</li>
-                <li><strong className="text-slate-100">Step-by-Step Tracking:</strong> Check off ingredients/steps; reset for re-use.</li>
-                <li><strong className="text-slate-100">Quick Search & Filters:</strong> Search bar + filters (time, cuisine).</li>
-                <li><strong className="text-slate-100">Dietary Preferences:</strong> Tag for gluten-free, sugar-free, etc.</li>
-                <li><strong className="text-slate-100">Share the Flavor:</strong> Share/import directly into the app.</li>
-                <li><strong className="text-slate-100">Easy Additions:</strong> Paste full recipe content (incl. images).</li>
-                <li><strong className="text-slate-100">Community & AI Assistant:</strong> Chefs Assistant (OpenAI), 12 msgs/day for members.</li>
-                <li><strong className="text-slate-100">Random Recipe Banner:</strong> Fresh inspiration each launch.</li>
-                <li><strong className="text-slate-100">My Recipe Starter:</strong> One recipe included to begin.</li>
-                <li><strong className="text-slate-100">Recipe Books:</strong> Organize into books; drag, drop, and sort.</li>
-                <li><strong className="text-slate-100">Color UI:</strong> Choose your tint color.</li>
-              </ul>
-
-              <p className="mt-4 text-slate-300">
-                <strong className="text-slate-100">Your kitchen adventure awaits.</strong>
-              </p>
-            </div>
-          </div>
-
-          <div className="mx-auto mt-6 flex max-w-2xl flex-wrap items-center justify-center gap-4">
-            {BuiltWithLogos.map((logo, index) => {
-              const img = (
-                <Image
-                  key={index}
-                  src={logo.src}
-                  alt={logo.alt}
-                  width={44}
-                  height={44}
-                  className="h-11 w-11 select-none rounded-md object-contain opacity-90 grayscale transition hover:scale-105 hover:opacity-100 hover:grayscale-0"
-                  draggable={false}
-                />
-              );
-              return (
-                <span key={index} className="inline-block">
-                  {logo.link ? (
-                    <Link href={logo.link} target="_blank">
-                      {img}
-                    </Link>
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={logo.onClick as () => void}
-                      className="cursor-pointer"
-                      aria-label={logo.alt}
-                      title={logo.alt}
-                    >
-                      {img}
-                    </button>
-                  )}
-                </span>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-
-      <FeedbackModal
-        isOpen={isFeedbackModalOpen}
-        onClose={() => setIsFeedbackModalOpen(false)}
-        onSubmit={handleFeedbackSubmit}
-        feedback={feedback}
-        setFeedback={setFeedback}
-        appName="RecipeRealm"
-      />
-    </div>
+    <ProjectPage
+      showArrows={showArrows}
+      nextSlide={nextSlide}
+      prevSlide={prevSlide}
+      appName="RecipeRealm"
+      title="RecipeRealm"
+      titleLink="https://apps.apple.com/us/app/reciperealm/id6458877177"
+      icon={AppImages.recipeRealm}
+      iconAlt="RecipeRealm app icon"
+      screenshots={screenshots}
+      screenshotProps={{
+        variant: "app",
+        aspect: "9/19",
+        cols: { mobile: 2, desktop: 4 },
+        deferUntilMounted: true,
+        sizes: "(max-width: 768px) 45vw, (max-width: 1024px) 25vw, 240px",
+      }}
+      actions={({ openFeedback }) => [
+        {
+          label: "Apple Store",
+          href: "https://apps.apple.com/us/app/reciperealm/id6458877177",
+          variant: "primary",
+        },
+        { label: "Send Feedback", onClick: openFeedback, variant: "secondary" },
+      ]}
+      description={
+        <p className="leading-relaxed">
+          <strong>
+            Discover a world of flavors with <span className="text-[color:var(--accent)]">RecipeRealm</span>
+          </strong>{" "}
+          — create, save, and share culinary creations with ease. Organize beautifully, explore new dishes, and customize
+          your cooking.
+        </p>
+      }
+      featureTitle="Features"
+      features={[
+        <>
+          <strong className="text-slate-100">Store &amp; Browse:</strong> Full recipe cards with times, images, ingredients, and
+          steps.
+        </>,
+        <>
+          <strong className="text-slate-100">In-App Browser &amp; Ingredient Capture:</strong> Scan ingredients from web pages.
+        </>,
+        <>
+          <strong className="text-slate-100">Images Made Easy:</strong> Library, camera, or Google image search.
+        </>,
+        <>
+          <strong className="text-slate-100">Edit Anytime:</strong> Update sections and crop photos effortlessly.
+        </>,
+        <>
+          <strong className="text-slate-100">Step-by-Step Tracking:</strong> Check off ingredients/steps; reset for re-use.
+        </>,
+        <>
+          <strong className="text-slate-100">Quick Search &amp; Filters:</strong> Search bar + filters (time, cuisine).
+        </>,
+        <>
+          <strong className="text-slate-100">Dietary Preferences:</strong> Tag for gluten-free, sugar-free, etc.
+        </>,
+        <>
+          <strong className="text-slate-100">Share the Flavor:</strong> Share/import directly into the app.
+        </>,
+        <>
+          <strong className="text-slate-100">Easy Additions:</strong> Paste full recipe content (incl. images).
+        </>,
+        <>
+          <strong className="text-slate-100">Community &amp; AI Assistant:</strong> Chefs Assistant (OpenAI), 12 msgs/day for
+          members.
+        </>,
+        <>
+          <strong className="text-slate-100">Random Recipe Banner:</strong> Fresh inspiration each launch.
+        </>,
+        <>
+          <strong className="text-slate-100">My Recipe Starter:</strong> One recipe included to begin.
+        </>,
+        <>
+          <strong className="text-slate-100">Recipe Books:</strong> Organize into books; drag, drop, and sort.
+        </>,
+        <>
+          <strong className="text-slate-100">Color UI:</strong> Choose your tint color.
+        </>,
+      ]}
+      builtWith={[
+        { src: AppImages.githubLight, alt: "GitHub", href: "https://github.com/devzano" },
+        { src: AppImages.xcode, alt: "Xcode", href: "https://developer.apple.com/xcode/" },
+        { src: AppImages.coredata, alt: "Core Data", href: "https://developer.apple.com/documentation/coredata/" },
+        { src: AppImages.swiftui, alt: "SwiftUI", href: "https://developer.apple.com/xcode/swiftui/" },
+        { src: AppImages.termsConditions, alt: "Terms", onClick: () => router.push("/reciperealm/terms") },
+        { src: AppImages.privacyPolicy, alt: "Privacy", onClick: () => router.push("/reciperealm/privacy") },
+      ]}
+    />
   );
 }

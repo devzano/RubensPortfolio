@@ -8,7 +8,6 @@ export default function SiteLayout({ children }: { children: ReactNode; }) {
       <FXAndNav />
       <div className="relative z-10">
         {children}
-        <div id="modal-root" />
       </div>
     </div>
   );

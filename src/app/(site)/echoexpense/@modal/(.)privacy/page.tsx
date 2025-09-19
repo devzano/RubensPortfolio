@@ -1,7 +1,7 @@
 // app/(site)/echoexpense/@modal/(.)privacy/page.tsx
 "use client";
 import { useRouter } from "next/navigation";
-import Modal from "@/components/Modal";
+import Modal from "@/components/ui/Modal";
 import Privacy from "@/components/Projects/EchoExpense/Privacy";
 
 export default function PrivacyModalOverlay() {

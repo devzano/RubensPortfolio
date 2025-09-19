@@ -3,46 +3,48 @@
 
 import React from "react";
 import Link from "next/link";
+import Image, { type StaticImageData } from "next/image";
 
 type ActionSpec = {
   label: string;
   onClick?: () => void;
-  href?: string;        // if given, we render a link instead of a button
-  external?: boolean;   // forces target=_blank for external links
+  href?: string;
+  external?: boolean;
   variant?: "primary" | "secondary" | "accent" | "ghost";
 };
 
 export type ProjectHeaderProps = {
   title: string;
-  titleLink?: string;          // optional link on the title (shows the small ↗)
-  showArrows?: boolean;        // show prev/next chevrons (for slider)
+  titleLink?: string;
+  showArrows?: boolean;
   nextSlide?: () => void;
   prevSlide?: () => void;
-  actions?: ActionSpec[];      // row of buttons under the title
-  subtle?: React.ReactNode;    // small italic/subtle text under the actions
+  actions?: ActionSpec[];
+  subtle?: React.ReactNode;
   className?: string;
+
+  // icon (already requested)
+  icon?: StaticImageData | string;
+  iconAlt?: string;
 };
 
 const classesForVariant = (v: ActionSpec["variant"]) => {
   switch (v) {
     case "primary":
-      return "rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-900/30 transition hover:-translate-y-0.5 hover:shadow-indigo-900/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/70";
+      return "rounded-full bg-gradient-to-br from-[color:var(--accent)] to-[color:var(--accent-deep)] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-black/20 transition hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2";
     case "accent":
-      return "rounded-full bg-gradient-to-br from-sky-500 to-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-blue-900/30 transition hover:-translate-y-0.5 hover:shadow-blue-900/40 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70";
+      return "rounded-full bg-gradient-to-br from-[color:var(--accent-light)] to-[color:var(--accent)] px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-black/20 transition hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2";
     case "ghost":
-      return "rounded-full bg-transparent px-5 py-2.5 text-sm font-semibold text-slate-100/80 transition hover:-translate-y-0.5 hover:text-slate-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70";
+      return "rounded-full bg-transparent px-5 py-2.5 text-sm font-semibold text-slate-100/80 transition hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2";
     case "secondary":
     default:
-      return "rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-semibold text-slate-100 shadow-lg shadow-black/20 backdrop-blur-md transition hover:-translate-y-0.5 hover:border-sky-400/40 hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/70";
+      return "rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-semibold text-slate-100 shadow-lg shadow-black/20 backdrop-blur-md transition hover:-translate-y-0.5 hover:border-[color:var(--accent-soft)] hover:bg-white/10 focus:outline-none focus-visible:ring-2";
   }
 };
 
 function ActionButton({ a }: { a: ActionSpec }) {
-  const base =
-  "relative will-change-transform hover:ring-4 hover:ring-sky-400/15 hover:alien-float";
-
+  const base = "relative will-change-transform hover:ring-4 hover:ring-[color:var(--accent-softer)]";
   const cls = `${classesForVariant(a.variant)} ${base}`;
-
   if (a.href) {
     const isExternal = a.external ?? /^https?:\/\//i.test(a.href);
     return isExternal ? (
@@ -71,34 +73,39 @@ export default function ProjectHeader({
   actions = [],
   subtle,
   className = "",
+  icon,
+  iconAlt,
 }: ProjectHeaderProps) {
+  const iconNode = icon ? (
+    <span className="mr-2 inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-white/10 shadow-sm">
+      <Image
+        src={icon}
+        alt={iconAlt ?? `${title} icon`}
+        width={32}
+        height={32}
+        className="h-8 w-8 object-contain"
+        draggable={false}
+        priority
+      />
+    </span>
+  ) : null;
+
   return (
     <div className={`relative ${className}`}>
-      {/* --- Neon beam + halo (decorative) --- */}
+      {/* beams use accent vars */}
       <span
         aria-hidden
-        className="
-          pointer-events-none absolute inset-x-0 -top-10 -z-10 mx-auto
-          h-28 w-[min(90vw,52rem)]
-          rounded-[40%]
-          bg-[radial-gradient(closest-side,rgba(56,189,248,.22),rgba(99,102,241,.14),transparent_70%)]
-          blur-3xl
-          md:h-32
-          md:blur-[52px]
-          mix-blend-screen
-        "
+        className="pointer-events-none absolute inset-x-0 -top-10 -z-10 mx-auto h-28 w-[min(90vw,52rem)] rounded-[40%] blur-3xl md:h-32 md:blur-[52px] mix-blend-screen"
+        style={{
+          background: `radial-gradient(closest-side, var(--accent-softer), var(--accent-soft), transparent 70%)`,
+        }}
       />
-      {/* slight conic beam to add directionality */}
       <span
         aria-hidden
-        className="
-          pointer-events-none absolute left-1/2 top-2 -z-10
-          h-40 w-40 -translate-x-1/2 rotate-12
-          bg-[conic-gradient(from_210deg_at_50%_50%,rgba(56,189,248,.30),rgba(139,92,246,.22),transparent_70%)]
-          blur-2xl opacity-80
-          md:h-48 md:w-48 md:blur-3xl
-          mix-blend-screen
-        "
+        className="pointer-events-none absolute left-1/2 top-2 -z-10 h-40 w-40 -translate-x-1/2 rotate-12 blur-2xl opacity-80 md:h-48 md:w-48 md:blur-3xl mix-blend-screen"
+        style={{
+          background: `conic-gradient(from 210deg at 50% 50%, var(--accent-soft), var(--accent-softer), transparent 70%)`,
+        }}
       />
 
       {/* Title + arrows */}
@@ -106,23 +113,23 @@ export default function ProjectHeader({
         <div className="flex max-w-full flex-nowrap items-center gap-4">
           {/* Left chevron */}
           <button
-            className={`h-12 w-12 shrink-0 rounded-full border border-white/10 bg-white/5 text-slate-200 shadow-lg shadow-black/20 backdrop-blur-md transition hover:scale-110 hover:text-sky-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/60 ${showArrows ? "" : "invisible"} hover:ring-2 hover:ring-sky-400/30`}
+            className={`h-12 w-12 shrink-0 rounded-full border border-white/10 bg-white/5 text-slate-200 shadow-lg shadow-black/20 backdrop-blur-md transition hover:scale-110 focus:outline-none focus-visible:ring-2 ${showArrows ? "" : "invisible"}`}
             onClick={prevSlide}
             aria-label="Previous Project"
+            style={{ color: "var(--accent)" }}
+            title="Previous"
           >
             <span className="select-none text-3xl leading-none">‹</span>
           </button>
 
-          {/* Title */}
+          {/* Title pill */}
           <h1 className="relative min-w-0 text-center">
             <span
               aria-hidden
-              className="
-                pointer-events-none absolute inset-x-6 -top-3 -z-10
-                h-10 rounded-full
-                bg-gradient-to-r from-sky-400/25 via-blue-500/15 to-violet-500/25
-                blur-xl
-              "
+              className="pointer-events-none absolute inset-x-6 -top-3 -z-10 h-10 rounded-full blur-xl"
+              style={{
+                background: `linear-gradient(to right, var(--accent-soft), var(--accent-softer))`,
+              }}
             />
             {titleLink ? (
               <a
@@ -131,10 +138,15 @@ export default function ProjectHeader({
                 rel="noopener noreferrer"
                 className="group inline-flex max-w-full items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 py-3 shadow-lg shadow-black/20 ring-1 ring-white/10 backdrop-blur-md"
               >
-                <span className="bg-gradient-to-br from-sky-300 via-sky-400 to-violet-400 bg-clip-text text-transparent text-2xl font-semibold tracking-tight sm:text-3xl whitespace-nowrap">
+                {iconNode}
+                <span
+                  className="bg-clip-text text-transparent text-2xl font-semibold tracking-tight sm:text-3xl whitespace-nowrap"
+                  style={{
+                    backgroundImage: `linear-gradient(135deg, var(--accent-light), var(--accent), var(--accent-deep))`,
+                  }}
+                >
                   {title}
                 </span>
-                {/* tiny ↗ hint */}
                 <svg
                   aria-hidden="true"
                   viewBox="0 0 24 24"
@@ -149,34 +161,41 @@ export default function ProjectHeader({
                     strokeLinejoin="round"
                   />
                 </svg>
-
-                {/* subtle hover halo to match tiles/buttons */}
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-0 rounded-full ring-0 ring-sky-400/0 transition-all duration-300 group-hover:ring-8 group-hover:ring-sky-400/10"
+                  className="pointer-events-none absolute inset-0 rounded-full ring-0 transition-all duration-300 group-hover:ring-8"
+                  style={{ boxShadow: "0 0 0 0 var(--accent-soft)" }}
                 />
               </a>
             ) : (
               <span className="relative inline-flex max-w-full items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 py-3 shadow-lg shadow-black/20 ring-1 ring-white/10 backdrop-blur-md">
-                <span className="bg-gradient-to-br from-sky-300 via-sky-400 to-violet-400 bg-clip-text text-transparent text-2xl font-semibold tracking-tight sm:text-3xl whitespace-nowrap">
+                {iconNode}
+                <span
+                  className="bg-clip-text text-transparent text-2xl font-semibold tracking-tight sm:text-3xl whitespace-nowrap"
+                  style={{
+                    backgroundImage: `linear-gradient(135deg, var(--accent-light), var(--accent), var(--accent-deep))`,
+                  }}
+                >
                   {title}
                 </span>
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 rounded-full ring-0 ring-sky-400/0 transition-all duration-300 hover:ring-8 hover:ring-sky-400/10"
-                />
               </span>
             )}
-
-            {/* subtle gradient underline */}
-            <span className="pointer-events-none absolute inset-x-8 -bottom-1 h-px bg-gradient-to-r from-transparent via-sky-400/60 to-transparent" />
+            <span
+              className="pointer-events-none absolute inset-x-8 -bottom-1 h-px"
+              style={{
+                background: `linear-gradient(to right, transparent, var(--accent), transparent)`,
+                opacity: 0.6,
+              }}
+            />
           </h1>
 
           {/* Right chevron */}
           <button
-            className={`h-12 w-12 shrink-0 rounded-full border border-white/10 bg-white/5 text-slate-200 shadow-lg shadow-black/20 backdrop-blur-md transition hover:scale-110 hover:text-sky-400 focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/60 ${showArrows ? "" : "invisible"} hover:ring-2 hover:ring-sky-400/30`}
+            className={`h-12 w-12 shrink-0 rounded-full border border-white/10 bg-white/5 text-slate-200 shadow-lg shadow-black/20 backdrop-blur-md transition hover:scale-110 focus:outline-none focus-visible:ring-2 ${showArrows ? "" : "invisible"}`}
             onClick={nextSlide}
             aria-label="Next Project"
+            style={{ color: "var(--accent)" }}
+            title="Next"
           >
             <span className="select-none text-3xl leading-none">›</span>
           </button>
@@ -195,7 +214,9 @@ export default function ProjectHeader({
       {/* Subtle text */}
       {subtle && (
         <div className="mb-6 text-center">
-          <div className="italic text-sky-400/90">{subtle}</div>
+          <div className="italic" style={{ color: "var(--accent)" }}>
+            {subtle}
+          </div>
         </div>
       )}
     </div>

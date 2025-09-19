@@ -57,7 +57,6 @@ export default function Page() {
     [SlideComponents, nextSlide, prevSlide]
   );
 
-  // Measure height whenever the active slide changes (and on resize)
   useEffect(() => {
     const measure = () => {
       if (slideRef.current) {

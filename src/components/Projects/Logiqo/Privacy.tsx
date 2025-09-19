@@ -2,7 +2,7 @@
 "use client";
 
 import React from "react";
-import DocShell from "../DocShell";
+import DocShell from "../LegalDocShell";
 
 const LAST_UPDATED = "July 20, 2024";
 const SUPPORT_EMAIL = "rmanzano.se@gmail.com";

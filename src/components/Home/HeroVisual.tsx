@@ -34,23 +34,23 @@ export default function HeroVisual({ items }: { items: readonly HeroItem[]; }) {
                px-2 flex items-center gap-2"
                 >
                   <span aria-hidden className="h-2 w-2 rounded-full bg-blue-500/80" />
-                  <span className="text-[11px] sm:text-xs font-medium tracking-wide
+                  <a href={"https://watchlistr.app"} className="text-[11px] sm:text-xs font-medium tracking-wide
                      text-neutral-600 dark:text-neutral-300">
                     watchlistr.app
-                  </span>
+                  </a>
                 </div>
               </div>
             </div>
 
             {/* Content area */}
             <div className="flex-1 grid place-items-center">
-              {(webItems.length ? webItems : [{ title: "Watchlistr", href: "https://watchlistr.app" }]).map(
+              {(webItems.length ? webItems : [{ title: "Watchlistr", href: "/watchlistr-web" }]).map(
                 (c) => (
                   <Link
                     key={c.title}
-                    href="https://watchlistr.app"
-                    aria-label="Watchlistr (web)"
-                    title="Watchlistr (web)"
+                    href="/watchlistr-web"
+                    aria-label="Watchlistr"
+                    title="Watchlistr"
                     className="aspect-video w-full max-w-sm dark:bg-neutral-800/80 ring-1 ring-black/5 dark:ring-white/5 flex items-center justify-center transition-transform duration-200 hover:scale-[1.02]"
                   >
                     {c.icon ? (

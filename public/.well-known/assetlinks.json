@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.devzano.Logiqo",
+      "sha256_cert_fingerprints": [
+        "01:61:EF:BA:FD:29:BC:2F:92:EC:08:DE:1D:BD:60:A2:F7:EC:D9:19:4C:97:08:6A:DA:C9:B2:F9:78:07:5B:07"
+      ]
+    }
+  }
+]

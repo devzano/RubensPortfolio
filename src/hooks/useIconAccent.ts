@@ -175,7 +175,7 @@ export default function useIconAccent(
       "--accent-light": light,
       "--accent-deep": deep,
       "--accent-soft": withAlpha(base, 0.20),
-      "--accent-softer": withAlpha(base, 0.10),
+      "--accent-softer": withAlpha(base, 0.50),
       "--tw-ring-color": base,
     } as React.CSSProperties;
   }, [accent, fallback]);

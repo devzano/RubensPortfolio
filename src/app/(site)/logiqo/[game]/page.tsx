@@ -8,7 +8,7 @@ import AppImages from "@/constants/images";
 
 const KNOWN = new Set(["tictactoe", "connectfour", "checkers", "chess"]);
 
-export default function InvitePage({ params }: { params: { game: string } }) {
+export default function InvitePage({ params }: { params: { game: string; }; }) {
   const { game } = params;
   const sp = useSearchParams();
   const room = sp.get("room") ?? "";
@@ -95,7 +95,7 @@ const btnPrimary: React.CSSProperties = {
 const btnSecondary: React.CSSProperties = {
   padding: "10px 14px",
   background: "var(--accent-soft)",
-  color: "rgb(17,17,17)",
+  color: "#fff",
   borderRadius: 12,
   textDecoration: "none",
   fontWeight: 600,
@@ -103,8 +103,8 @@ const btnSecondary: React.CSSProperties = {
 };
 const btnGhost: React.CSSProperties = {
   padding: "10px 14px",
-  background: "transparent",
-  color: "rgb(17,17,17)",
+  background: "var(--accent-soft)",
+  color: "#fff",
   borderRadius: 12,
   textDecoration: "none",
   fontWeight: 600,

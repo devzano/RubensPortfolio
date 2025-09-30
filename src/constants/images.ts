@@ -19,7 +19,20 @@ import StarshipPixelscapeIcon from "@/assets/CodingLogos/starship_pixelscape_ico
 import AutoArchiveIcon from "@/assets/CodingLogos/autoarchive_icon.png";
 import StedaIcon from "@/assets/CodingLogos/steda_icon.png";
 import ManzanosPopShopIcon from "@/assets/CodingLogos/manzanos_popshop_icon.png";
+// logiqo
 import LogiqoIcon from "@/assets/CodingLogos/logiqo_icon.png";
+import LogiqoIconSudoku from "@/assets/logiqo_game_backgrounds/sudokuBackground.jpg";
+import LogiqoIconWordSearch from "@/assets/logiqo_game_backgrounds/wordsearchBackground.jpg";
+import LogiqoIconCheckers from "@/assets/logiqo_game_backgrounds/checkersBackground.jpg";
+import LogiqoIconChess from "@/assets/logiqo_game_backgrounds/chessBackground.jpg";
+import LogiqoIconMinesweeper from "@/assets/logiqo_game_backgrounds/minesweeperBackground.jpg";
+import LogiqoIconTrivia from "@/assets/logiqo_game_backgrounds/triviaBackground.jpg";
+import LogiqoIconTicTacToe from "@/assets/logiqo_game_backgrounds/tictactoeBackground.jpg";
+import LogiqoIconConnectFour from "@/assets/logiqo_game_backgrounds/connectfourBackground.jpg";
+import LogiqoIconColorDots from "@/assets/logiqo_game_backgrounds/colordotsBackground.jpg";
+import LogiqoIconCrossword from "@/assets/logiqo_game_backgrounds/crosswordBackground.jpg";
+import LogiqoIconBattleship from "@/assets/logiqo_game_backgrounds/battleshipBackground.jpg";
+import LogiqoIconFreeblock from "@/assets/logiqo_game_backgrounds/freeblockBackground.jpg";
 // dev icons
 import GitHubLightLogo from "@/assets/CodingLogos/github_light.png";
 import GitHubDarkLogo from "@/assets/CodingLogos/github_dark.png";
@@ -61,7 +74,21 @@ const AppImages = {
   autoArchive: AutoArchiveIcon as Img,
   steda: StedaIcon as Img,
   manzanosPopShop: ManzanosPopShopIcon as Img,
+  // logiqo
   logiqo: LogiqoIcon as Img,
+  logiqoSudoku: LogiqoIconSudoku as Img,
+  logiqoWordSearch: LogiqoIconWordSearch as Img,
+  logiqoChess: LogiqoIconChess as Img,
+  logiqoCheckers: LogiqoIconCheckers as Img,
+  logiqoMinesweeper: LogiqoIconMinesweeper as Img,
+  logiqoTrivia: LogiqoIconTrivia as Img,
+  logiqoTicTacToe: LogiqoIconTicTacToe as Img,
+  logiqoConnectFour: LogiqoIconConnectFour as Img,
+  logiqoColorDots: LogiqoIconColorDots as Img,
+  logiqoCrossword: LogiqoIconCrossword as Img,
+  logiqoBattleship: LogiqoIconBattleship as Img,
+  logiqoFreeblock: LogiqoIconFreeblock as Img,
+
   // dev icons
   githubLight: GitHubLightLogo as Img,
   githubDark: GitHubDarkLogo as Img,

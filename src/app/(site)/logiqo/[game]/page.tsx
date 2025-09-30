@@ -2,7 +2,7 @@
 
 import React, { useMemo, useCallback, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import Image, { type StaticImageData } from "next/image";
 import { notFound, useSearchParams } from "next/navigation";
 
 import useIconAccent from "@/hooks/useIconAccent";
@@ -12,12 +12,12 @@ const KNOWN = ["tictactoe", "connectfour", "checkers", "chess", "battleship"] as
 type KnownGame = (typeof KNOWN)[number];
 const KNOWN_SET = new Set<KnownGame>(KNOWN);
 
-const GAME_META: Record<KnownGame, { title: string; bg: any }> = {
-  tictactoe:   { title: "Tic Tac Toe",   bg: AppImages.logiqoTicTacToe },
-  connectfour: { title: "Connect Four",  bg: AppImages.logiqoConnectFour },
-  checkers:    { title: "Checkers",      bg: AppImages.logiqoCheckers },
-  chess:       { title: "Chess",         bg: AppImages.logiqoChess },
-  battleship:  { title: "Battleship",    bg: AppImages.logiqoBattleship },
+const GAME_META: Record<KnownGame, { title: string; bg: StaticImageData }> = {
+  tictactoe:   { title: "Tic Tac Toe",  bg: AppImages.logiqoTicTacToe },
+  connectfour: { title: "Connect Four", bg: AppImages.logiqoConnectFour },
+  checkers:    { title: "Checkers",     bg: AppImages.logiqoCheckers },
+  chess:       { title: "Chess",        bg: AppImages.logiqoChess },
+  battleship:  { title: "Battleship",   bg: AppImages.logiqoBattleship },
 };
 
 export default function InvitePage({ params }: { params: { game: string } }) {
@@ -27,7 +27,6 @@ export default function InvitePage({ params }: { params: { game: string } }) {
   const auto = sp.get("open") === "1";
   const isKnown = KNOWN_SET.has(game as KnownGame);
 
-  // Accent variables from app icon
   const { cssVars } = useIconAccent(AppImages.logiqo, { fallback: "#6366F1" });
 
   const schemeUrl = useMemo(() => {
@@ -77,7 +76,6 @@ export default function InvitePage({ params }: { params: { game: string } }) {
         px-4 sm:px-6 md:px-8 py-6 sm:py-10 md:py-16
       "
     >
-      {/* Card: background = game image, with dim + vignette */}
       <section
         className="
           relative w-full max-w-xl md:max-w-3xl
@@ -88,7 +86,6 @@ export default function InvitePage({ params }: { params: { game: string } }) {
         "
         aria-label={`${meta.title} invite`}
       >
-        {/* Background image */}
         <Image
           src={meta.bg}
           alt={`${meta.title} background`}
@@ -97,24 +94,13 @@ export default function InvitePage({ params }: { params: { game: string } }) {
           sizes="(max-width: 768px) 100vw, 768px"
           className="object-cover"
         />
-
-        {/* Dim + subtle vignette */}
         <div className="absolute inset-0 bg-black/45" />
         <div className="absolute inset-0 bg-gradient-to-t from-black/35 via-black/15 to-transparent" />
         <div className="absolute inset-0 [mask-image:radial-gradient(120%_80%_at_50%_70%,#000_40%,transparent_100%)] bg-black/10" />
 
-        {/* Content row */}
         <div className="absolute inset-0 p-4 sm:p-6 md:p-7 flex items-end">
           <div className="flex w-full items-center gap-3 sm:gap-4">
-            {/* App icon */}
-            <div
-              className="
-                shrink-0 rounded-2xl overflow-hidden
-                w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16
-                ring-1 ring-white/20 bg-white/10
-                backdrop-blur-[2px]
-              "
-            >
+            <div className="shrink-0 rounded-2xl overflow-hidden w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 ring-1 ring-white/20 bg-white/10 backdrop-blur-[2px]">
               <Image
                 src={AppImages.logiqo}
                 alt="Logiqo app icon"
@@ -125,7 +111,6 @@ export default function InvitePage({ params }: { params: { game: string } }) {
               />
             </div>
 
-            {/* Title + room + actions */}
             <div className="min-w-0 flex-1">
               <h1 className="text-white font-semibold leading-tight text-lg sm:text-xl md:text-2xl m-0">
                 {meta.title}
@@ -135,8 +120,7 @@ export default function InvitePage({ params }: { params: { game: string } }) {
                 {room ? (
                   <>
                     {" "}
-                    — room{" "}
-                    <code className="px-1 rounded bg-white/15 text-white/95">{room}</code>
+                    — room <code className="px-1 rounded bg-white/15 text-white/95">{room}</code>
                   </>
                 ) : null}
                 .
@@ -188,7 +172,6 @@ export default function InvitePage({ params }: { params: { game: string } }) {
           </div>
         </div>
 
-        {/* Tiny accent stripe at top for brand touch (optional) */}
         <div className="absolute top-0 left-0 right-0 h-0.5 bg-[var(--accent,#6366F1)]/70" />
       </section>
     </main>

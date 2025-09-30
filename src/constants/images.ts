@@ -34,6 +34,8 @@ import LogiqoIconCrossword from "@/assets/logiqo_game_backgrounds/crosswordBackg
 import LogiqoIconBattleship from "@/assets/logiqo_game_backgrounds/battleshipBackground.jpg";
 import LogiqoIconFreeblock from "@/assets/logiqo_game_backgrounds/freeblockBackground.jpg";
 // dev icons
+import AppStoreLogo from "@/assets/CodingLogos/appstore_ios.png";
+import PlayStoreLogo from "@/assets/CodingLogos/playstore_android.png";
 import GitHubLightLogo from "@/assets/CodingLogos/github_light.png";
 import GitHubDarkLogo from "@/assets/CodingLogos/github_dark.png";
 import XcodeLogo from "@/assets/CodingLogos/xcode.png";
@@ -90,6 +92,8 @@ const AppImages = {
   logiqoFreeblock: LogiqoIconFreeblock as Img,
 
   // dev icons
+  appstore: AppStoreLogo as Img,
+  playstore: PlayStoreLogo as Img,
   githubLight: GitHubLightLogo as Img,
   githubDark: GitHubDarkLogo as Img,
   xcode: XcodeLogo as Img,

@@ -145,7 +145,7 @@ export default function InvitePage({ params }: { params: { game: string; }; }) {
             <div
               className="
                 shrink-0 rounded-2xl overflow-hidden
-                w-18 h-18 sm:w-14 sm:h-14 md:w-16 md:h-16
+                w-16 h-16 sm:w-14 sm:h-14 md:w-16 md:h-16
                 ring-1 ring-black/10 dark:ring-white/15 bg-white/10
               "
             >

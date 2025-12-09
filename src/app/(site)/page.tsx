@@ -5,7 +5,10 @@ import GetInTouchCTA from "@/components/Home/GetInTouchCTA";
 import ProjectsMenuCTA from "@/components/Home/ProjectsMenuCTA";
 import HeroVisual from "@/components/Home/HeroVisual";
 
-type Variant = { label: "mobile" | "web"; href: "/watchlistr-mobile" | "/watchlistr-web"; };
+type Variant = {
+  label: "mobile" | "web";
+  href: "/watchlistr-mobile" | "/watchlistr-web";
+};
 type Card = {
   title: string;
   href: string;
@@ -26,15 +29,66 @@ export default function Home() {
         { label: "web", href: "/watchlistr-web" },
       ] as const,
     },
-    { title: "RecipeRealm", href: "/reciperealm", desc: "SwiftUI recipe manager with AI scanning and CloudKit sync.", icon: AppImages.recipeRealm },
-    { title: "EchoExpense", href: "/echoexpense", desc: "Simple bill tracking with TipStore and custom notifications.", icon: AppImages.echoExpense },
-    { title: "Starship Pixelscape", href: "/starship-pixelscape", desc: "Retro space shooter with Game Center and custom effects.", icon: AppImages.starshipPixelscape },
-    { title: "Steda", href: "/steda", desc: "Habit & focus toolkit with clean UX.", icon: AppImages.steda },
-    { title: "OtakuHive", href: "/otakuhive", desc: "Anime & manga collections with Supabase.", icon: AppImages.otakuHive },
-    { title: "Manzanos PopShop", href: "/manzanos-popshop", desc: "Funko Pop store with Supabase + Stripe.", icon: AppImages.manzanosPopShop },
-    { title: "AutoArchive", href: "/autoarchive", desc: "Vehicle maintenance tracker with SwiftData.", icon: AppImages.autoArchive },
-    { title: "Logiqo", href: "/logiqo", desc: "Logic pocket playground.", icon: AppImages.logiqo },
-    { title: "SunshineKeyWestChallenge", href: "/sunshinekeywestchallenge", desc: "DRI fundraising charity fishing event.", icon: AppImages.sunshineKeyWestChallenge },
+    {
+      title: "CreatureRealm",
+      href: "/creaturerealm",
+      desc: "Multi-game creature compendium with interactive maps & collection tracking.",
+      icon: AppImages.creaturerealm,
+    },
+    {
+      title: "RecipeRealm",
+      href: "/reciperealm",
+      desc: "SwiftUI recipe manager with AI scanning and CloudKit sync.",
+      icon: AppImages.recipeRealm,
+    },
+    {
+      title: "EchoExpense",
+      href: "/echoexpense",
+      desc: "Simple bill tracking with TipStore and custom notifications.",
+      icon: AppImages.echoExpense,
+    },
+    {
+      title: "Starship Pixelscape",
+      href: "/starship-pixelscape",
+      desc: "Retro space shooter with Game Center and custom effects.",
+      icon: AppImages.starshipPixelscape,
+    },
+    {
+      title: "Steda",
+      href: "/steda",
+      desc: "Habit & focus toolkit with clean UX.",
+      icon: AppImages.steda,
+    },
+    {
+      title: "OtakuHive",
+      href: "/otakuhive",
+      desc: "Anime & manga collections with Supabase.",
+      icon: AppImages.otakuHive,
+    },
+    {
+      title: "Manzanos PopShop",
+      href: "/manzanos-popshop",
+      desc: "Funko Pop store with Supabase + Stripe.",
+      icon: AppImages.manzanosPopShop,
+    },
+    {
+      title: "AutoArchive",
+      href: "/autoarchive",
+      desc: "Vehicle maintenance tracker with SwiftData.",
+      icon: AppImages.autoArchive,
+    },
+    {
+      title: "Logiqo",
+      href: "/logiqo",
+      desc: "Logic pocket playground.",
+      icon: AppImages.logiqo,
+    },
+    {
+      title: "SunshineKeyWestChallenge",
+      href: "/sunshinekeywestchallenge",
+      desc: "DRI fundraising charity fishing event.",
+      icon: AppImages.sunshineKeyWestChallenge,
+    },
   ] as const;
 
   return (
@@ -52,8 +106,9 @@ export default function Home() {
                   Motivated and detail-driven engineer, building polished apps with
                   <span className="font-medium"> SwiftUI</span>,{" "}
                   <span className="font-medium">React Native + Expo</span> — backed by{" "}
-                  <span className="font-medium">Supabase/Firebase</span>. Seeking an entry-level role
-                  where I can contribute, learn fast, and ship thoughtful experiences.
+                  <span className="font-medium">Supabase/Firebase</span>. Seeking an
+                  entry-level role where I can contribute, learn fast, and ship thoughtful
+                  experiences.
                 </p>
 
                 {/* CTAs */}
@@ -91,7 +146,12 @@ export default function Home() {
           <div className="mx-auto max-w-6xl text-sm text-neutral-600 dark:text-neutral-400 flex items-center justify-between">
             <p>© {new Date().getFullYear()} devzano</p>
             <div className="flex items-center gap-4">
-              <a href="https://github.com/devzano" target="_blank" rel="noreferrer" className="hover:underline">
+              <a
+                href="https://github.com/devzano"
+                target="_blank"
+                rel="noreferrer"
+                className="hover:underline"
+              >
                 GitHub
               </a>
             </div>

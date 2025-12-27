@@ -8,6 +8,10 @@
       {
         "appID": "RZB7U5UTY4.com.devzano.RecipeRealm",
         "paths": ["*"]
+      },
+      {
+        "appID": "RZB7U5UTY4.com.devzano.EchoExpense",
+        "paths": ["/plaid/*"]
       }
     ]
   }

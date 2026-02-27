@@ -8,10 +8,10 @@ import AppImages from "@/constants/images";
 import ProjectPage from "@/components/Projects/ProjectsPage";
 
 // Screenshots
-import ManzanosPopShopHomeTab from "@/components/Projects/ManzanosPopShop/Screenshots/ManzanosPopShop_HomeTab.png";
-import ManzanosPopShopPopsTab from "@/components/Projects/ManzanosPopShop/Screenshots/ManzanosPopShop_PopsTab.png";
-import ManzanosPopShopPopDetails from "@/components/Projects/ManzanosPopShop/Screenshots/ManzanosPopShop_PopDetails.png";
-import ManzanosPopShopOrders from "@/components/Projects/ManzanosPopShop/Screenshots/ManzanosPopShop_Orders.png";
+import ManzanosPopShopHomeTab from "@/components/Projects/MPSMobile/Screenshots/MPSMobile_HomeTab.png";
+import ManzanosPopShopPopsTab from "@/components/Projects/MPSMobile/Screenshots/MPSMobile_PopsTab.png";
+import ManzanosPopShopPopDetails from "@/components/Projects/MPSMobile/Screenshots/MPSMobile_PopDetails.png";
+import ManzanosPopShopOrders from "@/components/Projects/MPSMobile/Screenshots/MPSMobile_Orders.png";
 
 export default function Page({
   showArrows = false,

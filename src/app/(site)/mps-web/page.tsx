@@ -8,10 +8,10 @@ import AppImages from "@/constants/images";
 import ProjectPage from "@/components/Projects/ProjectsPage";
 
 // Screenshots
-import ManzanosPopShopHomeTab from "@/components/Projects/ManzanosPopShop/Screenshots/ManzanosPopShop_HomeTab.png";
-import ManzanosPopShopPopsTab from "@/components/Projects/ManzanosPopShop/Screenshots/ManzanosPopShop_PopsTab.png";
-import ManzanosPopShopPopDetails from "@/components/Projects/ManzanosPopShop/Screenshots/ManzanosPopShop_PopDetails.png";
-import ManzanosPopShopOrders from "@/components/Projects/ManzanosPopShop/Screenshots/ManzanosPopShop_Orders.png";
+import MPSHomePage from "@/components/Projects/MPSWeb/Screenshots/MPSWeb_HomePage.png";
+import MPSBrowsePage from "@/components/Projects/MPSWeb/Screenshots/MPSWeb_BrowsePage.png";
+import MPSDetailPage from "@/components/Projects/MPSWeb/Screenshots/MPSWeb_DetailPage.png";
+import MPSAuthPage from "@/components/Projects/MPSWeb/Screenshots/MPSWeb_AuthModal.png";
 
 export default function Page({
   showArrows = false,
@@ -21,10 +21,10 @@ export default function Page({
   const router = useRouter();
 
   const screenshots = [
-    ManzanosPopShopHomeTab,
-    ManzanosPopShopPopsTab,
-    ManzanosPopShopPopDetails,
-    ManzanosPopShopOrders,
+    MPSHomePage,
+    MPSBrowsePage,
+    MPSDetailPage,
+    MPSAuthPage,
   ];
 
   return (
@@ -34,27 +34,22 @@ export default function Page({
       prevSlide={prevSlide}
       appName="Manzanos PopShop"
       title="Manzanos PopShop"
-      titleLink="https://apps.apple.com/us/app/manzanos-popshop/id6747915168"
+      titleLink="https://manzanospopshop.com"
       icon={AppImages.manzanosPopShop}
       iconAlt="Manzanos PopShop app icon"
       screenshots={screenshots}
       screenshotProps={{
-        variant: "app",
-        aspect: "9/19",
-        cols: { mobile: 2, desktop: 4 },
-        deferUntilMounted: true,
-        sizes: "(max-width: 768px) 45vw, (max-width: 1024px) 25vw, 240px",
+        variant: "web",
+        webAspect: "16/9",
+        webSizes: "(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1200px",
+        fit: "cover",
+        intervalMs: 4000
       }}
       actions={({ openFeedback }) => [
         {
-          label: "Apple Store",
-          href: "https://apps.apple.com/us/app/manzanos-popshop/id6747915168",
+          label: "Web Store",
+          href: "https://manzanospopshop.com",
           variant: "primary",
-        },
-        {
-          label: "Play Store",
-          href: "https://play.google.com/store/apps/details?id=com.devzano.manzanospopshop",
-          variant: "secondary",
         },
         { label: "Send Feedback", onClick: openFeedback, variant: "secondary" },
       ]}
@@ -62,7 +57,7 @@ export default function Page({
         <p className="leading-relaxed">
           <strong>
             Shop, collect, and show off your favorite Funko Pops with{" "}
-            <span className="text-[color:var(--accent)]">Manzanos PopShop</span>
+            <span className="text-color:var(--accent)">Manzanos PopShop</span>
           </strong>{" "}
           — a unique storefront powered by passion, built for collectors, and
           curated from a personal vault of iconic vinyl figures.

@@ -2,7 +2,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/ui/Modal";
-import Terms from "@/components/Projects/ManzanosPopShop/Terms";
+import Terms from "@/components/Projects/MPSMobile/Terms";
 
 export default function TermsStandalone() {
   const router = useRouter();

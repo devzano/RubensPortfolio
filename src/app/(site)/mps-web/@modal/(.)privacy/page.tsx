@@ -2,7 +2,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import Modal from "@/components/ui/Modal";
-import Privacy from "@/components/Projects/ManzanosPopShop/Privacy";
+import Privacy from "@/components/Projects/MPSMobile/Privacy";
 
 export default function PrivacyModalOverlay() {
   const router = useRouter();

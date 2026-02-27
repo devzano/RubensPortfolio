@@ -1,6 +1,10 @@
+// next.config.ts
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // eslint: { ignoreDuringBuilds: true },
+  images: {
+    unoptimized: true, // This disables Vercel's processing for ALL images globally
+  },
 };
+
 export default nextConfig;

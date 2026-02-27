@@ -7,8 +7,9 @@ import HeroVisual from "@/components/Home/HeroVisual";
 
 type Variant = {
   label: "mobile" | "web";
-  href: "/watchlistr-mobile" | "/watchlistr-web";
+  href: string;
 };
+
 type Card = {
   title: string;
   href: string;
@@ -67,9 +68,13 @@ export default function Home() {
     },
     {
       title: "Manzanos PopShop",
-      href: "/manzanos-popshop",
+      href: "/mps-mobile",
       desc: "Funko Pop store with Supabase + Stripe.",
       icon: AppImages.manzanosPopShop,
+      variants: [
+        { label: "mobile", href: "/mps-mobile" },
+        { label: "web", href: "/mps-web" },
+      ] as const,
     },
     {
       title: "AutoArchive",
@@ -93,7 +98,7 @@ export default function Home() {
 
   return (
     <div className="min-h-dvh flex flex-col">
-      <div className="relative z-10 flex flex-col pt-[var(--nav-h,56px)] min-h-[calc(100dvh-var(--nav-h,56px))]">
+      <div className="relative z-10 flex flex-col pt-(--nav-h,56px) min-h-[calc(100dvh-var(--nav-h,56px))]">
         <main className="flex-1 grid place-items-center">
           <section className="w-full px-6 sm:px-10">
             <div className="mx-auto max-w-6xl grid gap-8 lg:grid-cols-2 items-center will-change-transform motion-reduce:translate-y-0">
@@ -120,15 +125,13 @@ export default function Home() {
                     className="group relative h-11 px-5 w-full sm:w-auto rounded-full border border-neutral-200 dark:border-neutral-800 bg-white text-neutral-900 dark:bg-neutral-900 dark:text-white font-medium flex items-center justify-center shadow-sm transition-all duration-300 ease-out hover:scale-[1.02] hover:shadow-md active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/60"
                   >
                     Resume (PDF)
-                    {/* soft UFO ring */}
                     <span
                       aria-hidden
                       className="pointer-events-none absolute inset-0 rounded-full ring-0 ring-sky-400/0 transition-all duration-300 group-hover:ring-8 group-hover:ring-sky-400/10 dark:group-hover:ring-sky-300/10"
                     />
-                    {/* gradient underline */}
                     <span
                       aria-hidden
-                      className="pointer-events-none absolute -z-10 left-1/2 top-full mt-1 h-px w-0 -translate-x-1/2 bg-gradient-to-r from-transparent via-sky-400/70 to-transparent transition-all duration-300 group-hover:w-2/3"
+                      className="pointer-events-none absolute -z-10 left-1/2 top-full mt-1 h-px w-0 -translate-x-1/2 bg-linear-to-r from-transparent via-sky-400/70 to-transparent transition-all duration-300 group-hover:w-2/3"
                     />
                   </a>
 
@@ -146,14 +149,9 @@ export default function Home() {
           <div className="mx-auto max-w-6xl text-sm text-neutral-600 dark:text-neutral-400 flex items-center justify-between">
             <p>© {new Date().getFullYear()} devzano</p>
             <div className="flex items-center gap-4">
-              <a
-                href="https://github.com/devzano"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:underline"
-              >
-                GitHub
-              </a>
+              <a href="https://manzanohq.com" target="_blank" rel="noreferrer" className="hover:underline">ManzanoHQ</a>
+              <span>✱</span>
+              <a href="https://github.com/devzano" target="_blank" rel="noreferrer" className="hover:underline">GitHub</a>
             </div>
           </div>
         </footer>

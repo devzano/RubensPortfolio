@@ -11,7 +11,8 @@ import StarshipPixelscape from "@/app/(site)/starship-pixelscape/page";
 import SunshineKeyWestChallenge from "@/app/(site)/sunshinekeywestchallenge/page";
 import AutoArchive from "@/app/(site)/autoarchive/page";
 import Steda from "@/app/(site)/steda/page";
-import ManzanosPopShop from "@/app/(site)/manzanos-popshop/page";
+import MPSMobile from "@/app/(site)/mps-mobile/page";
+import MPSWeb from "@/app/(site)/mps-web/page";
 import Logiqo from "@/app/(site)/logiqo/page";
 
 type SlideComponent = React.ComponentType<SlideNavProps>;
@@ -32,7 +33,8 @@ export default function Page() {
       StarshipPixelscape,
       AutoArchive,
       Steda,
-      ManzanosPopShop,
+      MPSMobile,
+      MPSWeb,
       Logiqo,
     ],
     []

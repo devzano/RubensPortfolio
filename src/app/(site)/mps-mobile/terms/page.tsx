@@ -6,7 +6,7 @@ import Terms from "@/components/Projects/ManzanosPopShop/Terms";
 
 export default function TermsStandalone() {
   const router = useRouter();
-  const close = () => router.push("/manzanos-popshop", { scroll: false });
+  const close = () => router.push("/mps-mobile", { scroll: false });
   return (
     <Modal
       isOpen

@@ -54,7 +54,7 @@ export default function Page({
         <p className="leading-relaxed">
           <strong>
             Enhance your entertainment experience with{" "}
-            <span className="text-[color:var(--accent)]">Watchlistr</span>
+            <span className="text-(--accent)">Watchlistr</span>
           </strong>{" "}
           — a platform designed to help you track, discover, and organize your
           favorite Movies and TV Shows across web and iOS. What began as a
@@ -64,7 +64,7 @@ export default function Page({
             href="https://www.rubenmanzano.com/watchlistr-web"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[color:var(--accent)] underline-offset-4 hover:underline"
+            className="text-(--accent) underline-offset-4 hover:underline"
           >
             web platform
           </a>{" "}
@@ -73,7 +73,7 @@ export default function Page({
             href="https://www.rubenmanzano.com/watchlistr-mobile"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-[color:var(--accent)] underline-offset-4 hover:underline"
+            className="text-(--accent) underline-offset-4 hover:underline"
           >
             mobile app
           </a>

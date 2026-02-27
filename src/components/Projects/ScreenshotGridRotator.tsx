@@ -21,6 +21,7 @@ export type ScreenshotGridRotatorProps = {
   webAspect?: `${number}/${number}`;
   webSizes?: string;
   showArrows?: boolean;
+  unoptimized?: boolean; // Added for Vercel usage control
 };
 
 export default function ScreenshotGridRotator({
@@ -38,6 +39,7 @@ export default function ScreenshotGridRotator({
   webAspect = "16/9",
   webSizes = "(max-width: 640px) 100vw, (max-width: 1024px) 80vw, 1024px",
   showArrows = false,
+  unoptimized = true, // Defaulting to true to save Vercel credits
 }: ScreenshotGridRotatorProps) {
   const fit: "cover" | "contain" =
     fitProp ?? (variant === "web" ? "contain" : "cover");
@@ -51,18 +53,18 @@ export default function ScreenshotGridRotator({
   const [currentSet, setCurrentSet] = useState(0);
   const intervalRef = useRef<number | null>(null);
 
-  // swipe state
+  // Swipe state
   const pointerIdRef = useRef<number | null>(null);
   const startXRef = useRef(0);
   const startYRef = useRef(0);
   const draggingRef = useRef(false);
 
-  // mount gate
+  // Mount gate
   useEffect(() => {
     if (!mounted) setMounted(true);
   }, [mounted]);
 
-  // responsive columns (app variant only)
+  // Responsive columns (app variant only)
   useEffect(() => {
     if (!mounted) return;
     if (variant === "web") {
@@ -89,7 +91,7 @@ export default function ScreenshotGridRotator({
   const next = () => goTo(currentSet + 1);
   const prev = () => goTo(currentSet - 1);
 
-  // auto-rotate
+  // Auto-rotate
   useEffect(() => {
     if (!mounted || images.length === 0) return;
 
@@ -108,9 +110,9 @@ export default function ScreenshotGridRotator({
       if (intervalRef.current) window.clearInterval(intervalRef.current);
       intervalRef.current = null;
     };
-  }, [mounted, images.length, imagesPerSet, intervalMs]);
+  }, [mounted, images.length, imagesPerSet, intervalMs, maxSets]);
 
-  // keyboard (web variant)
+  // Keyboard (web variant)
   useEffect(() => {
     if (variant !== "web" || !mounted) return;
     const onKey = (e: KeyboardEvent) => {
@@ -146,7 +148,7 @@ export default function ScreenshotGridRotator({
     );
   }
 
-  // swipe handlers
+  // Swipe handlers
   const onPointerDown: React.PointerEventHandler<HTMLDivElement> = (e) => {
     if (pointerIdRef.current !== null) return;
     pointerIdRef.current = e.pointerId;
@@ -191,7 +193,7 @@ export default function ScreenshotGridRotator({
           style={{
             aspectRatio: webAspect as CSSProperties["aspectRatio"],
           }}
-          className={`relative mx-auto w/full max-w-5xl overflow-hidden rounded-xl border border-white/10 bg-white/5 ${touchActionClass}`}
+          className={`relative mx-auto w-full max-w-5xl overflow-hidden rounded-xl border border-white/10 bg-white/5 ${touchActionClass}`}
           aria-live="polite"
           onPointerDown={onPointerDown}
           onPointerUp={onPointerUp}
@@ -206,6 +208,7 @@ export default function ScreenshotGridRotator({
             sizes={webSizes}
             priority
             draggable={false}
+            unoptimized={unoptimized} // Applied here
           />
 
           {showArrows && maxSets > 1 && (
@@ -258,18 +261,17 @@ export default function ScreenshotGridRotator({
         className={`grid gap-4 ${
           imagesPerSet === (cols.mobile ?? 2) ? "grid-cols-2" : "grid-cols-4"
         } ${touchActionClass}`}
-        aria-live="polite"
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
       >
         {visible.map((src, i) => (
           <div
-            key={`${start + i}-${typeof src === "string" ? src : src.src}`}
+            key={`${currentSet}-${i}`}
             style={{
               aspectRatio: aspect as CSSProperties["aspectRatio"],
             }}
-            className="relative overflow-hidden rounded-xl border border-white/10 bg-white/5"
+            className="relative overflow-hidden rounded-lg border border-white/10 bg-white/5"
           >
             <Image
               src={src}
@@ -278,24 +280,22 @@ export default function ScreenshotGridRotator({
               className={fit === "cover" ? "object-cover" : "object-contain"}
               style={{ objectPosition: objPos }}
               sizes={sizes}
-              priority={i === 0}
               draggable={false}
+              unoptimized={unoptimized} // Applied here
             />
           </div>
         ))}
       </div>
 
       {maxSets > 1 && (
-        <div className="mt-3 flex items-center justify-center gap-2">
+        <div className="mt-4 flex items-center justify-center gap-2">
           {Array.from({ length: maxSets }).map((_, idx) => (
             <button
               key={idx}
               aria-label={`Go to set ${idx + 1}`}
               onClick={() => goTo(idx)}
-              className={`h-2.5 w-2.5 rounded-full transition ${
-                idx === currentSet
-                  ? "bg-sky-400"
-                  : "bg-white/20 hover:bg-white/40"
+              className={`h-2 w-8 rounded-full transition ${
+                idx === currentSet ? "bg-sky-400" : "bg-white/10 hover:bg-white/20"
               }`}
             />
           ))}

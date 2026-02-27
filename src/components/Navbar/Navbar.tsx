@@ -49,7 +49,7 @@ export default function Navbar({ onTogglePause }: Props) {
   return (
     <div
       ref={menuRef}
-      className="fixed top-2.5 inset-x-0 z-[999] pointer-events-none"
+      className="fixed top-2.5 inset-x-0 z-999 pointer-events-none"
     >
       <div
         ref={topRowRef}
@@ -169,6 +169,29 @@ export default function Navbar({ onTogglePause }: Props) {
                   <Image
                     src={AppImages.watchlistr}
                     alt="Watchlistr Web"
+                    className="w-[26px] h-[26px] rounded-md transition-transform duration-200 group-hover:scale-[1.06]"
+                  />
+                </Link>
+
+                <Link
+                  href="/mps-web"
+                  title="Manzanos PopShop"
+                  onClick={handleNavClick}
+                  className="
+                    group relative grid h-12 w-12 place-items-center
+                    rounded-[14px]
+                    bg-white/70 dark:bg-neutral-900/70
+                    border border-neutral-200 dark:border-neutral-800
+                    backdrop-blur-md
+                    transition-all duration-200
+                    hover:scale-[1.04]
+                    hover:bg-white/80 dark:hover:bg-neutral-800/80
+                    ring-0 hover:ring-8 ring-sky-400/10
+                  "
+                >
+                  <Image
+                    src={AppImages.manzanosPopShop}
+                    alt="Manzanos PopShop"
                     className="w-[26px] h-[26px] rounded-md transition-transform duration-200 group-hover:scale-[1.06]"
                   />
                 </Link>
@@ -339,7 +362,7 @@ export default function Navbar({ onTogglePause }: Props) {
                 </Link>
 
                 <Link
-                  href="/manzanos-popshop"
+                  href="/mps-mobile"
                   title="Manzanos PopShop"
                   onClick={handleNavClick}
                   className="

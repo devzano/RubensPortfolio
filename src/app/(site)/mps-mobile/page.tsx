@@ -62,7 +62,7 @@ export default function Page({
         <p className="leading-relaxed">
           <strong>
             Shop, collect, and show off your favorite Funko Pops with{" "}
-            <span className="text-[color:var(--accent)]">Manzanos PopShop</span>
+            <span className="text-(--accent)">Manzanos PopShop</span>
           </strong>{" "}
           — a unique storefront powered by passion, built for collectors, and
           curated from a personal vault of iconic vinyl figures.
@@ -104,8 +104,8 @@ export default function Page({
         { src: AppImages.swiftui, alt: "SwiftUI", href: "https://developer.apple.com/xcode/swiftui/" },
         { src: AppImages.expo, alt: "Expo", href: "https://docs.expo.dev/" },
         { src: AppImages.firebase, alt: "Firebase", href: "https://firebase.google.com/" },
-        { src: AppImages.termsConditions, alt: "Terms", onClick: () => router.push("/manzanos-popshop/terms") },
-        { src: AppImages.privacyPolicy, alt: "Privacy", onClick: () => router.push("/manzanos-popshop/privacy") },
+        { src: AppImages.termsConditions, alt: "Terms", onClick: () => router.push("/mps-mobile/terms") },
+        { src: AppImages.privacyPolicy, alt: "Privacy", onClick: () => router.push("/mps-mobile/privacy") },
       ]}
     />
   );

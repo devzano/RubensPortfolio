@@ -70,7 +70,7 @@ export default function Page({
         <p className="leading-relaxed">
           <strong>
             Sharpen your mind with puzzles and classic board games —{" "}
-            <span className="text-[color:var(--accent)]">Logiqo</span>
+            <span className="text-(--accent)">Logiqo</span>
           </strong>{" "}
           brings together Sudoku, Word Search, Chess, Checkers, Minesweeper and
           more in a sleek, modern app.

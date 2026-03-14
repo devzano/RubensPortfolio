@@ -3,11 +3,11 @@
     "details": [
       {
         "appID": "RZB7U5UTY4.com.devzano.Logiqo",
-        "paths": ["*"]
+        "paths": ["/logiqo/*"]
       },
       {
         "appID": "RZB7U5UTY4.com.devzano.RecipeRealm",
-        "paths": ["*"]
+        "paths": ["/reciperealm/*"]
       },
       {
         "appID": "RZB7U5UTY4.com.devzano.EchoExpense",

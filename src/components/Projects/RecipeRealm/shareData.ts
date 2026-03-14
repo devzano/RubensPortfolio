@@ -8,6 +8,9 @@ export type RecipeShareRecord = {
   prepTime: string;
   cookTime: string;
   servings: string;
+  caloriesPerServing?: number;
+  proteinGramsPerServing?: number;
+  carbsGramsPerServing?: number;
   cuisine: string;
   ingredients: string[];
   steps: string[];
@@ -32,6 +35,9 @@ export const recipeShares: Record<string, RecipeShareRecord> = {
     prepTime: "15 min",
     cookTime: "30 min",
     servings: "4 servings",
+    caloriesPerServing: 540,
+    proteinGramsPerServing: 38,
+    carbsGramsPerServing: 14,
     cuisine: "Italian-Inspired",
     ingredients: [
       "4 boneless chicken thighs",
@@ -109,6 +115,9 @@ export async function fetchRecipeShare(slug: string): Promise<RecipeShareRecord 
       prepTime?: { stringValue?: string };
       cookTime?: { stringValue?: string };
       servings?: { stringValue?: string };
+      caloriesPerServing?: { integerValue?: string };
+      proteinGramsPerServing?: { doubleValue?: number; integerValue?: string };
+      carbsGramsPerServing?: { doubleValue?: number; integerValue?: string };
       cuisine?: { stringValue?: string };
       sourceURL?: { stringValue?: string };
       expiresAt?: { timestampValue?: string };
@@ -143,6 +152,17 @@ export async function fetchRecipeShare(slug: string): Promise<RecipeShareRecord 
     prepTime: firestoreString(fields.prepTime),
     cookTime: firestoreString(fields.cookTime),
     servings: firestoreString(fields.servings),
+    caloriesPerServing: fields.caloriesPerServing?.integerValue
+      ? Number(fields.caloriesPerServing.integerValue)
+      : undefined,
+    proteinGramsPerServing: fields.proteinGramsPerServing?.doubleValue
+      ?? (fields.proteinGramsPerServing?.integerValue
+        ? Number(fields.proteinGramsPerServing.integerValue)
+        : undefined),
+    carbsGramsPerServing: fields.carbsGramsPerServing?.doubleValue
+      ?? (fields.carbsGramsPerServing?.integerValue
+        ? Number(fields.carbsGramsPerServing.integerValue)
+        : undefined),
     cuisine: firestoreString(fields.cuisine),
     ingredients: firestoreArray(fields.ingredients),
     steps: firestoreArray(fields.steps),

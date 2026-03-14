@@ -65,6 +65,29 @@ export default function RecipeShareLanding({ recipe }: RecipeShareLandingProps) 
               </div>
             ))}
           </div>
+
+          {(recipe.caloriesPerServing || recipe.proteinGramsPerServing || recipe.carbsGramsPerServing) ? (
+            <div className="grid gap-3 sm:grid-cols-3">
+              {recipe.caloriesPerServing ? (
+                <div className="rounded-2xl border border-orange-300/15 bg-orange-400/8 px-4 py-4">
+                  <div className="text-xs uppercase tracking-[0.16em] text-orange-200/75">Calories</div>
+                  <div className="mt-2 text-lg font-semibold text-white">{recipe.caloriesPerServing} cal</div>
+                </div>
+              ) : null}
+              {recipe.proteinGramsPerServing ? (
+                <div className="rounded-2xl border border-rose-300/15 bg-rose-400/8 px-4 py-4">
+                  <div className="text-xs uppercase tracking-[0.16em] text-rose-200/75">Protein</div>
+                  <div className="mt-2 text-lg font-semibold text-white">{recipe.proteinGramsPerServing}g</div>
+                </div>
+              ) : null}
+              {recipe.carbsGramsPerServing ? (
+                <div className="rounded-2xl border border-sky-300/15 bg-sky-400/8 px-4 py-4">
+                  <div className="text-xs uppercase tracking-[0.16em] text-sky-200/75">Carbs</div>
+                  <div className="mt-2 text-lg font-semibold text-white">{recipe.carbsGramsPerServing}g</div>
+                </div>
+              ) : null}
+            </div>
+          ) : null}
         </header>
 
         <section className="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">

@@ -13,6 +13,7 @@ export type RecipeShareRecord = {
   steps: string[];
   badges: string[];
   sourceURL?: string;
+  expiresAt?: string;
 };
 
 const FIREBASE_PROJECT_ID = "reciperealm-800e8";
@@ -110,6 +111,7 @@ export async function fetchRecipeShare(slug: string): Promise<RecipeShareRecord 
       servings?: { stringValue?: string };
       cuisine?: { stringValue?: string };
       sourceURL?: { stringValue?: string };
+      expiresAt?: { timestampValue?: string };
       ingredients?: { arrayValue?: { values?: Array<{ stringValue?: string }> } };
       steps?: { arrayValue?: { values?: Array<{ stringValue?: string }> } };
       badges?: { arrayValue?: { values?: Array<{ stringValue?: string }> } };
@@ -123,6 +125,10 @@ export async function fetchRecipeShare(slug: string): Promise<RecipeShareRecord 
 
   const title = firestoreString(fields.title) || titleFromSlug(slug) || "Shared Recipe";
   const notes = firestoreString(fields.notes);
+  const expiresAt = fields.expiresAt?.timestampValue ?? "";
+  if (expiresAt && new Date(expiresAt).getTime() <= Date.now()) {
+    return null;
+  }
   const summary =
     firestoreString(fields.summary) ||
     (notes ? notes.slice(0, 220) : "Shared from RecipeRealm. Open in the app to review, edit, and save this recipe.");
@@ -142,6 +148,7 @@ export async function fetchRecipeShare(slug: string): Promise<RecipeShareRecord 
     steps: firestoreArray(fields.steps),
     badges: firestoreArray(fields.badges),
     sourceURL: firestoreString(fields.sourceURL) || undefined,
+    expiresAt: expiresAt || undefined,
   };
 }
 

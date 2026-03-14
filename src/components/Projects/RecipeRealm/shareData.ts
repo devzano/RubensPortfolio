@@ -1,10 +1,10 @@
 export type RecipeShareRecord = {
+  shareID?: string;
   slug: string;
   title: string;
   summary: string;
   notes?: string;
   image?: string;
-  imageData?: string;
   prepTime: string;
   cookTime: string;
   servings: string;
@@ -14,6 +14,9 @@ export type RecipeShareRecord = {
   badges: string[];
   sourceURL?: string;
 };
+
+const FIREBASE_PROJECT_ID = "reciperealm-800e8";
+const FIREBASE_API_KEY = "AIzaSyBDU7x6DDX-k6ogBsw-Ru2qNlOfw1b-zoU";
 
 export const recipeShares: Record<string, RecipeShareRecord> = {
   "creamy-tuscan-chicken-a1b2c3": {
@@ -53,40 +56,12 @@ export const recipeShares: Record<string, RecipeShareRecord> = {
   },
 };
 
-export function getRecipeShare(slug: string): RecipeShareRecord | null {
-  return recipeShares[slug] ?? null;
+function firestoreString(field?: { stringValue?: string }): string {
+  return field?.stringValue ?? "";
 }
 
-type ShareSearchParams = Record<string, string | string[] | undefined>;
-
-const badgeMap = [
-  { key: "gf", label: "Gluten Free" },
-  { key: "sf", label: "Sugar Free" },
-  { key: "df", label: "Dairy Free" },
-  { key: "gm", label: "GMO Free" },
-  { key: "og", label: "Organic" },
-  { key: "vg", label: "Vegetarian" },
-  { key: "pf", label: "Peanut Free" },
-  { key: "nf", label: "Nut Free" },
-  { key: "ef", label: "Egg Free" },
-  { key: "tf", label: "No Trans Fat" },
-  { key: "cf", label: "Corn Free" },
-  { key: "sy", label: "Soy Free" },
-];
-
-function readSearchParam(params: ShareSearchParams, key: string): string {
-  const value = params[key];
-  if (Array.isArray(value)) {
-    return value[0] ?? "";
-  }
-  return value ?? "";
-}
-
-function splitLines(value: string): string[] {
-  return value
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean);
+function firestoreArray(field?: { arrayValue?: { values?: Array<{ stringValue?: string }> } }): string[] {
+  return field?.arrayValue?.values?.map((value) => value.stringValue ?? "").filter(Boolean) ?? [];
 }
 
 function titleFromSlug(slug: string): string {
@@ -97,105 +72,87 @@ function titleFromSlug(slug: string): string {
     .join(" ");
 }
 
-export function resolveRecipeShare(
-  slug: string,
-  searchParams: ShareSearchParams
-): RecipeShareRecord | null {
-  const title = readSearchParam(searchParams, "t");
-  const prepTime = readSearchParam(searchParams, "pt");
-  const cookTime = readSearchParam(searchParams, "ct");
-  const servings = readSearchParam(searchParams, "sv");
-  const cuisine = readSearchParam(searchParams, "cu");
-  const ingredients = splitLines(readSearchParam(searchParams, "ing"));
-  const steps = splitLines(readSearchParam(searchParams, "st"));
-  const notes = readSearchParam(searchParams, "nt");
-  const sourceURL = readSearchParam(searchParams, "src");
-  const image = readSearchParam(searchParams, "img");
-  const imageData = readSearchParam(searchParams, "imgd");
+export function extractShareID(slug: string): string | null {
+  const parts = slug.split("--");
+  const shareID = parts.at(-1)?.trim();
+  return shareID ? shareID : null;
+}
 
-  if (
-    !title &&
-    !prepTime &&
-    !cookTime &&
-    !servings &&
-    !cuisine &&
-    !notes &&
-    !sourceURL &&
-    !image &&
-    !imageData &&
-    ingredients.length === 0 &&
-    steps.length === 0
-  ) {
+export function getRecipeShare(slug: string): RecipeShareRecord | null {
+  return recipeShares[slug] ?? null;
+}
+
+export async function fetchRecipeShare(slug: string): Promise<RecipeShareRecord | null> {
+  const shareID = extractShareID(slug);
+  if (!shareID) {
     return getRecipeShare(slug);
   }
 
-  const badges = badgeMap
-    .filter((item) => readSearchParam(searchParams, item.key) === "1")
-    .map((item) => item.label);
+  const endpoint = `https://firestore.googleapis.com/v1/projects/${FIREBASE_PROJECT_ID}/databases/(default)/documents/recipeShares/${shareID}?key=${FIREBASE_API_KEY}`;
+  const response = await fetch(endpoint, {
+    next: { revalidate: 0 },
+    cache: "no-store",
+  });
 
-  const summary = notes
-    ? notes.slice(0, 220)
-    : "Shared from RecipeRealm. Open in the app to review, edit, and save this recipe.";
+  if (!response.ok) {
+    return getRecipeShare(slug);
+  }
+
+  const json = (await response.json()) as {
+    fields?: {
+      slug?: { stringValue?: string };
+      title?: { stringValue?: string };
+      summary?: { stringValue?: string };
+      notes?: { stringValue?: string };
+      imageURL?: { stringValue?: string };
+      prepTime?: { stringValue?: string };
+      cookTime?: { stringValue?: string };
+      servings?: { stringValue?: string };
+      cuisine?: { stringValue?: string };
+      sourceURL?: { stringValue?: string };
+      ingredients?: { arrayValue?: { values?: Array<{ stringValue?: string }> } };
+      steps?: { arrayValue?: { values?: Array<{ stringValue?: string }> } };
+      badges?: { arrayValue?: { values?: Array<{ stringValue?: string }> } };
+    };
+  };
+
+  const fields = json.fields;
+  if (!fields) {
+    return getRecipeShare(slug);
+  }
+
+  const title = firestoreString(fields.title) || titleFromSlug(slug) || "Shared Recipe";
+  const notes = firestoreString(fields.notes);
+  const summary =
+    firestoreString(fields.summary) ||
+    (notes ? notes.slice(0, 220) : "Shared from RecipeRealm. Open in the app to review, edit, and save this recipe.");
 
   return {
-    slug,
-    title: title || titleFromSlug(slug) || "Shared Recipe",
+    shareID,
+    slug: firestoreString(fields.slug) || slug,
+    title,
     summary,
     notes: notes || undefined,
-    prepTime,
-    cookTime,
-    servings,
-    cuisine,
-    ingredients,
-    steps,
-    badges,
-    sourceURL: sourceURL || undefined,
-    image: imageData ? `data:image/jpeg;base64,${imageData}` : image || undefined,
-    imageData: imageData || undefined,
+    image: firestoreString(fields.imageURL) || undefined,
+    prepTime: firestoreString(fields.prepTime),
+    cookTime: firestoreString(fields.cookTime),
+    servings: firestoreString(fields.servings),
+    cuisine: firestoreString(fields.cuisine),
+    ingredients: firestoreArray(fields.ingredients),
+    steps: firestoreArray(fields.steps),
+    badges: firestoreArray(fields.badges),
+    sourceURL: firestoreString(fields.sourceURL) || undefined,
   };
 }
 
-function appendParam(params: URLSearchParams, key: string, value?: string) {
-  if (!value) return;
-  const trimmed = value.trim();
-  if (trimmed) params.set(key, trimmed);
-}
-
-export function buildRecipeShareSearchParams(recipe: RecipeShareRecord): URLSearchParams {
-  const params = new URLSearchParams();
-
-  appendParam(params, "t", recipe.title);
-  appendParam(params, "pt", recipe.prepTime);
-  appendParam(params, "ct", recipe.cookTime);
-  appendParam(params, "sv", recipe.servings);
-  appendParam(params, "cu", recipe.cuisine);
-  appendParam(params, "ing", recipe.ingredients.join("\n"));
-  appendParam(params, "st", recipe.steps.join("\n"));
-  appendParam(params, "nt", recipe.notes ?? recipe.summary);
-  appendParam(params, "src", recipe.sourceURL);
-  if (recipe.imageData) {
-    appendParam(params, "imgd", recipe.imageData);
-  } else {
-    appendParam(params, "img", recipe.image);
-  }
-
-  badgeMap.forEach((badge) => {
-    if (recipe.badges.includes(badge.label)) {
-      params.set(badge.key, "1");
-    }
-  });
-
-  return params;
-}
-
 export function buildRecipeShareURL(recipe: RecipeShareRecord): string {
-  const query = buildRecipeShareSearchParams(recipe).toString();
-
-  return query
-    ? `https://www.rubenmanzano.com/reciperealm/${recipe.slug}?${query}`
-    : `https://www.rubenmanzano.com/reciperealm/${recipe.slug}`;
+  return `https://rubenmanzano.com/reciperealm/${recipe.slug}`;
 }
 
 export function buildRecipeDeepLink(recipe: RecipeShareRecord): string {
-  return `RecipeRealm://app/recipe?${buildRecipeShareSearchParams(recipe).toString()}`;
+  if (recipe.shareID) {
+    return `RecipeRealm://app/recipe?shareId=${encodeURIComponent(recipe.shareID)}`;
+  }
+
+  return `https://rubenmanzano.com/reciperealm/${recipe.slug}`;
 }

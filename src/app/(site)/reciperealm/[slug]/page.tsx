@@ -3,18 +3,16 @@ import { notFound } from "next/navigation";
 import RecipeShareLanding from "@/components/Projects/RecipeRealm/RecipeShareLanding";
 import {
   buildRecipeShareURL,
-  resolveRecipeShare,
+  fetchRecipeShare,
 } from "@/components/Projects/RecipeRealm/shareData";
 
 type PageProps = {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
 
-export async function generateMetadata({ params, searchParams }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const resolvedSearchParams = await searchParams;
-  const recipe = resolveRecipeShare(slug, resolvedSearchParams);
+  const recipe = await fetchRecipeShare(slug);
 
   if (!recipe) {
     return {
@@ -53,10 +51,9 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
   };
 }
 
-export default async function RecipeSharePage({ params, searchParams }: PageProps) {
+export default async function RecipeSharePage({ params }: PageProps) {
   const { slug } = await params;
-  const resolvedSearchParams = await searchParams;
-  const recipe = resolveRecipeShare(slug, resolvedSearchParams);
+  const recipe = await fetchRecipeShare(slug);
 
   if (!recipe) {
     notFound();

@@ -4,6 +4,7 @@ export type RecipeShareRecord = {
   summary: string;
   notes?: string;
   image?: string;
+  imageData?: string;
   prepTime: string;
   cookTime: string;
   servings: string;
@@ -110,6 +111,7 @@ export function resolveRecipeShare(
   const notes = readSearchParam(searchParams, "nt");
   const sourceURL = readSearchParam(searchParams, "src");
   const image = readSearchParam(searchParams, "img");
+  const imageData = readSearchParam(searchParams, "imgd");
 
   if (
     !title &&
@@ -120,6 +122,7 @@ export function resolveRecipeShare(
     !notes &&
     !sourceURL &&
     !image &&
+    !imageData &&
     ingredients.length === 0 &&
     steps.length === 0
   ) {
@@ -147,7 +150,8 @@ export function resolveRecipeShare(
     steps,
     badges,
     sourceURL: sourceURL || undefined,
-    image: image || undefined,
+    image: imageData ? `data:image/jpeg;base64,${imageData}` : image || undefined,
+    imageData: imageData || undefined,
   };
 }
 
@@ -169,7 +173,11 @@ export function buildRecipeShareSearchParams(recipe: RecipeShareRecord): URLSear
   appendParam(params, "st", recipe.steps.join("\n"));
   appendParam(params, "nt", recipe.notes ?? recipe.summary);
   appendParam(params, "src", recipe.sourceURL);
-  appendParam(params, "img", recipe.image);
+  if (recipe.imageData) {
+    appendParam(params, "imgd", recipe.imageData);
+  } else {
+    appendParam(params, "img", recipe.image);
+  }
 
   badgeMap.forEach((badge) => {
     if (recipe.badges.includes(badge.label)) {

@@ -27,6 +27,8 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
   const description =
     recipe.summary ||
     "Shared from RecipeRealm. Open in the app to review, edit, and save this recipe.";
+  const metadataImage =
+    recipe.image && !recipe.image.startsWith("data:") ? recipe.image : undefined;
 
   return {
     title: `${recipe.title} | RecipeRealm`,
@@ -38,15 +40,15 @@ export async function generateMetadata({ params, searchParams }: PageProps): Pro
       url,
       siteName: "RecipeRealm",
       type: "article",
-      images: recipe.image
-        ? [{ url: recipe.image, width: 1400, height: 900, alt: recipe.title }]
+      images: metadataImage
+        ? [{ url: metadataImage, width: 1400, height: 900, alt: recipe.title }]
         : undefined,
     },
     twitter: {
-      card: recipe.image ? "summary_large_image" : "summary",
+      card: metadataImage ? "summary_large_image" : "summary",
       title: `${recipe.title} | RecipeRealm`,
       description,
-      images: recipe.image ? [recipe.image] : undefined,
+      images: metadataImage ? [metadataImage] : undefined,
     },
   };
 }

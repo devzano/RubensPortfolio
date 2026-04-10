@@ -4,137 +4,151 @@
 import React from "react";
 import DocShell from "../LegalDocShell";
 
-const LAST_UPDATED = "July 20, 2024";
+const LAST_UPDATED = "April 2026";
 const SUPPORT_EMAIL = "rmanzano.se@gmail.com";
 
-export default function Privacy() {
+export default function Terms() {
   return (
-    <DocShell title="Privacy Policy" lastUpdated={LAST_UPDATED}>
+    <DocShell title="Terms of Service" lastUpdated={LAST_UPDATED}>
       <p>
-        This Privacy Policy applies to the EchoExpense mobile application
-        (&ldquo;Application&rdquo;) created by devzano (&ldquo;Service Provider&rdquo;) as an
-        ad-supported service. The Application is provided for use &ldquo;AS IS.&rdquo;
+        These Terms apply to the EchoExpense mobile application
+        (&ldquo;Application&rdquo;) operated by Ruben Manzano (operating as
+        Devzano) (&ldquo;Service Provider&rdquo;).
       </p>
+
+      <p className="mt-3">By using the Application, you agree to these Terms.</p>
 
       <div>
         <h2 className="mb-2 text-lg font-semibold text-slate-100">
-          1. Information Collection and Use
+          1. License &amp; Restrictions
         </h2>
-        <p>The Application may collect certain information automatically when you use it, including:</p>
+        <p>You may not:</p>
         <ul className="list-disc space-y-2 pl-6 marker:text-sky-400">
-          <li>Your device’s Internet Protocol (IP) address</li>
-          <li>Pages you visit in the Application and timestamps</li>
-          <li>Time spent on pages and overall session duration</li>
-          <li>Your device’s operating system</li>
+          <li>Copy, modify, or distribute the Application</li>
+          <li>Reverse engineer or extract source code</li>
+          <li>Create derivative works</li>
         </ul>
         <p className="mt-3">
-          For an enhanced experience, the Application may request personally identifiable information (e.g., your
-          email address such as {SUPPORT_EMAIL}). Any such information is retained and used as described in this Policy.
+          All intellectual property remains the property of the Service
+          Provider.
         </p>
       </div>
 
       <div>
-        <h2 className="mb-2 text-lg font-semibold text-slate-100">2. Location Data</h2>
+        <h2 className="mb-2 text-lg font-semibold text-slate-100">
+          2. Financial Features (Plaid)
+        </h2>
         <p>
-          The Application does <span className="font-semibold text-slate-100">not</span> collect precise (GPS) location.
-          It may gather approximate location to:
+          The Application integrates with Plaid Inc. to enable financial account
+          connectivity.
         </p>
+        <p className="mt-3">By using these features:</p>
         <ul className="list-disc space-y-2 pl-6 marker:text-sky-400">
-          <li><strong className="text-slate-100">Geolocation services:</strong> provide relevant content and features</li>
-          <li><strong className="text-slate-100">Analytics &amp; improvements:</strong> analyze trends and performance</li>
-          <li><strong className="text-slate-100">Third-party services:</strong> occasionally send anonymized data to improve the Application</li>
+          <li>You authorize Plaid to access your financial account data on your behalf</li>
+          <li>You agree to Plaid&rsquo;s Terms and Privacy Policy</li>
+          <li>The Service Provider does not store your banking credentials</li>
+        </ul>
+        <p className="mt-3">
+          Plaid Terms:{" "}
+          <a
+            href="https://plaid.com/legal/"
+            target="_blank"
+            rel="noreferrer"
+            className="text-sky-400 underline-offset-4 hover:underline"
+          >
+            https://plaid.com/legal/
+          </a>
+        </p>
+      </div>
+
+      <div>
+        <h2 className="mb-2 text-lg font-semibold text-slate-100">
+          3. Data &amp; Device Security
+        </h2>
+        <p>The Application processes data to provide its services. You are responsible for:</p>
+        <ul className="list-disc space-y-2 pl-6 marker:text-sky-400">
+          <li>Maintaining the security of your device</li>
+          <li>Protecting access to your account</li>
+        </ul>
+        <p className="mt-3">
+          Use of compromised devices (e.g., jailbroken/rooted) may impact
+          security.
+        </p>
+      </div>
+
+      <div>
+        <h2 className="mb-2 text-lg font-semibold text-slate-100">
+          4. Third-Party Services
+        </h2>
+        <p>The Application relies on third-party services:</p>
+        <ul className="list-disc space-y-2 pl-6 marker:text-sky-400">
+          <li>Firebase / Google Cloud — infrastructure</li>
+          <li>Plaid — financial integration</li>
+          <li>Google AdMob — advertising</li>
         </ul>
       </div>
 
       <div>
-        <h2 className="mb-2 text-lg font-semibold text-slate-100">3. Communications</h2>
+        <h2 className="mb-2 text-lg font-semibold text-slate-100">
+          5. Connectivity &amp; Charges
+        </h2>
         <p>
-          The Service Provider may use information you provide to contact you with important notices, required
-          communications, or promotions related to the Application.
+          Some features require an internet connection. The Service Provider is
+          not responsible for connectivity issues or data charges.
         </p>
       </div>
 
       <div>
-        <h2 className="mb-2 text-lg font-semibold text-slate-100">4. Third-Party Access &amp; Services</h2>
+        <h2 className="mb-2 text-lg font-semibold text-slate-100">
+          6. Responsibility &amp; Availability
+        </h2>
         <p>
-          Only aggregated and anonymized data may be shared with external services to help improve the Application.
-          The Application also uses third-party services with their own privacy policies:
+          The Application is provided &ldquo;AS IS.&rdquo; While efforts are
+          made to maintain accuracy and availability, the Service Provider is
+          not liable for:
         </p>
         <ul className="list-disc space-y-2 pl-6 marker:text-sky-400">
-          <li>Google AdMob — ads</li>
+          <li>Service interruptions</li>
+          <li>Data inaccuracies from third parties</li>
         </ul>
       </div>
 
       <div>
-        <h2 className="mb-2 text-lg font-semibold text-slate-100">5. Disclosure of Information</h2>
-        <p>Information may be disclosed:</p>
+        <h2 className="mb-2 text-lg font-semibold text-slate-100">
+          7. Updates &amp; Termination
+        </h2>
+        <p>The Service Provider may:</p>
         <ul className="list-disc space-y-2 pl-6 marker:text-sky-400">
-          <li>As required by law (e.g., subpoena or similar legal process)</li>
-          <li>To protect rights, safety, investigate fraud, or respond to government requests</li>
-          <li>To trusted providers working on our behalf under confidentiality obligations</li>
+          <li>Update the Application</li>
+          <li>Modify or discontinue features</li>
         </ul>
-      </div>
-
-      <div>
-        <h2 className="mb-2 text-lg font-semibold text-slate-100">6. Opt-Out Rights</h2>
-        <p>
-          You can stop all information collection by uninstalling the Application using your device’s standard
-          uninstall process or the application marketplace.
+        <p className="mt-3">
+          Upon termination, your rights to use the Application end.
         </p>
       </div>
 
       <div>
-        <h2 className="mb-2 text-lg font-semibold text-slate-100">7. Data Retention</h2>
+        <h2 className="mb-2 text-lg font-semibold text-slate-100">
+          8. Changes to Terms
+        </h2>
         <p>
-          User-provided data is retained while you use the Application and for a reasonable time thereafter. To request
-          deletion of data you provided, email{" "}
-          <a href={`mailto:${SUPPORT_EMAIL}`} className="text-sky-400 underline-offset-4 hover:underline">
+          These Terms may be updated periodically. Continued use indicates
+          acceptance.
+        </p>
+      </div>
+
+      <div>
+        <h2 className="mb-2 text-lg font-semibold text-slate-100">
+          9. Contact
+        </h2>
+        <p>
+          For questions:{" "}
+          <a
+            href={`mailto:${SUPPORT_EMAIL}`}
+            className="text-sky-400 underline-offset-4 hover:underline"
+          >
             {SUPPORT_EMAIL}
           </a>
-          . We will respond within a reasonable timeframe.
-        </p>
-      </div>
-
-      <div>
-        <h2 className="mb-2 text-lg font-semibold text-slate-100">8. Children’s Privacy</h2>
-        <p>
-          The Application is not intended for children under 13, and we do not knowingly collect personal information
-          from them. If you believe a child has provided such information, contact us to delete it promptly.
-        </p>
-      </div>
-
-      <div>
-        <h2 className="mb-2 text-lg font-semibold text-slate-100">9. Security</h2>
-        <p>
-          We use reasonable physical, electronic, and procedural safeguards to protect information processed and
-          maintained by the Application.
-        </p>
-      </div>
-
-      <div>
-        <h2 className="mb-2 text-lg font-semibold text-slate-100">10. Changes to this Policy</h2>
-        <p>
-          This Privacy Policy may be updated periodically. Updates will be posted on this page and/or in-app.
-          Continued use signifies acceptance of the revised Policy.
-        </p>
-      </div>
-
-      <div>
-        <h2 className="mb-2 text-lg font-semibold text-slate-100">11. Your Consent</h2>
-        <p>
-          By using the Application, you consent to the processing of your information as outlined here, including
-          future amendments.
-        </p>
-      </div>
-
-      <div>
-        <h2 className="mb-2 text-lg font-semibold text-slate-100">12. Contact Us</h2>
-        <p>
-          Questions about this Privacy Policy? Contact{" "}
-          <a href={`mailto:${SUPPORT_EMAIL}`} className="text-sky-400 underline-offset-4 hover:underline">
-            {SUPPORT_EMAIL}
-          </a>
-          .
         </p>
       </div>
     </DocShell>

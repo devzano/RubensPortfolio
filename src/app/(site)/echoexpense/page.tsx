@@ -111,8 +111,7 @@ export default function Page({
           <strong className="text-slate-100">Smart notifications:</strong> Choose alert times and get last-chance reminders.
         </>,
         <>
-          <strong className="text-slate-100">Profile insights:</strong> Photo/initials, totals for remaining/paid, and quick
-          account management.
+          <strong className="text-slate-100">Profile insights:</strong> Photo/initials, totals for remaining/paid, and quick account management.
         </>,
         <>
           <strong className="text-slate-100">Secure sign-in:</strong> Apple/Google auth and an intuitive, modern UI.
@@ -125,6 +124,7 @@ export default function Page({
         { src: AppImages.firebase, alt: "Firebase", href: "https://firebase.google.com/" },
         { src: AppImages.termsConditions, alt: "Terms", onClick: () => router.push("/echoexpense/terms") },
         { src: AppImages.privacyPolicy, alt: "Privacy", onClick: () => router.push("/echoexpense/privacy") },
+        { src: AppImages.termsConditions, alt: "Security", onClick: () => router.push("/echoexpense/security") },
       ]}
     />
   );

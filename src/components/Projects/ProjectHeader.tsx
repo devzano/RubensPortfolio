@@ -77,8 +77,12 @@ export default function ProjectHeader({
   icon,
   iconAlt,
 }: ProjectHeaderProps) {
+  const titlePillClass =
+    "group relative inline-flex max-w-full items-center justify-center overflow-hidden rounded-full border px-6 py-3 shadow-[0_18px_40px_rgba(0,0,0,0.34)] ring-1 backdrop-blur-xl";
+  const titleTextClass =
+    "relative z-[1] whitespace-nowrap text-2xl font-semibold tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.55)] sm:text-3xl";
   const iconNode = icon ? (
-    <span className="mr-2 inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-white/10 shadow-sm">
+    <span className="relative z-[1] mr-2 inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-white/10 shadow-sm">
       <Image
         src={icon}
         alt={iconAlt ?? `${title} icon`}
@@ -137,13 +141,38 @@ export default function ProjectHeader({
                 href={titleLink}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group inline-flex max-w-full items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 py-3 shadow-lg shadow-black/20 ring-1 ring-white/10 backdrop-blur-md"
+                className={titlePillClass}
+                style={{
+                  borderColor: "color-mix(in srgb, var(--accent) 18%, rgba(255,255,255,0.16))",
+                  background:
+                    "linear-gradient(180deg, rgba(8,12,20,0.74), rgba(8,12,20,0.62))",
+                  boxShadow:
+                    "0 18px 40px rgba(0,0,0,0.36), inset 0 1px 0 rgba(255,255,255,0.10), inset 0 0 0 1px rgba(255,255,255,0.04)",
+                }}
               >
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-[1px] rounded-full"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02) 36%, rgba(255,255,255,0.01))",
+                  }}
+                />
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-y-1 left-6 w-28 rounded-full blur-2xl"
+                  style={{
+                    background:
+                      "radial-gradient(circle at center, var(--accent-soft), transparent 72%)",
+                    opacity: 0.75,
+                  }}
+                />
                 {iconNode}
                 <span
-                  className="bg-clip-text text-transparent text-2xl font-semibold tracking-tight sm:text-3xl whitespace-nowrap"
+                  className={titleTextClass}
                   style={{
-                    backgroundImage: `linear-gradient(135deg, var(--accent-light), var(--accent), var(--accent-deep))`,
+                    textShadow:
+                      "0 2px 10px rgba(0,0,0,0.58), 0 0 18px color-mix(in srgb, var(--accent) 24%, transparent)",
                   }}
                 >
                   {title}
@@ -151,7 +180,7 @@ export default function ProjectHeader({
                 <svg
                   aria-hidden="true"
                   viewBox="0 0 24 24"
-                  className="ml-2 hidden h-4 w-4 opacity-60 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:opacity-100 sm:block"
+                  className="relative z-[1] ml-2 hidden h-4 w-4 text-white/70 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-white sm:block"
                 >
                   <path
                     d="M7 17L17 7M9 7h8v8"
@@ -169,12 +198,39 @@ export default function ProjectHeader({
                 />
               </a>
             ) : (
-              <span className="relative inline-flex max-w-full items-center justify-center rounded-full border border-white/10 bg-white/5 px-6 py-3 shadow-lg shadow-black/20 ring-1 ring-white/10 backdrop-blur-md">
+              <span
+                className={titlePillClass}
+                style={{
+                  borderColor: "color-mix(in srgb, var(--accent) 18%, rgba(255,255,255,0.16))",
+                  background:
+                    "linear-gradient(180deg, rgba(8,12,20,0.74), rgba(8,12,20,0.62))",
+                  boxShadow:
+                    "0 18px 40px rgba(0,0,0,0.36), inset 0 1px 0 rgba(255,255,255,0.10), inset 0 0 0 1px rgba(255,255,255,0.04)",
+                }}
+              >
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-[1px] rounded-full"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02) 36%, rgba(255,255,255,0.01))",
+                  }}
+                />
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-y-1 left-6 w-28 rounded-full blur-2xl"
+                  style={{
+                    background:
+                      "radial-gradient(circle at center, var(--accent-soft), transparent 72%)",
+                    opacity: 0.75,
+                  }}
+                />
                 {iconNode}
                 <span
-                  className="bg-clip-text text-transparent text-2xl font-semibold tracking-tight sm:text-3xl whitespace-nowrap"
+                  className={titleTextClass}
                   style={{
-                    backgroundImage: `linear-gradient(135deg, var(--accent-light), var(--accent), var(--accent-deep))`,
+                    textShadow:
+                      "0 2px 10px rgba(0,0,0,0.58), 0 0 18px color-mix(in srgb, var(--accent) 24%, transparent)",
                   }}
                 >
                   {title}

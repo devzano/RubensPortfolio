@@ -65,10 +65,9 @@ export default function ProjectsMenuCTA({ items }: { items: readonly ProjectItem
                 {/* soft UFO ring on hover */}
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-0 rounded-2xl ring-0 ring-sky-400/0
+                  className="pointer-events-none absolute inset-0 rounded-2xl ring-0 ring-transparent
                              transition-all duration-300
-                             group-hover:ring-8 group-hover:ring-sky-400/10
-                             dark:group-hover:ring-sky-300/10"
+                             group-hover:ring-8 group-hover:ring-[var(--accent-soft)]"
                 />
               </Link>
 

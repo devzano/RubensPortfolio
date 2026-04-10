@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:nodemon": "nodemon --watch src --watch public --watch next.config.ts --watch package.json --ext ts,tsx,js,jsx,mjs,css --exec \"next dev --turbopack\"",
     "build": "next build --turbopack",
     "start": "next start",
     "lint": "eslint"
@@ -12,6 +13,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.575.0",
     "next": "16.0.7",
+    "nodemailer": "^8.0.5",
     "react": "19.2.1",
     "react-dom": "19.2.1",
     "three": "^0.180.0"
@@ -20,11 +22,13 @@
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/nodemailer": "^8.0.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.180.0",
     "eslint": "^9",
     "eslint-config-next": "15.5.3",
+    "nodemon": "^3.1.14",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

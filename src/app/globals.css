@@ -26,9 +26,69 @@
     50% { transform: translateY(-12px) }
     100% { transform: translateY(0) }
   }
+  @keyframes screenshot-stage-in-next {
+    0% { opacity: 0; transform: translate3d(38px, 0, 0) scale(0.988); filter: blur(10px) }
+    100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0) }
+  }
+  @keyframes screenshot-stage-in-prev {
+    0% { opacity: 0; transform: translate3d(-38px, 0, 0) scale(0.988); filter: blur(10px) }
+    100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0) }
+  }
+  @keyframes screenshot-stage-out-next {
+    0% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0) }
+    100% { opacity: 0; transform: translate3d(-26px, 0, 0) scale(1.01); filter: blur(12px) }
+  }
+  @keyframes screenshot-stage-out-prev {
+    0% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0) }
+    100% { opacity: 0; transform: translate3d(26px, 0, 0) scale(1.01); filter: blur(12px) }
+  }
+  @keyframes screenshot-card-in {
+    0% { opacity: 0; transform: translate3d(0, 16px, 0) scale(0.985) }
+    100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1) }
+  }
+  @keyframes screenshot-media-pan {
+    0% { transform: scale(1.018) }
+    100% { transform: scale(1) }
+  }
   .hover\:alien-float:hover { animation: alien-float 1.6s ease-in-out infinite }
+  .screenshot-stage-in-next {
+    animation: screenshot-stage-in-next 760ms cubic-bezier(0.18, 0.8, 0.2, 1) both;
+    will-change: transform, opacity, filter;
+  }
+  .screenshot-stage-in-prev {
+    animation: screenshot-stage-in-prev 760ms cubic-bezier(0.18, 0.8, 0.2, 1) both;
+    will-change: transform, opacity, filter;
+  }
+  .screenshot-stage-out-next {
+    animation: screenshot-stage-out-next 760ms cubic-bezier(0.22, 0.0, 0.2, 1) both;
+    will-change: transform, opacity, filter;
+  }
+  .screenshot-stage-out-prev {
+    animation: screenshot-stage-out-prev 760ms cubic-bezier(0.22, 0.0, 0.2, 1) both;
+    will-change: transform, opacity, filter;
+  }
+  .screenshot-card-in {
+    opacity: 0;
+    animation: screenshot-card-in 620ms cubic-bezier(0.18, 0.8, 0.2, 1) both;
+    will-change: transform, opacity;
+  }
+  .screenshot-media-pan {
+    animation: screenshot-media-pan 1400ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+    will-change: transform;
+  }
   @media (prefers-reduced-motion: reduce) {
     .hover\:alien-float:hover { animation: none; transform: translateY(-0.375rem) } /* -6px */
+    .screenshot-stage-in-next,
+    .screenshot-stage-in-prev,
+    .screenshot-stage-out-next,
+    .screenshot-stage-out-prev,
+    .screenshot-card-in,
+    .screenshot-media-pan {
+      animation: none;
+      transform: none;
+      filter: none;
+      opacity: 1;
+    }
   }
 }
 
@@ -45,7 +105,7 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), sans-serif;
 }
 
 /* -------------------------------

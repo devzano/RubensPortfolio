@@ -62,7 +62,7 @@ export default function Page({
         <p className="leading-relaxed">
           <strong>
             Shop, collect, and show off your favorite Funko Pops with{" "}
-            <span className="text-(--accent)">Manzanos PopShop</span>
+            <span className="text-[color:var(--accent)]">Manzanos PopShop</span>
           </strong>{" "}
           — a unique storefront powered by passion, built for collectors, and
           curated from a personal vault of iconic vinyl figures.

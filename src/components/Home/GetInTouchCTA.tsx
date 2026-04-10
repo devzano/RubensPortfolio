@@ -46,7 +46,7 @@ export default function GetInTouchCTA() {
             />
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-0 rounded-2xl ring-0 ring-sky-400/0 transition-all duration-300 group-hover:ring-8 group-hover:ring-sky-400/10 dark:group-hover:ring-sky-300/10"
+              className="pointer-events-none absolute inset-0 rounded-2xl ring-0 ring-transparent transition-all duration-300 group-hover:ring-8 group-hover:ring-[var(--accent-soft)]"
             />
           </button>
 
@@ -105,7 +105,7 @@ export default function GetInTouchCTA() {
             />
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-0 rounded-2xl ring-0 ring-sky-400/0 transition-all duration-300 group-hover:ring-8 group-hover:ring-sky-400/10 dark:group-hover:ring-sky-300/10"
+              className="pointer-events-none absolute inset-0 rounded-2xl ring-0 ring-transparent transition-all duration-300 group-hover:ring-8 group-hover:ring-[var(--accent-soft)]"
             />
           </a>
           <span className="mt-1.5 h-4 text-[11px] sm:text-xs text-neutral-600 dark:text-neutral-400">
@@ -121,7 +121,7 @@ export default function GetInTouchCTA() {
             rel="noopener noreferrer"
             aria-label="Open LinkedIn profile"
             title="LinkedIn"
-            className="group relative grid aspect-square h-16 w-16 place-items-center rounded-2xl bg-white/70 dark:bg-neutral-900/70 hover:bg-neutral-100/70 dark:hover:bg-neutral-800/60 transition shadow-sm hover:shadow-md focus-visible:outline-none0"
+            className="group relative grid aspect-square h-16 w-16 place-items-center rounded-2xl bg-white/70 dark:bg-neutral-900/70 hover:bg-neutral-100/70 dark:hover:bg-neutral-800/60 transition shadow-sm hover:shadow-md focus-visible:outline-none"
           >
             <Image
               src={AppImages.linkedin}
@@ -132,7 +132,7 @@ export default function GetInTouchCTA() {
             />
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-0 rounded-2xl ring-0 ring-sky-400/0 transition-all duration-300 group-hover:ring-8 group-hover:ring-sky-400/10 dark:group-hover:ring-sky-300/10"
+              className="pointer-events-none absolute inset-0 rounded-2xl ring-0 ring-transparent transition-all duration-300 group-hover:ring-8 group-hover:ring-[var(--accent-soft)]"
             />
           </a>
           <span className="mt-1.5 h-4 text-[11px] sm:text-xs text-neutral-600 dark:text-neutral-400">

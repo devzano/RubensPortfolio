@@ -5,9 +5,12 @@ import Link from "next/link";
 import Image from "next/image";
 import AppImages from "@/constants/images";
 
-type Props = { onTogglePause: () => void; };
+type Props = {
+  isPaused: boolean;
+  onTogglePause: () => void;
+};
 
-export default function Navbar({ onTogglePause }: Props) {
+export default function Navbar({ isPaused, onTogglePause }: Props) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const menuRef = useRef<HTMLDivElement | null>(null);
   const topRowRef = useRef<HTMLDivElement | null>(null);
@@ -49,7 +52,7 @@ export default function Navbar({ onTogglePause }: Props) {
   return (
     <div
       ref={menuRef}
-      className="fixed top-2.5 inset-x-0 z-999 pointer-events-none"
+      className="fixed inset-x-0 top-2.5 z-[999] pointer-events-none"
     >
       <div
         ref={topRowRef}
@@ -69,7 +72,7 @@ export default function Navbar({ onTogglePause }: Props) {
               backdrop-blur-md shadow-sm
               transition-all duration-200
               hover:-translate-y-px hover:scale-[1.02] hover:shadow-md
-              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/50
+              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-soft)]
             "
           >
             <Image
@@ -87,7 +90,7 @@ export default function Navbar({ onTogglePause }: Props) {
               aria-hidden
               className="
                 pointer-events-none absolute inset-0 rounded-full
-                ring-0 group-hover:ring-8 ring-sky-400/10
+                ring-0 group-hover:ring-8 ring-[var(--accent-soft)]
                 transition-all duration-300
               "
             />
@@ -132,7 +135,7 @@ export default function Navbar({ onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-sky-400/10
+                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
                   "
                 >
                   <Image
@@ -146,7 +149,7 @@ export default function Navbar({ onTogglePause }: Props) {
                   />
                 </Link>
 
-                <div className="text-sky-400 text-[11px] uppercase tracking-[.12em] mt-1.5 -mb-1 opacity-90">
+                <div className="text-[color:var(--accent)] text-[11px] uppercase tracking-[.12em] mt-1.5 -mb-1 opacity-90">
                   Web
                 </div>
 
@@ -163,7 +166,7 @@ export default function Navbar({ onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-sky-400/10
+                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
                   "
                 >
                   <Image
@@ -186,7 +189,7 @@ export default function Navbar({ onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-sky-400/10
+                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
                   "
                 >
                   <Image
@@ -196,7 +199,7 @@ export default function Navbar({ onTogglePause }: Props) {
                   />
                 </Link>
 
-                <div className="text-sky-400 text-[11px] uppercase tracking-[.12em] mt-1.5 -mb-1 opacity-90">
+                <div className="text-[color:var(--accent)] text-[11px] uppercase tracking-[.12em] mt-1.5 -mb-1 opacity-90">
                   Mobile
                 </div>
 
@@ -213,7 +216,7 @@ export default function Navbar({ onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-sky-400/10
+                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
                   "
                 >
                   <Image
@@ -236,7 +239,7 @@ export default function Navbar({ onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-sky-400/10
+                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
                   "
                 >
                   <Image
@@ -259,7 +262,7 @@ export default function Navbar({ onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-sky-400/10
+                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
                   "
                 >
                   <Image
@@ -282,7 +285,7 @@ export default function Navbar({ onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-sky-400/10
+                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
                   "
                 >
                   <Image
@@ -305,7 +308,7 @@ export default function Navbar({ onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-sky-400/10
+                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
                   "
                 >
                   <Image
@@ -328,7 +331,7 @@ export default function Navbar({ onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-sky-400/10
+                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
                   "
                 >
                   <Image
@@ -351,7 +354,7 @@ export default function Navbar({ onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-sky-400/10
+                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
                   "
                 >
                   <Image
@@ -374,7 +377,7 @@ export default function Navbar({ onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-sky-400/10
+                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
                   "
                 >
                   <Image
@@ -397,7 +400,7 @@ export default function Navbar({ onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-sky-400/10
+                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
                   "
                 >
                   <Image
@@ -420,7 +423,7 @@ export default function Navbar({ onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-sky-400/10
+                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
                   "
                 >
                   <Image
@@ -443,7 +446,7 @@ export default function Navbar({ onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-sky-400/10
+                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
                   "
                 >
                   <Image
@@ -466,7 +469,7 @@ export default function Navbar({ onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-sky-400/10
+                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
                   "
                 >
                   <Image
@@ -482,7 +485,9 @@ export default function Navbar({ onTogglePause }: Props) {
 
         <button
           type="button"
-          title="Pause Animation"
+          title={isPaused ? "Resume Background" : "Pause Background"}
+          aria-label={isPaused ? "Resume Background" : "Pause Background"}
+          aria-pressed={isPaused}
           onClick={onTogglePause}
           className="
             group relative grid h-11 w-11 place-items-center rounded-full
@@ -491,16 +496,16 @@ export default function Navbar({ onTogglePause }: Props) {
             backdrop-blur-md shadow-sm
             transition-all duration-200
             hover:-translate-y-px hover:scale-[1.02] hover:shadow-md
-            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/50
-            text-sky-400 dark:text-sky-300 text-[20px] leading-none
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-soft)]
+            text-[color:var(--accent)] text-[20px] leading-none
           "
         >
-          𐫰
+          {isPaused ? "▶" : "⏸"}
           <span
             aria-hidden
             className="
               pointer-events-none absolute inset-0 rounded-full
-              ring-0 group-hover:ring-8 ring-sky-400/10
+              ring-0 group-hover:ring-8 ring-[var(--accent-soft)]
               transition-all duration-300
             "
           />

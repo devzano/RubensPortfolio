@@ -1,46 +1,31 @@
 // src/app/(site)/projects/page.tsx
 "use client";
+import dynamic from "next/dynamic";
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import type { SlideNavProps } from "@/types/types";
-import WatchlistrWeb from "@/app/(site)/watchlistr-web/page";
-import RecipeRealm from "@/app/(site)/reciperealm/page";
-import WatchlistrMobile from "@/app/(site)/watchlistr-mobile/page";
-import EchoExpense from "@/app/(site)/echoexpense/page";
-import OtakuHive from "@/app/(site)/otakuhive/page";
-import StarshipPixelscape from "@/app/(site)/starship-pixelscape/page";
-import SunshineKeyWestChallenge from "@/app/(site)/sunshinekeywestchallenge/page";
-import AutoArchive from "@/app/(site)/autoarchive/page";
-import Steda from "@/app/(site)/steda/page";
-import MPSMobile from "@/app/(site)/mps-mobile/page";
-import MPSWeb from "@/app/(site)/mps-web/page";
-import Logiqo from "@/app/(site)/logiqo/page";
 
 type SlideComponent = React.ComponentType<SlideNavProps>;
+
+const slideComponents: SlideComponent[] = [
+  dynamic(() => import("@/app/(site)/watchlistr-web/page")),
+  dynamic(() => import("@/app/(site)/reciperealm/page")),
+  dynamic(() => import("@/app/(site)/watchlistr-mobile/page")),
+  dynamic(() => import("@/app/(site)/echoexpense/page")),
+  dynamic(() => import("@/app/(site)/otakuhive/page")),
+  dynamic(() => import("@/app/(site)/sunshinekeywestchallenge/page")),
+  dynamic(() => import("@/app/(site)/starship-pixelscape/page")),
+  dynamic(() => import("@/app/(site)/autoarchive/page")),
+  dynamic(() => import("@/app/(site)/steda/page")),
+  dynamic(() => import("@/app/(site)/mps-mobile/page")),
+  dynamic(() => import("@/app/(site)/mps-web/page")),
+  dynamic(() => import("@/app/(site)/logiqo/page")),
+];
 
 export default function Page() {
   const [currentSlide, setCurrentSlide] = useState<number>(0);
   const [containerHeight, setContainerHeight] = useState<string>("auto");
   const slideRef = useRef<HTMLDivElement | null>(null);
-
-  const SlideComponents: SlideComponent[] = useMemo(
-    () => [
-      WatchlistrWeb,
-      RecipeRealm,
-      WatchlistrMobile,
-      EchoExpense,
-      OtakuHive,
-      SunshineKeyWestChallenge,
-      StarshipPixelscape,
-      AutoArchive,
-      Steda,
-      MPSMobile,
-      MPSWeb,
-      Logiqo,
-    ],
-    []
-  );
-
-  const slideCount = SlideComponents.length;
+  const slideCount = slideComponents.length;
 
   const nextSlide = useCallback(
     () => setCurrentSlide((prev) => (prev + 1) % slideCount),
@@ -51,12 +36,9 @@ export default function Page() {
     [slideCount]
   );
 
-  const slides = useMemo(
-    () =>
-      SlideComponents.map((Cmp, idx) => (
-        <Cmp key={idx} showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />
-      )),
-    [SlideComponents, nextSlide, prevSlide]
+  const ActiveSlide = useMemo(
+    () => slideComponents[currentSlide] ?? slideComponents[0],
+    [currentSlide]
   );
 
   useEffect(() => {
@@ -77,15 +59,9 @@ export default function Page() {
         style={{ height: containerHeight, transition: "height 0.5s ease" }}
       >
         <div className="slide-container">
-          {slides.map((slide, index) => (
-            <div
-              key={index}
-              ref={index === currentSlide ? slideRef : null}
-              className={`fade-slide ${index === currentSlide ? "active" : ""}`}
-            >
-              {slide}
-            </div>
-          ))}
+          <div ref={slideRef} className="fade-slide active">
+            <ActiveSlide showArrows={true} nextSlide={nextSlide} prevSlide={prevSlide} />
+          </div>
         </div>
       </div>
     </div>

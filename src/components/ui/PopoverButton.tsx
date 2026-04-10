@@ -104,7 +104,7 @@ export default function PopoverButton({
     "relative group inline-flex items-center justify-center font-medium transition-all duration-300 ease-out focus-visible:outline-none";
 
   const pillShared =
-    "h-11 px-5 rounded-full shadow-sm hover:scale-[1.02] hover:shadow-md active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-sky-400/60 w-full sm:w-auto";
+    "h-11 px-5 rounded-full shadow-sm hover:scale-[1.02] hover:shadow-md active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[var(--accent-soft)] w-full sm:w-auto";
 
   const pillOutline =
     "border border-neutral-200 dark:border-neutral-800 bg-white text-neutral-900 dark:bg-neutral-900 dark:text-white";
@@ -112,7 +112,7 @@ export default function PopoverButton({
   const pillSolid = "bg-neutral-900 text-white dark:bg-gray-300 dark:text-neutral-900";
 
   const linkShared =
-    "px-0 h-auto rounded-none shadow-none underline-offset-4 text-sky-600 hover:underline dark:text-sky-300";
+    "px-0 h-auto rounded-none shadow-none underline-offset-4 text-[color:var(--accent)] hover:underline";
 
   const triggerClass =
     variant === "link"
@@ -232,18 +232,18 @@ export default function PopoverButton({
           {/* soft UFO ring */}
           <span
             aria-hidden
-            className="pointer-events-none absolute inset-0 rounded-full ring-0 ring-sky-400/0 transition-all duration-300 group-hover:ring-8 group-hover:ring-sky-400/10 dark:group-hover:ring-sky-300/10"
+            className="pointer-events-none absolute inset-0 rounded-full ring-0 ring-transparent transition-all duration-300 group-hover:ring-8 group-hover:ring-[var(--accent-soft)]"
           />
           {/* gradient underline */}
           <span
             aria-hidden
-            className="pointer-events-none absolute -z-10 left-1/2 top-full mt-1 h-px w-0 -translate-x-1/2 bg-gradient-to-r from-transparent via-sky-400/70 to-transparent transition-all duration-300 group-hover:w-2/3"
+            className="pointer-events-none absolute -z-10 left-1/2 top-full mt-1 h-px w-0 -translate-x-1/2 bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent transition-all duration-300 group-hover:w-2/3"
           />
         </>
       ) : (
         <span
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-full mt-0.5 h-px w-0 -translate-x-1/2 bg-gradient-to-r from-transparent via-sky-400/70 to-transparent transition-all duration-300 group-hover:w-1/2"
+          className="pointer-events-none absolute left-1/2 top-full mt-0.5 h-px w-0 -translate-x-1/2 bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent transition-all duration-300 group-hover:w-1/2"
         />
       )}
     </>
@@ -312,7 +312,7 @@ export default function PopoverButton({
         {/* UFO beam glow behind the panel */}
         <div className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute left-1/2 top-0 h-40 w-40 -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.28),transparent_60%)] blur-md" />
-          <div className="absolute left-1/2 top-6 h-24 w-[85%] -translate-x-1/2 rounded-b-3xl bg-gradient-to-b from-sky-400/25 via-sky-400/10 to-transparent blur-sm animate-pulse" />
+          <div className="absolute left-1/2 top-6 h-24 w-[85%] -translate-x-1/2 rounded-b-3xl bg-gradient-to-b from-[var(--accent-soft)] via-[var(--accent-verysoft)] to-transparent blur-sm animate-pulse" />
         </div>
 
         {children}

@@ -63,6 +63,11 @@ export default function ProjectPage({
   className = "",
 }: ProjectPageProps) {
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
+  const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
+  const [feedbackStatus, setFeedbackStatus] = useState<{
+    tone: "success" | "error" | null;
+    message: string | null;
+  }>({ tone: null, message: null });
 
   const [feedback, setFeedback] = useState<Feedback>({
     firstName: "",
@@ -71,25 +76,44 @@ export default function ProjectPage({
     message: "",
   });
 
-  const openFeedback = () => setIsFeedbackModalOpen(true);
+  const openFeedback = () => {
+    setFeedbackStatus({ tone: null, message: null });
+    setIsFeedbackModalOpen(true);
+  };
 
   const handleFeedbackSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsSubmittingFeedback(true);
+    setFeedbackStatus({ tone: null, message: null });
+
     try {
       const res = await fetch("/api/sendMail", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ appName, ...feedback }),
       });
+
+      const data = (await res.json().catch(() => null)) as { error?: string } | null;
+
       if (res.ok) {
-        alert("Feedback sent successfully!");
-        setIsFeedbackModalOpen(false);
+        setFeedbackStatus({
+          tone: "success",
+          message: "Feedback sent successfully.",
+        });
         setFeedback({ firstName: "", lastName: "", email: "", message: "" });
       } else {
-        alert("Failed to send feedback. Please try again later.");
+        setFeedbackStatus({
+          tone: "error",
+          message: data?.error ?? "Failed to send feedback. Please try again later.",
+        });
       }
     } catch {
-      alert("Error sending feedback. Please try again later.");
+      setFeedbackStatus({
+        tone: "error",
+        message: "Error sending feedback. Please try again later.",
+      });
+    } finally {
+      setIsSubmittingFeedback(false);
     }
   };
 
@@ -196,6 +220,9 @@ export default function ProjectPage({
         feedback={feedback}
         setFeedback={setFeedback}
         appName={appName}
+        isSubmitting={isSubmittingFeedback}
+        statusMessage={feedbackStatus.message}
+        statusTone={feedbackStatus.tone}
       />
     </div>
   );

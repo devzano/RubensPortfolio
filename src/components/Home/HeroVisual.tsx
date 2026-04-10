@@ -94,10 +94,12 @@ export default function HeroVisual({ items }: { items: readonly HeroItem[]; }) {
                           alt={c.title}
                           width={52}
                           height={52}
-                          className={`relative rounded-xl ring-1 transition-all duration-300 transform ${isActive
-                            ? "ring-var(--accent) scale-110 shadow-[0_0_15px_rgba(var(--accent-rgb),0.3)]"
-                            : "ring-black/5 dark:ring-white/5 grayscale-[0.3] group-hover/icon:grayscale-0"
-                            } group-hover/icon:scale-110 group-hover/icon:shadow-xl`}
+                          className={`relative rounded-xl ring-1 transition-all duration-300 transform ${
+                            isActive
+                              ? "scale-110 shadow-[0_0_15px_rgba(var(--accent-rgb),0.3)]"
+                              : "ring-black/5 dark:ring-white/5 grayscale-[0.3] group-hover/icon:grayscale-0"
+                          } group-hover/icon:scale-110 group-hover/icon:shadow-xl`}
+                          style={isActive ? { borderColor: "var(--accent)" } : undefined}
                         />
                       ) : (
                         <div className="h-[52px] w-[52px] bg-neutral-200 dark:bg-neutral-800 rounded-xl flex items-center justify-center">

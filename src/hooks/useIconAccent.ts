@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import type { StaticImageData } from "next/image";
 
 type RGB = { r: number; g: number; b: number };
+const colorCache = new Map<string, string>();
 
 const clamp = (n: number, min = 0, max = 1) => Math.min(max, Math.max(min, n));
 
@@ -78,6 +79,9 @@ function withAlpha(hex: string, a = 0.15) {
 }
 
 async function extractDominantColor(src: string): Promise<string> {
+  const cached = colorCache.get(src);
+  if (cached) return cached;
+
   const img = new Image();
   img.crossOrigin = "anonymous";
   img.decoding = "async";
@@ -135,7 +139,9 @@ async function extractDominantColor(src: string): Promise<string> {
   r = Math.round(r / count);
   g = Math.round(g / count);
   b = Math.round(b / count);
-  return rgbToHex({ r, g, b });
+  const hex = rgbToHex({ r, g, b });
+  colorCache.set(src, hex);
+  return hex;
 }
 
 export default function useIconAccent(
@@ -168,12 +174,15 @@ export default function useIconAccent(
 
   const cssVars = useMemo(() => {
     const base = accent ?? fallback;
+    const rgb = hexToRgb(base) ?? hexToRgb(fallback) ?? { r: 99, g: 102, b: 241 };
     const light = lighten(base, 0.18);
     const deep = darken(base, 0.18);
     return {
       "--accent": base,
+      "--accent-rgb": `${rgb.r}, ${rgb.g}, ${rgb.b}`,
       "--accent-light": light,
       "--accent-deep": deep,
+      "--accent-verysoft": withAlpha(base, 0.05),
       "--accent-soft": withAlpha(base, 0.20),
       "--accent-softer": withAlpha(base, 0.50),
       "--tw-ring-color": base,

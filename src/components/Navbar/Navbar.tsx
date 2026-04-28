@@ -200,6 +200,33 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                 </Link>
 
                 <div className="text-[color:var(--accent)] text-[11px] uppercase tracking-[.12em] mt-1.5 -mb-1 opacity-90">
+                  macOS
+                </div>
+
+                <Link
+                  href="/clipzora"
+                  title="Clipzora"
+                  onClick={handleNavClick}
+                  className="
+                    group relative grid h-12 w-12 place-items-center
+                    rounded-[14px]
+                    bg-white/70 dark:bg-neutral-900/70
+                    border border-neutral-200 dark:border-neutral-800
+                    backdrop-blur-md
+                    transition-all duration-200
+                    hover:scale-[1.04]
+                    hover:bg-white/80 dark:hover:bg-neutral-800/80
+                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
+                  "
+                >
+                  <Image
+                    src={AppImages.clipzora}
+                    alt="Clipzora"
+                    className="w-[26px] h-[26px] rounded-md transition-transform duration-200 group-hover:scale-[1.06]"
+                  />
+                </Link>
+
+                <div className="text-[color:var(--accent)] text-[11px] uppercase tracking-[.12em] mt-1.5 -mb-1 opacity-90">
                   Mobile
                 </div>
 
@@ -452,6 +479,29 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                   <Image
                     src={AppImages.creaturerealm}
                     alt="CreatureRealm"
+                    className="w-[26px] h-[26px] rounded-md transition-transform duration-200 group-hover:scale-[1.06]"
+                  />
+                </Link>
+
+                <Link
+                  href="/clipzora"
+                  title="Clipzora"
+                  onClick={handleNavClick}
+                  className="
+                    group relative grid h-12 w-12 place-items-center
+                    rounded-[14px]
+                    bg-white/70 dark:bg-neutral-900/70
+                    border border-neutral-200 dark:border-neutral-800
+                    backdrop-blur-md
+                    transition-all duration-200
+                    hover:scale-[1.04]
+                    hover:bg-white/80 dark:hover:bg-neutral-800/80
+                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
+                  "
+                >
+                  <Image
+                    src={AppImages.clipzora}
+                    alt="Clipzora"
                     className="w-[26px] h-[26px] rounded-md transition-transform duration-200 group-hover:scale-[1.06]"
                   />
                 </Link>

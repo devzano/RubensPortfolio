@@ -89,6 +89,12 @@ export default function Home() {
       icon: AppImages.logiqo,
     },
     {
+      title: "Clipzora",
+      href: "/clipzora",
+      desc: "Clipboard manager for iPhone and Mac with Secure Vault, folders, palettes, and iCloud sync.",
+      icon: AppImages.clipzora,
+    },
+    {
       title: "SunshineKeyWestChallenge",
       href: "/sunshinekeywestchallenge",
       desc: "DRI fundraising charity fishing event.",

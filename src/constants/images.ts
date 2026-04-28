@@ -19,7 +19,8 @@ import StarshipPixelscapeIcon from "@/assets/CodingLogos/starship_pixelscape_ico
 import AutoArchiveIcon from "@/assets/CodingLogos/autoarchive_icon.png";
 import StedaIcon from "@/assets/CodingLogos/steda_icon.png";
 import ManzanosPopShopIcon from "@/assets/CodingLogos/manzanos_popshop_icon.png";
-import CreatureRealm from "@/assets/CodingLogos/creaturerealm_icon.png";
+import CreatureRealmIcon from "@/assets/CodingLogos/creaturerealm_icon.png";
+import ClipzoraIcon from "@/assets/CodingLogos/clipzora_icon.png";
 // logiqo
 import LogiqoIcon from "@/assets/CodingLogos/logiqo_icon.png";
 import LogiqoIconSudoku from "@/assets/logiqo_game_backgrounds/sudokuBackground.jpg";
@@ -77,7 +78,8 @@ const AppImages = {
   autoArchive: AutoArchiveIcon as Img,
   steda: StedaIcon as Img,
   manzanosPopShop: ManzanosPopShopIcon as Img,
-  creaturerealm: CreatureRealm as Img,
+  creaturerealm: CreatureRealmIcon as Img,
+  clipzora: ClipzoraIcon as Img,
   // logiqo
   logiqo: LogiqoIcon as Img,
   logiqoSudoku: LogiqoIconSudoku as Img,

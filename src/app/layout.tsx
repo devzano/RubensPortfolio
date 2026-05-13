@@ -97,7 +97,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         >
           <img
-            src="https://img.buymeacoffee.com/button-api/?text=Support Me&emoji=🎥&slug=devzano&button_colour=5F7FFF&font_colour=ffffff&font_family=Poppins&outline_colour=000000&coffee_colour=FFDD00"
+            src="https://img.buymeacoffee.com/button-api/?text=Support Me&emoji=💻&slug=devzano&button_colour=5F7FFF&font_colour=ffffff&font_family=Poppins&outline_colour=000000&coffee_colour=FFDD00"
             alt="Support Me on Buy Me a Coffee"
             style={{ height: '48px' }}
           />

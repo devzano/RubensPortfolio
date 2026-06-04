@@ -7,10 +7,70 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
   type FormEvent,
-  type ReactNode,
   type PointerEvent as ReactPointerEvent,
+  type ReactNode,
 } from "react";
+
+const sunshineTheme = {
+  dark: {
+    pageBg: "#06070b",
+    pageGlowTop: "radial-gradient(circle at top, rgba(216,180,74,0.16), transparent 34%)",
+    pageGlowBottom: "radial-gradient(circle at bottom left, rgba(108,90,28,0.14), transparent 30%)",
+    text: "rgba(255,255,255,0.96)",
+    muted: "rgba(255,255,255,0.70)",
+    soft: "rgba(255,255,255,0.48)",
+    border: "rgba(255,255,255,0.10)",
+    borderSoft: "rgba(255,255,255,0.08)",
+    panel: "linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03))",
+    hero: "linear-gradient(135deg, rgba(8,12,20,0.9), rgba(11,20,29,0.76))",
+    surface: "rgba(0,0,0,0.20)",
+    surfaceStrong: "rgba(0,0,0,0.28)",
+    surfaceSoft: "rgba(255,255,255,0.05)",
+    inputBg: "rgba(0,0,0,0.30)",
+    inputText: "rgba(255,255,255,0.96)",
+    inputPlaceholder: "rgba(255,255,255,0.30)",
+    canvasBg: "#0b1017",
+    successBg: "rgba(52, 211, 153, 0.10)",
+    successBorder: "rgba(52, 211, 153, 0.30)",
+    successText: "#d1fae5",
+    errorBg: "rgba(251, 113, 133, 0.10)",
+    errorBorder: "rgba(251, 113, 133, 0.30)",
+    errorText: "#ffe4e6",
+    buttonText: "#ffffff",
+    shadow: "0 24px 80px rgba(0,0,0,0.28)",
+    heroShadow: "0 28px 100px rgba(0,0,0,0.36)",
+  },
+  light: {
+    pageBg: "#f5f1e3",
+    pageGlowTop: "radial-gradient(circle at top, rgba(216,180,74,0.20), transparent 32%)",
+    pageGlowBottom: "radial-gradient(circle at bottom left, rgba(160,132,47,0.12), transparent 30%)",
+    text: "#1f1c16",
+    muted: "rgba(31,28,22,0.72)",
+    soft: "rgba(31,28,22,0.52)",
+    border: "rgba(89,72,27,0.16)",
+    borderSoft: "rgba(89,72,27,0.12)",
+    panel: "linear-gradient(180deg, rgba(255,255,255,0.92), rgba(248,243,229,0.78))",
+    hero: "linear-gradient(135deg, rgba(255,250,239,0.94), rgba(245,236,212,0.88))",
+    surface: "rgba(255,255,255,0.62)",
+    surfaceStrong: "rgba(255,255,255,0.72)",
+    surfaceSoft: "rgba(255,255,255,0.56)",
+    inputBg: "rgba(255,255,255,0.78)",
+    inputText: "#1f1c16",
+    inputPlaceholder: "rgba(31,28,22,0.34)",
+    canvasBg: "#fffaf0",
+    successBg: "rgba(5, 150, 105, 0.10)",
+    successBorder: "rgba(5, 150, 105, 0.25)",
+    successText: "#065f46",
+    errorBg: "rgba(225, 29, 72, 0.08)",
+    errorBorder: "rgba(225, 29, 72, 0.20)",
+    errorText: "#9f1239",
+    buttonText: "#1f1c16",
+    shadow: "0 24px 80px rgba(69,53,12,0.14)",
+    heroShadow: "0 28px 100px rgba(69,53,12,0.18)",
+  },
+} as const;
 
 type FieldSpec = {
   label: string;
@@ -85,6 +145,28 @@ const cardFields: FieldSpec[] = [
 
 const todayIso = () => new Date().toISOString().slice(0, 10);
 
+function getPageThemeStyle(theme: (typeof sunshineTheme)[keyof typeof sunshineTheme]): CSSProperties {
+  return {
+    backgroundColor: theme.pageBg,
+    color: theme.text,
+    ["--ss-text" as string]: theme.text,
+    ["--ss-muted" as string]: theme.muted,
+    ["--ss-soft" as string]: theme.soft,
+    ["--ss-border" as string]: theme.border,
+    ["--ss-border-soft" as string]: theme.borderSoft,
+    ["--ss-panel" as string]: theme.panel,
+    ["--ss-surface" as string]: theme.surface,
+    ["--ss-surface-strong" as string]: theme.surfaceStrong,
+    ["--ss-surface-soft" as string]: theme.surfaceSoft,
+    ["--ss-input-bg" as string]: theme.inputBg,
+    ["--ss-input-text" as string]: theme.inputText,
+    ["--ss-input-placeholder" as string]: theme.inputPlaceholder,
+    ["--ss-canvas-bg" as string]: theme.canvasBg,
+    ["--ss-shadow" as string]: theme.shadow,
+    ["--button-text" as string]: theme.buttonText,
+  };
+}
+
 function Field({
   label,
   name,
@@ -115,7 +197,13 @@ function Field({
         type={type}
         required={required}
         defaultValue={value}
-        className="h-12 rounded-2xl border border-white/10 bg-black/30 px-4 text-sm text-white outline-none ring-1 ring-white/8 transition placeholder:text-white/30 focus:border-(--accent) focus:ring-(--accent-soft)"
+        className="h-12 rounded-2xl border px-4 text-sm outline-none ring-1 transition placeholder:text-[color:var(--ss-input-placeholder)] focus:border-(--accent) focus:ring-(--accent-soft)"
+        style={{
+          borderColor: "var(--ss-border)",
+          background: "var(--ss-input-bg)",
+          color: "var(--ss-input-text)",
+          boxShadow: "inset 0 0 0 1px var(--ss-border-soft)",
+        }}
       />
     </label>
   );
@@ -135,7 +223,13 @@ function UploadField({
   required?: boolean;
 }) {
   return (
-    <label className="flex flex-col gap-2 rounded-3xl border border-white/8 bg-black/20 p-4">
+    <label
+      className="flex flex-col gap-2 rounded-3xl border p-4"
+      style={{
+        borderColor: "var(--ss-border-soft)",
+        background: "var(--ss-surface)",
+      }}
+    >
       <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-(--accent)">
         {label}
       </span>
@@ -144,9 +238,14 @@ function UploadField({
         type="file"
         accept={accept}
         required={required}
-        className="block w-full rounded-2xl border border-dashed border-white/15 bg-black/25 px-4 py-4 text-sm text-white file:mr-4 file:rounded-full file:border-0 file:bg-(--accent) file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:brightness-110"
+        className="block w-full rounded-2xl border border-dashed px-4 py-4 text-sm file:mr-4 file:rounded-full file:border-0 file:bg-(--accent) file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[color:var(--button-text)] hover:file:brightness-110"
+        style={{
+          borderColor: "var(--ss-border)",
+          background: "var(--ss-surface-strong)",
+          color: "var(--ss-input-text)",
+        }}
       />
-      {help ? <span className="text-xs text-white/45">{help}</span> : null}
+      {help ? <span className="text-xs" style={{ color: "var(--ss-soft)" }}>{help}</span> : null}
     </label>
   );
 }
@@ -161,12 +260,19 @@ function Section({
   children: ReactNode;
 }) {
   return (
-    <section className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03))] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:p-6">
+    <section
+      className="rounded-[28px] border p-5 backdrop-blur-xl sm:p-6"
+      style={{
+        borderColor: "var(--ss-border)",
+        background: "var(--ss-panel)",
+        boxShadow: "var(--ss-shadow)",
+      }}
+    >
       <div className="mb-5">
         <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-(--accent)">
           {eyebrow}
         </div>
-        <h2 className="mt-2 text-xl font-semibold tracking-tight text-white sm:text-2xl">
+        <h2 className="mt-2 text-xl font-semibold tracking-tight sm:text-2xl" style={{ color: "var(--ss-text)" }}>
           {title}
         </h2>
       </div>
@@ -283,26 +389,43 @@ function SignaturePad({
   };
 
   return (
-    <div className="rounded-3xl border border-white/8 bg-black/20 p-4">
+    <div
+      className="rounded-3xl border p-4"
+      style={{
+        borderColor: "var(--ss-border-soft)",
+        background: "var(--ss-surface)",
+      }}
+    >
       <div className="mb-3 flex items-center justify-between gap-3">
         <div>
           <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-(--accent)">
             Signature
           </div>
-          <div className="mt-1 text-sm text-white/68">
+          <div className="mt-1 text-sm" style={{ color: "var(--ss-muted)" }}>
             sign with your mouse or trackpad.
           </div>
         </div>
         <button
           type="button"
           onClick={clear}
-          className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] text-white/70 transition hover:bg-white/10"
+          className="rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition"
+          style={{
+            borderColor: "var(--ss-border)",
+            background: "var(--ss-surface-soft)",
+            color: "var(--ss-muted)",
+          }}
         >
           Clear
         </button>
       </div>
 
-      <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#0b1017]">
+      <div
+        className="overflow-hidden rounded-2xl border"
+        style={{
+          borderColor: "var(--ss-border)",
+          background: "var(--ss-canvas-bg)",
+        }}
+      >
         <canvas
           ref={canvasRef}
           className="block h-44 w-full touch-none"
@@ -317,7 +440,7 @@ function SignaturePad({
       <input name="signature_data_url" type="hidden" value={value} readOnly />
       <input name="authorization_date" type="hidden" value={currentDate} readOnly />
 
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-white/45">
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs" style={{ color: "var(--ss-soft)" }}>
         <span>{isEmpty ? "signature required before submission" : "signature captured"}</span>
         <span>
           Date: {(() => {
@@ -327,6 +450,40 @@ function SignaturePad({
         </span>
       </div>
     </div>
+  );
+}
+
+function ThemeToggle({
+  isLight,
+  onToggle,
+}: {
+  isLight: boolean;
+  onToggle: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      aria-label={isLight ? "Switch to dark mode" : "Switch to light mode"}
+      aria-pressed={isLight}
+      className="inline-flex h-11 w-11 items-center justify-center rounded-full border transition"
+      style={{
+        borderColor: "var(--ss-border)",
+        background: "var(--ss-surface-soft)",
+        color: "var(--ss-text)",
+      }}
+    >
+      {isLight ? (
+        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+          <path d="M12 3v2.2M12 18.8V21M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M3 12h2.2M18.8 12H21M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6" />
+          <circle cx="12" cy="12" r="4.2" />
+        </svg>
+      ) : (
+        <svg viewBox="0 0 24 24" className="h-5 w-5" fill="currentColor">
+          <path d="M20.2 14.4A8.7 8.7 0 0 1 9.6 3.8a.5.5 0 0 0-.7-.6A10 10 0 1 0 20.8 15a.5.5 0 0 0-.6-.6Z" />
+        </svg>
+      )}
+    </button>
   );
 }
 
@@ -350,12 +507,14 @@ export default function Page() {
   const [useCardDetails, setUseCardDetails] = useState(false);
   const [useSeparateApEmail, setUseSeparateApEmail] = useState(false);
   const [signatureDataUrl, setSignatureDataUrl] = useState("");
+  const [isLightMode, setIsLightMode] = useState(true);
   const [status, setStatus] = useState<{
     tone: "success" | "error" | null;
     message: string | null;
   }>({ tone: null, message: null });
 
   const currentDate = useMemo(() => todayIso(), []);
+  const theme = isLightMode ? sunshineTheme.light : sunshineTheme.dark;
 
   useEffect(() => {
     setStatus({ tone: null, message: null });
@@ -426,7 +585,7 @@ export default function Page() {
       "Authorization",
       `Printed Name: ${String(entries.printed_name ?? "")}`,
       `Authorization Date: ${String(entries.authorization_date ?? "")}`,
-      `Signature Included: Yes`,
+      "Signature Included: Yes",
       "",
       "Attachments",
       `Sales Tax Exemption Certificate: ${formData.get("sales_tax_certificate") instanceof File && (formData.get("sales_tax_certificate") as File).size > 0 ? "Attached" : "Not attached"}`,
@@ -473,7 +632,7 @@ export default function Page() {
         body: formData,
       });
 
-      const data = (await response.json().catch(() => null)) as { error?: string; } | null;
+      const data = (await response.json().catch(() => null)) as { error?: string } | null;
       if (!response.ok) {
         setStatus({
           tone: "error",
@@ -497,12 +656,30 @@ export default function Page() {
   };
 
   return (
-    <main className="relative min-h-dvh overflow-hidden px-4 py-10 sm:px-6 lg:px-8">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,rgba(216,180,74,0.18),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(108,90,28,0.16),transparent_30%)]" />
+    <main className="relative min-h-dvh overflow-hidden px-4 py-10 sm:px-6 lg:px-8" style={getPageThemeStyle(theme)}>
+      <div
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          backgroundImage: `${theme.pageGlowTop}, ${theme.pageGlowBottom}`,
+        }}
+      />
 
       <form onSubmit={handleSubmit} className="mx-auto flex w-full max-w-7xl flex-col gap-6">
-        <section className="relative overflow-hidden rounded-[34px] border border-white/10 bg-[linear-gradient(135deg,rgba(8,12,20,0.9),rgba(11,20,29,0.76))] p-6 shadow-[0_28px_100px_rgba(0,0,0,0.36)] backdrop-blur-2xl sm:p-8">
-          <div className="pointer-events-none absolute right-0 top-0 h-48 w-48 rounded-full bg-[radial-gradient(circle_at_center,rgba(216,180,74,0.24),transparent_70%)] blur-3xl" />
+        <section
+          className="relative overflow-hidden rounded-[34px] border p-6 backdrop-blur-2xl sm:p-8"
+          style={{
+            borderColor: "var(--ss-border)",
+            background: theme.hero,
+            boxShadow: theme.heroShadow,
+          }}
+        >
+          <div
+            className="pointer-events-none absolute right-0 top-0 h-48 w-48 rounded-full blur-3xl"
+            style={{ background: "radial-gradient(circle at center, rgba(216,180,74,0.24), transparent 70%)" }}
+          />
+          <div className="absolute right-6 top-6 sm:right-8 sm:top-8">
+            <ThemeToggle isLight={isLightMode} onToggle={() => setIsLightMode((value) => !value)} />
+          </div>
 
           <div className="flex flex-col gap-5 lg:flex-row lg:items-end">
             <div className="max-w-3xl flex-1">
@@ -516,8 +693,8 @@ export default function Page() {
               >
                 Temporary Showcase
               </div>
-              <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-center">
-                <div className="relative h-[88px] w-28 shrink-0 overflow-hidden rounded-2xl p-2">
+              <div className="mt-4 flex items-center gap-4">
+                <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-2xl p-2 sm:h-[88px] sm:w-28">
                   <Image
                     src={AppImages.sunshine}
                     alt="Sunshine Gasoline Distributors logo"
@@ -526,21 +703,27 @@ export default function Page() {
                     priority
                   />
                 </div>
-                <h1 className="text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+                <h1 className="text-3xl font-semibold tracking-tight sm:text-5xl" style={{ color: "var(--ss-text)" }}>
                   Sunshine COD Application
                 </h1>
               </div>
-              <p className="mt-4 max-w-2xl text-sm leading-7 text-white/70 sm:text-base">
+              <p className="mt-4 max-w-2xl text-sm leading-7 sm:text-base" style={{ color: "var(--ss-muted)" }}>
                 A digital version of the original application, with sample information filled in.
               </p>
             </div>
 
-            <div className="lg:ml-auto lg:shrink-0">
-              <div className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                <div className="text-[11px] uppercase tracking-[0.18em] text-white/45">
+            <div className="pt-2 lg:ml-auto lg:shrink-0">
+              <div
+                className="rounded-2xl border px-4 py-3"
+                style={{
+                  borderColor: "var(--ss-border)",
+                  background: "var(--ss-surface-soft)",
+                }}
+              >
+                <div className="text-[11px] uppercase tracking-[0.18em]" style={{ color: "var(--ss-soft)" }}>
                   Form Type
                 </div>
-                <div className="mt-1 text-sm font-medium text-white">
+                <div className="mt-1 text-sm font-medium" style={{ color: "var(--ss-text)" }}>
                   C.O.D. Application
                 </div>
               </div>
@@ -550,16 +733,21 @@ export default function Page() {
 
         <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
           <div className="space-y-6">
-            <section className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03))] p-5 shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:p-6">
+            <section
+              className="rounded-[28px] border p-5 backdrop-blur-xl sm:p-6"
+              style={{
+                borderColor: "var(--ss-border)",
+                background: "var(--ss-panel)",
+                boxShadow: "var(--ss-shadow)",
+              }}
+            >
               <div className="mb-5">
-                <div>
-                  <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-(--accent)">
-                    Applicant
-                  </div>
-                  <h2 className="mt-2 text-xl font-semibold tracking-tight text-white sm:text-2xl">
-                    Business Profile
-                  </h2>
+                <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-(--accent)">
+                  Applicant
                 </div>
+                <h2 className="mt-2 text-xl font-semibold tracking-tight sm:text-2xl" style={{ color: "var(--ss-text)" }}>
+                  Business Profile
+                </h2>
               </div>
 
               <div className="grid gap-4 md:grid-cols-2">
@@ -594,12 +782,11 @@ export default function Page() {
                           type="button"
                           onClick={() => setUseSeparateApEmail(false)}
                           aria-pressed={useSeparateApEmail}
-                          className={`relative inline-flex h-7 w-12 items-center rounded-full transition ${useSeparateApEmail ? "bg-(--accent)" : "bg-white/15"
-                            }`}
+                          className={`relative inline-flex h-7 w-12 items-center rounded-full transition ${useSeparateApEmail ? "bg-(--accent)" : ""}`}
+                          style={!useSeparateApEmail ? { background: "var(--ss-surface-strong)" } : undefined}
                         >
                           <span
-                            className={`h-5 w-5 rounded-full bg-white shadow transition ${useSeparateApEmail ? "translate-x-6" : "translate-x-1"
-                              }`}
+                            className={`h-5 w-5 rounded-full bg-white shadow transition ${useSeparateApEmail ? "translate-x-6" : "translate-x-1"}`}
                           />
                         </button>
                       }
@@ -619,19 +806,18 @@ export default function Page() {
                       value="Kathy Palomo"
                       headerRight={
                         <div className="flex items-center gap-3">
-                          <span className="text-[10px] font-medium normal-case tracking-normal text-white/55">
+                          <span className="text-[10px] font-medium normal-case tracking-normal" style={{ color: "var(--ss-soft)" }}>
                             Different Email
                           </span>
                           <button
                             type="button"
                             onClick={() => setUseSeparateApEmail(true)}
                             aria-pressed={useSeparateApEmail}
-                            className={`relative inline-flex h-7 w-12 items-center rounded-full transition ${useSeparateApEmail ? "bg-(--accent)" : "bg-white/15"
-                              }`}
+                            className={`relative inline-flex h-7 w-12 items-center rounded-full transition ${useSeparateApEmail ? "bg-(--accent)" : ""}`}
+                            style={!useSeparateApEmail ? { background: "var(--ss-surface-strong)" } : undefined}
                           >
                             <span
-                              className={`h-5 w-5 rounded-full bg-white shadow transition ${useSeparateApEmail ? "translate-x-6" : "translate-x-1"
-                                }`}
+                              className={`h-5 w-5 rounded-full bg-white shadow transition ${useSeparateApEmail ? "translate-x-6" : "translate-x-1"}`}
                             />
                           </button>
                         </div>
@@ -658,8 +844,14 @@ export default function Page() {
 
                 <div className="grid gap-4 lg:grid-cols-2">
                   {addressFields.map((group) => (
-                    <div key={group.title} className="rounded-3xl border border-white/8 bg-black/20 p-4">
-                      <div className="mb-4 text-sm font-medium text-white">{group.title}</div>
+                    <div
+                      key={group.title}
+                      className="rounded-3xl border p-4"
+                      style={{ borderColor: "var(--ss-border-soft)", background: "var(--ss-surface)" }}
+                    >
+                      <div className="mb-4 text-sm font-medium" style={{ color: "var(--ss-text)" }}>
+                        {group.title}
+                      </div>
                       <div className="grid gap-4 sm:grid-cols-2">
                         {group.fields.map((field) => (
                           <Field
@@ -677,31 +869,38 @@ export default function Page() {
                 </div>
               </div>
             </Section>
+
             <Section eyebrow="Sunshine" title="Operational Contacts">
-              <div className="space-y-4 text-sm text-white/78">
-                <div className="rounded-3xl border border-white/8 bg-black/20 p-4">
-                  <div className="font-medium text-white">Plant Addresses</div>
+              <div className="space-y-4 text-sm" style={{ color: "var(--ss-muted)" }}>
+                <div
+                  className="rounded-3xl border p-4"
+                  style={{ borderColor: "var(--ss-border-soft)", background: "var(--ss-surface)" }}
+                >
+                  <div className="font-medium" style={{ color: "var(--ss-text)" }}>Plant Addresses</div>
                   <div className="mt-3 grid gap-3 sm:grid-cols-3">
                     <div>
-                      <div className="text-white">724 S. Flagler Ave.</div>
+                      <div style={{ color: "var(--ss-text)" }}>724 S. Flagler Ave.</div>
                       <div>Homestead, FL 33030</div>
                       <div>305-247-7249</div>
                     </div>
                     <div>
-                      <div className="text-white">412 S. Flagler Ave.</div>
+                      <div style={{ color: "var(--ss-text)" }}>412 S. Flagler Ave.</div>
                       <div>Homestead, FL 33030</div>
                       <div>305-247-7249</div>
                     </div>
                     <div>
-                      <div className="text-white">255 Tavernier St.</div>
+                      <div style={{ color: "var(--ss-text)" }}>255 Tavernier St.</div>
                       <div>Tavernier, FL 33070</div>
                       <div>305-852-2881</div>
                     </div>
                   </div>
                 </div>
 
-                <div className="rounded-3xl border border-white/8 bg-black/20 p-4">
-                  <div className="font-medium text-white">Fuel Order Contact</div>
+                <div
+                  className="rounded-3xl border p-4"
+                  style={{ borderColor: "var(--ss-border-soft)", background: "var(--ss-surface)" }}
+                >
+                  <div className="font-medium" style={{ color: "var(--ss-text)" }}>Fuel Order Contact</div>
                   <div className="mt-2">dispatch@sunshinegasoline.com</div>
                   <div>Phone: 305-247-7249 Ext. 1</div>
                   <div className="mt-2">Submitting To: kpalomo@sunshinegasoline.com</div>
@@ -712,7 +911,7 @@ export default function Page() {
 
           <div className="space-y-6">
             <Section eyebrow="Authorization" title="Personal Guarantee">
-              <p className="text-sm leading-7 text-white/72">
+              <p className="text-sm leading-7" style={{ color: "var(--ss-muted)" }}>
                 In consideration of Sunshine Gasoline Distributors, Inc. extending credit, the undersigned
                 personally guarantees payment of goods purchased, including special arrangements and promissory
                 note-supported purchases. Venue is agreed to be Miami-Dade County and unpaid balances accrue
@@ -745,21 +944,26 @@ export default function Page() {
                   help="Upload the front of your driver's license."
                 />
 
-                <div className="rounded-3xl border border-white/8 bg-black/20 p-4">
-                  <label className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
-                    <div className="text-sm font-medium text-white">
+                <div
+                  className="rounded-3xl border p-4"
+                  style={{ borderColor: "var(--ss-border-soft)", background: "var(--ss-surface)" }}
+                >
+                  <label
+                    className="flex items-center justify-between gap-4 rounded-2xl border px-4 py-3"
+                    style={{ borderColor: "var(--ss-border)", background: "var(--ss-surface-strong)" }}
+                  >
+                    <div className="text-sm font-medium" style={{ color: "var(--ss-text)" }}>
                       Enter Credit Card Details Instead
                     </div>
                     <button
                       type="button"
                       onClick={() => setUseCardDetails((value) => !value)}
                       aria-pressed={useCardDetails}
-                      className={`relative inline-flex h-8 w-14 items-center rounded-full transition ${useCardDetails ? "bg-(--accent)" : "bg-white/15"
-                        }`}
+                      className={`relative inline-flex h-8 w-14 items-center rounded-full transition ${useCardDetails ? "bg-(--accent)" : ""}`}
+                      style={!useCardDetails ? { background: "var(--ss-surface-strong)" } : undefined}
                     >
                       <span
-                        className={`h-6 w-6 rounded-full bg-white shadow transition ${useCardDetails ? "translate-x-7" : "translate-x-1"
-                          }`}
+                        className={`h-6 w-6 rounded-full bg-white shadow transition ${useCardDetails ? "translate-x-7" : "translate-x-1"}`}
                       />
                     </button>
                   </label>
@@ -799,14 +1003,24 @@ export default function Page() {
           </div>
         </div>
 
-        <section className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.03))] pb-2 p-5 shadow-[0_24px_80px_rgba(0,0,0,0.28)] backdrop-blur-xl sm:p-6">
+        <section
+          className="rounded-[28px] border p-5 pb-2 backdrop-blur-xl sm:p-6"
+          style={{
+            borderColor: "var(--ss-border)",
+            background: "var(--ss-panel)",
+            boxShadow: "var(--ss-shadow)",
+          }}
+        >
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <h2 className="text-xl font-semibold tracking-tight text-white">Submit Application</h2>
+            <h2 className="text-xl font-semibold tracking-tight" style={{ color: "var(--ss-text)" }}>
+              Submit Application
+            </h2>
 
             <button
               type="submit"
               disabled={isSubmitting}
-              className="inline-flex h-12 items-center justify-center rounded-full bg-linear-to-br from-(--accent-light) to-(--accent) px-6 text-sm font-semibold text-white shadow-lg shadow-black/25 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex h-12 items-center justify-center rounded-full bg-linear-to-br from-(--accent-light) to-(--accent) px-6 text-sm font-semibold shadow-lg shadow-black/25 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+              style={{ color: "var(--button-text)" }}
             >
               {isSubmitting ? "Sending..." : "Submit Application"}
             </button>
@@ -814,10 +1028,20 @@ export default function Page() {
 
           {status.message ? (
             <div
-              className={`mt-4 rounded-2xl border px-4 py-3 text-sm ${status.tone === "success"
-                  ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-100"
-                  : "border-rose-400/30 bg-rose-400/10 text-rose-100"
-                }`}
+              className="mt-4 rounded-2xl border px-4 py-3 text-sm"
+              style={
+                status.tone === "success"
+                  ? {
+                      borderColor: theme.successBorder,
+                      background: theme.successBg,
+                      color: theme.successText,
+                    }
+                  : {
+                      borderColor: theme.errorBorder,
+                      background: theme.errorBg,
+                      color: theme.errorText,
+                    }
+              }
             >
               {status.message}
             </div>

@@ -52,7 +52,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
   return (
     <div
       ref={menuRef}
-      className="fixed inset-x-0 top-2.5 z-[999] pointer-events-none"
+      className="fixed inset-x-0 top-2.5 z-999 pointer-events-none"
     >
       <div
         ref={topRowRef}
@@ -72,7 +72,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
               backdrop-blur-md shadow-sm
               transition-all duration-200
               hover:-translate-y-px hover:scale-[1.02] hover:shadow-md
-              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-soft)]
+              focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-soft)
             "
           >
             <Image
@@ -90,7 +90,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
               aria-hidden
               className="
                 pointer-events-none absolute inset-0 rounded-full
-                ring-0 group-hover:ring-8 ring-[var(--accent-soft)]
+                ring-0 group-hover:ring-8 ring-(--accent-soft)
                 transition-all duration-300
               "
             />
@@ -135,7 +135,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
+                    ring-0 hover:ring-8 ring-(--accent-soft)
                   "
                 >
                   <Image
@@ -149,7 +149,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                   />
                 </Link>
 
-                <div className="text-[color:var(--accent)] text-[11px] uppercase tracking-[.12em] mt-1.5 -mb-1 opacity-90">
+                <div className="text-(--accent) text-[11px] uppercase tracking-[.12em] mt-1.5 -mb-1 opacity-90">
                   Web
                 </div>
 
@@ -166,7 +166,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
+                    ring-0 hover:ring-8 ring-(--accent-soft)
                   "
                 >
                   <Image
@@ -189,7 +189,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
+                    ring-0 hover:ring-8 ring-(--accent-soft)
                   "
                 >
                   <Image
@@ -199,7 +199,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                   />
                 </Link>
 
-                <div className="text-[color:var(--accent)] text-[11px] uppercase tracking-[.12em] mt-1.5 -mb-1 opacity-90">
+                <div className="text-(--accent) text-[11px] uppercase tracking-[.12em] mt-1.5 -mb-1 opacity-90">
                   macOS
                 </div>
 
@@ -216,7 +216,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
+                    ring-0 hover:ring-8 ring-(--accent-soft)
                   "
                 >
                   <Image
@@ -226,7 +226,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                   />
                 </Link>
 
-                <div className="text-[color:var(--accent)] text-[11px] uppercase tracking-[.12em] mt-1.5 -mb-1 opacity-90">
+                <div className="text-(--accent) text-[11px] uppercase tracking-[.12em] mt-1.5 -mb-1 opacity-90">
                   Mobile
                 </div>
 
@@ -243,7 +243,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
+                    ring-0 hover:ring-8 ring-(--accent-soft)
                   "
                 >
                   <Image
@@ -266,7 +266,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
+                    ring-0 hover:ring-8 ring-(--accent-soft)
                   "
                 >
                   <Image
@@ -289,7 +289,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
+                    ring-0 hover:ring-8 ring-(--accent-soft)
                   "
                 >
                   <Image
@@ -312,7 +312,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
+                    ring-0 hover:ring-8 ring-(--accent-soft)
                   "
                 >
                   <Image
@@ -335,7 +335,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
+                    ring-0 hover:ring-8 ring-(--accent-soft)
                   "
                 >
                   <Image
@@ -358,7 +358,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
+                    ring-0 hover:ring-8 ring-(--accent-soft)
                   "
                 >
                   <Image
@@ -381,7 +381,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
+                    ring-0 hover:ring-8 ring-(--accent-soft)
                   "
                 >
                   <Image
@@ -404,7 +404,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
+                    ring-0 hover:ring-8 ring-(--accent-soft)
                   "
                 >
                   <Image
@@ -427,7 +427,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
+                    ring-0 hover:ring-8 ring-(--accent-soft)
                   "
                 >
                   <Image
@@ -450,7 +450,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
+                    ring-0 hover:ring-8 ring-(--accent-soft)
                   "
                 >
                   <Image
@@ -473,7 +473,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
+                    ring-0 hover:ring-8 ring-(--accent-soft)
                   "
                 >
                   <Image
@@ -496,7 +496,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
+                    ring-0 hover:ring-8 ring-(--accent-soft)
                   "
                 >
                   <Image
@@ -519,7 +519,7 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
                     transition-all duration-200
                     hover:scale-[1.04]
                     hover:bg-white/80 dark:hover:bg-neutral-800/80
-                    ring-0 hover:ring-8 ring-[var(--accent-soft)]
+                    ring-0 hover:ring-8 ring-(--accent-soft)
                   "
                 >
                   <Image
@@ -546,16 +546,24 @@ export default function Navbar({ isPaused, onTogglePause }: Props) {
             backdrop-blur-md shadow-sm
             transition-all duration-200
             hover:-translate-y-px hover:scale-[1.02] hover:shadow-md
-            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--accent-soft)]
-            text-[color:var(--accent)] text-[20px] leading-none
+            focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--accent-soft)
+            text-(--accent) text-[20px] leading-none
           "
         >
-          {isPaused ? "▶" : "⏸"}
+          {isPaused ? (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+          ) : (
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M6 5h4v14H6zm8 0h4v14h-4z" />
+            </svg>
+          )}
           <span
             aria-hidden
             className="
               pointer-events-none absolute inset-0 rounded-full
-              ring-0 group-hover:ring-8 ring-[var(--accent-soft)]
+              ring-0 group-hover:ring-8 ring-(--accent-soft)
               transition-all duration-300
             "
           />

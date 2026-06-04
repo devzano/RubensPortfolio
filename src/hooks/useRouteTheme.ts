@@ -8,8 +8,7 @@ import { getRouteTheme } from "@/constants/routeThemes";
 export default function useRouteTheme() {
   const pathname = usePathname() ?? "/";
   const routeTheme = useMemo(() => getRouteTheme(pathname), [pathname]);
-
-  return useIconAccent(routeTheme.icon, {
+  return useIconAccent(routeTheme.lockAccent ? undefined : routeTheme.icon, {
     fallback: routeTheme.accent,
   });
 }

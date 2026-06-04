@@ -5,6 +5,7 @@ type ThemeConfig = {
   match: (pathname: string) => boolean;
   icon?: StaticImageData | string;
   accent: string;
+  lockAccent?: boolean;
 };
 
 export const ROUTE_THEMES: ThemeConfig[] = [
@@ -59,6 +60,11 @@ export const ROUTE_THEMES: ThemeConfig[] = [
     accent: "#1593AD",
   },
   {
+    match: (pathname) => pathname.startsWith("/sscodapp"),
+    accent: "#D8B44A",
+    lockAccent: true,
+  },
+  {
     match: (pathname) => pathname.startsWith("/watchlistr-mobile") || pathname.startsWith("/watchlistr-web"),
     icon: AppImages.watchlistr,
     accent: "#2EA0FF",
@@ -73,5 +79,6 @@ export function getRouteTheme(pathname: string) {
   return ROUTE_THEMES.find((theme) => theme.match(pathname)) ?? {
     icon: undefined,
     accent: "#6366F1",
+    lockAccent: false,
   };
 }

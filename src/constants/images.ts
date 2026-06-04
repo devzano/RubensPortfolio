@@ -1,6 +1,7 @@
 import type { StaticImageData } from "next/image";
 
 import Logo from "../../public/logo512.png";
+import SunshineLogo from "@/assets/CodingLogos/sunshine.png";
 // navbar
 import MenuIcon from "@/assets/CodingLogos/verticalmenu_icon.png";
 import HomeIcon from "@/assets/CodingLogos/home_icon.png";
@@ -60,6 +61,7 @@ type Img = StaticImageData;
 
 const AppImages = {
   logo: Logo as Img,
+  sunshine: SunshineLogo as Img,
   // navbar
   menu: MenuIcon as Img,
   home: HomeIcon as Img,

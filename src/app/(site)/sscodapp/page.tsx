@@ -41,6 +41,8 @@ const sunshineTheme = {
     buttonText: "#ffffff",
     shadow: "0 24px 80px rgba(0,0,0,0.28)",
     heroShadow: "0 28px 100px rgba(0,0,0,0.36)",
+    signatureStroke: "#f8fafc",
+    toggleOffBg: "rgba(255,255,255,0.16)",
   },
   light: {
     pageBg: "#f5f1e3",
@@ -69,6 +71,8 @@ const sunshineTheme = {
     buttonText: "#1f1c16",
     shadow: "0 24px 80px rgba(69,53,12,0.14)",
     heroShadow: "0 28px 100px rgba(69,53,12,0.18)",
+    signatureStroke: "#111827",
+    toggleOffBg: "rgba(107,114,128,0.35)",
   },
 } as const;
 
@@ -143,7 +147,66 @@ const cardFields: FieldSpec[] = [
   { label: "Authorized Signature for Payment", name: "authorized_signature_for_payment", value: "Ruben Manzano" },
 ];
 
+const reviewChecks = [
+  {
+    label: "Sunbiz",
+    url: "https://search.sunbiz.org/Inquiry/CorporationSearch/ByName",
+    note: "Verify the business entity is active and matches the submitted company name.",
+  },
+  {
+    label: "Florida Driver License Check",
+    url: "https://mydmvportal.flhsmv.gov/Home/en/PublicWeb/DLCheck",
+    note: "Manual review required. The FLHSMV portal uses a CAPTCHA, so Kathy will still need to enter the license number directly.",
+  },
+  {
+    label: "Miami-Dade Property Search",
+    url: "https://apps.miamidadepa.gov/PropertySearch/#/",
+    note: "Cross-check the owner name and address details against county property records.",
+  },
+  {
+    label: "Miami-Dade Criminal Search",
+    url: "https://www2.miamidadeclerk.gov/cjis/",
+    note: "Run a manual county criminal records check using the applicant name and date of birth.",
+  },
+] as const;
+
+type VerificationStepState = "pending" | "running" | "passed" | "manual" | "failed";
+
+type VerificationStep = {
+  key: string;
+  label: string;
+  description: string;
+  state: VerificationStepState;
+};
+
 const todayIso = () => new Date().toISOString().slice(0, 10);
+
+const createVerificationSteps = (): VerificationStep[] => [
+  {
+    key: "business",
+    label: "Business Check",
+    description: "Validating business entity details against Sunbiz.",
+    state: "pending",
+  },
+  {
+    key: "property",
+    label: "Property Check",
+    description: "Reviewing Miami-Dade property ownership details.",
+    state: "pending",
+  },
+  {
+    key: "criminal",
+    label: "Criminal Check",
+    description: "Reviewing Miami-Dade criminal records status.",
+    state: "pending",
+  },
+  {
+    key: "dmv",
+    label: "DMV History",
+    description: "Manual review required on the state DMV portal.",
+    state: "pending",
+  },
+];
 
 function getPageThemeStyle(theme: (typeof sunshineTheme)[keyof typeof sunshineTheme]): CSSProperties {
   return {
@@ -164,6 +227,8 @@ function getPageThemeStyle(theme: (typeof sunshineTheme)[keyof typeof sunshineTh
     ["--ss-canvas-bg" as string]: theme.canvasBg,
     ["--ss-shadow" as string]: theme.shadow,
     ["--button-text" as string]: theme.buttonText,
+    ["--ss-signature-stroke" as string]: theme.signatureStroke,
+    ["--ss-toggle-off-bg" as string]: theme.toggleOffBg,
   };
 }
 
@@ -238,7 +303,7 @@ function UploadField({
         type="file"
         accept={accept}
         required={required}
-        className="block w-full rounded-2xl border border-dashed px-4 py-4 text-sm file:mr-4 file:rounded-full file:border-0 file:bg-(--accent) file:px-4 file:py-2 file:text-sm file:font-semibold file:text-[color:var(--button-text)] hover:file:brightness-110"
+        className="block w-full rounded-2xl border border-dashed px-4 py-4 text-sm file:mr-4 file:rounded-full file:border-0 file:bg-(--accent) file:px-4 file:py-2 file:text-sm file:font-semibold file:text-(--button-text) hover:file:brightness-110"
         style={{
           borderColor: "var(--ss-border)",
           background: "var(--ss-surface-strong)",
@@ -310,7 +375,9 @@ function SignaturePad({
     context.lineCap = "round";
     context.lineJoin = "round";
     context.lineWidth = 2.4;
-    context.strokeStyle = "#f8fafc";
+    context.strokeStyle = getComputedStyle(document.documentElement)
+      .getPropertyValue("--ss-signature-stroke")
+      .trim();
     context.clearRect(0, 0, rect.width, rect.height);
 
     if (!value) {
@@ -502,6 +569,135 @@ function dataUrlToFile(dataUrl: string, filename: string) {
   return new File([bytes], filename, { type: mimeType });
 }
 
+function escapeHtml(value: string) {
+  return value
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function sleep(ms: number) {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, ms);
+  });
+}
+
+function VerificationModal({
+  open,
+  steps,
+  isSendingEmail,
+  isComplete,
+  errorMessage,
+  onClose,
+}: {
+  open: boolean;
+  steps: VerificationStep[];
+  isSendingEmail: boolean;
+  isComplete: boolean;
+  errorMessage: string | null;
+  onClose: () => void;
+}) {
+  if (!open) return null;
+
+  return (
+    <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/45 px-4 py-6 backdrop-blur-sm">
+      <div
+        className="w-full max-w-2xl rounded-[30px] border p-6 shadow-2xl sm:p-7"
+        style={{
+          borderColor: "var(--ss-border)",
+          background: "var(--ss-panel)",
+          color: "var(--ss-text)",
+        }}
+      >
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-(--accent)">
+              Verification Preview
+            </div>
+            <h3 className="mt-2 text-2xl font-semibold tracking-tight">
+              Running Customer Review Flow
+            </h3>
+            <p className="mt-2 text-sm leading-6" style={{ color: "var(--ss-muted)" }}>
+              This demonstrates the future approval flow. Business, property, and criminal checks are shown as preview passes, and DMV remains manual review required until a compliant backend verifier is approved.
+            </p>
+          </div>
+          {(isComplete || errorMessage) ? (
+            <button
+              type="button"
+              onClick={onClose}
+              className="rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition"
+              style={{
+                borderColor: "var(--ss-border)",
+                background: "var(--ss-surface-soft)",
+                color: "var(--ss-muted)",
+              }}
+            >
+              Close
+            </button>
+          ) : null}
+        </div>
+
+        <div className="mt-6 space-y-3">
+          {steps.map((step) => {
+            const stateStyles: Record<VerificationStepState, { badge: string; tone: string; }> = {
+              pending: { badge: "Pending", tone: "var(--ss-soft)" },
+              running: { badge: "Running", tone: "var(--accent)" },
+              passed: { badge: "Passed", tone: "#059669" },
+              manual: { badge: "Manual Review", tone: "#d97706" },
+              failed: { badge: "Failed", tone: "#e11d48" },
+            };
+
+            return (
+              <div
+                key={step.key}
+                className="rounded-3xl border p-4"
+                style={{
+                  borderColor: "var(--ss-border-soft)",
+                  background: "var(--ss-surface)",
+                }}
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <div className="font-medium">{step.label}</div>
+                    <div className="mt-1 text-sm" style={{ color: "var(--ss-muted)" }}>
+                      {step.description}
+                    </div>
+                  </div>
+                  <div
+                    className="rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]"
+                    style={{
+                      color: stateStyles[step.state].tone,
+                      background: "color-mix(in srgb, currentColor 10%, transparent)",
+                      border: "1px solid color-mix(in srgb, currentColor 20%, transparent)",
+                    }}
+                  >
+                    {stateStyles[step.state].badge}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <div className="mt-5 rounded-3xl border p-4" style={{ borderColor: "var(--ss-border-soft)", background: "var(--ss-surface)" }}>
+          <div className="text-sm font-medium">Dispatch Summary</div>
+          <div className="mt-2 text-sm" style={{ color: "var(--ss-muted)" }}>
+            {errorMessage
+              ? errorMessage
+              : isSendingEmail
+                ? "Preparing dispatch summary email for Kathy."
+                : isComplete
+                  ? "Summary sent. DMV is flagged as manual review required in the email."
+                  : "Verification preview is still in progress."}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Page() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [useCardDetails, setUseCardDetails] = useState(false);
@@ -512,6 +708,11 @@ export default function Page() {
     tone: "success" | "error" | null;
     message: string | null;
   }>({ tone: null, message: null });
+  const [verificationModalOpen, setVerificationModalOpen] = useState(false);
+  const [verificationSteps, setVerificationSteps] = useState<VerificationStep[]>(() => createVerificationSteps());
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [verificationComplete, setVerificationComplete] = useState(false);
+  const [verificationError, setVerificationError] = useState<string | null>(null);
 
   const currentDate = useMemo(() => todayIso(), []);
   const theme = isLightMode ? sunshineTheme.light : sunshineTheme.dark;
@@ -519,6 +720,12 @@ export default function Page() {
   useEffect(() => {
     setStatus({ tone: null, message: null });
   }, [useCardDetails]);
+
+  const setStepState = (key: VerificationStep["key"], nextState: VerificationStepState) => {
+    setVerificationSteps((current) =>
+      current.map((step) => (step.key === key ? { ...step, state: nextState } : step))
+    );
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -533,6 +740,11 @@ export default function Page() {
 
     setIsSubmitting(true);
     setStatus({ tone: null, message: null });
+    setVerificationSteps(createVerificationSteps());
+    setVerificationModalOpen(true);
+    setVerificationComplete(false);
+    setVerificationError(null);
+    setIsSendingEmail(false);
 
     const form = event.currentTarget;
     const formData = new FormData(form);
@@ -540,6 +752,28 @@ export default function Page() {
     const apEmail = useSeparateApEmail
       ? String(entries.ap_email ?? "")
       : String(entries.business_email ?? "");
+    const companyName = String(entries.company_name ?? "");
+    const ownerName = String(entries.owner ?? "");
+    const ownerDob = String(entries.individual_applicant_dob ?? "");
+    const driversLicenseNumber = useCardDetails
+      ? String(entries.drivers_license_number ?? "")
+      : "See uploaded driver's license attachment";
+    const mailingAddress = [
+      String(entries.mailing_street_address ?? ""),
+      String(entries.mailing_city ?? ""),
+      String(entries.mailing_state ?? ""),
+      String(entries.mailing_zip_code ?? ""),
+    ]
+      .filter(Boolean)
+      .join(", ");
+    const deliveryAddress = [
+      String(entries.delivery_street_address ?? ""),
+      String(entries.delivery_city ?? ""),
+      String(entries.delivery_state ?? ""),
+      String(entries.delivery_zip_code ?? ""),
+    ]
+      .filter(Boolean)
+      .join(", ");
 
     formData.set("appName", "Sunshine COD Application");
     formData.set("firstName", String(entries.owner ?? "Ruben"));
@@ -550,6 +784,12 @@ export default function Page() {
 
     const messageLines = [
       "Sunshine COD Application Submission",
+      "",
+      "Showcase Verification Preview",
+      "Business Check: Passed (preview)",
+      "Property Check: Passed (preview)",
+      "Criminal Check: Passed (preview)",
+      "DMV History: Manual review required",
       "",
       `Date: ${String(entries.date ?? "")}`,
       `Company Name: ${String(entries.company_name ?? "")}`,
@@ -564,6 +804,12 @@ export default function Page() {
       `Individual Applicant DOB: ${String(entries.individual_applicant_dob ?? "")}`,
       `Federal Employee ID No.: ${String(entries.federal_employee_id_no ?? "")}`,
       `Sales Tax Exempt No.: ${String(entries.sales_tax_exempt_no ?? "")}`,
+      "",
+      "Dispatch Review Checks",
+      `Sunbiz Business Check: review ${companyName} — ${reviewChecks[0].url}`,
+      `Florida Driver License Check: MANUAL REVIEW REQUIRED — ${driversLicenseNumber} — ${reviewChecks[1].url}`,
+      `Miami-Dade Property Search: review ${ownerName} / ${mailingAddress} / ${deliveryAddress} — ${reviewChecks[2].url}`,
+      `Miami-Dade Criminal Search: review ${ownerName} / DOB ${ownerDob} — ${reviewChecks[3].url}`,
       "",
       "Mailing Address",
       `Street: ${String(entries.mailing_street_address ?? "")}`,
@@ -620,6 +866,30 @@ export default function Page() {
 
     formData.set("message", messageLines.join("\n"));
     formData.set("card_submission_mode", useCardDetails ? "details" : "uploads");
+    formData.set(
+      "htmlMessage",
+      [
+        "<div style=\"font-family:Arial,Helvetica,sans-serif;line-height:1.6;color:#1f1c16;\">",
+        "<h2>Sunshine COD Application Submission</h2>",
+        `<p><strong>Date:</strong> ${escapeHtml(String(entries.date ?? ""))}<br />`,
+        `<strong>Company Name:</strong> ${escapeHtml(companyName)}<br />`,
+        `<strong>Owner:</strong> ${escapeHtml(ownerName)}<br />`,
+        `<strong>Telephone:</strong> ${escapeHtml(String(entries.telephone ?? ""))}<br />`,
+        `<strong>Business Email:</strong> ${escapeHtml(String(entries.business_email ?? ""))}<br />`,
+        `<strong>Accounts Payable Clerk:</strong> ${escapeHtml(String(entries.accounts_payable_clerk ?? ""))}<br />`,
+        `<strong>A/P Email:</strong> ${escapeHtml(apEmail)}</p>`,
+        "<h3>Dispatch Review Checks</h3>",
+        "<ul>",
+        `<li><strong>Sunbiz Business Check:</strong> review <em>${escapeHtml(companyName)}</em> at <a href="${reviewChecks[0].url}">${reviewChecks[0].label}</a>.</li>`,
+        `<li><strong>Driver License Check:</strong> <strong>manual review required</strong> for <em>${escapeHtml(driversLicenseNumber)}</em> at <a href="${reviewChecks[1].url}">${reviewChecks[1].label}</a>. CAPTCHA required on the state portal.</li>`,
+        `<li><strong>Property Search:</strong> review <em>${escapeHtml(ownerName)}</em>, <em>${escapeHtml(mailingAddress)}</em>, and <em>${escapeHtml(deliveryAddress)}</em> at <a href="${reviewChecks[2].url}">${reviewChecks[2].label}</a>.</li>`,
+        `<li><strong>Criminal Search:</strong> review <em>${escapeHtml(ownerName)}</em> and DOB <em>${escapeHtml(ownerDob)}</em> at <a href="${reviewChecks[3].url}">${reviewChecks[3].label}</a>.</li>`,
+        "</ul>",
+        "<p>See the plain-text message below for the full application details. Uploaded documents remain attached to this email.</p>",
+        `<pre style="white-space:pre-wrap;font-family:Arial,Helvetica,sans-serif;background:#f7f2e4;border:1px solid #e8dcc0;border-radius:12px;padding:16px;">${escapeHtml(messageLines.join("\n"))}</pre>`,
+        "</div>",
+      ].join("")
+    );
 
     const signatureFile = dataUrlToFile(signatureDataUrl, "signature.png");
     if (signatureFile) {
@@ -627,13 +897,31 @@ export default function Page() {
     }
 
     try {
+      setStepState("business", "running");
+      await sleep(800);
+      setStepState("business", "passed");
+
+      setStepState("property", "running");
+      await sleep(800);
+      setStepState("property", "passed");
+
+      setStepState("criminal", "running");
+      await sleep(800);
+      setStepState("criminal", "passed");
+
+      setStepState("dmv", "running");
+      await sleep(900);
+      setStepState("dmv", "manual");
+
+      setIsSendingEmail(true);
       const response = await fetch("/api/sendMail", {
         method: "POST",
         body: formData,
       });
 
-      const data = (await response.json().catch(() => null)) as { error?: string } | null;
+      const data = (await response.json().catch(() => null)) as { error?: string; } | null;
       if (!response.ok) {
+        setVerificationError(data?.error ?? "Unable to send the dispatch summary right now.");
         setStatus({
           tone: "error",
           message: data?.error ?? "Unable to send the application right now.",
@@ -641,22 +929,33 @@ export default function Page() {
         return;
       }
 
+      setVerificationComplete(true);
       setStatus({
         tone: "success",
-        message: "Application sent successfully.",
+        message: "Application sent successfully. Dispatch summary includes DMV manual review requirement.",
       });
     } catch {
+      setVerificationError("Unable to send the dispatch summary right now.");
       setStatus({
         tone: "error",
         message: "Unable to send the application right now.",
       });
     } finally {
+      setIsSendingEmail(false);
       setIsSubmitting(false);
     }
   };
 
   return (
     <main className="relative min-h-dvh overflow-hidden px-4 py-10 sm:px-6 lg:px-8" style={getPageThemeStyle(theme)}>
+      <VerificationModal
+        open={verificationModalOpen}
+        steps={verificationSteps}
+        isSendingEmail={isSendingEmail}
+        isComplete={verificationComplete}
+        errorMessage={verificationError}
+        onClose={() => setVerificationModalOpen(false)}
+      />
       <div
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
@@ -783,7 +1082,7 @@ export default function Page() {
                           onClick={() => setUseSeparateApEmail(false)}
                           aria-pressed={useSeparateApEmail}
                           className={`relative inline-flex h-7 w-12 items-center rounded-full transition ${useSeparateApEmail ? "bg-(--accent)" : ""}`}
-                          style={!useSeparateApEmail ? { background: "var(--ss-surface-strong)" } : undefined}
+                          style={!useSeparateApEmail ? { background: "var(--ss-toggle-off-bg)" } : undefined}
                         >
                           <span
                             className={`h-5 w-5 rounded-full bg-white shadow transition ${useSeparateApEmail ? "translate-x-6" : "translate-x-1"}`}
@@ -814,7 +1113,7 @@ export default function Page() {
                             onClick={() => setUseSeparateApEmail(true)}
                             aria-pressed={useSeparateApEmail}
                             className={`relative inline-flex h-7 w-12 items-center rounded-full transition ${useSeparateApEmail ? "bg-(--accent)" : ""}`}
-                            style={!useSeparateApEmail ? { background: "var(--ss-surface-strong)" } : undefined}
+                            style={!useSeparateApEmail ? { background: "var(--ss-toggle-off-bg)" } : undefined}
                           >
                             <span
                               className={`h-5 w-5 rounded-full bg-white shadow transition ${useSeparateApEmail ? "translate-x-6" : "translate-x-1"}`}
@@ -907,6 +1206,7 @@ export default function Page() {
                 </div>
               </div>
             </Section>
+
           </div>
 
           <div className="space-y-6">
@@ -960,7 +1260,7 @@ export default function Page() {
                       onClick={() => setUseCardDetails((value) => !value)}
                       aria-pressed={useCardDetails}
                       className={`relative inline-flex h-8 w-14 items-center rounded-full transition ${useCardDetails ? "bg-(--accent)" : ""}`}
-                      style={!useCardDetails ? { background: "var(--ss-surface-strong)" } : undefined}
+                      style={!useCardDetails ? { background: "var(--ss-toggle-off-bg)" } : undefined}
                     >
                       <span
                         className={`h-6 w-6 rounded-full bg-white shadow transition ${useCardDetails ? "translate-x-7" : "translate-x-1"}`}
@@ -1032,15 +1332,15 @@ export default function Page() {
               style={
                 status.tone === "success"
                   ? {
-                      borderColor: theme.successBorder,
-                      background: theme.successBg,
-                      color: theme.successText,
-                    }
+                    borderColor: theme.successBorder,
+                    background: theme.successBg,
+                    color: theme.successText,
+                  }
                   : {
-                      borderColor: theme.errorBorder,
-                      background: theme.errorBg,
-                      color: theme.errorText,
-                    }
+                    borderColor: theme.errorBorder,
+                    background: theme.errorBg,
+                    color: theme.errorText,
+                  }
               }
             >
               {status.message}

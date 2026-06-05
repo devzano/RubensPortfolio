@@ -7,6 +7,7 @@ type FeedbackPayload = {
   lastName?: string;
   email?: string;
   message?: string;
+  htmlMessage?: string;
   subject?: string;
   recipient?: string;
 };
@@ -44,6 +45,7 @@ export async function POST(request: Request) {
       lastName: toText(formData.get("lastName")),
       email: toText(formData.get("email")),
       message: toText(formData.get("message")),
+      htmlMessage: toText(formData.get("htmlMessage")),
       subject: toText(formData.get("subject")),
       recipient: toText(formData.get("recipient")),
     };
@@ -65,7 +67,7 @@ export async function POST(request: Request) {
     }
   }
 
-  const { appName, firstName, lastName, email, message, subject, recipient } = payload;
+  const { appName, firstName, lastName, email, message, htmlMessage, subject, recipient } = payload;
 
   if (![appName, firstName, lastName, email, message].every(isNonEmpty)) {
     return NextResponse.json(
@@ -85,6 +87,7 @@ export async function POST(request: Request) {
   const trimmedRecipient = isNonEmpty(recipient)
     ? recipient.trim()
     : EMAIL_USER;
+  const trimmedHtmlMessage = isNonEmpty(htmlMessage) ? htmlMessage.trim() : "";
 
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -108,6 +111,7 @@ export async function POST(request: Request) {
         "Message:",
         trimmedMessage.trim(),
       ].join("\n"),
+      html: trimmedHtmlMessage || undefined,
       attachments,
     });
 

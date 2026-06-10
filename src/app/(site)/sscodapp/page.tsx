@@ -350,10 +350,12 @@ function SignaturePad({
   value,
   onChange,
   currentDate,
+  strokeColor,
 }: {
   value: string;
   onChange: (nextValue: string) => void;
   currentDate: string;
+  strokeColor: string;
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const drawingRef = useRef(false);
@@ -375,9 +377,7 @@ function SignaturePad({
     context.lineCap = "round";
     context.lineJoin = "round";
     context.lineWidth = 2.4;
-    context.strokeStyle = getComputedStyle(document.documentElement)
-      .getPropertyValue("--ss-signature-stroke")
-      .trim();
+    context.strokeStyle = strokeColor;
     context.clearRect(0, 0, rect.width, rect.height);
 
     if (!value) {
@@ -392,7 +392,7 @@ function SignaturePad({
       setIsEmpty(false);
     };
     image.src = value;
-  }, [value]);
+  }, [value, strokeColor]);
 
   const toPoint = (event: ReactPointerEvent<HTMLCanvasElement>) => {
     const rect = event.currentTarget.getBoundingClientRect();
@@ -1225,6 +1225,7 @@ export default function Page() {
                   value={signatureDataUrl}
                   onChange={setSignatureDataUrl}
                   currentDate={currentDate}
+                  strokeColor={theme.signatureStroke}
                 />
               </div>
             </Section>

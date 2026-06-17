@@ -19,11 +19,18 @@ const toText = (value: FormDataEntryValue | null) =>
   typeof value === "string" ? value : "";
 
 export async function POST(request: Request) {
-  const { EMAIL_USER, EMAIL_APP_PASSWORD } = process.env;
+  const { EMAIL_USER, EMAIL_COD_USER, EMAIL_APP_PASSWORD } = process.env;
 
   if (!EMAIL_USER || !EMAIL_APP_PASSWORD) {
     return NextResponse.json(
-      { error: "Mail service is not configured." },
+      {
+        error: "Mail service is not configured.",
+        debug: {
+          EMAIL_USER: Boolean(EMAIL_USER),
+          EMAIL_APP_PASSWORD: Boolean(EMAIL_APP_PASSWORD),
+          EMAIL_COD_USER: Boolean(EMAIL_COD_USER),
+        },
+      },
       { status: 500 }
     );
   }
@@ -116,9 +123,27 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ ok: true });
-  } catch {
+  } catch (error) {
+    const message =
+      error instanceof Error && error.message.trim().length > 0
+        ? error.message.trim()
+        : "Unknown mailer error";
+    const errorCode =
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      typeof (error as { code?: unknown }).code === "string"
+        ? (error as { code: string }).code
+        : null;
+
     return NextResponse.json(
-      { error: "Unable to send feedback right now." },
+      {
+        error: "Unable to send feedback right now.",
+        debug: {
+          message,
+          code: errorCode,
+        },
+      },
       { status: 500 }
     );
   }

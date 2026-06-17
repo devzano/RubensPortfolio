@@ -51,7 +51,7 @@ export default function Page({
       description={
         <p className="leading-relaxed">
           <strong>
-            Stay in control of your car care with <span className="text-[color:var(--accent)]">AutoArchive</span>
+            Stay in control of your car care with <span className="text-(--accent)">AutoArchive</span>
           </strong>{" "}
           — your all-in-one app for managing vehicles, maintenance, and service records in one clean place.
         </p>

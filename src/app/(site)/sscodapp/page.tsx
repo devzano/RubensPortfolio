@@ -383,7 +383,7 @@ function UploadField({
           className="mt-3 overflow-hidden rounded-2xl border"
           style={{
             borderColor: "var(--ss-border)",
-            background: "#05070b",
+            background: fileType === "image" ? "var(--ss-surface-strong)" : "#05070b",
           }}
         >
           <div className="flex h-48 w-full items-center justify-center p-4">
@@ -391,7 +391,7 @@ function UploadField({
               <img
                 src={previewUrl}
                 alt={`${label} preview`}
-                className="max-h-full max-w-full rounded-lg object-contain"
+                className="h-full w-full rounded-lg object-cover sm:h-auto sm:w-auto sm:max-h-full sm:max-w-full sm:object-contain"
               />
             ) : fileType === "pdf" ? (
               <div className="flex flex-col items-center gap-3 text-center">
@@ -727,6 +727,56 @@ function escapeHtml(value: string) {
     .replaceAll("'", "&#39;");
 }
 
+function buildDebugMessage(data: {
+  error?: string;
+  debug?: {
+    message?: string;
+    code?: string | null;
+    EMAIL_USER?: boolean;
+    EMAIL_APP_PASSWORD?: boolean;
+    EMAIL_COD_USER?: boolean;
+    file?: string;
+    sizeBytes?: number;
+    maxFileBytes?: number;
+    totalAttachmentBytes?: number;
+    maxTotalAttachmentBytes?: number;
+  };
+} | null) {
+  if (!data) {
+    return "Unable to send the dispatch summary right now.";
+  }
+
+  const parts = [
+    data.error ?? "Unable to send the dispatch summary right now.",
+    data.debug?.message ? `message: ${data.debug.message}` : null,
+    data.debug?.code ? `code: ${data.debug.code}` : null,
+    typeof data.debug?.EMAIL_USER === "boolean"
+      ? `EMAIL_USER: ${data.debug.EMAIL_USER ? "set" : "missing"}`
+      : null,
+    typeof data.debug?.EMAIL_APP_PASSWORD === "boolean"
+      ? `EMAIL_APP_PASSWORD: ${data.debug.EMAIL_APP_PASSWORD ? "set" : "missing"}`
+      : null,
+    typeof data.debug?.EMAIL_COD_USER === "boolean"
+      ? `EMAIL_COD_USER: ${data.debug.EMAIL_COD_USER ? "set" : "missing"}`
+      : null,
+    data.debug?.file ? `file: ${data.debug.file}` : null,
+    typeof data.debug?.sizeBytes === "number"
+      ? `sizeBytes: ${data.debug.sizeBytes}`
+      : null,
+    typeof data.debug?.maxFileBytes === "number"
+      ? `maxFileBytes: ${data.debug.maxFileBytes}`
+      : null,
+    typeof data.debug?.totalAttachmentBytes === "number"
+      ? `totalAttachmentBytes: ${data.debug.totalAttachmentBytes}`
+      : null,
+    typeof data.debug?.maxTotalAttachmentBytes === "number"
+      ? `maxTotalAttachmentBytes: ${data.debug.maxTotalAttachmentBytes}`
+      : null,
+  ].filter(Boolean);
+
+  return parts.join(" | ");
+}
+
 function sleep(ms: number) {
   return new Promise((resolve) => {
     window.setTimeout(resolve, ms);
@@ -751,95 +801,97 @@ function VerificationModal({
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/45 px-4 py-6 backdrop-blur-sm">
-      <div
-        className="w-full max-w-2xl rounded-[30px] border p-6 shadow-2xl sm:p-7"
-        style={{
-          borderColor: "var(--ss-border)",
-          background: "var(--ss-panel)",
-          color: "var(--ss-text)",
-        }}
-      >
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-(--accent)">
-              Verification Preview
+    <div className="fixed inset-0 z-[120] overflow-y-auto bg-black/45 px-4 py-4 backdrop-blur-sm sm:px-6 sm:py-6">
+      <div className="flex min-h-full items-center justify-center">
+        <div
+          className="my-auto flex w-full max-w-2xl max-h-[88dvh] flex-col overflow-hidden rounded-[30px] border p-5 shadow-2xl sm:p-7"
+          style={{
+            borderColor: "var(--ss-border)",
+            background: "var(--ss-panel)",
+            color: "var(--ss-text)",
+          }}
+        >
+          <div className="flex items-start justify-between gap-4">
+            <div>
+              <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-(--accent)">
+                Verification Preview
+              </div>
+              <h3 className="mt-2 text-2xl font-semibold tracking-tight">
+                Running Customer Review Flow
+              </h3>
+              <p className="mt-2 text-sm leading-6" style={{ color: "var(--ss-muted)" }}>
+                This demonstrates the future approval flow. Business, property, and criminal checks are shown as preview passes, and DMV remains manual review required until a compliant backend verifier is approved.
+              </p>
             </div>
-            <h3 className="mt-2 text-2xl font-semibold tracking-tight">
-              Running Customer Review Flow
-            </h3>
-            <p className="mt-2 text-sm leading-6" style={{ color: "var(--ss-muted)" }}>
-              This demonstrates the future approval flow. Business, property, and criminal checks are shown as preview passes, and DMV remains manual review required until a compliant backend verifier is approved.
-            </p>
-          </div>
-          {(isComplete || errorMessage) ? (
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition"
-              style={{
-                borderColor: "var(--ss-border)",
-                background: "var(--ss-surface-soft)",
-                color: "var(--ss-muted)",
-              }}
-            >
-              Close
-            </button>
-          ) : null}
-        </div>
-
-        <div className="mt-6 space-y-3">
-          {steps.map((step) => {
-            const stateStyles: Record<VerificationStepState, { badge: string; tone: string; }> = {
-              pending: { badge: "Pending", tone: "var(--ss-soft)" },
-              running: { badge: "Running", tone: "var(--accent)" },
-              passed: { badge: "Passed", tone: "#059669" },
-              manual: { badge: "Manual Review", tone: "#d97706" },
-              failed: { badge: "Failed", tone: "#e11d48" },
-            };
-
-            return (
-              <div
-                key={step.key}
-                className="rounded-3xl border p-4"
+            {(isComplete || errorMessage) ? (
+              <button
+                type="button"
+                onClick={onClose}
+                className="rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition"
                 style={{
-                  borderColor: "var(--ss-border-soft)",
-                  background: "var(--ss-surface)",
+                  borderColor: "var(--ss-border)",
+                  background: "var(--ss-surface-soft)",
+                  color: "var(--ss-muted)",
                 }}
               >
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <div className="font-medium">{step.label}</div>
-                    <div className="mt-1 text-sm" style={{ color: "var(--ss-muted)" }}>
-                      {step.description}
+                Close
+              </button>
+            ) : null}
+          </div>
+
+          <div className="mt-6 flex-1 space-y-3 overflow-y-auto pr-1">
+            {steps.map((step) => {
+              const stateStyles: Record<VerificationStepState, { badge: string; tone: string; }> = {
+                pending: { badge: "Pending", tone: "var(--ss-soft)" },
+                running: { badge: "Running", tone: "var(--accent)" },
+                passed: { badge: "Passed", tone: "#059669" },
+                manual: { badge: "Manual Review", tone: "#d97706" },
+                failed: { badge: "Failed", tone: "#e11d48" },
+              };
+
+              return (
+                <div
+                  key={step.key}
+                  className="rounded-3xl border p-4"
+                  style={{
+                    borderColor: "var(--ss-border-soft)",
+                    background: "var(--ss-surface)",
+                  }}
+                >
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <div className="font-medium">{step.label}</div>
+                      <div className="mt-1 text-sm" style={{ color: "var(--ss-muted)" }}>
+                        {step.description}
+                      </div>
+                    </div>
+                    <div
+                      className="rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]"
+                      style={{
+                        color: stateStyles[step.state].tone,
+                        background: "color-mix(in srgb, currentColor 10%, transparent)",
+                        border: "1px solid color-mix(in srgb, currentColor 20%, transparent)",
+                      }}
+                    >
+                      {stateStyles[step.state].badge}
                     </div>
                   </div>
-                  <div
-                    className="rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em]"
-                    style={{
-                      color: stateStyles[step.state].tone,
-                      background: "color-mix(in srgb, currentColor 10%, transparent)",
-                      border: "1px solid color-mix(in srgb, currentColor 20%, transparent)",
-                    }}
-                  >
-                    {stateStyles[step.state].badge}
-                  </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
 
-        <div className="mt-5 rounded-3xl border p-4" style={{ borderColor: "var(--ss-border-soft)", background: "var(--ss-surface)" }}>
-          <div className="text-sm font-medium">Dispatch Summary</div>
-          <div className="mt-2 text-sm" style={{ color: "var(--ss-muted)" }}>
-            {errorMessage
-              ? errorMessage
-              : isSendingEmail
-                ? "Preparing summary email for dispatch."
-                : isComplete
-                  ? "Summary sent. DMV is flagged as manual review required in the email."
-                  : "Verification preview is still in progress."}
+            <div className="rounded-3xl border p-4" style={{ borderColor: "var(--ss-border-soft)", background: "var(--ss-surface)" }}>
+              <div className="text-sm font-medium">Dispatch Summary</div>
+              <div className="mt-2 text-sm" style={{ color: "var(--ss-muted)" }}>
+                {errorMessage
+                  ? errorMessage
+                  : isSendingEmail
+                    ? "Preparing summary email for dispatch."
+                    : isComplete
+                      ? "Summary sent. DMV is flagged as manual review required in the email."
+                      : "Verification preview is still in progress."}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -887,6 +939,17 @@ export default function Page() {
   useEffect(() => {
     setStatus({ tone: null, message: null });
   }, [useCardDetails]);
+
+  useEffect(() => {
+    if (!verificationModalOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [verificationModalOpen]);
 
   const setStepState = (key: VerificationStep["key"], nextState: VerificationStepState) => {
     setVerificationSteps((current) =>
@@ -1098,35 +1161,19 @@ export default function Page() {
           EMAIL_USER?: boolean;
           EMAIL_APP_PASSWORD?: boolean;
           EMAIL_COD_USER?: boolean;
+          file?: string;
+          sizeBytes?: number;
+          maxFileBytes?: number;
+          totalAttachmentBytes?: number;
+          maxTotalAttachmentBytes?: number;
         };
       } | null;
       if (!response.ok) {
-        const debugMessage = data?.debug
-          ? [
-            data.debug.message ? `message: ${data.debug.message}` : null,
-            data.debug.code ? `code: ${data.debug.code}` : null,
-            typeof data.debug.EMAIL_USER === "boolean"
-              ? `EMAIL_USER: ${data.debug.EMAIL_USER ? "set" : "missing"}`
-              : null,
-            typeof data.debug.EMAIL_APP_PASSWORD === "boolean"
-              ? `EMAIL_APP_PASSWORD: ${data.debug.EMAIL_APP_PASSWORD ? "set" : "missing"}`
-              : null,
-            typeof data.debug.EMAIL_COD_USER === "boolean"
-              ? `EMAIL_COD_USER: ${data.debug.EMAIL_COD_USER ? "set" : "missing"}`
-              : null,
-          ]
-            .filter(Boolean)
-            .join(" | ")
-          : null;
-
-        setVerificationError(
-          [data?.error ?? "Unable to send the dispatch summary right now.", debugMessage]
-            .filter(Boolean)
-            .join(" | ")
-        );
+        const debugMessage = buildDebugMessage(data);
+        setVerificationError(debugMessage);
         setStatus({
           tone: "error",
-          message: data?.error ?? "Unable to send the application right now.",
+          message: debugMessage,
         });
         return;
       }
@@ -1141,12 +1188,11 @@ export default function Page() {
         error instanceof Error && error.message.trim().length > 0
           ? error.message.trim()
           : "Unknown network error";
-      setVerificationError(
-        `Unable to send the dispatch summary right now. | message: ${debugMessage}`
-      );
+      const surfacedMessage = `Unable to send the dispatch summary right now. | message: ${debugMessage}`;
+      setVerificationError(surfacedMessage);
       setStatus({
         tone: "error",
-        message: "Unable to send the application right now.",
+        message: surfacedMessage,
       });
     } finally {
       setIsSendingEmail(false);

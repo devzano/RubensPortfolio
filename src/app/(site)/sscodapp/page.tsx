@@ -240,7 +240,7 @@ function Field({
   type = "text",
   className = "",
   required = true,
-  disabled = false,
+  readOnly = false,
   headerRight,
 }: {
   label: string;
@@ -249,7 +249,7 @@ function Field({
   type?: string;
   className?: string;
   required?: boolean;
-  disabled?: boolean;
+  readOnly?: boolean;
   headerRight?: ReactNode;
 }) {
   return (
@@ -265,8 +265,8 @@ function Field({
         type={type}
         required={required}
         defaultValue={value}
-        disabled={disabled}
-        className="h-12 rounded-2xl border px-4 text-sm outline-none ring-1 transition placeholder:text-[color:var(--ss-input-placeholder)] focus:border-(--accent) focus:ring-(--accent-soft) disabled:cursor-not-allowed disabled:opacity-70"
+        readOnly={readOnly}
+        className="h-12 rounded-2xl border px-4 text-sm outline-none ring-1 transition placeholder:text-[color:var(--ss-input-placeholder)] focus:border-(--accent) focus:ring-(--accent-soft) read-only:cursor-default read-only:opacity-70"
         style={{
           borderColor: "var(--ss-border)",
           background: "var(--ss-input-bg)",
@@ -797,6 +797,7 @@ export default function Page() {
   const [useCardDetails, setUseCardDetails] = useState(false);
   const [useSeparateApEmail, setUseSeparateApEmail] = useState(false);
   const [useMailingForDelivery, setUseMailingForDelivery] = useState(false);
+  const [isPickup, setIsPickup] = useState(false);
   const [signatureDataUrl, setSignatureDataUrl] = useState("");
   const [isLightMode, setIsLightMode] = useState(true);
   const [status, setStatus] = useState<{
@@ -815,6 +816,11 @@ export default function Page() {
   const mailingAddressGroup = addressFields.find((group) => group.title === "Mailing Address");
 
   const deliveryValueFor = (field: FieldSpec) => {
+    if (isPickup) {
+      if (field.name === "delivery_street_address") return "Pick-Up";
+      return "N/A";
+    }
+
     if (!useMailingForDelivery) {
       return field.value;
     }
@@ -855,6 +861,7 @@ export default function Page() {
     const form = event.currentTarget;
     const formData = new FormData(form);
     const entries = Object.fromEntries(formData.entries());
+    const deliveryMethod = isPickup ? "Pick-Up" : useMailingForDelivery ? "Same as Mailing Address" : "Delivery";
     const apEmail = useSeparateApEmail
       ? String(entries.ap_email ?? "")
       : String(entries.business_email ?? "");
@@ -887,6 +894,7 @@ export default function Page() {
     formData.set("email", String(entries.business_email ?? "ruben@manzanomarine.co"));
     formData.set("subject", "Sunshine COD Application Submission");
     formData.set("recipient", "kpalomo@sunshinegasoline.com");
+    formData.set("delivery_method", deliveryMethod);
 
     const messageLines = [
       "Sunshine COD Application Submission",
@@ -895,6 +903,7 @@ export default function Page() {
       "Business Check: Passed (preview)",
       "Property Check: Passed (preview)",
       "Criminal Check: Passed (preview)",
+      `Delivery Method: ${deliveryMethod}`,
       "DMV History: Manual review required",
       "",
       `Date: ${String(entries.date ?? "")}`,
@@ -923,7 +932,7 @@ export default function Page() {
       `State: ${String(entries.mailing_state ?? "")}`,
       `Zip Code: ${String(entries.mailing_zip_code ?? "")}`,
       "",
-      "Delivery Address",
+      `Delivery Address (${deliveryMethod})`,
       `Street: ${String(entries.delivery_street_address ?? "")}`,
       `City: ${String(entries.delivery_city ?? "")}`,
       `State: ${String(entries.delivery_state ?? "")}`,
@@ -983,7 +992,8 @@ export default function Page() {
         `<strong>Telephone:</strong> ${escapeHtml(String(entries.telephone ?? ""))}<br />`,
         `<strong>Business Email:</strong> ${escapeHtml(String(entries.business_email ?? ""))}<br />`,
         `<strong>Accounts Payable Clerk:</strong> ${escapeHtml(String(entries.accounts_payable_clerk ?? ""))}<br />`,
-        `<strong>A/P Email:</strong> ${escapeHtml(apEmail)}</p>`,
+        `<strong>A/P Email:</strong> ${escapeHtml(apEmail)}<br />`,
+        `<strong>Delivery Method:</strong> ${escapeHtml(deliveryMethod)}</p>`,
         "<h3>Dispatch Review Checks</h3>",
         "<ul>",
         `<li><strong>Sunbiz Business Check:</strong> review <em>${escapeHtml(companyName)}</em> at <a href="${reviewChecks[0].url}">${reviewChecks[0].label}</a>.</li>`,
@@ -1038,20 +1048,20 @@ export default function Page() {
       if (!response.ok) {
         const debugMessage = data?.debug
           ? [
-              data.debug.message ? `message: ${data.debug.message}` : null,
-              data.debug.code ? `code: ${data.debug.code}` : null,
-              typeof data.debug.EMAIL_USER === "boolean"
-                ? `EMAIL_USER: ${data.debug.EMAIL_USER ? "set" : "missing"}`
-                : null,
-              typeof data.debug.EMAIL_APP_PASSWORD === "boolean"
-                ? `EMAIL_APP_PASSWORD: ${data.debug.EMAIL_APP_PASSWORD ? "set" : "missing"}`
-                : null,
-              typeof data.debug.EMAIL_COD_USER === "boolean"
-                ? `EMAIL_COD_USER: ${data.debug.EMAIL_COD_USER ? "set" : "missing"}`
-                : null,
-            ]
-              .filter(Boolean)
-              .join(" | ")
+            data.debug.message ? `message: ${data.debug.message}` : null,
+            data.debug.code ? `code: ${data.debug.code}` : null,
+            typeof data.debug.EMAIL_USER === "boolean"
+              ? `EMAIL_USER: ${data.debug.EMAIL_USER ? "set" : "missing"}`
+              : null,
+            typeof data.debug.EMAIL_APP_PASSWORD === "boolean"
+              ? `EMAIL_APP_PASSWORD: ${data.debug.EMAIL_APP_PASSWORD ? "set" : "missing"}`
+              : null,
+            typeof data.debug.EMAIL_COD_USER === "boolean"
+              ? `EMAIL_COD_USER: ${data.debug.EMAIL_COD_USER ? "set" : "missing"}`
+              : null,
+          ]
+            .filter(Boolean)
+            .join(" | ")
           : null;
 
         setVerificationError(
@@ -1090,7 +1100,7 @@ export default function Page() {
   };
 
   return (
-    <main className="relative min-h-dvh overflow-hidden px-4 py-10 sm:px-6 lg:px-8" style={getPageThemeStyle(theme)}>
+    <main className="relative min-h-dvh overflow-hidden px-4 pb-36 pt-10 sm:px-6 lg:px-8" style={getPageThemeStyle(theme)}>
       <VerificationModal
         open={verificationModalOpen}
         steps={verificationSteps}
@@ -1297,21 +1307,42 @@ export default function Page() {
                         </div>
 
                         {group.title === "Delivery Address" ? (
-                          <div className="flex items-center gap-3">
-                            <span className="text-[10px] font-medium" style={{ color: "var(--ss-soft)" }}>
-                              Same as Mailing
-                            </span>
-                            <button
-                              type="button"
-                              onClick={() => setUseMailingForDelivery((value) => !value)}
-                              aria-pressed={useMailingForDelivery}
-                              className={`relative inline-flex h-7 w-12 items-center rounded-full transition ${useMailingForDelivery ? "bg-(--accent)" : ""}`}
-                              style={!useMailingForDelivery ? { background: "var(--ss-toggle-off-bg)" } : undefined}
-                            >
-                              <span
-                                className={`h-5 w-5 rounded-full bg-white shadow transition ${useMailingForDelivery ? "translate-x-6" : "translate-x-1"}`}
-                              />
-                            </button>
+                          <div className="flex flex-wrap items-center justify-end gap-3">
+                            <div className="flex items-center gap-2">
+                              <span className="text-[10px] font-medium" style={{ color: "var(--ss-soft)" }}>
+                                Same as Mailing
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setUseMailingForDelivery((value) => !value);
+                                  setIsPickup(false);
+                                }}
+                                aria-pressed={useMailingForDelivery}
+                                className={`relative inline-flex h-7 w-12 items-center rounded-full transition ${useMailingForDelivery ? "bg-(--accent)" : ""}`}
+                                style={!useMailingForDelivery ? { background: "var(--ss-toggle-off-bg)" } : undefined}
+                              >
+                                <span className={`h-5 w-5 rounded-full bg-white shadow transition ${useMailingForDelivery ? "translate-x-6" : "translate-x-1"}`} />
+                              </button>
+                            </div>
+
+                            <div className="flex items-center gap-2">
+                              <span className="text-[10px] font-medium" style={{ color: "var(--ss-soft)" }}>
+                                Pick-Up
+                              </span>
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  setIsPickup((value) => !value);
+                                  setUseMailingForDelivery(false);
+                                }}
+                                aria-pressed={isPickup}
+                                className={`relative inline-flex h-7 w-12 items-center rounded-full transition ${isPickup ? "bg-(--accent)" : ""}`}
+                                style={!isPickup ? { background: "var(--ss-toggle-off-bg)" } : undefined}
+                              >
+                                <span className={`h-5 w-5 rounded-full bg-white shadow transition ${isPickup ? "translate-x-6" : "translate-x-1"}`} />
+                              </button>
+                            </div>
                           </div>
                         ) : null}
                       </div>
@@ -1321,12 +1352,12 @@ export default function Page() {
 
                           return (
                             <Field
-                              key={`${group.title}-${field.label}-${useMailingForDelivery ? "mailing" : "delivery"}`}
+                              key={`${group.title}-${field.label}-${isPickup ? "pickup" : useMailingForDelivery ? "mailing" : "delivery"}`}
                               label={field.label}
                               name={field.name}
                               value={isDeliveryAddress ? deliveryValueFor(field) : field.value}
                               type={field.type}
-                              disabled={isDeliveryAddress && useMailingForDelivery}
+                              readOnly={isDeliveryAddress && (useMailingForDelivery || isPickup)}
                               className={field.label === "Street Address" ? "sm:col-span-2" : ""}
                             />
                           );
@@ -1473,49 +1504,56 @@ export default function Page() {
           </div>
         </div>
 
-        <section
-          className="rounded-[28px] border p-5 pb-2 backdrop-blur-xl sm:p-6"
-          style={{
-            borderColor: "var(--ss-border)",
-            background: "var(--ss-panel)",
-            boxShadow: "var(--ss-shadow)",
-          }}
-        >
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <h2 className="text-xl font-semibold tracking-tight" style={{ color: "var(--ss-text)" }}>
-              Submit Application
-            </h2>
+        <section className="fixed inset-x-0 bottom-0 z-[90] px-4 pb-4 sm:px-6 lg:px-8">
+          <div
+            className="mx-auto w-full max-w-7xl rounded-[28px] border p-4 backdrop-blur-xl sm:p-5"
+            style={{
+              borderColor: "var(--ss-border)",
+              background: "var(--ss-panel)",
+              boxShadow: "var(--ss-shadow)",
+            }}
+          >
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-base font-semibold tracking-tight sm:text-lg" style={{ color: "var(--ss-text)" }}>
+                  Submit Application
+                </h2>
+                <div className="mt-1 text-xs" style={{ color: "var(--ss-soft)" }}>
+                  Ready when the required fields, uploads, and signature are complete.
+                </div>
+              </div>
 
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="inline-flex h-12 items-center justify-center rounded-full bg-linear-to-br from-(--accent-light) to-(--accent) px-6 text-sm font-semibold shadow-lg shadow-black/25 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
-              style={{ color: "var(--button-text)" }}
-            >
-              {isSubmitting ? "Sending..." : "Submit Application"}
-            </button>
-          </div>
-
-          {status.message ? (
-            <div
-              className="mt-4 rounded-2xl border px-4 py-3 text-sm"
-              style={
-                status.tone === "success"
-                  ? {
-                    borderColor: theme.successBorder,
-                    background: theme.successBg,
-                    color: theme.successText,
-                  }
-                  : {
-                    borderColor: theme.errorBorder,
-                    background: theme.errorBg,
-                    color: theme.errorText,
-                  }
-              }
-            >
-              {status.message}
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="inline-flex h-12 items-center justify-center rounded-full bg-linear-to-br from-(--accent-light) to-(--accent) px-6 text-sm font-semibold shadow-lg shadow-black/25 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+                style={{ color: "var(--button-text)" }}
+              >
+                {isSubmitting ? "Sending..." : "Submit Application"}
+              </button>
             </div>
-          ) : null}
+
+            {status.message ? (
+              <div
+                className="mt-3 rounded-2xl border px-4 py-3 text-sm"
+                style={
+                  status.tone === "success"
+                    ? {
+                      borderColor: theme.successBorder,
+                      background: theme.successBg,
+                      color: theme.successText,
+                    }
+                    : {
+                      borderColor: theme.errorBorder,
+                      background: theme.errorBg,
+                      color: theme.errorText,
+                    }
+                }
+              >
+                {status.message}
+              </div>
+            ) : null}
+          </div>
         </section>
       </form>
     </main>

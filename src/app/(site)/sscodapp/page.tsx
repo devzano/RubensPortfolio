@@ -7,6 +7,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type ChangeEvent,
   type CSSProperties,
   type FormEvent,
   type PointerEvent as ReactPointerEvent,
@@ -239,6 +240,7 @@ function Field({
   type = "text",
   className = "",
   required = true,
+  disabled = false,
   headerRight,
 }: {
   label: string;
@@ -247,6 +249,7 @@ function Field({
   type?: string;
   className?: string;
   required?: boolean;
+  disabled?: boolean;
   headerRight?: ReactNode;
 }) {
   return (
@@ -262,7 +265,8 @@ function Field({
         type={type}
         required={required}
         defaultValue={value}
-        className="h-12 rounded-2xl border px-4 text-sm outline-none ring-1 transition placeholder:text-[color:var(--ss-input-placeholder)] focus:border-(--accent) focus:ring-(--accent-soft)"
+        disabled={disabled}
+        className="h-12 rounded-2xl border px-4 text-sm outline-none ring-1 transition placeholder:text-[color:var(--ss-input-placeholder)] focus:border-(--accent) focus:ring-(--accent-soft) disabled:cursor-not-allowed disabled:opacity-70"
         style={{
           borderColor: "var(--ss-border)",
           background: "var(--ss-input-bg)",
@@ -287,6 +291,46 @@ function UploadField({
   help?: string;
   required?: boolean;
 }) {
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [fileName, setFileName] = useState("");
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0] ?? null;
+
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+
+    setFileName(file?.name ?? "");
+
+    if (!file || !file.type.startsWith("image/")) {
+      setPreviewUrl(null);
+      return;
+    }
+
+    setPreviewUrl(URL.createObjectURL(file));
+  };
+
+  const clearFile = () => {
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+    }
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+    setPreviewUrl(null);
+    setFileName("");
+  };
+
   return (
     <label
       className="flex flex-col gap-2 rounded-3xl border p-4"
@@ -299,10 +343,12 @@ function UploadField({
         {label}
       </span>
       <input
+        ref={inputRef}
         name={name}
         type="file"
         accept={accept}
         required={required}
+        onChange={handleChange}
         className="block w-full rounded-2xl border border-dashed px-4 py-4 text-sm file:mr-4 file:rounded-full file:border-0 file:bg-(--accent) file:px-4 file:py-2 file:text-sm file:font-semibold file:text-(--button-text) hover:file:brightness-110"
         style={{
           borderColor: "var(--ss-border)",
@@ -310,6 +356,54 @@ function UploadField({
           color: "var(--ss-input-text)",
         }}
       />
+
+      {previewUrl ? (
+        <div
+          className="mt-3 overflow-hidden rounded-2xl border"
+          style={{
+            borderColor: "var(--ss-border)",
+            background: "var(--ss-canvas-bg)",
+          }}
+        >
+          <img
+            src={previewUrl}
+            alt={`${label} preview`}
+            className="h-48 w-full object-contain"
+          />
+        </div>
+      ) : null}
+
+      {fileName ? (
+        <div className="flex items-center justify-between gap-3">
+          <span className="text-xs truncate" style={{ color: "var(--ss-soft)" }}>
+            Selected: {fileName}
+          </span>
+          <button
+            type="button"
+            onClick={clearFile}
+            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border transition hover:opacity-80"
+            style={{
+              borderColor: "var(--ss-border)",
+              background: "var(--ss-surface-soft)",
+              color: "var(--ss-muted)",
+            }}
+            aria-label="Clear selected file"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              className="h-4 w-4"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            >
+              <path d="M6 6L18 18" />
+              <path d="M18 6L6 18" />
+            </svg>
+          </button>
+        </div>
+      ) : null}
+
       {help ? <span className="text-xs" style={{ color: "var(--ss-soft)" }}>{help}</span> : null}
     </label>
   );
@@ -687,7 +781,7 @@ function VerificationModal({
             {errorMessage
               ? errorMessage
               : isSendingEmail
-                ? "Preparing dispatch summary email for Kathy."
+                ? "Preparing summary email for dispatch."
                 : isComplete
                   ? "Summary sent. DMV is flagged as manual review required in the email."
                   : "Verification preview is still in progress."}
@@ -702,6 +796,7 @@ export default function Page() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [useCardDetails, setUseCardDetails] = useState(false);
   const [useSeparateApEmail, setUseSeparateApEmail] = useState(false);
+  const [useMailingForDelivery, setUseMailingForDelivery] = useState(false);
   const [signatureDataUrl, setSignatureDataUrl] = useState("");
   const [isLightMode, setIsLightMode] = useState(true);
   const [status, setStatus] = useState<{
@@ -716,6 +811,17 @@ export default function Page() {
 
   const currentDate = useMemo(() => todayIso(), []);
   const theme = isLightMode ? sunshineTheme.light : sunshineTheme.dark;
+
+  const mailingAddressGroup = addressFields.find((group) => group.title === "Mailing Address");
+
+  const deliveryValueFor = (field: FieldSpec) => {
+    if (!useMailingForDelivery) {
+      return field.value;
+    }
+
+    const mailingFieldName = field.name.replace("delivery_", "mailing_");
+    return mailingAddressGroup?.fields.find((mailingField) => mailingField.name === mailingFieldName)?.value ?? field.value;
+  };
 
   useEffect(() => {
     setStatus({ tone: null, message: null });
@@ -919,9 +1025,40 @@ export default function Page() {
         body: formData,
       });
 
-      const data = (await response.json().catch(() => null)) as { error?: string; } | null;
+      const data = (await response.json().catch(() => null)) as {
+        error?: string;
+        debug?: {
+          message?: string;
+          code?: string | null;
+          EMAIL_USER?: boolean;
+          EMAIL_APP_PASSWORD?: boolean;
+          EMAIL_COD_USER?: boolean;
+        };
+      } | null;
       if (!response.ok) {
-        setVerificationError(data?.error ?? "Unable to send the dispatch summary right now.");
+        const debugMessage = data?.debug
+          ? [
+              data.debug.message ? `message: ${data.debug.message}` : null,
+              data.debug.code ? `code: ${data.debug.code}` : null,
+              typeof data.debug.EMAIL_USER === "boolean"
+                ? `EMAIL_USER: ${data.debug.EMAIL_USER ? "set" : "missing"}`
+                : null,
+              typeof data.debug.EMAIL_APP_PASSWORD === "boolean"
+                ? `EMAIL_APP_PASSWORD: ${data.debug.EMAIL_APP_PASSWORD ? "set" : "missing"}`
+                : null,
+              typeof data.debug.EMAIL_COD_USER === "boolean"
+                ? `EMAIL_COD_USER: ${data.debug.EMAIL_COD_USER ? "set" : "missing"}`
+                : null,
+            ]
+              .filter(Boolean)
+              .join(" | ")
+          : null;
+
+        setVerificationError(
+          [data?.error ?? "Unable to send the dispatch summary right now.", debugMessage]
+            .filter(Boolean)
+            .join(" | ")
+        );
         setStatus({
           tone: "error",
           message: data?.error ?? "Unable to send the application right now.",
@@ -934,8 +1071,14 @@ export default function Page() {
         tone: "success",
         message: "Application sent successfully. Dispatch summary includes DMV manual review requirement.",
       });
-    } catch {
-      setVerificationError("Unable to send the dispatch summary right now.");
+    } catch (error) {
+      const debugMessage =
+        error instanceof Error && error.message.trim().length > 0
+          ? error.message.trim()
+          : "Unknown network error";
+      setVerificationError(
+        `Unable to send the dispatch summary right now. | message: ${debugMessage}`
+      );
       setStatus({
         tone: "error",
         message: "Unable to send the application right now.",
@@ -1148,20 +1291,46 @@ export default function Page() {
                       className="rounded-3xl border p-4"
                       style={{ borderColor: "var(--ss-border-soft)", background: "var(--ss-surface)" }}
                     >
-                      <div className="mb-4 text-sm font-medium" style={{ color: "var(--ss-text)" }}>
-                        {group.title}
+                      <div className="mb-4 flex items-center justify-between gap-4">
+                        <div className="text-sm font-medium" style={{ color: "var(--ss-text)" }}>
+                          {group.title}
+                        </div>
+
+                        {group.title === "Delivery Address" ? (
+                          <div className="flex items-center gap-3">
+                            <span className="text-[10px] font-medium" style={{ color: "var(--ss-soft)" }}>
+                              Same as Mailing
+                            </span>
+                            <button
+                              type="button"
+                              onClick={() => setUseMailingForDelivery((value) => !value)}
+                              aria-pressed={useMailingForDelivery}
+                              className={`relative inline-flex h-7 w-12 items-center rounded-full transition ${useMailingForDelivery ? "bg-(--accent)" : ""}`}
+                              style={!useMailingForDelivery ? { background: "var(--ss-toggle-off-bg)" } : undefined}
+                            >
+                              <span
+                                className={`h-5 w-5 rounded-full bg-white shadow transition ${useMailingForDelivery ? "translate-x-6" : "translate-x-1"}`}
+                              />
+                            </button>
+                          </div>
+                        ) : null}
                       </div>
                       <div className="grid gap-4 sm:grid-cols-2">
-                        {group.fields.map((field) => (
-                          <Field
-                            key={`${group.title}-${field.label}`}
-                            label={field.label}
-                            name={field.name}
-                            value={field.value}
-                            type={field.type}
-                            className={field.label === "Street Address" ? "sm:col-span-2" : ""}
-                          />
-                        ))}
+                        {group.fields.map((field) => {
+                          const isDeliveryAddress = group.title === "Delivery Address";
+
+                          return (
+                            <Field
+                              key={`${group.title}-${field.label}-${useMailingForDelivery ? "mailing" : "delivery"}`}
+                              label={field.label}
+                              name={field.name}
+                              value={isDeliveryAddress ? deliveryValueFor(field) : field.value}
+                              type={field.type}
+                              disabled={isDeliveryAddress && useMailingForDelivery}
+                              className={field.label === "Street Address" ? "sm:col-span-2" : ""}
+                            />
+                          );
+                        })}
                       </div>
                     </div>
                   ))}
@@ -1235,13 +1404,13 @@ export default function Page() {
                 <UploadField
                   label="Sales Tax Exemption Certificate"
                   name="sales_tax_certificate"
-                  accept=".pdf,image/*"
+                  accept="image/jpeg,image/png,image/webp,.pdf"
                   help="Upload a PDF or Image Copy."
                 />
                 <UploadField
                   label="Driver's License"
                   name="drivers_license_image"
-                  accept="image/*,.pdf"
+                  accept="image/jpeg,image/png,image/webp,.pdf"
                   help="Upload the front of your driver's license."
                 />
 
@@ -1274,13 +1443,13 @@ export default function Page() {
                       <UploadField
                         label="Credit Card Front"
                         name="credit_card_front"
-                        accept="image/*,.pdf"
+                        accept="image/jpeg,image/png,image/webp,.pdf"
                         help="Readable Image or PDF."
                       />
                       <UploadField
                         label="Credit Card Back"
                         name="credit_card_back"
-                        accept="image/*,.pdf"
+                        accept="image/jpeg,image/png,image/webp,.pdf"
                         help="Readable Image or PDF."
                       />
                     </div>

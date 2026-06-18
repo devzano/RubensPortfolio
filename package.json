@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "dev:lan": "next dev --hostname 192.168.68.54 --turbopack",
     "dev:nodemon": "nodemon --watch src --watch public --watch next.config.ts --watch package.json --ext ts,tsx,js,jsx,mjs,css --exec \"next dev --turbopack\"",
     "build": "next build --turbopack",
     "start": "next start",

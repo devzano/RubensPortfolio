@@ -370,13 +370,27 @@ function UploadField({
         accept={accept}
         required={required}
         onChange={handleChange}
-        className="block w-full rounded-2xl border border-dashed px-4 py-4 text-sm file:mr-4 file:rounded-full file:border-0 file:bg-(--accent) file:px-4 file:py-2 file:text-sm file:font-semibold file:text-(--button-text) hover:file:brightness-110"
+        className="sr-only"
+      />
+      <div
+        className="flex items-center gap-3 rounded-2xl border border-dashed px-4 py-4"
         style={{
           borderColor: "var(--ss-border)",
           background: "var(--ss-surface-strong)",
           color: "var(--ss-input-text)",
         }}
-      />
+      >
+        <button
+          type="button"
+          onClick={() => inputRef.current?.click()}
+          className="inline-flex shrink-0 items-center justify-center rounded-full bg-(--accent) px-5 py-2 text-sm font-semibold text-(--button-text) transition hover:brightness-110"
+        >
+          Choose File
+        </button>
+        <span className="min-w-0 truncate text-sm" style={{ color: fileName ? "var(--ss-input-text)" : "var(--ss-soft)" }}>
+          {fileName || "No file selected"}
+        </span>
+      </div>
 
       {previewUrl || fileType === "pdf" || fileType === "other" ? (
         <div
@@ -789,6 +803,7 @@ function VerificationModal({
   isSendingEmail,
   isComplete,
   errorMessage,
+  debugDetails,
   onClose,
 }: {
   open: boolean;
@@ -796,6 +811,7 @@ function VerificationModal({
   isSendingEmail: boolean;
   isComplete: boolean;
   errorMessage: string | null;
+  debugDetails: string | null;
   onClose: () => void;
 }) {
   if (!open) return null;
@@ -888,10 +904,26 @@ function VerificationModal({
                   : isSendingEmail
                     ? "Preparing summary email for dispatch."
                     : isComplete
-                      ? "Summary sent. DMV is flagged as manual review required in the email."
-                      : "Verification preview is still in progress."}
+                  ? "Summary sent. DMV is flagged as manual review required in the email."
+                  : "Verification preview is still in progress."}
               </div>
             </div>
+
+            {debugDetails ? (
+              <div className="rounded-3xl border p-4" style={{ borderColor: "var(--ss-border-soft)", background: "var(--ss-surface)" }}>
+                <div className="text-sm font-medium">Raw Debug</div>
+                <pre
+                  className="mt-2 overflow-x-auto whitespace-pre-wrap break-words rounded-2xl border p-3 text-xs"
+                  style={{
+                    borderColor: "var(--ss-border)",
+                    background: "var(--ss-surface-strong)",
+                    color: "var(--ss-muted)",
+                  }}
+                >
+                  {debugDetails}
+                </pre>
+              </div>
+            ) : null}
           </div>
         </div>
       </div>
@@ -916,6 +948,7 @@ export default function Page() {
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [verificationComplete, setVerificationComplete] = useState(false);
   const [verificationError, setVerificationError] = useState<string | null>(null);
+  const [debugDetails, setDebugDetails] = useState<string | null>(null);
 
   const currentDate = useMemo(() => todayIso(), []);
   const theme = isLightMode ? sunshineTheme.light : sunshineTheme.dark;
@@ -974,6 +1007,7 @@ export default function Page() {
     setVerificationModalOpen(true);
     setVerificationComplete(false);
     setVerificationError(null);
+    setDebugDetails(null);
     setIsSendingEmail(false);
 
     const form = event.currentTarget;
@@ -1170,6 +1204,12 @@ export default function Page() {
       } | null;
       if (!response.ok) {
         const debugMessage = buildDebugMessage(data);
+        setDebugDetails(
+          [
+            `HTTP ${response.status} ${response.statusText}`,
+            data ? JSON.stringify(data, null, 2) : "No JSON body returned.",
+          ].join("\n\n")
+        );
         setVerificationError(debugMessage);
         setStatus({
           tone: "error",
@@ -1179,6 +1219,12 @@ export default function Page() {
       }
 
       setVerificationComplete(true);
+      setDebugDetails(
+        [
+          `HTTP ${response.status} ${response.statusText}`,
+          data ? JSON.stringify(data, null, 2) : '{"ok":true}',
+        ].join("\n\n")
+      );
       setStatus({
         tone: "success",
         message: "Application sent successfully. Dispatch summary includes DMV manual review requirement.",
@@ -1189,6 +1235,22 @@ export default function Page() {
           ? error.message.trim()
           : "Unknown network error";
       const surfacedMessage = `Unable to send the dispatch summary right now. | message: ${debugMessage}`;
+      setDebugDetails(
+        [
+          "Network / fetch exception",
+          error instanceof Error
+            ? JSON.stringify(
+                {
+                  name: error.name,
+                  message: error.message,
+                  stack: error.stack ?? null,
+                },
+                null,
+                2
+              )
+            : JSON.stringify({ error: String(error) }, null, 2),
+        ].join("\n\n")
+      );
       setVerificationError(surfacedMessage);
       setStatus({
         tone: "error",
@@ -1208,6 +1270,7 @@ export default function Page() {
         isSendingEmail={isSendingEmail}
         isComplete={verificationComplete}
         errorMessage={verificationError}
+        debugDetails={debugDetails}
         onClose={() => setVerificationModalOpen(false)}
       />
       <div
@@ -1652,6 +1715,24 @@ export default function Page() {
                 }
               >
                 {status.message}
+              </div>
+            ) : null}
+
+            {debugDetails ? (
+              <div
+                className="mt-3 rounded-2xl border p-4"
+                style={{
+                  borderColor: "var(--ss-border)",
+                  background: "var(--ss-surface)",
+                  color: "var(--ss-muted)",
+                }}
+              >
+                <div className="text-sm font-medium" style={{ color: "var(--ss-text)" }}>
+                  Raw Debug
+                </div>
+                <pre className="mt-2 overflow-x-auto whitespace-pre-wrap break-words text-xs">
+                  {debugDetails}
+                </pre>
               </div>
             ) : null}
           </div>

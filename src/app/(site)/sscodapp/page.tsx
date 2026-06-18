@@ -171,6 +171,11 @@ const reviewChecks = [
   },
 ] as const;
 
+const SAFE_MAX_ATTACHMENT_BYTES = Math.floor(1.5 * 1024 * 1024);
+const SAFE_MAX_TOTAL_ATTACHMENT_BYTES = 3 * 1024 * 1024;
+const COMPRESSED_IMAGE_TARGET_BYTES = 700 * 1024;
+const COMPRESSED_IMAGE_MAX_DIMENSION = 1600;
+
 type VerificationStepState = "pending" | "running" | "passed" | "manual" | "failed";
 
 type VerificationStep = {
@@ -181,6 +186,81 @@ type VerificationStep = {
 };
 
 const todayIso = () => new Date().toISOString().slice(0, 10);
+
+function formatBytes(bytes: number) {
+  if (bytes >= 1024 * 1024) {
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  }
+  return `${Math.ceil(bytes / 1024)} KB`;
+}
+
+async function compressImageFile(file: File) {
+  if (!file.type.startsWith("image/")) {
+    return file;
+  }
+
+  const imageUrl = URL.createObjectURL(file);
+
+  try {
+    const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const element = new window.Image();
+      element.onload = () => resolve(element);
+      element.onerror = () => reject(new Error("Unable to load selected image for compression."));
+      element.src = imageUrl;
+    });
+
+    const longestSide = Math.max(image.width, image.height);
+    const scale = longestSide > COMPRESSED_IMAGE_MAX_DIMENSION
+      ? COMPRESSED_IMAGE_MAX_DIMENSION / longestSide
+      : 1;
+    const width = Math.max(1, Math.round(image.width * scale));
+    const height = Math.max(1, Math.round(image.height * scale));
+
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+
+    const context = canvas.getContext("2d");
+    if (!context) {
+      return file;
+    }
+
+    context.drawImage(image, 0, 0, width, height);
+
+    const tryEncode = async (quality: number) => {
+      const blob = await new Promise<Blob | null>((resolve) => {
+        canvas.toBlob(resolve, "image/jpeg", quality);
+      });
+      return blob;
+    };
+
+    let encodedBlob = await tryEncode(0.82);
+    if (!encodedBlob) {
+      return file;
+    }
+
+    const qualitySteps = [0.72, 0.62, 0.52, 0.42];
+    for (const quality of qualitySteps) {
+      if (encodedBlob.size <= COMPRESSED_IMAGE_TARGET_BYTES) break;
+      const nextBlob = await tryEncode(quality);
+      if (nextBlob) {
+        encodedBlob = nextBlob;
+      }
+    }
+
+    if (encodedBlob.size >= file.size) {
+      return file;
+    }
+
+    const baseName = file.name.replace(/\.[^.]+$/, "");
+    return new File([encodedBlob], `${baseName}.jpg`, {
+      type: "image/jpeg",
+      lastModified: Date.now(),
+    });
+  } finally {
+    URL.revokeObjectURL(imageUrl);
+  }
+}
 
 const createVerificationSteps = (): VerificationStep[] => [
   {
@@ -295,6 +375,7 @@ function UploadField({
   const [fileName, setFileName] = useState("");
   const [fileType, setFileType] = useState<"image" | "pdf" | "other" | null>(null);
   const [fileSizeLabel, setFileSizeLabel] = useState("");
+  const [validationError, setValidationError] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -305,21 +386,53 @@ function UploadField({
     };
   }, [previewUrl]);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0] ?? null;
+  const handleChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const originalFile = event.target.files?.[0] ?? null;
 
     if (previewUrl) {
       URL.revokeObjectURL(previewUrl);
     }
 
-    setFileName(file?.name ?? "");
-    setFileSizeLabel(
-      file ? `${(file.size / (1024 * 1024)).toFixed(file.size >= 1024 * 1024 ? 1 : 2)} MB` : ""
-    );
+    setValidationError(null);
 
-    if (!file) {
+    if (!originalFile) {
+      setFileName("");
+      setFileSizeLabel("");
       setFileType(null);
       setPreviewUrl(null);
+      return;
+    }
+
+    let file = originalFile;
+
+    try {
+      file = await compressImageFile(originalFile);
+    } catch {
+      file = originalFile;
+    }
+
+    if (inputRef.current && file !== originalFile) {
+      try {
+        const dataTransfer = new DataTransfer();
+        dataTransfer.items.add(file);
+        inputRef.current.files = dataTransfer.files;
+      } catch {
+        file = originalFile;
+      }
+    }
+
+    setFileName(file.name);
+    setFileSizeLabel(formatBytes(file.size));
+
+    if (file.size > SAFE_MAX_ATTACHMENT_BYTES) {
+      if (inputRef.current) {
+        inputRef.current.value = "";
+      }
+      setFileName("");
+      setFileSizeLabel("");
+      setFileType(null);
+      setPreviewUrl(null);
+      setValidationError(`This file is too large. Maximum size is ${formatBytes(SAFE_MAX_ATTACHMENT_BYTES)}.`);
       return;
     }
 
@@ -350,6 +463,7 @@ function UploadField({
     setFileName("");
     setFileType(null);
     setFileSizeLabel("");
+    setValidationError(null);
   };
 
   return (
@@ -388,9 +502,9 @@ function UploadField({
           Choose File
         </button>
         <span className="min-w-0 truncate text-sm" style={{ color: fileName ? "var(--ss-input-text)" : "var(--ss-soft)" }}>
-          {fileName || "No file selected"}
-        </span>
-      </div>
+        {fileName || "No file selected"}
+      </span>
+    </div>
 
       {previewUrl || fileType === "pdf" || fileType === "other" ? (
         <div
@@ -471,8 +585,8 @@ function UploadField({
         </div>
       ) : null}
 
-      <span className="text-xs" style={{ color: "var(--ss-soft)" }}>
-        {[help, "Max 10 MB per file, 20 MB total email attachments."].filter(Boolean).join(" ")}
+      <span className="text-xs" style={{ color: validationError ? "var(--ss-error-text, #b91c1c)" : "var(--ss-soft)" }}>
+        {validationError ?? [help, `Images are compressed automatically. Max ${formatBytes(SAFE_MAX_ATTACHMENT_BYTES)} per file, ${formatBytes(SAFE_MAX_TOTAL_ATTACHMENT_BYTES)} total email attachments.`].filter(Boolean).join(" ")}
       </span>
     </label>
   );
@@ -791,6 +905,31 @@ function buildDebugMessage(data: {
   return parts.join(" | ");
 }
 
+function buildResponseDebugMessage(
+  response: Response,
+  data: {
+    error?: string;
+    debug?: {
+      message?: string;
+      code?: string | null;
+      EMAIL_USER?: boolean;
+      EMAIL_APP_PASSWORD?: boolean;
+      EMAIL_COD_USER?: boolean;
+      file?: string;
+      sizeBytes?: number;
+      maxFileBytes?: number;
+      totalAttachmentBytes?: number;
+      maxTotalAttachmentBytes?: number;
+    };
+  } | null
+) {
+  if (response.status === 413 && !data) {
+    return "Production request rejected before the API route ran. This is usually the host payload limit on multipart uploads, not the app's own file-size guard.";
+  }
+
+  return buildDebugMessage(data);
+}
+
 function sleep(ms: number) {
   return new Promise((resolve) => {
     window.setTimeout(resolve, ms);
@@ -820,14 +959,33 @@ function VerificationModal({
     <div className="fixed inset-0 z-[120] overflow-y-auto bg-black/45 px-4 py-4 backdrop-blur-sm sm:px-6 sm:py-6">
       <div className="flex min-h-full items-center justify-center">
         <div
-          className="my-auto flex w-full max-w-2xl max-h-[88dvh] flex-col overflow-hidden rounded-[30px] border p-5 shadow-2xl sm:p-7"
+          className="relative my-auto flex w-full max-w-2xl max-h-[88dvh] flex-col overflow-hidden rounded-[30px] border p-5 shadow-2xl sm:p-7"
           style={{
             borderColor: "var(--ss-border)",
             background: "var(--ss-panel)",
             color: "var(--ss-text)",
           }}
         >
-          <div className="flex items-start justify-between gap-4">
+          {(isComplete || errorMessage) ? (
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close verification modal"
+              className="absolute right-4 top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full border transition sm:right-5 sm:top-5"
+              style={{
+                borderColor: "var(--ss-border)",
+                background: "var(--ss-surface-soft)",
+                color: "var(--ss-muted)",
+              }}
+            >
+              <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <path d="M6 6L18 18" />
+                <path d="M18 6L6 18" />
+              </svg>
+            </button>
+          ) : null}
+
+          <div className="flex items-start gap-4 pr-14">
             <div>
               <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-(--accent)">
                 Verification Preview
@@ -839,20 +997,6 @@ function VerificationModal({
                 This demonstrates the future approval flow. Business, property, and criminal checks are shown as preview passes, and DMV remains manual review required until a compliant backend verifier is approved.
               </p>
             </div>
-            {(isComplete || errorMessage) ? (
-              <button
-                type="button"
-                onClick={onClose}
-                className="rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.14em] transition"
-                style={{
-                  borderColor: "var(--ss-border)",
-                  background: "var(--ss-surface-soft)",
-                  color: "var(--ss-muted)",
-                }}
-              >
-                Close
-              </button>
-            ) : null}
           </div>
 
           <div className="mt-6 flex-1 space-y-3 overflow-y-auto pr-1">
@@ -1001,6 +1145,44 @@ export default function Page() {
       return;
     }
 
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const signatureFile = dataUrlToFile(signatureDataUrl, "signature.png");
+    const uploadFiles = Array.from(formData.values()).filter(
+      (value): value is File => value instanceof File && value.size > 0
+    );
+    if (signatureFile) {
+      uploadFiles.push(signatureFile);
+    }
+
+    const totalAttachmentBytes = uploadFiles.reduce((sum, file) => sum + file.size, 0);
+    if (totalAttachmentBytes > SAFE_MAX_TOTAL_ATTACHMENT_BYTES) {
+      const message = `Combined uploads are too large for production email delivery. Current total: ${formatBytes(totalAttachmentBytes)}. Limit: ${formatBytes(SAFE_MAX_TOTAL_ATTACHMENT_BYTES)}.`;
+      setStatus({
+        tone: "error",
+        message,
+      });
+      setVerificationError(message);
+      setDebugDetails(
+        JSON.stringify(
+          {
+            reason: "client_attachment_budget_exceeded",
+            totalAttachmentBytes,
+            maxTotalAttachmentBytes: SAFE_MAX_TOTAL_ATTACHMENT_BYTES,
+            files: uploadFiles.map((file) => ({
+              name: file.name,
+              sizeBytes: file.size,
+              type: file.type,
+            })),
+          },
+          null,
+          2
+        )
+      );
+      setVerificationModalOpen(false);
+      return;
+    }
+
     setIsSubmitting(true);
     setStatus({ tone: null, message: null });
     setVerificationSteps(createVerificationSteps());
@@ -1010,8 +1192,6 @@ export default function Page() {
     setDebugDetails(null);
     setIsSendingEmail(false);
 
-    const form = event.currentTarget;
-    const formData = new FormData(form);
     const entries = Object.fromEntries(formData.entries());
     const deliveryMethod = isPickup ? "Pick-Up" : useMailingForDelivery ? "Same as Mailing Address" : "Delivery";
     const apEmail = useSeparateApEmail
@@ -1159,7 +1339,6 @@ export default function Page() {
       ].join("")
     );
 
-    const signatureFile = dataUrlToFile(signatureDataUrl, "signature.png");
     if (signatureFile) {
       formData.append("signature_image", signatureFile);
     }
@@ -1203,7 +1382,7 @@ export default function Page() {
         };
       } | null;
       if (!response.ok) {
-        const debugMessage = buildDebugMessage(data);
+        const debugMessage = buildResponseDebugMessage(response, data);
         setDebugDetails(
           [
             `HTTP ${response.status} ${response.statusText}`,

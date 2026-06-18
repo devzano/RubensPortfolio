@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
+const MAX_ATTACHMENT_BYTES = 10 * 1024 * 1024;
+const MAX_TOTAL_ATTACHMENT_BYTES = 20 * 1024 * 1024;
+
 type FeedbackPayload = {
   appName?: string;
   firstName?: string;
@@ -41,6 +44,7 @@ export async function POST(request: Request) {
     content: Buffer;
     contentType: string;
   }[] = [];
+  let totalAttachmentBytes = 0;
 
   const contentType = request.headers.get("content-type") ?? "";
 
@@ -59,6 +63,34 @@ export async function POST(request: Request) {
 
     for (const [key, value] of formData.entries()) {
       if (!(value instanceof File) || value.size === 0) continue;
+      if (value.size > MAX_ATTACHMENT_BYTES) {
+        return NextResponse.json(
+          {
+            error: `Attachment "${value.name || key}" is too large. Maximum file size is 10 MB.`,
+            debug: {
+              file: value.name || key,
+              sizeBytes: value.size,
+              maxFileBytes: MAX_ATTACHMENT_BYTES,
+            },
+          },
+          { status: 400 }
+        );
+      }
+
+      totalAttachmentBytes += value.size;
+      if (totalAttachmentBytes > MAX_TOTAL_ATTACHMENT_BYTES) {
+        return NextResponse.json(
+          {
+            error: "Attachments are too large to send by email. Combined uploads must stay under 20 MB.",
+            debug: {
+              totalAttachmentBytes,
+              maxTotalAttachmentBytes: MAX_TOTAL_ATTACHMENT_BYTES,
+            },
+          },
+          { status: 400 }
+        );
+      }
+
       const arrayBuffer = await value.arrayBuffer();
       attachments.push({
         filename: value.name || `${key}.bin`,

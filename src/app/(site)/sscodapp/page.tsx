@@ -293,6 +293,8 @@ function UploadField({
 }) {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [fileName, setFileName] = useState("");
+  const [fileType, setFileType] = useState<"image" | "pdf" | "other" | null>(null);
+  const [fileSizeLabel, setFileSizeLabel] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -311,12 +313,29 @@ function UploadField({
     }
 
     setFileName(file?.name ?? "");
+    setFileSizeLabel(
+      file ? `${(file.size / (1024 * 1024)).toFixed(file.size >= 1024 * 1024 ? 1 : 2)} MB` : ""
+    );
 
-    if (!file || !file.type.startsWith("image/")) {
+    if (!file) {
+      setFileType(null);
       setPreviewUrl(null);
       return;
     }
 
+    if (file.type === "application/pdf" || file.name.toLowerCase().endsWith(".pdf")) {
+      setFileType("pdf");
+      setPreviewUrl(null);
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      setFileType("other");
+      setPreviewUrl(null);
+      return;
+    }
+
+    setFileType("image");
     setPreviewUrl(URL.createObjectURL(file));
   };
 
@@ -329,6 +348,8 @@ function UploadField({
     }
     setPreviewUrl(null);
     setFileName("");
+    setFileType(null);
+    setFileSizeLabel("");
   };
 
   return (
@@ -357,26 +378,58 @@ function UploadField({
         }}
       />
 
-      {previewUrl ? (
+      {previewUrl || fileType === "pdf" || fileType === "other" ? (
         <div
           className="mt-3 overflow-hidden rounded-2xl border"
           style={{
             borderColor: "var(--ss-border)",
-            background: "var(--ss-canvas-bg)",
+            background: "#05070b",
           }}
         >
-          <img
-            src={previewUrl}
-            alt={`${label} preview`}
-            className="h-48 w-full object-contain"
-          />
+          <div className="flex h-48 w-full items-center justify-center p-4">
+            {previewUrl ? (
+              <img
+                src={previewUrl}
+                alt={`${label} preview`}
+                className="max-h-full max-w-full rounded-lg object-contain"
+              />
+            ) : fileType === "pdf" ? (
+              <div className="flex flex-col items-center gap-3 text-center">
+                <div
+                  className="flex h-16 w-16 items-center justify-center rounded-2xl border"
+                  style={{
+                    borderColor: "rgba(255,255,255,0.16)",
+                    background: "rgba(255,255,255,0.06)",
+                    color: "#ffffff",
+                  }}
+                >
+                  <svg viewBox="0 0 24 24" className="h-8 w-8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M7 3h7l5 5v13H7z" />
+                    <path d="M14 3v5h5" />
+                    <path d="M9 14h6" />
+                    <path d="M9 18h6" />
+                    <path d="M10 10h1" />
+                  </svg>
+                </div>
+                <div className="max-w-full truncate text-sm font-medium text-white">
+                  {fileName}
+                </div>
+                <div className="text-xs text-white/55">PDF preview placeholder</div>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center gap-3 text-center text-white/70">
+                <div className="text-sm font-medium">{fileName}</div>
+                <div className="text-xs">Preview unavailable for this file type</div>
+              </div>
+            )}
+          </div>
         </div>
       ) : null}
 
       {fileName ? (
         <div className="flex items-center justify-between gap-3">
           <span className="text-xs truncate" style={{ color: "var(--ss-soft)" }}>
-            Selected: {fileName}
+            Selected: {fileName}{fileSizeLabel ? ` • ${fileSizeLabel}` : ""}
           </span>
           <button
             type="button"
@@ -404,7 +457,9 @@ function UploadField({
         </div>
       ) : null}
 
-      {help ? <span className="text-xs" style={{ color: "var(--ss-soft)" }}>{help}</span> : null}
+      <span className="text-xs" style={{ color: "var(--ss-soft)" }}>
+        {[help, "Max 10 MB per file, 20 MB total email attachments."].filter(Boolean).join(" ")}
+      </span>
     </label>
   );
 }

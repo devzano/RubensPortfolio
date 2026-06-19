@@ -855,7 +855,7 @@ function escapeHtml(value: string) {
     .replaceAll("'", "&#39;");
 }
 
-function buildDebugMessage(data: {
+function buildSubmissionMessage(data: {
   error?: string;
   debug?: {
     message?: string;
@@ -874,38 +874,10 @@ function buildDebugMessage(data: {
     return "Unable to send the dispatch summary right now.";
   }
 
-  const parts = [
-    data.error ?? "Unable to send the dispatch summary right now.",
-    data.debug?.message ? `message: ${data.debug.message}` : null,
-    data.debug?.code ? `code: ${data.debug.code}` : null,
-    typeof data.debug?.EMAIL_USER === "boolean"
-      ? `EMAIL_USER: ${data.debug.EMAIL_USER ? "set" : "missing"}`
-      : null,
-    typeof data.debug?.EMAIL_APP_PASSWORD === "boolean"
-      ? `EMAIL_APP_PASSWORD: ${data.debug.EMAIL_APP_PASSWORD ? "set" : "missing"}`
-      : null,
-    typeof data.debug?.EMAIL_COD_USER === "boolean"
-      ? `EMAIL_COD_USER: ${data.debug.EMAIL_COD_USER ? "set" : "missing"}`
-      : null,
-    data.debug?.file ? `file: ${data.debug.file}` : null,
-    typeof data.debug?.sizeBytes === "number"
-      ? `sizeBytes: ${data.debug.sizeBytes}`
-      : null,
-    typeof data.debug?.maxFileBytes === "number"
-      ? `maxFileBytes: ${data.debug.maxFileBytes}`
-      : null,
-    typeof data.debug?.totalAttachmentBytes === "number"
-      ? `totalAttachmentBytes: ${data.debug.totalAttachmentBytes}`
-      : null,
-    typeof data.debug?.maxTotalAttachmentBytes === "number"
-      ? `maxTotalAttachmentBytes: ${data.debug.maxTotalAttachmentBytes}`
-      : null,
-  ].filter(Boolean);
-
-  return parts.join(" | ");
+  return data.error ?? "Unable to send the dispatch summary right now.";
 }
 
-function buildResponseDebugMessage(
+function buildResponseMessage(
   response: Response,
   data: {
     error?: string;
@@ -924,10 +896,10 @@ function buildResponseDebugMessage(
   } | null
 ) {
   if (response.status === 413 && !data) {
-    return "Production request rejected before the API route ran. This is usually the host payload limit on multipart uploads, not the app's own file-size guard.";
+    return "Uploads are too large for production delivery. Please use smaller photos or fewer attachments.";
   }
 
-  return buildDebugMessage(data);
+  return buildSubmissionMessage(data);
 }
 
 function sleep(ms: number) {
@@ -942,7 +914,6 @@ function VerificationModal({
   isSendingEmail,
   isComplete,
   errorMessage,
-  debugDetails,
   onClose,
 }: {
   open: boolean;
@@ -950,7 +921,6 @@ function VerificationModal({
   isSendingEmail: boolean;
   isComplete: boolean;
   errorMessage: string | null;
-  debugDetails: string | null;
   onClose: () => void;
 }) {
   if (!open) return null;
@@ -1052,22 +1022,6 @@ function VerificationModal({
                   : "Verification preview is still in progress."}
               </div>
             </div>
-
-            {debugDetails ? (
-              <div className="rounded-3xl border p-4" style={{ borderColor: "var(--ss-border-soft)", background: "var(--ss-surface)" }}>
-                <div className="text-sm font-medium">Raw Debug</div>
-                <pre
-                  className="mt-2 overflow-x-auto whitespace-pre-wrap break-words rounded-2xl border p-3 text-xs"
-                  style={{
-                    borderColor: "var(--ss-border)",
-                    background: "var(--ss-surface-strong)",
-                    color: "var(--ss-muted)",
-                  }}
-                >
-                  {debugDetails}
-                </pre>
-              </div>
-            ) : null}
           </div>
         </div>
       </div>
@@ -1092,7 +1046,6 @@ export default function Page() {
   const [isSendingEmail, setIsSendingEmail] = useState(false);
   const [verificationComplete, setVerificationComplete] = useState(false);
   const [verificationError, setVerificationError] = useState<string | null>(null);
-  const [debugDetails, setDebugDetails] = useState<string | null>(null);
 
   const currentDate = useMemo(() => todayIso(), []);
   const theme = isLightMode ? sunshineTheme.light : sunshineTheme.dark;
@@ -1163,22 +1116,6 @@ export default function Page() {
         message,
       });
       setVerificationError(message);
-      setDebugDetails(
-        JSON.stringify(
-          {
-            reason: "client_attachment_budget_exceeded",
-            totalAttachmentBytes,
-            maxTotalAttachmentBytes: SAFE_MAX_TOTAL_ATTACHMENT_BYTES,
-            files: uploadFiles.map((file) => ({
-              name: file.name,
-              sizeBytes: file.size,
-              type: file.type,
-            })),
-          },
-          null,
-          2
-        )
-      );
       setVerificationModalOpen(false);
       return;
     }
@@ -1189,7 +1126,6 @@ export default function Page() {
     setVerificationModalOpen(true);
     setVerificationComplete(false);
     setVerificationError(null);
-    setDebugDetails(null);
     setIsSendingEmail(false);
 
     const entries = Object.fromEntries(formData.entries());
@@ -1382,28 +1318,16 @@ export default function Page() {
         };
       } | null;
       if (!response.ok) {
-        const debugMessage = buildResponseDebugMessage(response, data);
-        setDebugDetails(
-          [
-            `HTTP ${response.status} ${response.statusText}`,
-            data ? JSON.stringify(data, null, 2) : "No JSON body returned.",
-          ].join("\n\n")
-        );
-        setVerificationError(debugMessage);
+        const submissionMessage = buildResponseMessage(response, data);
+        setVerificationError(submissionMessage);
         setStatus({
           tone: "error",
-          message: debugMessage,
+          message: submissionMessage,
         });
         return;
       }
 
       setVerificationComplete(true);
-      setDebugDetails(
-        [
-          `HTTP ${response.status} ${response.statusText}`,
-          data ? JSON.stringify(data, null, 2) : '{"ok":true}',
-        ].join("\n\n")
-      );
       setStatus({
         tone: "success",
         message: "Application sent successfully. Dispatch summary includes DMV manual review requirement.",
@@ -1414,22 +1338,6 @@ export default function Page() {
           ? error.message.trim()
           : "Unknown network error";
       const surfacedMessage = `Unable to send the dispatch summary right now. | message: ${debugMessage}`;
-      setDebugDetails(
-        [
-          "Network / fetch exception",
-          error instanceof Error
-            ? JSON.stringify(
-                {
-                  name: error.name,
-                  message: error.message,
-                  stack: error.stack ?? null,
-                },
-                null,
-                2
-              )
-            : JSON.stringify({ error: String(error) }, null, 2),
-        ].join("\n\n")
-      );
       setVerificationError(surfacedMessage);
       setStatus({
         tone: "error",
@@ -1449,7 +1357,6 @@ export default function Page() {
         isSendingEmail={isSendingEmail}
         isComplete={verificationComplete}
         errorMessage={verificationError}
-        debugDetails={debugDetails}
         onClose={() => setVerificationModalOpen(false)}
       />
       <div
@@ -1894,24 +1801,6 @@ export default function Page() {
                 }
               >
                 {status.message}
-              </div>
-            ) : null}
-
-            {debugDetails ? (
-              <div
-                className="mt-3 rounded-2xl border p-4"
-                style={{
-                  borderColor: "var(--ss-border)",
-                  background: "var(--ss-surface)",
-                  color: "var(--ss-muted)",
-                }}
-              >
-                <div className="text-sm font-medium" style={{ color: "var(--ss-text)" }}>
-                  Raw Debug
-                </div>
-                <pre className="mt-2 overflow-x-auto whitespace-pre-wrap break-words text-xs">
-                  {debugDetails}
-                </pre>
               </div>
             ) : null}
           </div>

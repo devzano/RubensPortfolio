@@ -65,6 +65,11 @@ export const ROUTE_THEMES: ThemeConfig[] = [
     lockAccent: true,
   },
   {
+    match: (pathname) => pathname.startsWith("/ssfuelportal"),
+    accent: "#D8B44A",
+    lockAccent: true,
+  },
+  {
     match: (pathname) => pathname.startsWith("/watchlistr-mobile") || pathname.startsWith("/watchlistr-web"),
     icon: AppImages.watchlistr,
     accent: "#2EA0FF",

@@ -9,11 +9,12 @@ import useRouteTheme from "@/hooks/useRouteTheme";
 export default function SiteLayout({ children }: { children: ReactNode; }) {
   const { accent, cssVars } = useRouteTheme();
   const pathname = usePathname() ?? "/";
-  const isSunshineCodPage = pathname.startsWith("/sscodapp");
+  const isSunshineShowcasePage =
+    pathname.startsWith("/sscodapp") || pathname.startsWith("/ssfuelportal");
 
   return (
     <div className="min-h-dvh flex flex-col" style={cssVars}>
-      {!isSunshineCodPage ? <FXAndNav accent={accent} /> : null}
+      {!isSunshineShowcasePage ? <FXAndNav accent={accent} /> : null}
       <div className="relative z-10">
         {children}
       </div>

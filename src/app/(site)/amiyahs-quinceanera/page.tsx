@@ -1,28 +1,8 @@
 "use client";
 
-import {
-  Camera,
-  ChevronLeft,
-  ChevronRight,
-  Film,
-  LoaderCircle,
-  Lock,
-  Mic,
-  PauseCircle,
-  PlayCircle,
-  Sparkles,
-  Upload,
-  Waves,
-  X,
-} from "lucide-react";
+import { Camera, ChevronLeft, ChevronRight, Film, LoaderCircle, Lock, Mic, PauseCircle, PlayCircle, Sparkles, Upload, Waves, X } from "lucide-react";
 import Image from "next/image";
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type CSSProperties,
-} from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { supabase } from "@/lib/supabase/client";
 
 const EVENT_SLUG = "amiyahs-quinceanera";
@@ -51,6 +31,14 @@ type GalleryItem = UploadRow & {
   publicUrl: string;
 };
 
+type UploadProgressState = {
+  active: boolean;
+  current: number;
+  total: number;
+  label: string;
+  mode: "media" | "voice";
+};
+
 const theme = {
   accent: "#d8b45a",
   accentStrong: "#b58d29",
@@ -63,7 +51,7 @@ const theme = {
   shadow: "0 30px 80px rgba(73, 111, 112, 0.18)",
 } as const;
 
-const mediaTabs: { key: MediaKind; label: string; icon: typeof Sparkles }[] = [
+const mediaTabs: { key: MediaKind; label: string; icon: typeof Sparkles; }[] = [
   { key: "all", label: "All Media", icon: Sparkles },
   { key: "image", label: "Photos", icon: Camera },
   { key: "video", label: "Videos", icon: Film },
@@ -241,7 +229,7 @@ function GalleryViewer({
   }
 
   return (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-[#0e1718]/82 px-4 py-6 backdrop-blur-xl">
+    <div className="fixed inset-0 z-110 flex items-center justify-center bg-[#0e1718]/82 px-4 py-6 backdrop-blur-xl">
       <button
         type="button"
         onClick={onClose}
@@ -398,7 +386,7 @@ function AdminPanel({
   }
 
   return (
-    <div className="fixed inset-0 z-[105] flex items-center justify-center bg-[#102021]/45 px-4 backdrop-blur-md">
+    <div className="fixed inset-0 z-105 flex items-center justify-center bg-[#102021]/45 px-4 backdrop-blur-md">
       <div className="w-full max-w-md rounded-[30px] border border-white/35 bg-white/95 p-6 shadow-[0_28px_80px_rgba(53,77,78,0.24)]">
         <div className="flex items-start justify-between gap-3">
           <div>
@@ -477,6 +465,7 @@ export default function AmiyahsQuinceaneraPage() {
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
   const [statusTone, setStatusTone] = useState<"success" | "error" | "info">("info");
   const [playingAudioId, setPlayingAudioId] = useState<string | null>(null);
+  const [uploadProgress, setUploadProgress] = useState<UploadProgressState | null>(null);
   const [viewerOpen, setViewerOpen] = useState(false);
   const [viewerIndex, setViewerIndex] = useState(0);
   const [viewerPlaying, setViewerPlaying] = useState(true);
@@ -537,6 +526,20 @@ export default function AmiyahsQuinceaneraPage() {
     };
   }, [audioPreviewUrl]);
 
+  useEffect(() => {
+    if (!uploadProgress?.active) {
+      document.body.style.overflow = "";
+      return;
+    }
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [uploadProgress?.active]);
+
   const filteredGallery = useMemo(() => {
     if (activeTab === "all") {
       return galleryItems;
@@ -579,6 +582,30 @@ export default function AmiyahsQuinceaneraPage() {
   const setStatus = (tone: "success" | "error" | "info", message: string) => {
     setStatusTone(tone);
     setStatusMessage(message);
+  };
+
+  const startUploadProgress = (mode: "media" | "voice", total: number) => {
+    setUploadProgress({
+      active: true,
+      current: 0,
+      total,
+      label: "Preparing upload…",
+      mode,
+    });
+  };
+
+  const updateUploadProgress = (current: number, total: number, label: string, mode: "media" | "voice") => {
+    setUploadProgress({
+      active: true,
+      current,
+      total,
+      label,
+      mode,
+    });
+  };
+
+  const clearUploadProgress = () => {
+    setUploadProgress(null);
   };
 
   const resetVoiceDraft = () => {
@@ -718,10 +745,12 @@ export default function AmiyahsQuinceaneraPage() {
     }
 
     setUploading(true);
+    startUploadProgress("media", selectedFiles.length);
     setStatus("info", "Uploading event media…");
 
     try {
-      for (const file of selectedFiles) {
+      for (const [index, file] of selectedFiles.entries()) {
+        updateUploadProgress(index + 1, selectedFiles.length, file.name, "media");
         await uploadSingleAsset(file, file.name, guestName.trim(), caption.trim());
       }
 
@@ -735,6 +764,7 @@ export default function AmiyahsQuinceaneraPage() {
       setStatus("error", error instanceof Error ? error.message : "Upload failed.");
     } finally {
       setUploading(false);
+      clearUploadProgress();
     }
   };
 
@@ -748,13 +778,16 @@ export default function AmiyahsQuinceaneraPage() {
     }
 
     setUploading(true);
+    startUploadProgress("voice", 1);
     setStatus("info", "Uploading voice memo…");
 
     try {
       if (audioFallbackFile) {
+        updateUploadProgress(1, 1, audioFallbackFile.name, "voice");
         await uploadSingleAsset(audioFallbackFile, audioFallbackFile.name, guest, note);
       } else if (audioBlob) {
         const extension = audioMimeType.includes("mp4") ? "m4a" : audioMimeType.includes("ogg") ? "ogg" : "webm";
+        updateUploadProgress(1, 1, `voice-memo.${extension}`, "voice");
         await uploadSingleAsset(audioBlob, `voice-memo.${extension}`, guest, note);
       }
 
@@ -767,6 +800,7 @@ export default function AmiyahsQuinceaneraPage() {
       setStatus("error", error instanceof Error ? error.message : "Voice memo upload failed.");
     } finally {
       setUploading(false);
+      clearUploadProgress();
     }
   };
 
@@ -817,7 +851,7 @@ export default function AmiyahsQuinceaneraPage() {
         body: JSON.stringify({ action: "verify", password: adminPassword }),
       });
 
-      const payload = (await response.json()) as { ok?: boolean; error?: string };
+      const payload = (await response.json()) as { ok?: boolean; error?: string; };
 
       if (!response.ok || !payload.ok) {
         setAdminError(payload.error || "Password was rejected.");
@@ -856,7 +890,7 @@ export default function AmiyahsQuinceaneraPage() {
         }),
       });
 
-      const payload = (await response.json()) as { ok?: boolean; error?: string };
+      const payload = (await response.json()) as { ok?: boolean; error?: string; };
 
       if (!response.ok || !payload.ok) {
         throw new Error(payload.error || "Item could not be hidden.");
@@ -904,41 +938,28 @@ export default function AmiyahsQuinceaneraPage() {
                 Live Guest Album
               </div>
               <div className="rounded-full border border-white/55 bg-white/60 px-4 py-2 text-right text-[11px] font-semibold uppercase tracking-[0.24em] text-[#669a99] backdrop-blur-xl">
-                June 28, 2026
+                July 25, 2026
               </div>
             </div>
 
-            <div className="max-w-3xl rounded-[32px] border border-white/55 bg-white/56 p-6 shadow-[0_18px_60px_rgba(73,111,112,0.14)] backdrop-blur-2xl sm:p-8">
+            <div className="max-w-3xl rounded-4xl border border-white/20 bg-white/5 p-6 shadow-[0_18px_60px_rgba(73,111,112,0.08)] backdrop-blur-lg sm:p-8">
               <div className="text-[12px] font-semibold uppercase tracking-[0.32em] text-[#9b7b22]">Under The Sea Celebration</div>
               <h1 className="mt-4 text-4xl font-semibold tracking-tight text-[#1c4c4d] sm:text-6xl">Amiyah&apos;s Quinceañera</h1>
-              <p className="mt-4 max-w-2xl text-base leading-7 text-[#2f6867]/85 sm:text-lg">
-                Scan in, upload your favorite photos and videos from the night, and leave a voice message she can keep long after the celebration.
+              <p className="mt-4 max-w-2xl text-base leading-7 text-[#1c4c4d] sm:text-lg">
+                Take or upload your favorite photos and videos from the night, and leave a voice message she can keep long after the celebration.
               </p>
 
               <div className="mt-6 flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={() => jumpToSection("upload-media")}
-                  className="inline-flex items-center gap-2 rounded-full border border-[#c8a546] bg-[#d9b24f] px-5 py-3 text-sm font-semibold text-[#1f2929] shadow-[0_16px_32px_rgba(181,141,41,0.24)] transition hover:-translate-y-0.5"
-                >
-                  <Upload className="h-4 w-4" />
-                  Upload Media
+                <button type="button" onClick={() => jumpToSection("upload-media")} className="inline-flex items-center gap-2 rounded-full border border-[#c8a546] bg-[#d9b24f] px-5 py-3 text-sm font-semibold text-[#1f2929] shadow-[0_16px_32px_rgba(181,141,41,0.24)] transition hover:-translate-y-0.5" >
+                  <Upload className="h-4 w-4" /> Upload Media
                 </button>
-                <button
-                  type="button"
-                  onClick={() => jumpToSection("gallery")}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/80 px-5 py-3 text-sm font-semibold text-[#2e5f60] backdrop-blur-xl transition hover:-translate-y-0.5"
-                >
-                  <Camera className="h-4 w-4" />
-                  View Album
+
+                <button type="button" onClick={() => jumpToSection("gallery")} className="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/70 px-5 py-3 text-sm font-semibold text-[#2e5f60] backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white" >
+                  <Camera className="h-4 w-4" /> View Album
                 </button>
-                <button
-                  type="button"
-                  onClick={() => jumpToSection("voice-memo")}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/80 px-5 py-3 text-sm font-semibold text-[#2e5f60] backdrop-blur-xl transition hover:-translate-y-0.5"
-                >
-                  <Mic className="h-4 w-4" />
-                  Leave Voice Memo
+
+                <button type="button" onClick={() => jumpToSection("voice-memo")} className="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/70 px-5 py-3 text-sm font-semibold text-[#2e5f60] backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white" >
+                  <Mic className="h-4 w-4" /> Leave Voice Memo
                 </button>
               </div>
             </div>
@@ -946,20 +967,31 @@ export default function AmiyahsQuinceaneraPage() {
         </section>
 
         <section className="grid gap-4 md:grid-cols-3">
+          {/* Photos Card */}
           <div className="rounded-[28px] border border-[var(--amiyah-border)] bg-[var(--amiyah-card)] p-5 backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
-            <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">Photos</div>
-            <div className="mt-2 text-3xl font-semibold">{counts.photos}</div>
-            <p className="mt-2 text-sm text-[var(--amiyah-muted)]">Live snapshots from the dance floor, family tables, and the entrance.</p>
+            <div className="flex items-center justify-between gap-4">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">Photos</div>
+              <div className="text-3xl font-semibold">{counts.photos}</div>
+            </div>
+            {/* <p className="mt-2 text-sm text-[var(--amiyah-muted)]">Snapshots from the entrance, family tables, and the dance floor.</p> */}
           </div>
+
+          {/* Videos Card */}
           <div className="rounded-[28px] border border-[var(--amiyah-border)] bg-[var(--amiyah-card)] p-5 backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
-            <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">Videos</div>
-            <div className="mt-2 text-3xl font-semibold">{counts.videos}</div>
-            <p className="mt-2 text-sm text-[var(--amiyah-muted)]">Clips from the entrance, toast, surprise moments, and dance sets.</p>
+            <div className="flex items-center justify-between gap-4">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">Videos</div>
+              <div className="text-3xl font-semibold">{counts.videos}</div>
+            </div>
+            {/* <p className="mt-2 text-sm text-[var(--amiyah-muted)]">Clips from the entrance, toast, surprise moments, and dance sets.</p> */}
           </div>
+
+          {/* Voice Memos Card */}
           <div className="rounded-[28px] border border-[var(--amiyah-border)] bg-[var(--amiyah-card)] p-5 backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
-            <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">Voice Memos</div>
-            <div className="mt-2 text-3xl font-semibold">{counts.voice}</div>
-            <p className="mt-2 text-sm text-[var(--amiyah-muted)]">Quick audio messages guests can leave directly from their phone.</p>
+            <div className="flex items-center justify-between gap-4">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">Voice Memos</div>
+              <div className="text-3xl font-semibold">{counts.voice}</div>
+            </div>
+            {/* <p className="mt-2 text-sm text-[var(--amiyah-muted)]">Audio messages guests left.</p> */}
           </div>
         </section>
 
@@ -973,7 +1005,7 @@ export default function AmiyahsQuinceaneraPage() {
               <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22]">Upload</div>
               <h2 className="mt-2 text-2xl font-semibold">Add Photos Or Videos</h2>
               <p className="mt-2 text-sm leading-6 text-[var(--amiyah-muted)]">
-                Guests can send multiple media files at once. Images are normalized in the browser before upload to keep the gallery lighter on mobile.
+                You can send multiple media files at once.
               </p>
 
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -982,7 +1014,7 @@ export default function AmiyahsQuinceaneraPage() {
                   <input
                     value={guestName}
                     onChange={(event) => setGuestName(event.target.value)}
-                    placeholder="Optional guest name"
+                    placeholder="Optional"
                     className="h-12 rounded-2xl border border-[var(--amiyah-border)] bg-white/80 px-4 outline-none"
                   />
                 </label>
@@ -991,7 +1023,7 @@ export default function AmiyahsQuinceaneraPage() {
                   <input
                     value={caption}
                     onChange={(event) => setCaption(event.target.value)}
-                    placeholder="Optional note for this upload"
+                    placeholder="Optional"
                     className="h-12 rounded-2xl border border-[var(--amiyah-border)] bg-white/80 px-4 outline-none"
                   />
                 </label>
@@ -999,7 +1031,7 @@ export default function AmiyahsQuinceaneraPage() {
 
               <label className="mt-4 flex cursor-pointer flex-col items-center justify-center rounded-[28px] border border-dashed border-[#c8b270] bg-white/62 px-5 py-10 text-center transition hover:bg-white/74">
                 <Upload className="h-7 w-7 text-[#7cbab8]" />
-                <div className="mt-4 text-base font-medium">Choose event photos or videos</div>
+                <div className="mt-4 text-base font-medium">Photos or Videos</div>
                 <div className="mt-2 text-sm text-[var(--amiyah-muted)]">JPEG, PNG, WEBP, MP4, MOV, WEBM up to 50 MB each.</div>
                 <input
                   ref={selectedFilesInputRef}
@@ -1049,15 +1081,15 @@ export default function AmiyahsQuinceaneraPage() {
               <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22]">Voice Message</div>
               <h2 className="mt-2 text-2xl font-semibold">Leave A Voice Memo</h2>
               <p className="mt-2 text-sm leading-6 text-[var(--amiyah-muted)]">
-                Record straight from the page or upload an audio file if you already saved a message.
+                Record live from your device or upload an audio file if you already saved a message.
               </p>
 
               <div className="mt-5 rounded-[28px] border border-[var(--amiyah-border)] bg-white/70 p-5">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
-                    <div className="text-sm font-medium">Voice memo recorder</div>
+                    <div className="text-sm font-medium">Recorder</div>
                     <div className="mt-1 text-sm text-[var(--amiyah-muted)]">
-                      {isRecording ? `Recording… ${recordingSeconds}s` : "Ready when you are."}
+                      {isRecording ? `Recording… ${recordingSeconds}s` : "Ready"}
                     </div>
                   </div>
                   <div className="flex flex-wrap gap-3">
@@ -1135,39 +1167,36 @@ export default function AmiyahsQuinceaneraPage() {
 
           <section
             id="gallery"
-            className="rounded-[30px] border border-[var(--amiyah-border)] bg-[var(--amiyah-card-strong)] p-5 backdrop-blur-xl sm:p-6"
+            className="relative rounded-[30px] border border-[var(--amiyah-border)] bg-[var(--amiyah-card-strong)] p-5 backdrop-blur-xl sm:p-6"
             style={{ boxShadow: theme.shadow }}
           >
+            {/* Absolute Positioned Admin Lock Button */}
+            <button
+              type="button"
+              onClick={() => setAdminOpen(true)}
+              className="absolute top-5 right-5 sm:top-6 sm:right-6 inline-flex items-center justify-center rounded-full border border-white/70 bg-white/85 p-2.5 text-[#2d6d6c] transition hover:bg-white z-10"
+              aria-label={adminUnlocked ? "Moderation On" : "Admin Menu"}
+              title={adminUnlocked ? "Moderation On" : "Admin Menu"}
+            >
+              <Lock className="h-4 w-4" />
+            </button>
+
             <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
               <div>
                 <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22]">Gallery</div>
                 <h2 className="mt-2 text-2xl font-semibold">Event Album</h2>
                 <p className="mt-2 text-sm leading-6 text-[var(--amiyah-muted)]">
-                  Public event gallery with live uploads from guests. {totalUploads} item{totalUploads === 1 ? "" : "s"} so far.
+                  Event gallery with live uploads from guests. <br /> {totalUploads} item{totalUploads === 1 ? "" : "s"} so far.
                 </p>
               </div>
 
               <div className="flex flex-wrap gap-3">
                 <button
                   type="button"
-                  onClick={() => {
-                    if (!filteredGallery.length) {
-                      return;
-                    }
-                    openViewer(0);
-                  }}
+                  onClick={() => { if (!filteredGallery.length) { return; } openViewer(0); }}
                   className="inline-flex items-center gap-2 rounded-full border border-[#c8a546] bg-[#d9b24f] px-4 py-2 text-sm font-semibold text-[#1f2929]"
                 >
-                  <PlayCircle className="h-4 w-4" />
-                  Start Slideshow
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setAdminOpen(true)}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/85 px-4 py-2 text-sm font-semibold text-[#2d6d6c]"
-                >
-                  <Lock className="h-4 w-4" />
-                  {adminUnlocked ? "Moderation On" : "Admin"}
+                  <PlayCircle className="h-4 w-4" /> Start Slideshow
                 </button>
               </div>
             </div>
@@ -1185,8 +1214,7 @@ export default function AmiyahsQuinceaneraPage() {
                     color: key === activeTab ? "#7f6215" : "#2e5f60",
                   }}
                 >
-                  <Icon className="h-4 w-4" />
-                  {label}
+                  <Icon className="h-4 w-4" /> {label}
                 </button>
               ))}
             </div>
@@ -1203,97 +1231,45 @@ export default function AmiyahsQuinceaneraPage() {
                       {item.media_kind === "image" ? (
                         <>
                           <Image src={item.publicUrl} alt={item.caption || "Guest photo upload"} fill unoptimized className="object-cover" />
-                          <button
-                            type="button"
-                            onClick={() => openViewer(index)}
-                            className="absolute inset-0 flex items-center justify-center bg-[#122123]/0 transition group-hover:bg-[#122123]/18"
-                            aria-label="Open photo in slideshow"
-                          >
+                          <button type="button" onClick={() => openViewer(index)} className="absolute inset-0 flex items-center justify-center bg-[#122123]/0 transition group-hover:bg-[#122123]/18" aria-label="Open photo in slideshow">
                             <span className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/50 bg-white/85 text-[#224546] opacity-0 transition group-hover:opacity-100">
                               <PlayCircle className="h-7 w-7" />
                             </span>
                           </button>
                         </>
                       ) : null}
-
                       {item.media_kind === "video" ? (
                         <>
                           <video className="h-full w-full object-cover" src={item.publicUrl} muted playsInline preload="metadata" />
-                          <button
-                            type="button"
-                            onClick={() => openViewer(index)}
-                            className="absolute inset-0 flex items-center justify-center bg-[#122123]/18"
-                            aria-label="Open video in slideshow"
-                          >
+                          <button type="button" onClick={() => openViewer(index)} className="absolute inset-0 flex items-center justify-center bg-[#122123]/18" aria-label="Open video in slideshow">
                             <span className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/45 bg-white/84 text-[#224546]">
                               <PlayCircle className="h-7 w-7" />
                             </span>
                           </button>
                         </>
                       ) : null}
-
                       {item.media_kind === "audio" ? (
                         <div className="flex h-full flex-col items-center justify-center gap-4 bg-[radial-gradient(circle_at_top,rgba(114,216,216,0.24),rgba(255,255,255,0.92))] p-5 text-center">
-                          <button
-                            type="button"
-                            onClick={() => void toggleCardAudio(item.id)}
-                            className="inline-flex h-16 w-16 items-center justify-center rounded-full border border-[#8bd5d4] bg-white/90 text-[#2f6968]"
-                            aria-label="Play voice memo"
-                          >
+                          <button type="button" onClick={() => void toggleCardAudio(item.id)} className="inline-flex h-16 w-16 items-center justify-center rounded-full border border-[#8bd5d4] bg-white/90 text-[#2f6968]" aria-label="Play voice memo">
                             {playingAudioId === item.id ? <PauseCircle className="h-8 w-8" /> : <PlayCircle className="h-8 w-8" />}
                           </button>
                           <div className="text-base font-semibold">Voice Memo</div>
                           <div className="text-sm text-[var(--amiyah-muted)]">Tap to listen or open in slideshow.</div>
-                          <button
-                            type="button"
-                            onClick={() => openViewer(index)}
-                            className="rounded-full border border-white/70 bg-white/80 px-4 py-2 text-sm font-semibold text-[#2d6d6c]"
-                          >
+                          <button type="button" onClick={() => openViewer(index)} className="rounded-full border border-white/70 bg-white/80 px-4 py-2 text-sm font-semibold text-[#2d6d6c]">
                             Open Viewer
                           </button>
-                          <audio
-                            ref={(element) => {
-                              audioElementMapRef.current[item.id] = element;
-                            }}
-                            className="hidden"
-                            src={item.publicUrl}
-                            onEnded={() => setPlayingAudioId((current) => (current === item.id ? null : current))}
-                          />
+                          <audio ref={(element) => { audioElementMapRef.current[item.id] = element; }} className="hidden" src={item.publicUrl} onEnded={() => setPlayingAudioId((current) => (current === item.id ? null : current))} />
                         </div>
                       ) : null}
-
                       {adminUnlocked ? (
-                        <button
-                          type="button"
-                          onClick={() => void hideUpload(item)}
-                          disabled={adminWorking}
-                          className="absolute right-3 top-3 inline-flex items-center gap-2 rounded-full border border-red-200 bg-white/92 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-red-700 disabled:opacity-55"
-                        >
-                          {adminWorking ? <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> : <X className="h-3.5 w-3.5" />}
-                          Hide
+                        <button type="button" onClick={() => void hideUpload(item)} disabled={adminWorking} className="absolute right-3 top-3 inline-flex items-center gap-2 rounded-full border border-red-200 bg-white/92 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-red-700 disabled:opacity-55">
+                          {adminWorking ? <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> : <X className="h-3.5 w-3.5" />} Hide
                         </button>
                       ) : null}
                     </div>
-
                     <div className="space-y-2 px-4 py-4">
                       <div className="flex items-center justify-between gap-3">
-                        <div
-                          className="rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em]"
-                          style={{
-                            background:
-                              item.media_kind === "image"
-                                ? "rgba(114,216,216,0.16)"
-                                : item.media_kind === "video"
-                                  ? "rgba(217,178,79,0.16)"
-                                  : "rgba(150,116,201,0.14)",
-                            color:
-                              item.media_kind === "image"
-                                ? "#2f6968"
-                                : item.media_kind === "video"
-                                  ? "#7e6317"
-                                  : "#6f4ea8",
-                          }}
-                        >
+                        <div className="rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ background: item.media_kind === "image" ? "rgba(114,216,216,0.16)" : item.media_kind === "video" ? "rgba(217,178,79,0.16)" : "rgba(150,116,201,0.14)", color: item.media_kind === "image" ? "#2f6968" : item.media_kind === "video" ? "#7e6317" : "#6f4ea8", }}>
                           {item.media_kind}
                         </div>
                         <div className="text-xs text-[var(--amiyah-muted)]">{formatDate(item.created_at)}</div>
@@ -1307,7 +1283,7 @@ export default function AmiyahsQuinceaneraPage() {
               </div>
             ) : (
               <div className="mt-6 rounded-[28px] border border-[var(--amiyah-border)] bg-white/58 px-5 py-12 text-center">
-                <div className="text-lg font-semibold">No uploads yet</div>
+                <div className="text-lg font-semibold">No Uploads</div>
                 <p className="mt-2 text-sm text-[var(--amiyah-muted)]">Be the first guest to share a photo, a video, or a message for Amiyah.</p>
               </div>
             )}
@@ -1362,6 +1338,60 @@ export default function AmiyahsQuinceaneraPage() {
           onPrevious={() => setViewerIndex((current) => cycleIndex(current - 1, filteredGallery.length))}
           onTogglePlay={() => setViewerPlaying((current) => !current)}
         />
+      ) : null}
+
+      {uploadProgress?.active ? (
+        <>
+          <div className="fixed inset-0 z-[115] bg-[#0f2021]/54 backdrop-blur-[3px]">
+            <div className="flex h-full items-end justify-center px-3 pb-[max(1rem,env(safe-area-inset-bottom))] pt-6 sm:items-center sm:px-4 sm:pb-6">
+              <div className="w-full max-w-md rounded-[32px] border border-white/25 bg-white/96 p-5 text-center shadow-[0_28px_80px_rgba(53,77,78,0.24)] sm:p-6">
+                <div className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full border border-[#d6c081] bg-[#fff5d8] text-[#9b7b22]">
+                  <LoaderCircle className="h-8 w-8 animate-spin" />
+                </div>
+                <div className="mt-5 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">
+                  {uploadProgress.mode === "media" ? "Uploading Media" : "Uploading Voice Memo"}
+                </div>
+                <h3 className="mt-2 text-2xl font-semibold text-[#214445]">Please keep this page open</h3>
+                <p className="mt-3 text-sm leading-6 text-[#4b6c6c]">
+                  {uploadProgress.current} of {uploadProgress.total} {uploadProgress.total === 1 ? "item" : "items"} in progress.
+                </p>
+                <div className="mt-5 h-3 overflow-hidden rounded-full bg-[#e8f4f4]">
+                  <div
+                    className="h-full rounded-full bg-[linear-gradient(90deg,#72d8d8,#d8b45a)] transition-all"
+                    style={{ width: `${Math.max(8, Math.round((uploadProgress.current / Math.max(uploadProgress.total, 1)) * 100))}%` }}
+                  />
+                </div>
+                <div className="mt-4 truncate text-sm font-medium text-[#315f60]">{uploadProgress.label}</div>
+                <div className="mt-3 text-xs leading-5 text-[#5d7b7c]">
+                  Uploads continue best if Safari or Chrome stays open until this finishes.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="fixed bottom-5 right-5 z-[116] hidden w-[min(92vw,360px)] rounded-[26px] border border-white/35 bg-white/95 p-4 shadow-[0_22px_70px_rgba(53,77,78,0.22)] backdrop-blur-xl md:block">
+            <div className="flex items-start gap-3">
+              <div className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#d6c081] bg-[#fff5d8] text-[#9b7b22]">
+                <LoaderCircle className="h-5 w-5 animate-spin" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-semibold text-[#214445]">
+                  {uploadProgress.mode === "media" ? "Uploading to album" : "Uploading voice memo"}
+                </div>
+                <div className="mt-1 text-xs text-[#4b6c6c]">
+                  {uploadProgress.current} / {uploadProgress.total}
+                </div>
+                <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#e8f4f4]">
+                  <div
+                    className="h-full rounded-full bg-[linear-gradient(90deg,#72d8d8,#d8b45a)] transition-all"
+                    style={{ width: `${Math.max(8, Math.round((uploadProgress.current / Math.max(uploadProgress.total, 1)) * 100))}%` }}
+                  />
+                </div>
+                <div className="mt-2 truncate text-xs font-medium text-[#315f60]">{uploadProgress.label}</div>
+              </div>
+            </div>
+          </div>
+        </>
       ) : null}
     </main>
   );

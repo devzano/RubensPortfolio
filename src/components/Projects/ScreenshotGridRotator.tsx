@@ -352,7 +352,7 @@ export default function ScreenshotGridRotator({
           )}
         </div>
 
-        {maxSets > 1 && (
+        {/* {maxSets > 1 && (
           <div className="mt-3 flex items-center justify-center gap-2">
             {Array.from({ length: maxSets }).map((_, idx) => (
               <button
@@ -367,7 +367,7 @@ export default function ScreenshotGridRotator({
               />
             ))}
           </div>
-        )}
+        )} */}
       </div>
     );
   }
@@ -385,7 +385,7 @@ export default function ScreenshotGridRotator({
         {renderGrid(activeSet, "active")}
       </div>
 
-      {maxSets > 1 && (
+      {/* {maxSets > 1 && (
         <div className="mt-4 flex items-center justify-center gap-2">
           {Array.from({ length: maxSets }).map((_, idx) => (
             <button
@@ -398,7 +398,7 @@ export default function ScreenshotGridRotator({
             />
           ))}
         </div>
-      )}
+      )} */}
     </div>
   );
 }

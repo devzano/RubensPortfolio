@@ -70,6 +70,11 @@ export const ROUTE_THEMES: ThemeConfig[] = [
     lockAccent: true,
   },
   {
+    match: (pathname) => pathname.startsWith("/amiyahs-quinceanera"),
+    accent: "#D4B052",
+    lockAccent: true,
+  },
+  {
     match: (pathname) => pathname.startsWith("/watchlistr-mobile") || pathname.startsWith("/watchlistr-web"),
     icon: AppImages.watchlistr,
     accent: "#2EA0FF",

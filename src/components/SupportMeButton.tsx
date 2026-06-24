@@ -6,7 +6,11 @@ import { usePathname } from "next/navigation";
 export default function SupportMeButton() {
   const pathname = usePathname() ?? "/";
 
-  if (pathname.startsWith("/sscodapp") || pathname.startsWith("/ssfuelportal")) {
+  if (
+    pathname.startsWith("/sscodapp") ||
+    pathname.startsWith("/ssfuelportal") ||
+    pathname.startsWith("/amiyahs-quinceanera")
+  ) {
     return null;
   }
 

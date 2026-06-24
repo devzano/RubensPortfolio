@@ -10,7 +10,9 @@ export default function SiteLayout({ children }: { children: ReactNode; }) {
   const { accent, cssVars } = useRouteTheme();
   const pathname = usePathname() ?? "/";
   const isSunshineShowcasePage =
-    pathname.startsWith("/sscodapp") || pathname.startsWith("/ssfuelportal");
+    pathname.startsWith("/sscodapp") ||
+    pathname.startsWith("/ssfuelportal") ||
+    pathname.startsWith("/amiyahs-quinceanera");
 
   return (
     <div className="min-h-dvh flex flex-col" style={cssVars}>

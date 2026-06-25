@@ -91,23 +91,23 @@ type AddressGroup = {
 
 const companyFields: FieldSpec[] = [
   { label: "Date", name: "date", value: "", type: "date" },
-  { label: "Company Name", name: "company_name", value: "Manzano Marine LLC" },
-  { label: "Owner", name: "owner", value: "Ruben Manzano" },
-  { label: "Telephone", name: "telephone", value: "(305) 481-1185", type: "tel" },
-  { label: "Business Email", name: "business_email", value: "rmanzano@sunshinegasoline.com", type: "email" },
-  { label: "Accounts Payable Clerk", name: "accounts_payable_clerk", value: "Kathy Palomo" },
-  { label: "Primary Activity of Business", name: "primary_activity_of_business", value: "Boat Supplies & Marina Operations" },
-  { label: "Years Established", name: "years_established", value: "8" },
-  { label: "Tank Registration No. (s)", name: "tank_registration_numbers", value: "FL-MAR-22841 / FL-MAR-22842" },
-  { label: "Individual Applicant DOB", name: "individual_applicant_dob", value: "1996-08-25", type: "date" },
-  { label: "Federal Employee ID No.", name: "federal_employee_id_no", value: "84-5123476" },
-  { label: "Sales Tax Exempt No.", name: "sales_tax_exempt_no", value: "FL-EX-20498713" },
+  { label: "Company Name", name: "company_name", value: "" },
+  { label: "Owner", name: "owner", value: "" },
+  { label: "Telephone", name: "telephone", value: "", type: "tel" },
+  { label: "Business Email", name: "business_email", value: "", type: "email" },
+  { label: "Accounts Payable Clerk", name: "accounts_payable_clerk", value: "" },
+  { label: "Primary Activity of Business", name: "primary_activity_of_business", value: "" },
+  { label: "Years Established", name: "years_established", value: "" },
+  { label: "Tank Registration No. (s)", name: "tank_registration_numbers", value: "" },
+  { label: "Individual Applicant DOB", name: "individual_applicant_dob", value: "", type: "date" },
+  { label: "Federal Employee ID No.", name: "federal_employee_id_no", value: "" },
+  { label: "Sales Tax Exempt No.", name: "sales_tax_exempt_no", value: "" },
 ];
 
 const apEmailField: FieldSpec = {
   label: "A/P Email",
   name: "ap_email",
-  value: "rmanzano@sunshinegasoline.com",
+  value: "",
   type: "email",
 };
 
@@ -115,37 +115,37 @@ const addressFields: AddressGroup[] = [
   {
     title: "Mailing Address",
     fields: [
-      { label: "Street Address", name: "mailing_street_address", value: "724 S. Flagler Ave." },
-      { label: "City", name: "mailing_city", value: "Homestead" },
-      { label: "State", name: "mailing_state", value: "FL" },
-      { label: "Zip Code", name: "mailing_zip_code", value: "33030" },
+      { label: "Street Address", name: "mailing_street_address", value: "" },
+      { label: "City", name: "mailing_city", value: "" },
+      { label: "State", name: "mailing_state", value: "" },
+      { label: "Zip Code", name: "mailing_zip_code", value: "" },
     ],
   },
   {
     title: "Delivery Address",
     fields: [
-      { label: "Street Address", name: "delivery_street_address", value: "255 Tavernier St." },
-      { label: "City", name: "delivery_city", value: "Tavernier" },
-      { label: "State", name: "delivery_state", value: "FL" },
-      { label: "Zip Code", name: "delivery_zip_code", value: "33070" },
+      { label: "Street Address", name: "delivery_street_address", value: "" },
+      { label: "City", name: "delivery_city", value: "" },
+      { label: "State", name: "delivery_state", value: "" },
+      { label: "Zip Code", name: "delivery_zip_code", value: "" },
     ],
   },
 ];
 
 const fuelFields: FieldSpec[] = [
-  { label: "Type of Fuel", name: "type_of_fuel", value: "Diesel" },
-  { label: "Tank Size", name: "tank_size", value: "1,000 gallons" },
-  { label: "Boat Tank", name: "boat_tank", value: "Yes, twin 250-gallon tanks" },
+  { label: "Type of Fuel", name: "type_of_fuel", value: "" },
+  { label: "Tank Size", name: "tank_size", value: "" },
+  { label: "Boat Tank", name: "boat_tank", value: "" },
 ];
 
 const cardFields: FieldSpec[] = [
-  { label: "Name on Card", name: "name_on_card", value: "Ruben Manzano" },
-  { label: "Type of Card", name: "type_of_card", value: "Visa Business" },
-  { label: "Card Number", name: "card_number", value: "4242 4242 4242 4242" },
-  { label: "3-digit Bank Number", name: "bank_number", value: "123" },
-  { label: "Expiration Date", name: "expiration_date", value: "08/28" },
-  { label: "Driver's License #", name: "drivers_license_number", value: "M525-721-98-417-0" },
-  { label: "Authorized Signature for Payment", name: "authorized_signature_for_payment", value: "Ruben Manzano" },
+  { label: "Name on Card", name: "name_on_card", value: "" },
+  { label: "Type of Card", name: "type_of_card", value: "" },
+  { label: "Card Number", name: "card_number", value: "" },
+  { label: "3-digit Bank Number", name: "bank_number", value: "" },
+  { label: "Expiration Date", name: "expiration_date", value: "" },
+  { label: "Driver's License #", name: "drivers_license_number", value: "" },
+  { label: "Authorized Signature for Payment", name: "authorized_signature_for_payment", value: "" },
 ];
 
 const reviewChecks = [
@@ -322,6 +322,7 @@ function Field({
   required = true,
   readOnly = false,
   headerRight,
+  onChange,
 }: {
   label: string;
   name: string;
@@ -331,6 +332,7 @@ function Field({
   required?: boolean;
   readOnly?: boolean;
   headerRight?: ReactNode;
+  onChange?: (nextValue: string) => void;
 }) {
   return (
     <label className={`flex flex-col gap-2 ${className}`}>
@@ -344,7 +346,8 @@ function Field({
         name={name}
         type={type}
         required={required}
-        defaultValue={value}
+        value={value}
+        onChange={(event) => onChange?.(event.target.value)}
         readOnly={readOnly}
         className="h-12 rounded-2xl border px-4 text-sm outline-none ring-1 transition placeholder:text-[color:var(--ss-input-placeholder)] focus:border-(--accent) focus:ring-(--accent-soft) read-only:cursor-default read-only:opacity-70"
         style={{
@@ -502,9 +505,9 @@ function UploadField({
           Choose File
         </button>
         <span className="min-w-0 truncate text-sm" style={{ color: fileName ? "var(--ss-input-text)" : "var(--ss-soft)" }}>
-        {fileName || "No file selected"}
-      </span>
-    </div>
+          {fileName || "No file selected"}
+        </span>
+      </div>
 
       {previewUrl || fileType === "pdf" || fileType === "other" ? (
         <div
@@ -1018,8 +1021,8 @@ function VerificationModal({
                   : isSendingEmail
                     ? "Preparing summary email for dispatch."
                     : isComplete
-                  ? "Summary sent. DMV is flagged as manual review required in the email."
-                  : "Verification preview is still in progress."}
+                      ? "Summary sent. DMV is flagged as manual review required in the email."
+                      : "Verification preview is still in progress."}
               </div>
             </div>
           </div>
@@ -1035,6 +1038,36 @@ export default function Page() {
   const [useSeparateApEmail, setUseSeparateApEmail] = useState(false);
   const [useMailingForDelivery, setUseMailingForDelivery] = useState(false);
   const [isPickup, setIsPickup] = useState(false);
+  const [formValues, setFormValues] = useState<Record<string, string>>(() => {
+    const initialValues: Record<string, string> = {};
+
+    for (const field of companyFields) {
+      initialValues[field.name] = field.value;
+    }
+
+    initialValues.business_email = "";
+    initialValues.accounts_payable_clerk = "";
+    initialValues.ap_email = apEmailField.value;
+
+    for (const group of addressFields) {
+      for (const field of group.fields) {
+        initialValues[field.name] = field.value;
+      }
+    }
+
+    for (const field of fuelFields) {
+      initialValues[field.name] = field.value;
+    }
+
+    for (const field of cardFields) {
+      initialValues[field.name] = field.value;
+    }
+
+    initialValues.printed_name = "";
+    initialValues.authorization_date_display = todayIso();
+
+    return initialValues;
+  });
   const [signatureDataUrl, setSignatureDataUrl] = useState("");
   const [isLightMode, setIsLightMode] = useState(true);
   const [status, setStatus] = useState<{
@@ -1050,7 +1083,14 @@ export default function Page() {
   const currentDate = useMemo(() => todayIso(), []);
   const theme = isLightMode ? sunshineTheme.light : sunshineTheme.dark;
 
-  const mailingAddressGroup = addressFields.find((group) => group.title === "Mailing Address");
+  const updateFieldValue = (name: string, nextValue: string) => {
+    setFormValues((current) => ({
+      ...current,
+      [name]: nextValue,
+    }));
+  };
+
+  const valueForField = (field: FieldSpec) => formValues[field.name] ?? field.value;
 
   const deliveryValueFor = (field: FieldSpec) => {
     if (isPickup) {
@@ -1058,12 +1098,11 @@ export default function Page() {
       return "N/A";
     }
 
-    if (!useMailingForDelivery) {
-      return field.value;
+    if (useMailingForDelivery) {
+      return formValues[field.name.replace("delivery_", "mailing_")] ?? "";
     }
 
-    const mailingFieldName = field.name.replace("delivery_", "mailing_");
-    return mailingAddressGroup?.fields.find((mailingField) => mailingField.name === mailingFieldName)?.value ?? field.value;
+    return formValues[field.name] ?? "";
   };
 
   useEffect(() => {
@@ -1157,9 +1196,9 @@ export default function Page() {
       .join(", ");
 
     formData.set("appName", "Sunshine COD Application");
-    formData.set("firstName", String(entries.owner ?? "Ruben"));
+    formData.set("firstName", String(entries.owner ?? ""));
     formData.set("lastName", "Application");
-    formData.set("email", String(entries.business_email ?? "ruben@manzanomarine.co"));
+    formData.set("email", String(entries.business_email ?? ""));
     formData.set("subject", "Sunshine COD Application Submission");
     formData.set("recipient", "kpalomo@sunshinegasoline.com");
     formData.set("delivery_method", deliveryMethod);
@@ -1393,7 +1432,7 @@ export default function Page() {
                   color: "var(--accent)",
                 }}
               >
-                Temporary Showcase
+                Digital Application
               </div>
               <div className="mt-4 flex items-center gap-4">
                 <div className="relative h-20 w-24 shrink-0 overflow-hidden rounded-2xl p-2 sm:h-[88px] sm:w-28">
@@ -1410,7 +1449,7 @@ export default function Page() {
                 </h1>
               </div>
               <p className="mt-4 max-w-2xl text-sm leading-7 sm:text-base" style={{ color: "var(--ss-muted)" }}>
-                A digital version of the original application, with sample information filled in.
+                A digital version of the original application, ready for customer submission.
               </p>
             </div>
 
@@ -1460,8 +1499,9 @@ export default function Page() {
                       key={field.label}
                       label={field.label}
                       name={field.name}
-                      value={field.name === "date" ? currentDate : field.value}
+                      value={field.name === "date" ? currentDate : valueForField(field)}
                       type={field.type}
+                      onChange={(nextValue) => updateFieldValue(field.name, nextValue)}
                       className={field.label === "Primary Activity of Business" ? "md:col-span-2" : ""}
                     />
                   ))}
@@ -1469,8 +1509,9 @@ export default function Page() {
                 <Field
                   label="Business Email"
                   name="business_email"
-                  value="rmanzano@sunshinegasoline.com"
+                  value={formValues.business_email ?? ""}
                   type="email"
+                  onChange={(nextValue) => updateFieldValue("business_email", nextValue)}
                 />
 
                 {useSeparateApEmail ? (
@@ -1478,7 +1519,8 @@ export default function Page() {
                     <Field
                       label="Accounts Payable Clerk"
                       name="accounts_payable_clerk"
-                      value="Kathy Palomo"
+                      value={formValues.accounts_payable_clerk ?? ""}
+                      onChange={(nextValue) => updateFieldValue("accounts_payable_clerk", nextValue)}
                       headerRight={
                         <button
                           type="button"
@@ -1496,8 +1538,9 @@ export default function Page() {
                     <Field
                       label={apEmailField.label}
                       name={apEmailField.name}
-                      value={apEmailField.value}
+                      value={formValues.ap_email ?? ""}
                       type={apEmailField.type}
+                      onChange={(nextValue) => updateFieldValue("ap_email", nextValue)}
                     />
                   </>
                 ) : (
@@ -1505,7 +1548,8 @@ export default function Page() {
                     <Field
                       label="Accounts Payable Clerk"
                       name="accounts_payable_clerk"
-                      value="Kathy Palomo"
+                      value={formValues.accounts_payable_clerk ?? ""}
+                      onChange={(nextValue) => updateFieldValue("accounts_payable_clerk", nextValue)}
                       headerRight={
                         <div className="flex items-center gap-3">
                           <span className="text-[10px] font-medium normal-case tracking-normal" style={{ color: "var(--ss-soft)" }}>
@@ -1538,8 +1582,9 @@ export default function Page() {
                       key={field.label}
                       label={field.label}
                       name={field.name}
-                      value={field.value}
+                      value={valueForField(field)}
                       type={field.type}
+                      onChange={(nextValue) => updateFieldValue(field.name, nextValue)}
                     />
                   ))}
                 </div>
@@ -1602,11 +1647,12 @@ export default function Page() {
 
                           return (
                             <Field
-                              key={`${group.title}-${field.label}-${isPickup ? "pickup" : useMailingForDelivery ? "mailing" : "delivery"}`}
+                              key={`${group.title}-${field.name}`}
                               label={field.label}
                               name={field.name}
-                              value={isDeliveryAddress ? deliveryValueFor(field) : field.value}
+                              value={isDeliveryAddress ? deliveryValueFor(field) : valueForField(field)}
                               type={field.type}
+                              onChange={(nextValue) => updateFieldValue(field.name, nextValue)}
                               readOnly={isDeliveryAddress && (useMailingForDelivery || isPickup)}
                               className={field.label === "Street Address" ? "sm:col-span-2" : ""}
                             />
@@ -1669,8 +1715,19 @@ export default function Page() {
               </p>
 
               <div className="mt-5 grid gap-4">
-                <Field label="Printed Name" name="printed_name" value="Ruben Manzano" />
-                <Field label="Authorization Date" name="authorization_date_display" value={currentDate} type="date" />
+                <Field
+                  label="Printed Name"
+                  name="printed_name"
+                  value={formValues.printed_name ?? ""}
+                  onChange={(nextValue) => updateFieldValue("printed_name", nextValue)}
+                />
+                <Field
+                  label="Authorization Date"
+                  name="authorization_date_display"
+                  value={formValues.authorization_date_display ?? currentDate}
+                  type="date"
+                  onChange={(nextValue) => updateFieldValue("authorization_date_display", nextValue)}
+                />
                 <SignaturePad
                   value={signatureDataUrl}
                   onChange={setSignatureDataUrl}
@@ -1741,8 +1798,9 @@ export default function Page() {
                           key={field.label}
                           label={field.label}
                           name={field.name}
-                          value={field.value}
+                          value={valueForField(field)}
                           type={field.type}
+                          onChange={(nextValue) => updateFieldValue(field.name, nextValue)}
                           className={field.label === "Authorized Signature for Payment" ? "md:col-span-2" : ""}
                         />
                       ))}

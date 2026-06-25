@@ -73,7 +73,7 @@ export default function Page({
         <div className="leading-relaxed space-y-3">
           <p>
             <strong>
-              <span className="text-[color:var(--accent)]">CreatureRealm</span>
+              <span className="text-var(--accent)">CreatureRealm</span>
             </strong>{" "}
             is your all-in-one companion for exploring creatures across your favorite
             games. Start with a beautifully crafted Pokédex experience—complete with

@@ -56,15 +56,15 @@ export default function Page({
         <div className="leading-relaxed space-y-3">
           <p>
             <strong>
-              <span className="text-[color:var(--accent)]">Stop losing what you copy.</span>
+              <span className="text-var(--accent)">Stop losing what you copy.</span>
             </strong>
           </p>
           <p>
-            Most clipboards are gone the moment you hit copy again. <strong> <span className="text-[color:var(--accent)]">Clipzora</span> </strong> turns your temporary snippets into a permanent, organized library that works as fast as you do. From vital code snippets and design hex codes to high-res images and important links, <strong> <span className="text-[color:var(--accent)]">Clipzora</span> </strong> keeps your history searchable and accessible across your iPhone and Mac.
+            Most clipboards are gone the moment you hit copy again. <strong> <span className="text-var(--accent)">Clipzora</span> </strong> turns your temporary snippets into a permanent, organized library that works as fast as you do. From vital code snippets and design hex codes to high-res images and important links, <strong> <span className="text-var(--accent)">Clipzora</span> </strong> keeps your history searchable and accessible across your iPhone and Mac.
           </p>
           <p>
             Start for free with a 50-item history, folders, palettes, Secure Vault slots,
-            Share Extension support, and essential filters. Upgrade to <strong> <span className="text-[color:var(--accent)]">Clipzora Pro</span> </strong> for unlimited history, iCloud sync, keyboard access to folders and vault items, advanced recovery tools, color pickers, and full import/export control.
+            Share Extension support, and essential filters. Upgrade to <strong> <span className="text-var(--accent)">Clipzora Pro</span> </strong> for unlimited history, iCloud sync, keyboard access to folders and vault items, advanced recovery tools, color pickers, and full import/export control.
           </p>
         </div>
       }

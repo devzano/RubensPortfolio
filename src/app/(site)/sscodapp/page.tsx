@@ -145,7 +145,6 @@ const cardFields: FieldSpec[] = [
   { label: "3-digit Bank Number", name: "bank_number", value: "" },
   { label: "Expiration Date", name: "expiration_date", value: "" },
   { label: "Driver's License #", name: "drivers_license_number", value: "" },
-  { label: "Authorized Signature for Payment", name: "authorized_signature_for_payment", value: "" },
 ];
 
 const reviewChecks = [
@@ -631,11 +630,17 @@ function SignaturePad({
   onChange,
   currentDate,
   strokeColor,
+  title = "Signature",
+  description = "sign with your mouse or trackpad.",
+  showHiddenFields = true,
 }: {
   value: string;
   onChange: (nextValue: string) => void;
   currentDate: string;
   strokeColor: string;
+  title?: string;
+  description?: string;
+  showHiddenFields?: boolean;
 }) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const drawingRef = useRef(false);
@@ -746,10 +751,10 @@ function SignaturePad({
       <div className="mb-3 flex items-center justify-between gap-3">
         <div>
           <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-(--accent)">
-            Signature
+            {title}
           </div>
           <div className="mt-1 text-sm" style={{ color: "var(--ss-muted)" }}>
-            sign with your mouse or trackpad.
+            {description}
           </div>
         </div>
         <button
@@ -784,8 +789,8 @@ function SignaturePad({
         />
       </div>
 
-      <input name="signature_data_url" type="hidden" value={value} readOnly />
-      <input name="authorization_date" type="hidden" value={currentDate} readOnly />
+      {showHiddenFields ? <input name="signature_data_url" type="hidden" value={value} readOnly /> : null}
+      {showHiddenFields ? <input name="authorization_date" type="hidden" value={currentDate} readOnly /> : null}
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs" style={{ color: "var(--ss-soft)" }}>
         <span>{isEmpty ? "signature required before submission" : "signature captured"}</span>
@@ -874,10 +879,10 @@ function buildSubmissionMessage(data: {
   };
 } | null) {
   if (!data) {
-    return "Unable to send the dispatch summary right now.";
+    return "Unable to send the application package right now.";
   }
 
-  return data.error ?? "Unable to send the dispatch summary right now.";
+  return data.error ?? "Unable to send the application package right now.";
 }
 
 function buildResponseMessage(
@@ -1014,14 +1019,14 @@ function VerificationModal({
             })}
 
             <div className="rounded-3xl border p-4" style={{ borderColor: "var(--ss-border-soft)", background: "var(--ss-surface)" }}>
-              <div className="text-sm font-medium">Dispatch Summary</div>
+              <div className="text-sm font-medium">Application Package</div>
               <div className="mt-2 text-sm" style={{ color: "var(--ss-muted)" }}>
                 {errorMessage
                   ? errorMessage
                   : isSendingEmail
-                    ? "Preparing summary email for dispatch."
+                    ? "Generating the official application PDF package."
                     : isComplete
-                      ? "Summary sent. DMV is flagged as manual review required in the email."
+                      ? "PDF package sent. DMV is still flagged as manual review required."
                       : "Verification preview is still in progress."}
               </div>
             </div>
@@ -1033,8 +1038,10 @@ function VerificationModal({
 }
 
 export default function Page() {
+  const formRef = useRef<HTMLFormElement | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [useCardDetails, setUseCardDetails] = useState(false);
+  const [useSamePaymentSignature, setUseSamePaymentSignature] = useState(true);
   const [useSeparateApEmail, setUseSeparateApEmail] = useState(false);
   const [useMailingForDelivery, setUseMailingForDelivery] = useState(false);
   const [isPickup, setIsPickup] = useState(false);
@@ -1069,6 +1076,7 @@ export default function Page() {
     return initialValues;
   });
   const [signatureDataUrl, setSignatureDataUrl] = useState("");
+  const [paymentSignatureDataUrl, setPaymentSignatureDataUrl] = useState("");
   const [isLightMode, setIsLightMode] = useState(true);
   const [status, setStatus] = useState<{
     tone: "success" | "error" | null;
@@ -1110,6 +1118,12 @@ export default function Page() {
   }, [useCardDetails]);
 
   useEffect(() => {
+    if (useSamePaymentSignature) {
+      setPaymentSignatureDataUrl("");
+    }
+  }, [useSamePaymentSignature]);
+
+  useEffect(() => {
     if (!verificationModalOpen) return;
 
     const previousOverflow = document.body.style.overflow;
@@ -1140,11 +1154,25 @@ export default function Page() {
     const form = event.currentTarget;
     const formData = new FormData(form);
     const signatureFile = dataUrlToFile(signatureDataUrl, "signature.png");
+    const paymentSignatureFile =
+      useCardDetails && !useSamePaymentSignature
+        ? dataUrlToFile(paymentSignatureDataUrl, "payment-signature.png")
+        : null;
+    if (useCardDetails && !useSamePaymentSignature && !paymentSignatureDataUrl) {
+      setStatus({
+        tone: "error",
+        message: "Please add the payment authorization signature before submitting the application.",
+      });
+      return;
+    }
     const uploadFiles = Array.from(formData.values()).filter(
       (value): value is File => value instanceof File && value.size > 0
     );
     if (signatureFile) {
       uploadFiles.push(signatureFile);
+    }
+    if (paymentSignatureFile) {
+      uploadFiles.push(paymentSignatureFile);
     }
 
     const totalAttachmentBytes = uploadFiles.reduce((sum, file) => sum + file.size, 0);
@@ -1201,6 +1229,7 @@ export default function Page() {
     formData.set("email", String(entries.business_email ?? ""));
     formData.set("subject", "Sunshine COD Application Submission");
     formData.set("recipient", "kpalomo@sunshinegasoline.com");
+    formData.set("submission_type", "sunshine_cod_pdf");
     formData.set("delivery_method", deliveryMethod);
 
     const messageLines = [
@@ -1270,7 +1299,7 @@ export default function Page() {
         `3-digit Bank Number: ${String(entries.bank_number ?? "")}`,
         `Expiration Date: ${String(entries.expiration_date ?? "")}`,
         `Driver's License #: ${String(entries.drivers_license_number ?? "")}`,
-        `Authorized Signature for Payment: ${String(entries.authorized_signature_for_payment ?? "")}`
+        `Payment Signature: ${useSamePaymentSignature ? "Same as main authorization signature" : "Separate payment signature included"}`
       );
       formData.delete("credit_card_front");
       formData.delete("credit_card_back");
@@ -1316,6 +1345,9 @@ export default function Page() {
 
     if (signatureFile) {
       formData.append("signature_image", signatureFile);
+    }
+    if (paymentSignatureFile) {
+      formData.append("payment_signature_image", paymentSignatureFile);
     }
 
     try {
@@ -1369,14 +1401,14 @@ export default function Page() {
       setVerificationComplete(true);
       setStatus({
         tone: "success",
-        message: "Application sent successfully. Dispatch summary includes DMV manual review requirement.",
+        message: "Application package sent successfully. DMV manual review requirement is included.",
       });
     } catch (error) {
       const debugMessage =
         error instanceof Error && error.message.trim().length > 0
           ? error.message.trim()
           : "Unknown network error";
-      const surfacedMessage = `Unable to send the dispatch summary right now. | message: ${debugMessage}`;
+      const surfacedMessage = `Unable to send the application package right now. | message: ${debugMessage}`;
       setVerificationError(surfacedMessage);
       setStatus({
         tone: "error",
@@ -1405,7 +1437,7 @@ export default function Page() {
         }}
       />
 
-      <form onSubmit={handleSubmit} className="mx-auto flex w-full max-w-7xl flex-col gap-6">
+      <form ref={formRef} onSubmit={handleSubmit} className="mx-auto flex w-full max-w-7xl flex-col gap-6">
         <section
           className="relative overflow-hidden rounded-[34px] border p-6 backdrop-blur-2xl sm:p-8"
           style={{
@@ -1767,12 +1799,14 @@ export default function Page() {
                       type="button"
                       onClick={() => setUseCardDetails((value) => !value)}
                       aria-pressed={useCardDetails}
-                      className={`relative inline-flex h-8 w-14 items-center rounded-full transition ${useCardDetails ? "bg-(--accent)" : ""}`}
-                      style={!useCardDetails ? { background: "var(--ss-toggle-off-bg)" } : undefined}
+                      className="inline-flex h-8 w-14 shrink-0 items-center rounded-full border p-[3px] transition"
+                      style={{
+                        justifyContent: useCardDetails ? "flex-end" : "flex-start",
+                        background: useCardDetails ? "var(--accent)" : "var(--ss-toggle-off-bg)",
+                        borderColor: useCardDetails ? "color-mix(in srgb, var(--accent) 70%, #b89b3a)" : "var(--ss-border)",
+                      }}
                     >
-                      <span
-                        className={`h-6 w-6 rounded-full bg-white shadow transition ${useCardDetails ? "translate-x-7" : "translate-x-1"}`}
-                      />
+                      <span className="h-6 w-6 rounded-full bg-white shadow-sm transition" />
                     </button>
                   </label>
 
@@ -1792,18 +1826,65 @@ export default function Page() {
                       />
                     </div>
                   ) : (
-                    <div className="mt-4 grid gap-4 md:grid-cols-2">
-                      {cardFields.map((field) => (
-                        <Field
-                          key={field.label}
-                          label={field.label}
-                          name={field.name}
-                          value={valueForField(field)}
-                          type={field.type}
-                          onChange={(nextValue) => updateFieldValue(field.name, nextValue)}
-                          className={field.label === "Authorized Signature for Payment" ? "md:col-span-2" : ""}
+                    <div className="mt-4 space-y-4">
+                      <div className="grid gap-4 md:grid-cols-2">
+                        {cardFields.map((field) => (
+                          <Field
+                            key={field.label}
+                            label={field.label}
+                            name={field.name}
+                            value={valueForField(field)}
+                            type={field.type}
+                            onChange={(nextValue) => updateFieldValue(field.name, nextValue)}
+                          />
+                        ))}
+                      </div>
+
+                      <div
+                        className="rounded-3xl border p-4"
+                        style={{ borderColor: "var(--ss-border-soft)", background: "var(--ss-surface)" }}
+                      >
+                        <div className="flex items-center justify-between gap-4">
+                          <div>
+                            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-(--accent)">
+                              Payment Signature
+                            </div>
+                            <div className="mt-1 text-sm" style={{ color: "var(--ss-muted)" }}>
+                              Use the same signature above or add a separate card authorization signature.
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setUseSamePaymentSignature((current) => !current)}
+                            aria-pressed={useSamePaymentSignature}
+                            className="inline-flex h-8 w-14 shrink-0 items-center rounded-full border p-[3px] transition"
+                            style={{
+                              justifyContent: useSamePaymentSignature ? "flex-end" : "flex-start",
+                              background: useSamePaymentSignature ? "var(--accent)" : "var(--ss-toggle-off-bg)",
+                              borderColor: useSamePaymentSignature ? "color-mix(in srgb, var(--accent) 70%, #b89b3a)" : "var(--ss-border)",
+                            }}
+                          >
+                            <span className="h-6 w-6 rounded-full bg-white shadow-sm transition" />
+                          </button>
+                        </div>
+                        <div className="mt-3 text-sm" style={{ color: "var(--ss-soft)" }}>
+                          {useSamePaymentSignature
+                            ? "Using the main authorization signature on the payment section."
+                            : "Separate payment signature required for the card section."}
+                        </div>
+                      </div>
+
+                      {!useSamePaymentSignature ? (
+                        <SignaturePad
+                          value={paymentSignatureDataUrl}
+                          onChange={setPaymentSignatureDataUrl}
+                          currentDate={currentDate}
+                          strokeColor={theme.signatureStroke}
+                          title="Payment Authorization Signature"
+                          description="sign for the card authorization area."
+                          showHiddenFields={false}
                         />
-                      ))}
+                      ) : null}
                     </div>
                   )}
                 </div>
@@ -1831,14 +1912,16 @@ export default function Page() {
                 </div>
               </div>
 
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="inline-flex h-12 items-center justify-center rounded-full bg-linear-to-br from-(--accent-light) to-(--accent) px-6 text-sm font-semibold shadow-lg shadow-black/25 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
-                style={{ color: "var(--button-text)" }}
-              >
-                {isSubmitting ? "Sending..." : "Submit Application"}
-              </button>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="inline-flex h-12 items-center justify-center rounded-full bg-linear-to-br from-(--accent-light) to-(--accent) px-6 text-sm font-semibold shadow-lg shadow-black/25 transition hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:opacity-60"
+                  style={{ color: "var(--button-text)" }}
+                >
+                  {isSubmitting ? "Sending..." : "Submit Application"}
+                </button>
+              </div>
             </div>
 
             {status.message ? (

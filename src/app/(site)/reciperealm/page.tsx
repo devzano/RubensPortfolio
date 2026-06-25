@@ -88,7 +88,7 @@ export default function Page({
       description={
         <p className="leading-relaxed">
           <strong>
-            Discover a world of flavors with <span className="text-[color:var(--accent)]">RecipeRealm</span>
+            Discover a world of flavors with <span className="text-var(--accent)">RecipeRealm</span>
           </strong>{" "}
           — create, save, and share culinary creations with ease. Organize beautifully, explore new dishes, and customize
           your cooking.

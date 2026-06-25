@@ -26,7 +26,6 @@ export type PopoverButtonProps = {
   as?: AsElement;
   className?: string;
   panelClassName?: string;
-  /** ms to wait before closing on hover-out (helps cursor travel) */
   hoverCloseDelay?: number;
 };
 
@@ -46,7 +45,7 @@ export default function PopoverButton({
   const [open, setOpen] = useState(false);
   const [isTouch, setIsTouch] = useState(false);
   const [side, setSide] = useState<"top" | "bottom">("bottom");
-  const [panelStyle, setPanelStyle] = useState<CSSProperties>({}); // left/top/maxWidth in px
+  const [panelStyle, setPanelStyle] = useState<CSSProperties>({});
   const wrapRef = useRef<HTMLDivElement | null>(null);
   const triggerRef = useRef<HTMLAnchorElement | HTMLButtonElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
@@ -89,7 +88,6 @@ export default function PopoverButton({
 
   const isLinkEl = as === "link" || (as === "auto" && !!href);
 
-  // Prevent immediate nav on touch (first tap opens)
   const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (isTouch && !open) {
       e.preventDefault();
@@ -99,7 +97,6 @@ export default function PopoverButton({
 
   const handleButtonClick = () => setOpen((o) => !o);
 
-  // ---- Trigger styles ----
   const baseCommon =
     "relative group inline-flex items-center justify-center font-medium transition-all duration-300 ease-out focus-visible:outline-none";
 
@@ -112,7 +109,7 @@ export default function PopoverButton({
   const pillSolid = "bg-neutral-900 text-white dark:bg-gray-300 dark:text-neutral-900";
 
   const linkShared =
-    "px-0 h-auto rounded-none shadow-none underline-offset-4 text-[color:var(--accent)] hover:underline";
+    "px-0 h-auto rounded-none shadow-none underline-offset-4 text-var(--accent) hover:underline";
 
   const triggerClass =
     variant === "link"
@@ -122,15 +119,14 @@ export default function PopoverButton({
   const positionPanel = useCallback(() => {
     if (!wrapRef.current || !triggerRef.current || !panelRef.current) return;
 
-    const margin = 8; // viewport padding
-    const gap = 8;    // gap between trigger and panel
+    const margin = 8;
+    const gap = 8;
     const vw = window.innerWidth;
     const vh = window.innerHeight;
 
     const wrapRect = wrapRef.current.getBoundingClientRect();
     const triggerRect = triggerRef.current.getBoundingClientRect();
 
-    // Temporarily ensure the panel is measurable.
     const panel = panelRef.current;
     const prevDisplay = panel.style.display;
     const prevVisibility = panel.style.visibility;
@@ -140,18 +136,16 @@ export default function PopoverButton({
     const panelW = panel.offsetWidth;
     const panelH = panel.offsetHeight;
 
-    // Horizontal: preferred based on align, then clamp to viewport.
     const alignOffset = (triggerRect: DOMRect, panelW: number) => {
       if (align === "start") return triggerRect.left;
       if (align === "end") return triggerRect.right - panelW;
-      return triggerRect.left + triggerRect.width / 2 - panelW / 2; // center
+      return triggerRect.left + triggerRect.width / 2 - panelW / 2;
     };
 
     let leftViewport = alignOffset(triggerRect, panelW);
     leftViewport = Math.max(margin, Math.min(leftViewport, vw - margin - panelW));
     const left = Math.round(leftViewport - wrapRect.left);
 
-    // Vertical: prefer below, flip to top if overflow.
     let place: "top" | "bottom" = "bottom";
     let topViewport = triggerRect.bottom + gap;
     if (topViewport + panelH > vh - margin) {
@@ -172,12 +166,10 @@ export default function PopoverButton({
       maxWidth: `${maxWidthPx}px`,
     });
 
-    // Restore temporary styles
     panel.style.display = prevDisplay;
     panel.style.visibility = prevVisibility;
   }, [align]);
 
-  // Reposition when opening (and when align changes)
   useLayoutEffect(() => {
     if (!open) return;
     positionPanel();
@@ -189,7 +181,6 @@ export default function PopoverButton({
   //   return () => ro.disconnect();
   // }, [open, positionPanel]);
 
-
   useEffect(() => {
     if (!open) return;
     const onWin = () => positionPanel();
@@ -199,9 +190,8 @@ export default function PopoverButton({
       window.removeEventListener("resize", onWin);
       window.removeEventListener("scroll", onWin);
     };
-  }, [open, positionPanel]); // ✅
+  }, [open, positionPanel]);
 
-  // Hover retention on trigger
   const triggerMouseEnter = () => {
     cancelClose();
     if (!isTouch) setOpen(true);
@@ -210,11 +200,8 @@ export default function PopoverButton({
     scheduleClose();
   };
 
-  // Panel alignment class is no longer used for hard positioning.
-  // We keep transform-origin for nicer scale animations.
   const originClass = side === "top" ? "origin-bottom" : "origin-top";
 
-  // Trigger content (label + optional icon + hover adornments)
   const TriggerInner = (
     <>
       {label}
@@ -232,18 +219,18 @@ export default function PopoverButton({
           {/* soft UFO ring */}
           <span
             aria-hidden
-            className="pointer-events-none absolute inset-0 rounded-full ring-0 ring-transparent transition-all duration-300 group-hover:ring-8 group-hover:ring-[var(--accent-soft)]"
+            className="pointer-events-none absolute inset-0 rounded-full ring-0 ring-transparent transition-all duration-300 group-hover:ring-8 group-hover:ring-(--accent-soft)"
           />
           {/* gradient underline */}
           <span
             aria-hidden
-            className="pointer-events-none absolute -z-10 left-1/2 top-full mt-1 h-px w-0 -translate-x-1/2 bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent transition-all duration-300 group-hover:w-2/3"
+            className="pointer-events-none absolute -z-10 left-1/2 top-full mt-1 h-px w-0 -translate-x-1/2 bg-linear-to-r from-transparent via-(--accent) to-transparent transition-all duration-300 group-hover:w-2/3"
           />
         </>
       ) : (
         <span
           aria-hidden
-          className="pointer-events-none absolute left-1/2 top-full mt-0.5 h-px w-0 -translate-x-1/2 bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent transition-all duration-300 group-hover:w-1/2"
+          className="pointer-events-none absolute left-1/2 top-full mt-0.5 h-px w-0 -translate-x-1/2 bg-linear-to-r from-transparent via-(--accent) to-transparent transition-all duration-300 group-hover:w-1/2"
         />
       )}
     </>
@@ -296,7 +283,7 @@ export default function PopoverButton({
         style={panelStyle}
         className={`
           absolute z-30
-          ${panelClassName ?? "w-[min(28rem,calc(100vw-2rem))] sm:w-[26rem]"}
+          ${panelClassName ?? "w-[min(28rem,calc(100vw-2rem))] sm:w-104"}
           rounded-2xl border border-neutral-200/70 dark:border-neutral-800
           bg-white/70 dark:bg-neutral-900/70 backdrop-blur-md shadow-xl
           p-4 text-sm ${originClass}
@@ -312,7 +299,7 @@ export default function PopoverButton({
         {/* UFO beam glow behind the panel */}
         <div className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute left-1/2 top-0 h-40 w-40 -translate-x-1/2 rounded-full bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.28),transparent_60%)] blur-md" />
-          <div className="absolute left-1/2 top-6 h-24 w-[85%] -translate-x-1/2 rounded-b-3xl bg-gradient-to-b from-[var(--accent-soft)] via-[var(--accent-verysoft)] to-transparent blur-sm animate-pulse" />
+          <div className="absolute left-1/2 top-6 h-24 w-[85%] -translate-x-1/2 rounded-b-3xl bg-linear-to-b from-(--accent-soft) via-(--accent-verysoft) to-transparent blur-sm animate-pulse" />
         </div>
 
         {children}

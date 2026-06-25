@@ -145,7 +145,7 @@ export default function Page({
           <p className="leading-relaxed">
             <strong>
               Discover and track your favorite movies and shows with{" "}
-              <span className="text-[color:var(--accent)]">Watchlistr</span>
+              <span className="text-var(--accent)">Watchlistr</span>
             </strong>{" "}
             — your personalized hub for keeping up with the latest releases, hidden gems, and timeless classics. With an
             intuitive design, powerful search tools, and smart watchlist management, Watchlistr makes it effortless to
@@ -250,7 +250,7 @@ function IpaInstallModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[10000] flex items-center justify-center overflow-y-auto bg-black/90 px-4 py-6 backdrop-blur-sm"
+      className="fixed inset-0 z-10000 flex items-center justify-center overflow-y-auto bg-black/90 px-4 py-6 backdrop-blur-sm"
       role="dialog"
       aria-modal="true"
       aria-labelledby="watchlistr-ipa-title"
@@ -264,7 +264,7 @@ function IpaInstallModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
           ref={closeButtonRef}
           type="button"
           onClick={onClose}
-          className="absolute right-3 top-3 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/10 text-2xl leading-none text-slate-200 transition hover:scale-105 hover:bg-white/15 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent)]"
+          className="absolute right-3 top-3 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/10 text-2xl leading-none text-slate-200 transition hover:scale-105 hover:bg-white/15 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-var(--accent)"
           aria-label="Close IPA install instructions"
         >
           &times;
@@ -272,7 +272,7 @@ function IpaInstallModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
 
         <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-5 pt-6 sm:px-7 sm:pt-7">
           <div className="pr-11">
-            <h2 id="watchlistr-ipa-title" className="text-2xl font-semibold tracking-tight text-[color:var(--accent-light)] sm:text-3xl">
+            <h2 id="watchlistr-ipa-title" className="text-2xl font-semibold tracking-tight text-var(--accent-light) sm:text-3xl">
               Watchlistr IPA
             </h2>
             <p className="mt-3 text-sm leading-6 text-slate-300 sm:text-base">
@@ -282,9 +282,9 @@ function IpaInstallModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
 
           <div className="mt-6 space-y-3">
             {sideloadSteps.map((step, index) => (
-              <div key={step.title} className="rounded-xl border border-white/10 bg-white/[0.06] p-4">
+              <div key={step.title} className="rounded-xl border border-white/10 bg-white/6 p-4">
                 <div className="flex gap-3">
-                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[color:var(--accent-soft)] text-sm font-semibold text-[color:var(--accent-light)] ring-1 ring-[color:var(--accent-softer)]">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-var(--accent-soft) text-sm font-semibold text-var(--accent-light) ring-1 ring-var(--accent-softer)">
                     {index + 1}
                   </div>
                   <div>
@@ -296,7 +296,7 @@ function IpaInstallModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
             ))}
           </div>
 
-          <div className="mt-5 rounded-xl border border-[color:var(--accent-soft)] bg-[color:var(--accent-verysoft)] p-4 text-sm leading-6 text-slate-300">
+          <div className="mt-5 rounded-xl border border-var(--accent-soft) bg-var(--accent-verysoft) p-4 text-sm leading-6 text-slate-300">
             Free Apple ID installs may need to be refreshed periodically.
           </div>
 
@@ -306,7 +306,7 @@ function IpaInstallModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
           <a
             href={WATCHLISTR_IPA_PATH}
             download
-            className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-gradient-to-br from-[color:var(--accent-light)] to-[color:var(--accent)] px-5 text-sm font-semibold text-white shadow-lg shadow-black/30 transition hover:-translate-y-0.5 hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--accent-light)]"
+            className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-linear-to-br from-var(--accent-light) to-var(--accent) px-5 text-sm font-semibold text-white shadow-lg shadow-black/30 transition hover:-translate-y-0.5 hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-var(--accent-light)"
           >
             Download IPA
           </a>

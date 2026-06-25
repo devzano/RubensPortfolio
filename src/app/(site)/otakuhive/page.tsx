@@ -52,7 +52,7 @@ export default function Page({
       description={
         <p className="leading-relaxed">
           <strong>
-            Discover a world of manga with <span className="text-[color:var(--accent)]">OtakuHive</span>
+            Discover a world of manga with <span className="text-var(--accent)">OtakuHive</span>
           </strong>{" "}
           — a sleek, powerful reader that connects directly to MangaDex for a massive,
           always-fresh catalog.

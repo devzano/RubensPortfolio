@@ -57,7 +57,7 @@ export default function Page({
         <p className="leading-relaxed">
           <strong>
             Experience the excitement and heart of the{" "}
-            <span className="text-[color:var(--accent)]">Sunshine Key West Challenge</span>
+            <span className="text-var(--accent)">Sunshine Key West Challenge</span>
           </strong>{" "}
           — a cherished annual fishing tournament supporting the Diabetes Research Institute’s
           mission to find a cure for Type 1 diabetes. Stay connected to the tournament’s purpose,

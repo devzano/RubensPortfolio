@@ -1,7 +1,7 @@
 // app/(site)/watchlistr-mobile/page.tsx
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import { SlideNavProps } from "@/types/types";
@@ -35,6 +35,210 @@ import SearchAndroid from "@/components/Projects/Watchlistr-Mobile/Screenshots/s
 import SearchGenreAndroid from "@/components/Projects/Watchlistr-Mobile/Screenshots/search-genre_android.png";
 import MovieWatchlistViewAndroid from "@/components/Projects/Watchlistr-Mobile/Screenshots/movie-watchlist_android.png";
 import TVShowWatchlistViewAndroid from "@/components/Projects/Watchlistr-Mobile/Screenshots/tvshow-watchlist_android.png";
+
+const versionHistory = [
+  {
+    version: "26.1",
+    title: "26.1 Update",
+    items: ["Upcoming notifications and small fixes."],
+  },
+  {
+    version: "26.0",
+    title: "26.0 Update",
+    items: [
+      "New media home section based on your Watchlistr watchlist.",
+      "Added a calendar view.",
+      "Performance improvements and bug fixes.",
+    ],
+  },
+  {
+    version: "1.2.0",
+    title: "1.2.0 Update",
+    items: ["iOS 26 updates.", "Smarter widget."],
+  },
+  {
+    version: "1.1.7",
+    title: "1.1.7 Update",
+    items: [
+      "Improved sharing with smart links that open the app if installed or show a lightweight web preview.",
+      "Updated onboarding to reduce app size.",
+      "Bug fixes.",
+    ],
+  },
+  {
+    version: "1.1.6",
+    title: "1.1.6 Update",
+    items: [
+      "Added folders to organize your watchlist.",
+      "Added sort by genre for faster watchlist browsing.",
+    ],
+  },
+  {
+    version: "1.1.5",
+    title: "1.1.5 Update",
+    items: [
+      "Updated onboarding experience.",
+      "Media detail pages now include more comprehensive information.",
+      "Redesigned profile view.",
+    ],
+  },
+  {
+    version: "1.1.3",
+    title: "1.1.3 Update",
+    items: [
+      "Added app icon customization.",
+      "Fixed iOS 18 search bar disappearing issue.",
+      "Fixed TV show watchlist episode watched status issue.",
+      "Expanded genre search results.",
+      "Improved reminder notifications.",
+    ],
+  },
+  {
+    version: "1.1.2",
+    title: "1.1.2 Update",
+    items: [
+      "Added swipe-to-go-back gesture.",
+      "Improved shared Watchlistr links.",
+      "Fixed Watching items not moving to the top.",
+      "Fixed TV show watchlist sorting.",
+      "Fixed missing media search data.",
+    ],
+  },
+  {
+    version: "1.1.1",
+    title: "1.1.1 Update",
+    items: ["Layout enhancements for landscape mode and smaller badge images."],
+  },
+  {
+    version: "1.1",
+    title: "1.1 Update",
+    items: [
+      "New grid compositional watchlist layout.",
+      "Performance improvements and bug fixes.",
+    ],
+  },
+  {
+    version: "1.0.7",
+    title: "1.0.7 Update",
+    items: [
+      "Fixed Watching badge removal issue.",
+      "Added movie collections in search and detail views.",
+      "Optimized layout for iPad and macOS.",
+      "Added startup tab customization.",
+      "Performance improvements and bug fixes.",
+    ],
+  },
+  {
+    version: "1.0.6",
+    title: "1.0.6 Update",
+    items: [
+      "Long-press watchlist items to mark as Watching.",
+      "Added Apple and Google sign-up.",
+      "New tab bar design.",
+      "Bug fixes and performance improvements.",
+    ],
+  },
+  {
+    version: "1.0.5",
+    title: "1.0.5 Update",
+    items: [
+      "Fixed tab bar display issues.",
+      "Sharing now works properly with TV shows.",
+      "Watch provider links now open supported apps or TMDB.",
+      "Added sorting by added date and more media sorting controls.",
+    ],
+  },
+  {
+    version: "1.0.4",
+    title: "1.0.4 Update",
+    items: [
+      "Fixed sharing media without posters.",
+      "Added more content sections for movies and TV shows.",
+      "Added onboarding experience.",
+      "Expanded media detail pages.",
+      "Redesigned profile view.",
+    ],
+  },
+  {
+    version: "1.0.3",
+    title: "1.0.3 Update",
+    items: [
+      "Fixed movie release dates and notifications.",
+      "Added poster placeholders for missing media posters.",
+      "Added share button from media detail pages.",
+      "Added trending and additional media pages.",
+      "Enhanced actor and genre searches.",
+    ],
+  },
+  {
+    version: "1.0.2",
+    title: "1.0.2 Update",
+    items: [
+      "Fixed missing data in certain media entries.",
+      "Added temporary user option.",
+      "Refreshed design with a new tab bar and transparent header.",
+      "Added search history.",
+      "Added watchlist reminders and New Episode badges.",
+      "Added cast exploration and suggested media.",
+    ],
+  },
+  {
+    version: "1.0.1",
+    title: "1.0.1 Update",
+    items: [
+      "Added Face ID and Touch ID access.",
+      "Added more cast discovery.",
+      "Revamped profile tab.",
+      "Added custom text colors.",
+      "Added profile pictures.",
+    ],
+  },
+];
+
+function WhatsNewSection() {
+  const [selectedVersion, setSelectedVersion] = useState(versionHistory[0].version);
+
+  const selected = useMemo(
+    () => versionHistory.find((item) => item.version === selectedVersion) ?? versionHistory[0],
+    [selectedVersion]
+  );
+
+  return (
+    <section className="mt-8 rounded-3xl border border-white/10 bg-white/4 p-5">
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h3 className="text-xl font-bold text-white">What’s New</h3>
+          <p className="text-sm text-slate-400">View Watchlistr version history.</p>
+        </div>
+
+        <select
+          value={selectedVersion}
+          onChange={(event) => setSelectedVersion(event.target.value)}
+          className="rounded-2xl border border-white/10 bg-black/40 px-4 py-2 text-sm font-semibold text-white outline-none transition hover:border-white/20 focus:border-(--accent)"
+        >
+          {versionHistory.map((item) => (
+            <option key={item.version} value={item.version}>
+              Version {item.version}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+        <h4 className="mb-3 text-lg font-bold text-white">{selected.title}</h4>
+
+        <ul className="space-y-2 text-sm leading-relaxed text-slate-300">
+          {selected.items.map((item) => (
+            <li key={item} className="flex gap-2">
+              <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-(--accent)" />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
 
 const WATCHLISTR_IPA_PATH =
   "https://github.com/devzano/RubensPortfolio/releases/download/watchlistr-ios-ipa/Watchlistr.ipa";
@@ -142,15 +346,20 @@ export default function Page({
           { label: "Send Feedback", onClick: openFeedback, variant: "secondary" },
         ]}
         description={
-          <p className="leading-relaxed">
-            <strong>
-              Discover and track your favorite movies and shows with{" "}
-              <span className="text-var(--accent)">Watchlistr</span>
-            </strong>{" "}
-            — your personalized hub for keeping up with the latest releases, hidden gems, and timeless classics. With an
-            intuitive design, powerful search tools, and smart watchlist management, Watchlistr makes it effortless to
-            stay on top of your entertainment journey.
-          </p>
+          <div className="space-y-4 leading-relaxed">
+            <p>
+              <strong>
+                Discover and track your favorite movies and shows with{" "}
+                <span className="text-var(--accent)">Watchlistr</span>
+              </strong>{" "}
+              — your personalized hub for keeping up with the latest releases, hidden
+              gems, and timeless classics. With an intuitive design, powerful search
+              tools, and smart watchlist management, Watchlistr makes it effortless to
+              stay on top of your entertainment journey.
+            </p>
+
+            <WhatsNewSection />
+          </div>
         }
         featureTitle="Features"
         features={[

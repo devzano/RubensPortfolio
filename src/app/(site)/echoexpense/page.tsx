@@ -31,6 +31,17 @@ import CalendarView from "@/components/Projects/EchoExpense/Screenshots/EchoExpe
 
 const versionHistory = [
   {
+    version: "26.0",
+    title: "26.0 Update",
+    items: [
+      "New look throughout the app with additional features.",
+      "Smarter categories for organizing bills and paydays.",
+      "Plaid sync to view transactions and match or create bills and paydays.",
+      "New widget showing upcoming bills and paydays.",
+      "Performance improvements and bug fixes.",
+    ],
+  },
+  {
     version: "1.0.7",
     title: "1.0.7 Update",
     items: [

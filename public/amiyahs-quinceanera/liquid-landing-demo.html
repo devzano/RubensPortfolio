@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Amiyah's Quinceañera Liquid Landing</title>
+    <meta
+      name="description"
+      content="A luxurious liquid-and-bubble landing animation for Amiyah's Quinceañera."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@0.168.0/build/three.module.js"
+        }
+      }
+    </script>
+    <style>
+      :root {
+        --amiyah-gold: #d8b45a;
+        --amiyah-gold-strong: #b58d29;
+        --amiyah-teal: #72d8d8;
+        --amiyah-teal-deep: #2d6d6c;
+        --amiyah-ink: #173536;
+        --amiyah-sea-mist: #effcf8;
+        --amiyah-foam: rgba(255, 255, 255, 0.82);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        min-height: 100%;
+        overflow: hidden;
+        background:
+          radial-gradient(circle at 20% 18%, rgba(114, 216, 216, 0.34), transparent 18%),
+          radial-gradient(circle at 82% 16%, rgba(216, 180, 90, 0.22), transparent 18%),
+          radial-gradient(circle at 70% 72%, rgba(114, 216, 216, 0.16), transparent 22%),
+          linear-gradient(180deg, #f8fffd 0%, #eefcf6 26%, #f9fbfa 100%);
+        color: var(--amiyah-ink);
+        font-family: Inter, system-ui, sans-serif;
+      }
+
+      body::before,
+      body::after {
+        content: "";
+        position: fixed;
+        inset: auto;
+        pointer-events: none;
+        z-index: 0;
+        border-radius: 999px;
+        filter: blur(28px);
+        opacity: 0.72;
+      }
+
+      body::before {
+        top: 6%;
+        left: 4%;
+        width: min(30vw, 24rem);
+        height: min(30vw, 24rem);
+        background: radial-gradient(circle, rgba(114, 216, 216, 0.26), transparent 70%);
+      }
+
+      body::after {
+        right: 2%;
+        bottom: 8%;
+        width: min(34vw, 28rem);
+        height: min(34vw, 28rem);
+        background: radial-gradient(circle, rgba(216, 180, 90, 0.18), transparent 72%);
+      }
+
+      #scene {
+        position: fixed;
+        inset: 0;
+        z-index: 10;
+        pointer-events: none;
+      }
+
+      #scene canvas {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
+      .page-shell {
+        position: relative;
+        z-index: 1;
+        min-height: 100vh;
+      }
+
+      .hero-mask {
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(18, 46, 48, 0.18)),
+          radial-gradient(circle at 50% 26%, rgba(255, 255, 255, 0.2), transparent 28%);
+        pointer-events: none;
+      }
+
+      .serif-title {
+        font-family: "Cormorant Garamond", Georgia, serif;
+      }
+
+      .title-glow {
+        text-shadow:
+          0 0 12px rgba(255, 240, 196, 0.7),
+          0 0 28px rgba(216, 180, 90, 0.42),
+          0 2px 16px rgba(92, 62, 8, 0.18);
+      }
+
+      .shimmer {
+        background-image:
+          linear-gradient(
+            110deg,
+            rgba(255, 255, 255, 0) 10%,
+            rgba(255, 255, 255, 0.8) 42%,
+            rgba(255, 255, 255, 0) 70%
+          );
+        background-size: 220% 100%;
+        animation: shimmer 3.8s linear infinite;
+      }
+
+      .glass-card {
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0.52));
+        border: 1px solid rgba(255, 255, 255, 0.72);
+        box-shadow:
+          0 18px 50px rgba(58, 90, 92, 0.16),
+          inset 0 1px 0 rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(16px);
+      }
+
+      .reveal-content {
+        opacity: 0;
+        transform: translateY(26px) scale(0.985);
+        filter: blur(12px);
+        transition:
+          opacity 1.4s ease,
+          transform 1.4s cubic-bezier(0.22, 1, 0.36, 1),
+          filter 1.4s ease;
+      }
+
+      body.revealed .reveal-content {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+
+      .overlay-copy {
+        opacity: 1;
+        transform: translateY(0);
+        transition:
+          opacity 1s ease,
+          transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+
+      body.revealed .overlay-copy {
+        opacity: 0;
+        transform: translateY(-18px);
+      }
+
+      .landing-shell {
+        position: fixed;
+        inset: 0;
+        z-index: 20;
+        pointer-events: none;
+      }
+
+      body.revealed .landing-shell {
+        opacity: 0;
+        transition: opacity 1s ease;
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: 180% 0;
+        }
+        100% {
+          background-position: -40% 0;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .shimmer,
+        .reveal-content,
+        .overlay-copy {
+          animation: none;
+          transition: none;
+        }
+
+        body.revealed .overlay-copy {
+          opacity: 0;
+          transform: none;
+        }
+
+        body.revealed .reveal-content,
+        .reveal-content {
+          opacity: 1;
+          transform: none;
+          filter: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-shell isolate">
+      <section class="relative flex min-h-screen items-center justify-center px-6 py-10">
+        <div class="hero-mask"></div>
+
+        <div class="reveal-content relative z-[2] mx-auto flex w-full max-w-7xl flex-col gap-10">
+          <div class="flex items-start justify-between gap-4">
+            <div class="glass-card rounded-full px-5 py-2 text-[11px] font-semibold uppercase tracking-[0.34em] text-[#9b7b22]">
+              Under The Sea Celebration
+            </div>
+            <div class="glass-card rounded-full px-5 py-2 text-right text-[11px] font-semibold uppercase tracking-[0.3em] text-[#559190]">
+              Saturday • 7 PM
+            </div>
+          </div>
+
+          <div class="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
+            <div class="max-w-4xl">
+              <div class="text-[12px] font-semibold uppercase tracking-[0.38em] text-[#9b7b22]">
+                Amiyah's Quinceañera
+              </div>
+              <h1 class="serif-title mt-6 text-5xl font-semibold leading-none tracking-tight text-[#1c4c4d] md:text-7xl lg:text-8xl">
+                A Night Of Golden Tide, Sea Glass, And Celebration
+              </h1>
+              <p class="mt-6 max-w-2xl text-base leading-8 text-[rgba(35,66,66,0.78)] md:text-lg">
+                A luminous entrance sequence inspired by the event palette: sea-glass teal, pearl mist, and gilded shimmer.
+                The liquid rises, bubbles breathe through the surface, and the celebration reveals itself.
+              </p>
+
+              <div class="mt-8 flex flex-wrap gap-4">
+                <button
+                  class="rounded-full border border-[#c8a546] bg-[#d9b24f] px-6 py-3 text-sm font-semibold text-[#1f2929] shadow-[0_18px_34px_rgba(181,141,41,0.24)]"
+                  type="button"
+                >
+                  Enter Celebration
+                </button>
+                <button
+                  class="rounded-full border border-white/70 bg-white/72 px-6 py-3 text-sm font-semibold text-[#2d6d6c] backdrop-blur-md"
+                  type="button"
+                >
+                  View Gallery
+                </button>
+              </div>
+            </div>
+
+            <div class="grid gap-4 md:grid-cols-3 lg:grid-cols-1">
+              <div class="glass-card rounded-[30px] p-5">
+                <div class="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22]">Theme</div>
+                <div class="mt-3 text-2xl font-semibold text-[#214445]">Pearl + Sea Glass</div>
+              </div>
+              <div class="glass-card rounded-[30px] p-5">
+                <div class="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22]">Mood</div>
+                <div class="mt-3 text-2xl font-semibold text-[#214445]">Dreamy, Lush, Elegant</div>
+              </div>
+              <div class="glass-card rounded-[30px] p-5">
+                <div class="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22]">Motion</div>
+                <div class="mt-3 text-2xl font-semibold text-[#214445]">Liquid Reveal</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="landing-shell">
+          <div class="overlay-copy absolute inset-0 z-[25] flex items-center justify-center px-6">
+            <div class="mx-auto max-w-5xl text-center">
+              <div
+                class="mx-auto mb-5 h-px w-36 shimmer rounded-full opacity-80"
+                style="background-color: rgba(216, 180, 90, 0.4)"
+              ></div>
+              <h2
+                class="serif-title title-glow text-5xl font-semibold tracking-tight text-[#f6df95] md:text-7xl lg:text-[6.25rem]"
+              >
+                Amiyah’s Quinceañera
+              </h2>
+              <p class="mx-auto mt-4 max-w-2xl text-sm font-medium uppercase tracking-[0.42em] text-[rgba(255,247,224,0.82)] md:text-base">
+                Welcome to the Celebration
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div id="scene" aria-hidden="true"></div>
+
+    <script type="module">
+      import * as THREE from "three";
+
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const mount = document.getElementById("scene");
+
+      const renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true,
+        powerPreference: "high-performance",
+      });
+      renderer.setClearColor(0x000000, 0);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.85));
+      mount.appendChild(renderer.domElement);
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 10);
+      camera.position.z = 1;
+
+      const clock = new THREE.Clock();
+      let accumulatedTime = 0;
+      const lifecycle = {
+        fill: prefersReducedMotion ? 1.16 : 0.08,
+        opacity: prefersReducedMotion ? 0 : 1,
+        revealStarted: prefersReducedMotion,
+      };
+
+      const vertexShader = `
+        varying vec2 vUv;
+        void main() {
+          vUv = uv;
+          gl_Position = vec4(position, 1.0);
+        }
+      `;
+
+      const fragmentShader = `
+        precision highp float;
+
+        varying vec2 vUv;
+        uniform vec2 uResolution;
+        uniform float uTime;
+        uniform float uFill;
+        uniform float uOpacity;
+        uniform vec3 uGold;
+        uniform vec3 uTeal;
+        uniform vec3 uDeep;
+
+        float hash(vec2 p) {
+          return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+        }
+
+        float noise(vec2 p) {
+          vec2 i = floor(p);
+          vec2 f = fract(p);
+          vec2 u = f * f * (3.0 - 2.0 * f);
+
+          return mix(
+            mix(hash(i + vec2(0.0, 0.0)), hash(i + vec2(1.0, 0.0)), u.x),
+            mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x),
+            u.y
+          );
+        }
+
+        float fbm(vec2 p) {
+          float value = 0.0;
+          float amplitude = 0.5;
+          for (int i = 0; i < 5; i++) {
+            value += amplitude * noise(p);
+            p *= 2.03;
+            amplitude *= 0.52;
+          }
+          return value;
+        }
+
+        void main() {
+          vec2 uv = vUv;
+          float aspect = uResolution.x / max(uResolution.y, 1.0);
+          vec2 warped = uv;
+          warped.x *= aspect;
+
+          float waveA = sin(uv.x * 8.0 + uTime * 1.5) * 0.032;
+          float waveB = sin(uv.x * 17.0 - uTime * 2.0) * 0.016;
+          float waveC = (fbm(vec2(uv.x * 3.4, uTime * 0.18 + 1.3)) - 0.5) * 0.07;
+          float crest = uFill + waveA + waveB + waveC;
+
+          float liquidMask = smoothstep(crest + 0.04, crest - 0.02, uv.y);
+          float depth = clamp((crest - uv.y) * 1.6 + 0.22, 0.0, 1.0);
+
+          vec3 baseA = mix(uTeal, uGold, clamp(uv.y * 0.82 + 0.12, 0.0, 1.0));
+          vec3 baseB = mix(uDeep, uTeal, clamp(0.2 + depth * 0.85, 0.0, 1.0));
+          vec3 silk = mix(baseA, baseB, 0.56 + 0.24 * sin((uv.x + uv.y) * 12.0 - uTime * 0.75));
+
+          float shimmerBand = smoothstep(0.0, 0.6, sin((uv.x * 6.8 - uv.y * 4.2) + uTime * 1.6) * 0.5 + 0.5);
+          silk += mix(uGold, vec3(1.0), shimmerBand * 0.15) * 0.22;
+
+          float organic = fbm(warped * vec2(2.2, 3.8) + vec2(0.0, uTime * 0.16));
+          silk += organic * 0.08;
+
+          float highlight = exp(-pow(abs(uv.y - crest) * 42.0, 1.18));
+          vec3 crestGlow = mix(vec3(1.0), uGold, 0.55) * highlight * 1.35;
+
+          float pearlSpark = smoothstep(0.75, 1.0, fbm(warped * 6.0 + vec2(uTime * 0.24, -uTime * 0.3)));
+          vec3 spark = mix(uTeal, vec3(1.0), 0.58) * pearlSpark * 0.12 * liquidMask;
+
+          vec3 color = silk * liquidMask + crestGlow + spark;
+          float alpha = liquidMask * uOpacity * 0.98;
+
+          gl_FragColor = vec4(color, alpha);
+        }
+      `;
+
+      const liquidMaterial = new THREE.ShaderMaterial({
+        transparent: true,
+        depthWrite: false,
+        uniforms: {
+          uResolution: { value: new THREE.Vector2(1, 1) },
+          uTime: { value: 0 },
+          uFill: { value: lifecycle.fill },
+          uOpacity: { value: lifecycle.opacity },
+          uGold: { value: new THREE.Color("#d8b45a") },
+          uTeal: { value: new THREE.Color("#72d8d8") },
+          uDeep: { value: new THREE.Color("#2d6d6c") },
+        },
+        vertexShader,
+        fragmentShader,
+      });
+
+      const liquidMesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), liquidMaterial);
+      scene.add(liquidMesh);
+
+      const bubbleCount = prefersReducedMotion ? 0 : 140;
+      const bubbleGeometry = new THREE.BufferGeometry();
+      const bubblePositions = new Float32Array(bubbleCount * 3);
+      const bubbleSizes = new Float32Array(bubbleCount);
+      const bubbleOffsets = new Float32Array(bubbleCount);
+      const bubbleSeeds = new Float32Array(bubbleCount);
+      const bubbleAge = new Float32Array(bubbleCount);
+      const bubbleSpeed = new Float32Array(bubbleCount);
+
+      function resetBubble(i, scatter = 1) {
+        const x = (Math.random() * 2 - 1) * scatter;
+        bubblePositions[i * 3] = x;
+        bubblePositions[i * 3 + 1] = -0.98 - Math.random() * 0.45;
+        bubblePositions[i * 3 + 2] = 0;
+        bubbleSizes[i] = 16 + Math.random() * 38;
+        bubbleOffsets[i] = Math.random() * Math.PI * 2;
+        bubbleSeeds[i] = Math.random();
+        bubbleAge[i] = Math.random() * 6;
+        bubbleSpeed[i] = 0.3 + Math.random() * 0.34;
+      }
+
+      for (let i = 0; i < bubbleCount; i++) {
+        resetBubble(i, 0.92);
+      }
+
+      bubbleGeometry.setAttribute("position", new THREE.BufferAttribute(bubblePositions, 3));
+      bubbleGeometry.setAttribute("aSize", new THREE.BufferAttribute(bubbleSizes, 1));
+      bubbleGeometry.setAttribute("aSeed", new THREE.BufferAttribute(bubbleSeeds, 1));
+
+      const bubbleMaterial = new THREE.ShaderMaterial({
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        uniforms: {
+          uTime: { value: 0 },
+          uFill: { value: lifecycle.fill },
+          uOpacity: { value: lifecycle.opacity },
+          uViewport: { value: new THREE.Vector2(1, 1) },
+          uGold: { value: new THREE.Color("#efd68b") },
+          uTeal: { value: new THREE.Color("#9df0ed") },
+        },
+        vertexShader: `
+          attribute float aSize;
+          attribute float aSeed;
+          varying float vSeed;
+          varying float vGlow;
+          void main() {
+            vSeed = aSeed;
+            vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+            float perspectiveBoost = 1.0 + sin(aSeed * 17.0) * 0.16;
+            gl_PointSize = aSize * perspectiveBoost;
+            gl_Position = projectionMatrix * mvPosition;
+            vGlow = smoothstep(-1.0, 0.95, position.y);
+          }
+        `,
+        fragmentShader: `
+          precision highp float;
+          varying float vSeed;
+          varying float vGlow;
+          uniform float uTime;
+          uniform float uFill;
+          uniform float uOpacity;
+          uniform vec3 uGold;
+          uniform vec3 uTeal;
+
+          void main() {
+            vec2 uv = gl_PointCoord - 0.5;
+            float dist = length(uv);
+            if (dist > 0.5) discard;
+
+            float ring = smoothstep(0.48, 0.18, dist);
+            float shell = smoothstep(0.5, 0.34, dist) - smoothstep(0.3, 0.12, dist);
+            float sheen = 0.5 + 0.5 * sin(uTime * 2.2 + vSeed * 13.0 + uv.x * 8.0 - uv.y * 7.0);
+            vec3 iridescence = mix(uTeal, uGold, sheen);
+            vec3 color = mix(vec3(1.0), iridescence, 0.72) * ring;
+            color += iridescence * shell * 0.9;
+
+            float alpha = ring * (0.34 + shell * 1.15) * uOpacity * vGlow;
+            gl_FragColor = vec4(color, alpha);
+          }
+        `,
+      });
+
+      const bubblePoints = new THREE.Points(bubbleGeometry, bubbleMaterial);
+      bubblePoints.position.z = 0.02;
+      scene.add(bubblePoints);
+
+      function resize() {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+        renderer.setSize(width, height, false);
+        liquidMaterial.uniforms.uResolution.value.set(width, height);
+        bubbleMaterial.uniforms.uViewport.value.set(width, height);
+      }
+
+      resize();
+      window.addEventListener("resize", resize, { passive: true });
+
+      function updateBubbles(time, delta) {
+        for (let i = 0; i < bubbleCount; i++) {
+          bubbleAge[i] += delta;
+          const drift =
+            Math.sin(bubbleAge[i] * 1.35 + bubbleOffsets[i]) * (0.0018 + bubbleSeeds[i] * 0.0034);
+
+          bubblePositions[i * 3] += drift;
+          bubblePositions[i * 3 + 1] += bubbleSpeed[i] * delta;
+
+          const localWave =
+            Math.sin((bubblePositions[i * 3] * 4.2) + time * 1.5 + bubbleOffsets[i]) * 0.02 +
+            Math.sin((bubblePositions[i * 3] * 9.4) - time * 2.1) * 0.01;
+          const fluidTop = lifecycle.fill + localWave;
+          const bubbleY = bubblePositions[i * 3 + 1];
+
+          if (bubbleY > fluidTop - 0.02 || bubblePositions[i * 3] > 1.18 || bubblePositions[i * 3] < -1.18) {
+            resetBubble(i, 0.96);
+          }
+        }
+
+        bubbleGeometry.attributes.position.needsUpdate = true;
+      }
+
+      function animate() {
+        const delta = Math.min(clock.getDelta(), 0.033);
+        accumulatedTime += delta;
+        const elapsed = accumulatedTime;
+
+        if (!prefersReducedMotion) {
+          if (lifecycle.fill < 1.14) {
+            lifecycle.fill += delta * 0.74 + Math.max(0.0, 0.26 - lifecycle.fill) * delta * 0.4;
+          } else if (!lifecycle.revealStarted) {
+            lifecycle.revealStarted = true;
+            document.body.classList.add("revealed");
+          }
+
+          if (lifecycle.revealStarted && lifecycle.opacity > 0.0) {
+            lifecycle.opacity = Math.max(0, lifecycle.opacity - delta * 0.92);
+          }
+        } else if (!lifecycle.revealStarted) {
+          lifecycle.revealStarted = true;
+          document.body.classList.add("revealed");
+        }
+
+        liquidMaterial.uniforms.uTime.value = elapsed;
+        liquidMaterial.uniforms.uFill.value = lifecycle.fill;
+        liquidMaterial.uniforms.uOpacity.value = lifecycle.opacity;
+
+        bubbleMaterial.uniforms.uTime.value = elapsed;
+        bubbleMaterial.uniforms.uFill.value = lifecycle.fill;
+        bubbleMaterial.uniforms.uOpacity.value = lifecycle.opacity;
+
+        if (bubbleCount > 0) {
+          updateBubbles(elapsed, delta);
+        }
+
+        renderer.render(scene, camera);
+        requestAnimationFrame(animate);
+      }
+
+      if (prefersReducedMotion) {
+        document.body.classList.add("revealed");
+      }
+
+      animate();
+    </script>
+  </body>
+</html>

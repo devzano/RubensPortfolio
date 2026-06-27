@@ -3,6 +3,7 @@
 import { Camera, ChevronLeft, ChevronRight, Film, LoaderCircle, Lock, Mic, PauseCircle, PlayCircle, Sparkles, Upload, Waves, X } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import * as THREE from "three";
 import { supabase } from "@/lib/supabase/client";
 
 const EVENT_SLUG = "amiyahs-quinceanera";
@@ -57,6 +58,351 @@ const mediaTabs: { key: MediaKind; label: string; icon: typeof Sparkles; }[] = [
   { key: "video", label: "Videos", icon: Film },
   { key: "audio", label: "Voice Notes", icon: Mic },
 ];
+
+function LiquidIntroOverlay({ onComplete }: { onComplete: () => void; }) {
+  const mountRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const mount = mountRef.current;
+    if (!mount) return;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (prefersReducedMotion) {
+      onComplete();
+      return;
+    }
+
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: true,
+      powerPreference: "high-performance",
+    });
+    renderer.setClearColor(0x000000, 0);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.85));
+    mount.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 10);
+    camera.position.z = 1;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const lifecycle = {
+      fill: 0.18,
+      opacity: 1,
+      revealStarted: false,
+      completed: false,
+    };
+
+    const vertexShader = `
+      varying vec2 vUv;
+      void main() {
+        vUv = uv;
+        gl_Position = vec4(position, 1.0);
+      }
+    `;
+
+    const fragmentShader = `
+      precision highp float;
+
+      varying vec2 vUv;
+      uniform vec2 uResolution;
+      uniform float uTime;
+      uniform float uFill;
+      uniform float uOpacity;
+      uniform vec3 uGold;
+      uniform vec3 uTeal;
+      uniform vec3 uDeep;
+
+      float hash(vec2 p) {
+        return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
+      }
+
+      float noise(vec2 p) {
+        vec2 i = floor(p);
+        vec2 f = fract(p);
+        vec2 u = f * f * (3.0 - 2.0 * f);
+
+        return mix(
+          mix(hash(i + vec2(0.0, 0.0)), hash(i + vec2(1.0, 0.0)), u.x),
+          mix(hash(i + vec2(0.0, 1.0)), hash(i + vec2(1.0, 1.0)), u.x),
+          u.y
+        );
+      }
+
+      float fbm(vec2 p) {
+        float value = 0.0;
+        float amplitude = 0.5;
+        for (int i = 0; i < 5; i++) {
+          value += amplitude * noise(p);
+          p *= 2.03;
+          amplitude *= 0.52;
+        }
+        return value;
+      }
+
+      void main() {
+        vec2 uv = vUv;
+        float aspect = uResolution.x / max(uResolution.y, 1.0);
+        vec2 warped = uv;
+        warped.x *= aspect;
+
+        float waveA = sin(uv.x * 8.0 + uTime * 1.5) * 0.038;
+        float waveB = sin(uv.x * 17.0 - uTime * 2.0) * 0.02;
+        float waveC = (fbm(vec2(uv.x * 3.4, uTime * 0.18 + 1.3)) - 0.5) * 0.078;
+        float crest = uFill + waveA + waveB + waveC;
+
+        float liquidMask = smoothstep(crest + 0.04, crest - 0.02, uv.y);
+        float depth = clamp((crest - uv.y) * 1.6 + 0.22, 0.0, 1.0);
+
+        vec3 baseA = mix(uTeal, uGold, clamp(uv.y * 0.82 + 0.12, 0.0, 1.0));
+        vec3 baseB = mix(uDeep, uTeal, clamp(0.2 + depth * 0.85, 0.0, 1.0));
+        vec3 silk = mix(baseA, baseB, 0.56 + 0.24 * sin((uv.x + uv.y) * 12.0 - uTime * 0.75));
+
+        float shimmerBand = smoothstep(0.0, 0.6, sin((uv.x * 6.8 - uv.y * 4.2) + uTime * 1.6) * 0.5 + 0.5);
+        silk += mix(uGold, vec3(1.0), shimmerBand * 0.15) * 0.22;
+
+        float organic = fbm(warped * vec2(2.2, 3.8) + vec2(0.0, uTime * 0.16));
+        silk += organic * 0.08;
+
+        float highlight = exp(-pow(abs(uv.y - crest) * 42.0, 1.18));
+        vec3 crestGlow = mix(vec3(1.0), uGold, 0.55) * highlight * 1.35;
+
+        float pearlSpark = smoothstep(0.75, 1.0, fbm(warped * 6.0 + vec2(uTime * 0.24, -uTime * 0.3)));
+        vec3 spark = mix(uTeal, vec3(1.0), 0.58) * pearlSpark * 0.12 * liquidMask;
+
+        vec3 color = silk * liquidMask + crestGlow + spark;
+        float alpha = liquidMask * uOpacity * 0.98;
+
+        gl_FragColor = vec4(color, alpha);
+      }
+    `;
+
+    const liquidMaterial = new THREE.ShaderMaterial({
+      transparent: true,
+      depthWrite: false,
+      uniforms: {
+        uResolution: { value: new THREE.Vector2(1, 1) },
+        uTime: { value: 0 },
+        uFill: { value: lifecycle.fill },
+        uOpacity: { value: lifecycle.opacity },
+        uGold: { value: new THREE.Color(theme.accent) },
+        uTeal: { value: new THREE.Color(theme.sea) },
+        uDeep: { value: new THREE.Color("#2d6d6c") },
+      },
+      vertexShader,
+      fragmentShader,
+    });
+
+    const liquidMesh = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), liquidMaterial);
+    scene.add(liquidMesh);
+
+    const bubbleCount = 190;
+    const bubbleGeometry = new THREE.BufferGeometry();
+    const bubblePositions = new Float32Array(bubbleCount * 3);
+    const bubbleSizes = new Float32Array(bubbleCount);
+    const bubbleOffsets = new Float32Array(bubbleCount);
+    const bubbleSeeds = new Float32Array(bubbleCount);
+    const bubbleAge = new Float32Array(bubbleCount);
+    const bubbleSpeed = new Float32Array(bubbleCount);
+
+    const resetBubble = (i: number, scatter = 1, visibleBias = false) => {
+      const x = (Math.random() * 2 - 1) * scatter;
+      bubblePositions[i * 3] = x;
+      bubblePositions[i * 3 + 1] = visibleBias
+        ? -0.72 + Math.random() * 0.46
+        : -0.98 - Math.random() * 0.45;
+      bubblePositions[i * 3 + 2] = 0;
+      bubbleSizes[i] = visibleBias ? 22 + Math.random() * 44 : 16 + Math.random() * 38;
+      bubbleOffsets[i] = Math.random() * Math.PI * 2;
+      bubbleSeeds[i] = Math.random();
+      bubbleAge[i] = Math.random() * 6;
+      bubbleSpeed[i] = visibleBias ? 0.34 + Math.random() * 0.38 : 0.3 + Math.random() * 0.34;
+    };
+
+    for (let i = 0; i < bubbleCount; i += 1) {
+      resetBubble(i, 0.92, true);
+    }
+
+    bubbleGeometry.setAttribute("position", new THREE.BufferAttribute(bubblePositions, 3));
+    bubbleGeometry.setAttribute("aSize", new THREE.BufferAttribute(bubbleSizes, 1));
+    bubbleGeometry.setAttribute("aSeed", new THREE.BufferAttribute(bubbleSeeds, 1));
+
+    const bubbleMaterial = new THREE.ShaderMaterial({
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      uniforms: {
+        uTime: { value: 0 },
+        uOpacity: { value: lifecycle.opacity },
+        uIntroBoost: { value: 1 },
+        uGold: { value: new THREE.Color("#efd68b") },
+        uTeal: { value: new THREE.Color("#9df0ed") },
+      },
+      vertexShader: `
+        attribute float aSize;
+        attribute float aSeed;
+        varying float vSeed;
+        varying float vGlow;
+        void main() {
+          vSeed = aSeed;
+          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+          float perspectiveBoost = 1.0 + sin(aSeed * 17.0) * 0.16;
+          gl_PointSize = aSize * perspectiveBoost;
+          gl_Position = projectionMatrix * mvPosition;
+          vGlow = smoothstep(-1.0, 0.95, position.y);
+        }
+      `,
+      fragmentShader: `
+        precision highp float;
+        varying float vSeed;
+        varying float vGlow;
+        uniform float uTime;
+        uniform float uOpacity;
+        uniform float uIntroBoost;
+        uniform vec3 uGold;
+        uniform vec3 uTeal;
+
+        void main() {
+          vec2 uv = gl_PointCoord - 0.5;
+          float dist = length(uv);
+          if (dist > 0.5) discard;
+
+          float ring = smoothstep(0.48, 0.18, dist);
+          float shell = smoothstep(0.5, 0.34, dist) - smoothstep(0.3, 0.12, dist);
+          float sheen = 0.5 + 0.5 * sin(uTime * 2.2 + vSeed * 13.0 + uv.x * 8.0 - uv.y * 7.0);
+          vec3 iridescence = mix(uTeal, uGold, sheen);
+          vec3 color = mix(vec3(1.0), iridescence, 0.72) * ring;
+          color += iridescence * shell * 0.9;
+          color += mix(uTeal, vec3(1.0), 0.5) * ring * 0.16 * uIntroBoost;
+
+          float alpha = ring * (0.38 + shell * 1.25 + uIntroBoost * 0.18) * uOpacity * vGlow;
+          gl_FragColor = vec4(color, alpha);
+        }
+      `,
+    });
+
+    const bubblePoints = new THREE.Points(bubbleGeometry, bubbleMaterial);
+    bubblePoints.position.z = 0.02;
+    scene.add(bubblePoints);
+
+    const resize = () => {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      renderer.setSize(width, height, false);
+      liquidMaterial.uniforms.uResolution.value.set(width, height);
+    };
+
+    resize();
+    window.addEventListener("resize", resize, { passive: true });
+
+    const clock = new THREE.Clock();
+    let accumulatedTime = 0;
+    let frameId = 0;
+
+    const updateBubbles = (time: number, delta: number) => {
+      for (let i = 0; i < bubbleCount; i += 1) {
+        bubbleAge[i] += delta;
+        const drift = Math.sin(bubbleAge[i] * 1.35 + bubbleOffsets[i]) * (0.0018 + bubbleSeeds[i] * 0.0034);
+
+        bubblePositions[i * 3] += drift;
+        bubblePositions[i * 3 + 1] += bubbleSpeed[i] * delta;
+
+        const localWave =
+          Math.sin((bubblePositions[i * 3] * 4.2) + time * 1.5 + bubbleOffsets[i]) * 0.024 +
+          Math.sin((bubblePositions[i * 3] * 9.4) - time * 2.1) * 0.014;
+        const fluidTop = lifecycle.fill + localWave;
+        const bubbleY = bubblePositions[i * 3 + 1];
+
+        if (bubbleY > fluidTop - 0.02 || bubblePositions[i * 3] > 1.18 || bubblePositions[i * 3] < -1.18) {
+          resetBubble(i, 0.96);
+        }
+      }
+
+      bubbleGeometry.attributes.position.needsUpdate = true;
+    };
+
+    const animate = () => {
+      const delta = Math.min(clock.getDelta(), 0.033);
+      accumulatedTime += delta;
+      const elapsed = accumulatedTime;
+      const introBoost = Math.max(0, 1 - elapsed / 0.8);
+
+      if (lifecycle.fill < 1.14) {
+        lifecycle.fill += delta * 0.74 + Math.max(0, 0.32 - lifecycle.fill) * delta * 0.4;
+      } else if (!lifecycle.revealStarted) {
+        lifecycle.revealStarted = true;
+      }
+
+      if (lifecycle.revealStarted && lifecycle.opacity > 0) {
+        lifecycle.opacity = Math.max(0, lifecycle.opacity - delta * 1.1);
+      }
+
+      liquidMaterial.uniforms.uTime.value = elapsed;
+      liquidMaterial.uniforms.uFill.value = lifecycle.fill;
+      liquidMaterial.uniforms.uOpacity.value = lifecycle.opacity;
+
+      bubbleMaterial.uniforms.uTime.value = elapsed;
+      bubbleMaterial.uniforms.uOpacity.value = lifecycle.opacity;
+      bubbleMaterial.uniforms.uIntroBoost.value = introBoost;
+
+      updateBubbles(elapsed, delta);
+      renderer.render(scene, camera);
+
+      if (lifecycle.revealStarted && lifecycle.opacity <= 0.01 && !lifecycle.completed) {
+        lifecycle.completed = true;
+        onComplete();
+      } else {
+        frameId = window.requestAnimationFrame(animate);
+      }
+    };
+
+    frameId = window.requestAnimationFrame(animate);
+
+    return () => {
+      if (frameId) window.cancelAnimationFrame(frameId);
+      window.removeEventListener("resize", resize);
+      document.body.style.overflow = previousOverflow;
+      bubbleGeometry.dispose();
+      bubbleMaterial.dispose();
+      liquidMesh.geometry.dispose();
+      liquidMaterial.dispose();
+      renderer.dispose();
+      mount.innerHTML = "";
+    };
+  }, [onComplete]);
+
+  return (
+    <>
+      <div
+        className="fixed inset-0 z-40 pointer-events-none bg-[radial-gradient(circle_at_18%_28%,rgba(114,216,216,0.28),transparent_26%),radial-gradient(circle_at_80%_22%,rgba(216,180,90,0.22),transparent_24%),linear-gradient(180deg,#f7f0df_0%,#efe3c7_42%,#eadabc_100%)]"
+        aria-hidden="true"
+      />
+      <div ref={mountRef} className="fixed inset-0 z-50 pointer-events-none" aria-hidden="true" />
+      <div className="fixed inset-0 z-[60] flex items-center justify-center px-6 pointer-events-none">
+        <div className="mx-auto max-w-5xl text-center">
+          <div
+            className="mx-auto mb-5 h-px w-36 rounded-full bg-[rgba(216,180,90,0.4)]"
+            style={{ boxShadow: "0 0 28px rgba(255, 238, 182, 0.5)" }}
+          />
+          <h2
+            className="text-5xl font-semibold tracking-tight text-[#f6df95] md:text-7xl lg:text-[6.25rem]"
+            style={{
+              fontFamily: '"Cormorant Garamond", Georgia, serif',
+              textShadow: "0 0 12px rgba(255,240,196,0.7), 0 0 28px rgba(216,180,90,0.42), 0 2px 16px rgba(92,62,8,0.18)",
+            }}
+          >
+            Amiyah&apos;s Quinceañera
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-sm font-medium uppercase tracking-[0.42em] text-[rgba(255,247,224,0.82)] md:text-base">
+            Welcome to the Celebration
+          </p>
+        </div>
+      </div>
+    </>
+  );
+}
 
 function formatFileSize(bytes: number) {
   if (bytes < 1024 * 1024) {
@@ -449,6 +795,7 @@ function AdminPanel({
 }
 
 export default function AmiyahsQuinceaneraPage() {
+  const [showIntro, setShowIntro] = useState(true);
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
   const [activeTab, setActiveTab] = useState<MediaKind>("all");
   const [loadingGallery, setLoadingGallery] = useState(true);
@@ -906,7 +1253,8 @@ export default function AmiyahsQuinceaneraPage() {
   };
 
   const pageStyle: CSSProperties = {
-    background: "linear-gradient(180deg, rgba(248, 255, 255, 0.98) 0%, rgba(237, 255, 252, 0.96) 24%, rgba(244, 248, 242, 0.96) 100%)",
+    background:
+      "radial-gradient(circle_at_top, rgba(115, 220, 214, 0.22), transparent 20%), radial-gradient(circle_at_12%_26%, rgba(214, 177, 82, 0.18), transparent 22%), linear-gradient(180deg, #f8f4e7 0%, #eef8f6 18%, #e1f4f0 42%, #d3efea 68%, #e8f7f4 100%)",
     color: theme.text,
     ["--amiyah-accent" as string]: theme.accent,
     ["--amiyah-accent-strong" as string]: theme.accentStrong,
@@ -919,9 +1267,20 @@ export default function AmiyahsQuinceaneraPage() {
   };
 
   return (
-    <main className="min-h-dvh overflow-hidden px-4 py-5 sm:px-6 lg:px-8" style={pageStyle}>
-      <div className="mx-auto flex max-w-7xl flex-col gap-6">
-        <section className="relative min-h-[90svh] overflow-hidden rounded-[36px] border border-white/50 shadow-[0_30px_100px_rgba(77,132,132,0.22)]">
+    <>
+      {showIntro ? <LiquidIntroOverlay onComplete={() => setShowIntro(false)} /> : null}
+      <main
+        className={`min-h-dvh overflow-hidden px-4 py-5 transition-all duration-1000 sm:px-6 lg:px-8 ${showIntro ? "pointer-events-none opacity-0 blur-sm scale-[0.985]" : "opacity-100 blur-0 scale-100"}`}
+        style={pageStyle}
+      >
+        <div aria-hidden="true" className="pointer-events-none fixed inset-0 overflow-hidden">
+          <div className="absolute -left-24 top-[18%] h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(111,214,206,0.24),transparent_68%)] blur-3xl" />
+          <div className="absolute right-[-6rem] top-[10%] h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(217,178,79,0.22),transparent_68%)] blur-3xl" />
+          <div className="absolute bottom-[-10rem] left-[12%] h-96 w-96 rounded-full bg-[radial-gradient(circle,rgba(124,197,188,0.24),transparent_70%)] blur-3xl" />
+          <div className="absolute inset-x-0 bottom-0 h-56 bg-[linear-gradient(180deg,transparent,rgba(70,164,156,0.16)_36%,rgba(30,98,98,0.08))]" />
+        </div>
+        <div className="mx-auto flex max-w-7xl flex-col gap-6">
+        <section className="relative min-h-[90svh] overflow-hidden rounded-[36px] border border-white/55 bg-white/18 shadow-[0_30px_100px_rgba(77,132,132,0.22)]">
           <div className="absolute inset-0">
             <div className="absolute inset-0 hidden md:block">
               <Image src="/amiyahs-quinceanera/hero-web.png" alt="Amiyah's Quinceañera hero artwork" fill priority className="object-cover" />
@@ -929,38 +1288,60 @@ export default function AmiyahsQuinceaneraPage() {
             <div className="absolute inset-0 md:hidden">
               <Image src="/amiyahs-quinceanera/hero-mobile.png" alt="Amiyah's Quinceañera mobile hero artwork" fill priority className="object-cover" />
             </div>
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(242,255,255,0.18),rgba(244,255,252,0.46)_45%,rgba(244,250,247,0.72))]" />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(245,255,255,0.16),rgba(229,250,247,0.4)_34%,rgba(236,248,243,0.72)_62%,rgba(233,242,233,0.9)_100%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_24%,rgba(116,225,217,0.26),transparent_20%),radial-gradient(circle_at_82%_22%,rgba(231,210,145,0.28),transparent_18%),radial-gradient(circle_at_50%_85%,rgba(97,198,190,0.18),transparent_26%)]" />
+            <div className="absolute inset-x-0 bottom-0 h-44 bg-[linear-gradient(180deg,transparent,rgba(115,210,205,0.18)_36%,rgba(58,121,121,0.12))]" />
+            <div className="absolute inset-x-[-5%] bottom-10 h-28 rounded-[999px] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.72),rgba(169,239,231,0.2)_52%,transparent_72%)] blur-3xl" />
           </div>
 
           <div className="relative z-10 flex min-h-[90svh] flex-col justify-between p-5 sm:p-8 lg:p-10">
             <div className="flex items-start justify-between gap-4">
-              <div className="rounded-full border border-white/55 bg-white/55 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22] backdrop-blur-xl">
+              <div className="rounded-full border border-white/60 bg-white/62 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22] backdrop-blur-xl shadow-[0_10px_26px_rgba(86,128,126,0.08)]">
                 Live Guest Album
               </div>
-              <div className="rounded-full border border-white/55 bg-white/60 px-4 py-2 text-right text-[11px] font-semibold uppercase tracking-[0.24em] text-[#669a99] backdrop-blur-xl">
+              <div className="rounded-full border border-white/60 bg-white/62 px-4 py-2 text-right text-[11px] font-semibold uppercase tracking-[0.24em] text-[#669a99] backdrop-blur-xl shadow-[0_10px_26px_rgba(86,128,126,0.08)]">
                 July 25, 2026
               </div>
             </div>
 
-            <div className="max-w-3xl rounded-4xl border border-white/20 bg-white/5 p-6 shadow-[0_18px_60px_rgba(73,111,112,0.08)] backdrop-blur-lg sm:p-8">
-              <div className="text-[12px] font-semibold uppercase tracking-[0.32em] text-[#9b7b22]">Under The Sea Celebration</div>
-              <h1 className="mt-4 text-4xl font-semibold tracking-tight text-[#1c4c4d] sm:text-6xl">Amiyah&apos;s Quinceañera</h1>
-              <p className="mt-4 max-w-2xl text-base leading-7 text-[#1c4c4d] sm:text-lg">
-                Take or upload your favorite photos and videos from the night, and leave a voice message she can keep long after the celebration.
-              </p>
+            <div className="max-w-[58rem]">
+              <div className="relative overflow-hidden rounded-[34px] border border-white/28 bg-[linear-gradient(180deg,rgba(255,255,255,0.34),rgba(255,255,255,0.08))] p-5 shadow-[0_18px_60px_rgba(73,111,112,0.06)] backdrop-blur-lg sm:p-7">
+                <div className="pointer-events-none absolute inset-0">
+                  <div className="absolute right-[-2rem] top-[-2rem] h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.68),rgba(150,233,227,0.22)_46%,transparent_72%)] blur-2xl" />
+                  <div className="absolute left-[-2rem] bottom-[-2rem] h-44 w-44 rounded-full bg-[radial-gradient(circle,rgba(114,216,216,0.22),transparent_70%)] blur-2xl" />
+                  <div className="absolute right-10 top-8 h-3 w-3 rounded-full bg-white/75 shadow-[0_0_18px_rgba(255,255,255,0.8)]" />
+                  <div className="absolute right-[4.5rem] top-14 h-2.5 w-2.5 rounded-full bg-[#dff8f7] shadow-[0_0_16px_rgba(196,245,242,0.9)]" />
+                  <div className="absolute right-14 top-20 h-4 w-4 rounded-full bg-white/65 shadow-[0_0_20px_rgba(255,255,255,0.7)]" />
+                  <div className="absolute inset-x-0 bottom-0 h-[4.5rem] bg-[linear-gradient(180deg,transparent,rgba(118,220,214,0.16)_52%,rgba(255,255,255,0.2))]" />
+                  <div className="absolute inset-x-0 bottom-6 h-px bg-[linear-gradient(90deg,transparent,rgba(216,180,90,0.1),rgba(216,180,90,0.45),rgba(216,180,90,0.1),transparent)]" />
+                </div>
+                <div className="inline-flex rounded-full border border-[#e7d7a2] bg-white/60 px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.32em] text-[#9b7b22]">Under The Sea Celebration</div>
+                <h1 className="mt-5 text-4xl font-semibold tracking-tight text-[#173f44] sm:text-6xl lg:text-7xl" style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}>
+                  Amiyah&apos;s Quinceañera
+                </h1>
+                <p className="mt-4 max-w-2xl text-base leading-7 text-[#245056] sm:text-lg">
+                  Take or upload your favorite photos and videos from the night, and leave a voice message she can keep long after the celebration.
+                </p>
 
-              <div className="mt-6 flex flex-wrap gap-3">
-                <button type="button" onClick={() => jumpToSection("upload-media")} className="inline-flex items-center gap-2 rounded-full border border-[#c8a546] bg-[#d9b24f] px-5 py-3 text-sm font-semibold text-[#1f2929] shadow-[0_16px_32px_rgba(181,141,41,0.24)] transition hover:-translate-y-0.5" >
-                  <Upload className="h-4 w-4" /> Upload Media
-                </button>
+                <div className="mt-5 flex flex-wrap gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#7f9f9f]">
+                  <span className="rounded-full border border-white/55 bg-white/58 px-3 py-2">Pearl Glow</span>
+                  <span className="rounded-full border border-white/55 bg-white/58 px-3 py-2">Sea Glass Tones</span>
+                  <span className="rounded-full border border-white/55 bg-white/58 px-3 py-2">Golden Tide</span>
+                </div>
 
-                <button type="button" onClick={() => jumpToSection("gallery")} className="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/70 px-5 py-3 text-sm font-semibold text-[#2e5f60] backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white" >
-                  <Camera className="h-4 w-4" /> View Album
-                </button>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <button type="button" onClick={() => jumpToSection("upload-media")} className="inline-flex items-center gap-2 rounded-full border border-[#c8a546] bg-[#d9b24f] px-5 py-3 text-sm font-semibold text-[#1f2929] shadow-[0_16px_32px_rgba(181,141,41,0.24)] transition hover:-translate-y-0.5" >
+                    <Upload className="h-4 w-4" /> Upload Media
+                  </button>
 
-                <button type="button" onClick={() => jumpToSection("voice-memo")} className="inline-flex items-center gap-2 rounded-full border border-white/60 bg-white/70 px-5 py-3 text-sm font-semibold text-[#2e5f60] backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white" >
-                  <Mic className="h-4 w-4" /> Leave Voice Memo
-                </button>
+                  <button type="button" onClick={() => jumpToSection("gallery")} className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/78 px-5 py-3 text-sm font-semibold text-[#2e5f60] backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white" >
+                    <Camera className="h-4 w-4" /> View Album
+                  </button>
+
+                  <button type="button" onClick={() => jumpToSection("voice-memo")} className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/78 px-5 py-3 text-sm font-semibold text-[#2e5f60] backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white" >
+                    <Mic className="h-4 w-4" /> Leave Voice Memo
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -968,30 +1349,39 @@ export default function AmiyahsQuinceaneraPage() {
 
         <section className="grid gap-4 md:grid-cols-3">
           {/* Photos Card */}
-          <div className="rounded-[28px] border border-[var(--amiyah-border)] bg-[var(--amiyah-card)] p-5 backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
+          <div className="relative overflow-hidden rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(232,249,247,0.78))] p-5 backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
+            <div className="absolute right-[-18px] top-[-18px] h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(114,216,216,0.2),transparent_68%)]" />
             <div className="flex items-center justify-between gap-4">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">Photos</div>
+              <div>
+                <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">Photos</div>
+                <div className="mt-2 text-sm text-[#4f7474]">Sea-glass snapshots from the night.</div>
+              </div>
               <div className="text-3xl font-semibold">{counts.photos}</div>
             </div>
-            {/* <p className="mt-2 text-sm text-[var(--amiyah-muted)]">Snapshots from the entrance, family tables, and the dance floor.</p> */}
           </div>
 
           {/* Videos Card */}
-          <div className="rounded-[28px] border border-[var(--amiyah-border)] bg-[var(--amiyah-card)] p-5 backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
+          <div className="relative overflow-hidden rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(255,244,220,0.78))] p-5 backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
+            <div className="absolute right-[-18px] top-[-18px] h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(216,180,90,0.2),transparent_68%)]" />
             <div className="flex items-center justify-between gap-4">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">Videos</div>
+              <div>
+                <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">Videos</div>
+                <div className="mt-2 text-sm text-[#4f7474]">Entrance, dancing, and tide-turn moments.</div>
+              </div>
               <div className="text-3xl font-semibold">{counts.videos}</div>
             </div>
-            {/* <p className="mt-2 text-sm text-[var(--amiyah-muted)]">Clips from the entrance, toast, surprise moments, and dance sets.</p> */}
           </div>
 
           {/* Voice Memos Card */}
-          <div className="rounded-[28px] border border-[var(--amiyah-border)] bg-[var(--amiyah-card)] p-5 backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
+          <div className="relative overflow-hidden rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(235,247,247,0.8))] p-5 backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
+            <div className="absolute right-[-18px] top-[-18px] h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(152,126,204,0.16),transparent_68%)]" />
             <div className="flex items-center justify-between gap-4">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">Voice Memos</div>
+              <div>
+                <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">Voice Memos</div>
+                <div className="mt-2 text-sm text-[#4f7474]">Messages she can replay long after the party.</div>
+              </div>
               <div className="text-3xl font-semibold">{counts.voice}</div>
             </div>
-            {/* <p className="mt-2 text-sm text-[var(--amiyah-muted)]">Audio messages guests left.</p> */}
           </div>
         </section>
 
@@ -999,13 +1389,14 @@ export default function AmiyahsQuinceaneraPage() {
           <div className="space-y-6">
             <section
               id="upload-media"
-              className="rounded-[30px] border border-[var(--amiyah-border)] bg-[var(--amiyah-card-strong)] p-5 backdrop-blur-xl sm:p-6"
+              className="relative overflow-hidden rounded-[30px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(235,250,247,0.84))] p-5 backdrop-blur-xl sm:p-6"
               style={{ boxShadow: theme.shadow }}
             >
+              <div className="absolute inset-x-0 top-0 h-20 bg-[radial-gradient(circle_at_top,rgba(114,216,216,0.22),transparent_70%)]" />
               <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22]">Upload</div>
               <h2 className="mt-2 text-2xl font-semibold">Add Photos Or Videos</h2>
               <p className="mt-2 text-sm leading-6 text-[var(--amiyah-muted)]">
-                You can send multiple media files at once.
+                Drop moments from the celebration straight into the shared album. Multiple files can go up in one pass.
               </p>
 
               <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -1029,7 +1420,7 @@ export default function AmiyahsQuinceaneraPage() {
                 </label>
               </div>
 
-              <label className="mt-4 flex cursor-pointer flex-col items-center justify-center rounded-[28px] border border-dashed border-[#c8b270] bg-white/62 px-5 py-10 text-center transition hover:bg-white/74">
+              <label className="mt-4 flex cursor-pointer flex-col items-center justify-center rounded-[28px] border border-dashed border-[#c8b270] bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(235,249,246,0.72))] px-5 py-10 text-center transition hover:bg-white/86">
                 <Upload className="h-7 w-7 text-[#7cbab8]" />
                 <div className="mt-4 text-base font-medium">Photos or Videos</div>
                 <div className="mt-2 text-sm text-[var(--amiyah-muted)]">JPEG, PNG, WEBP, MP4, MOV, WEBM up to 50 MB each.</div>
@@ -1075,16 +1466,17 @@ export default function AmiyahsQuinceaneraPage() {
 
             <section
               id="voice-memo"
-              className="rounded-[30px] border border-[var(--amiyah-border)] bg-[var(--amiyah-card-strong)] p-5 backdrop-blur-xl sm:p-6"
+              className="relative overflow-hidden rounded-[30px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(244,251,249,0.84))] p-5 backdrop-blur-xl sm:p-6"
               style={{ boxShadow: theme.shadow }}
             >
+              <div className="absolute inset-x-0 top-0 h-20 bg-[radial-gradient(circle_at_top,rgba(216,180,90,0.14),transparent_72%)]" />
               <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22]">Voice Message</div>
               <h2 className="mt-2 text-2xl font-semibold">Leave A Voice Memo</h2>
               <p className="mt-2 text-sm leading-6 text-[var(--amiyah-muted)]">
-                Record live from your device or upload an audio file if you already saved a message.
+                Record a keepsake message from the celebration floor, or upload one you already saved.
               </p>
 
-              <div className="mt-5 rounded-[28px] border border-[var(--amiyah-border)] bg-white/70 p-5">
+              <div className="mt-5 rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.86),rgba(236,249,248,0.72))] p-5">
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                   <div>
                     <div className="text-sm font-medium">Recorder</div>
@@ -1167,9 +1559,10 @@ export default function AmiyahsQuinceaneraPage() {
 
           <section
             id="gallery"
-            className="relative rounded-[30px] border border-[var(--amiyah-border)] bg-[var(--amiyah-card-strong)] p-5 backdrop-blur-xl sm:p-6"
+            className="relative overflow-hidden rounded-[30px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(235,249,246,0.84))] p-5 backdrop-blur-xl sm:p-6"
             style={{ boxShadow: theme.shadow }}
           >
+            <div className="absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_top,rgba(114,216,216,0.18),transparent_72%)]" />
             {/* Absolute Positioned Admin Lock Button */}
             <button
               type="button"
@@ -1186,7 +1579,7 @@ export default function AmiyahsQuinceaneraPage() {
                 <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22]">Gallery</div>
                 <h2 className="mt-2 text-2xl font-semibold">Event Album</h2>
                 <p className="mt-2 text-sm leading-6 text-[var(--amiyah-muted)]">
-                  Event gallery with live uploads from guests. <br /> {totalUploads} item{totalUploads === 1 ? "" : "s"} so far.
+                  A live stream of guest memories from the night. <br /> {totalUploads} item{totalUploads === 1 ? "" : "s"} so far.
                 </p>
               </div>
 
@@ -1226,7 +1619,7 @@ export default function AmiyahsQuinceaneraPage() {
             ) : filteredGallery.length ? (
               <div className="mt-6 grid gap-4 sm:grid-cols-2">
                 {filteredGallery.map((item, index) => (
-                  <article key={item.id} className="overflow-hidden rounded-[26px] border border-[var(--amiyah-border)] bg-white/82">
+                  <article key={item.id} className="overflow-hidden rounded-[26px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(241,251,248,0.82))] shadow-[0_16px_42px_rgba(79,129,128,0.08)]">
                     <div className="group relative aspect-[4/5] bg-[#dff9f7]">
                       {item.media_kind === "image" ? (
                         <>
@@ -1249,7 +1642,7 @@ export default function AmiyahsQuinceaneraPage() {
                         </>
                       ) : null}
                       {item.media_kind === "audio" ? (
-                        <div className="flex h-full flex-col items-center justify-center gap-4 bg-[radial-gradient(circle_at_top,rgba(114,216,216,0.24),rgba(255,255,255,0.92))] p-5 text-center">
+                        <div className="flex h-full flex-col items-center justify-center gap-4 bg-[radial-gradient(circle_at_top,rgba(114,216,216,0.3),rgba(255,255,255,0.94))] p-5 text-center">
                           <button type="button" onClick={() => void toggleCardAudio(item.id)} className="inline-flex h-16 w-16 items-center justify-center rounded-full border border-[#8bd5d4] bg-white/90 text-[#2f6968]" aria-label="Play voice memo">
                             {playingAudioId === item.id ? <PauseCircle className="h-8 w-8" /> : <PlayCircle className="h-8 w-8" />}
                           </button>
@@ -1282,7 +1675,7 @@ export default function AmiyahsQuinceaneraPage() {
                 ))}
               </div>
             ) : (
-              <div className="mt-6 rounded-[28px] border border-[var(--amiyah-border)] bg-white/58 px-5 py-12 text-center">
+              <div className="mt-6 rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.84),rgba(237,248,245,0.74))] px-5 py-12 text-center">
                 <div className="text-lg font-semibold">No Uploads</div>
                 <p className="mt-2 text-sm text-[var(--amiyah-muted)]">Be the first guest to share a photo, a video, or a message for Amiyah.</p>
               </div>
@@ -1292,7 +1685,7 @@ export default function AmiyahsQuinceaneraPage() {
 
         {statusMessage ? (
           <section
-            className="rounded-[24px] border px-5 py-4 text-sm backdrop-blur-xl"
+            className="rounded-[24px] border bg-[linear-gradient(180deg,rgba(255,255,255,0.86),rgba(239,248,245,0.72))] px-5 py-4 text-sm backdrop-blur-xl"
             style={{
               borderColor:
                 statusTone === "success"
@@ -1393,6 +1786,7 @@ export default function AmiyahsQuinceaneraPage() {
           </div>
         </>
       ) : null}
-    </main>
+      </main>
+    </>
   );
 }

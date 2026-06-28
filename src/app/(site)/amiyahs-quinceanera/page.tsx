@@ -1332,9 +1332,31 @@ export default function AmiyahsQuinceaneraPage() {
     }
   };
 
+  useEffect(() => {
+    const previousBodyBackground = document.body.style.background;
+    const previousBodyBackgroundColor = document.body.style.backgroundColor;
+    const previousHtmlBackground = document.documentElement.style.background;
+    const previousHtmlBackgroundColor = document.documentElement.style.backgroundColor;
+
+    const amiyahPageBackground =
+      "radial-gradient(circle_at_top, rgba(216,180,90,0.24), transparent 22%), radial-gradient(circle_at_12%_26%, rgba(196,151,72,0.18), transparent 24%), radial-gradient(circle_at_88%_18%, rgba(255,236,181,0.24), transparent 22%), linear-gradient(180deg, #f8efd9 0%, #f3e4c4 22%, #ead7ad 48%, #dfc795 72%, #f2e3c4 100%)";
+
+    document.body.style.background = amiyahPageBackground;
+    document.body.style.backgroundColor = "#f8efd9";
+    document.documentElement.style.background = amiyahPageBackground;
+    document.documentElement.style.backgroundColor = "#f8efd9";
+
+    return () => {
+      document.body.style.background = previousBodyBackground;
+      document.body.style.backgroundColor = previousBodyBackgroundColor;
+      document.documentElement.style.background = previousHtmlBackground;
+      document.documentElement.style.backgroundColor = previousHtmlBackgroundColor;
+    };
+  }, []);
+
   const pageStyle: CSSProperties = {
     background:
-      "radial-gradient(circle_at_top, rgba(115, 220, 214, 0.22), transparent 20%), radial-gradient(circle_at_12%_26%, rgba(214, 177, 82, 0.18), transparent 22%), linear-gradient(180deg, #f8f4e7 0%, #eef8f6 18%, #e1f4f0 42%, #d3efea 68%, #e8f7f4 100%)",
+      "radial-gradient(circle_at_top, rgba(216,180,90,0.24), transparent 22%), radial-gradient(circle_at_12%_26%, rgba(196,151,72,0.18), transparent 24%), radial-gradient(circle_at_88%_18%, rgba(255,236,181,0.24), transparent 22%), linear-gradient(180deg, #f8efd9 0%, #f3e4c4 22%, #ead7ad 48%, #dfc795 72%, #f2e3c4 100%)",
     color: theme.text,
     ["--amiyah-accent" as string]: theme.accent,
     ["--amiyah-accent-strong" as string]: theme.accentStrong,
@@ -1354,521 +1376,517 @@ export default function AmiyahsQuinceaneraPage() {
         style={pageStyle}
       >
         <div aria-hidden="true" className="pointer-events-none fixed inset-0 overflow-hidden">
-          <div className="absolute -left-24 top-[18%] h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(111,214,206,0.24),transparent_68%)] blur-3xl" />
-          <div className="absolute right-[-6rem] top-[10%] h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(217,178,79,0.22),transparent_68%)] blur-3xl" />
-          <div className="absolute bottom-[-10rem] left-[12%] h-96 w-96 rounded-full bg-[radial-gradient(circle,rgba(124,197,188,0.24),transparent_70%)] blur-3xl" />
-          <div className="absolute inset-x-0 bottom-0 h-56 bg-[linear-gradient(180deg,transparent,rgba(70,164,156,0.16)_36%,rgba(30,98,98,0.08))]" />
+          <div className="absolute -left-24 top-[18%] h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(216,180,90,0.18),transparent_68%)] blur-3xl" />
+          <div className="absolute right-[-6rem] top-[10%] h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(255,231,170,0.26),transparent_68%)] blur-3xl" />
+          <div className="absolute bottom-[-10rem] left-[12%] h-96 w-96 rounded-full bg-[radial-gradient(circle,rgba(196,151,72,0.18),transparent_70%)] blur-3xl" />
+          <div className="absolute inset-x-0 bottom-0 h-56 bg-[linear-gradient(180deg,transparent,rgba(204,166,91,0.16)_36%,rgba(143,105,45,0.08))]" />
         </div>
         <div className="mx-auto flex max-w-7xl flex-col gap-6">
-        <section className="relative min-h-[90svh] overflow-hidden rounded-[36px] border border-white/55 bg-white/18 shadow-[0_30px_100px_rgba(77,132,132,0.22)]">
-          <div className="absolute inset-0">
-            <div className="absolute inset-0 hidden md:block">
-              <Image src="/amiyahs-quinceanera/hero-web.png" alt="Amiyah's Quinceañera hero artwork" fill priority className="object-cover" />
-            </div>
-            <div className="absolute inset-0 md:hidden">
-              <Image src="/amiyahs-quinceanera/hero-mobile.png" alt="Amiyah's Quinceañera mobile hero artwork" fill priority className="object-cover" />
-            </div>
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(245,255,255,0.16),rgba(229,250,247,0.4)_34%,rgba(236,248,243,0.72)_62%,rgba(233,242,233,0.9)_100%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_24%,rgba(116,225,217,0.26),transparent_20%),radial-gradient(circle_at_82%_22%,rgba(231,210,145,0.28),transparent_18%),radial-gradient(circle_at_50%_85%,rgba(97,198,190,0.18),transparent_26%)]" />
-            <div className="absolute inset-x-0 bottom-0 h-44 bg-[linear-gradient(180deg,transparent,rgba(115,210,205,0.18)_36%,rgba(58,121,121,0.12))]" />
-            <div className="absolute inset-x-[-5%] bottom-10 h-28 rounded-[999px] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.72),rgba(169,239,231,0.2)_52%,transparent_72%)] blur-3xl" />
-          </div>
-
-          <div className="relative z-10 flex min-h-[90svh] flex-col justify-between p-5 sm:p-8 lg:p-10">
-            <div className="flex items-start justify-between gap-4">
-              <div className="rounded-full border border-white/60 bg-white/62 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22] backdrop-blur-xl shadow-[0_10px_26px_rgba(86,128,126,0.08)]">
-                Live Guest Album
+          <section className="relative min-h-[90svh] overflow-hidden rounded-[36px] border border-white/55 bg-white/18 shadow-[0_30px_100px_rgba(77,132,132,0.22)]">
+            <div className="absolute inset-0">
+              <div className="absolute inset-0 hidden md:block">
+                <Image src="/amiyahs-quinceanera/hero-web.png" alt="Amiyah's Quinceañera hero artwork" fill priority className="object-cover" />
               </div>
-              <div className="rounded-full border border-white/60 bg-white/62 px-4 py-2 text-right text-[11px] font-semibold uppercase tracking-[0.24em] text-[#669a99] backdrop-blur-xl shadow-[0_10px_26px_rgba(86,128,126,0.08)]">
-                July 25, 2026
+              <div className="absolute inset-0 md:hidden">
+                <Image src="/amiyahs-quinceanera/hero-mobile.png" alt="Amiyah's Quinceañera mobile hero artwork" fill priority className="object-cover" />
               </div>
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(245,255,255,0.16),rgba(229,250,247,0.4)_34%,rgba(236,248,243,0.72)_62%,rgba(233,242,233,0.9)_100%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_24%,rgba(116,225,217,0.26),transparent_20%),radial-gradient(circle_at_82%_22%,rgba(231,210,145,0.28),transparent_18%),radial-gradient(circle_at_50%_85%,rgba(97,198,190,0.18),transparent_26%)]" />
+              <div className="absolute inset-x-0 bottom-0 h-44 bg-[linear-gradient(180deg,transparent,rgba(115,210,205,0.18)_36%,rgba(58,121,121,0.12))]" />
+              <div className="absolute inset-x-[-5%] bottom-10 h-28 rounded-[999px] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.72),rgba(169,239,231,0.2)_52%,transparent_72%)] blur-3xl" />
             </div>
 
-            <div className="max-w-[58rem]">
-              <div className="relative overflow-hidden rounded-[34px] border border-white/28 bg-[linear-gradient(180deg,rgba(255,255,255,0.34),rgba(255,255,255,0.08))] p-5 shadow-[0_18px_60px_rgba(73,111,112,0.06)] backdrop-blur-lg sm:p-7">
-                <div className="pointer-events-none absolute inset-0">
-                  <div className="absolute right-[-2rem] top-[-2rem] h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.68),rgba(150,233,227,0.22)_46%,transparent_72%)] blur-2xl" />
-                  <div className="absolute left-[-2rem] bottom-[-2rem] h-44 w-44 rounded-full bg-[radial-gradient(circle,rgba(114,216,216,0.22),transparent_70%)] blur-2xl" />
-                  <div className="absolute right-10 top-8 h-3 w-3 rounded-full bg-white/75 shadow-[0_0_18px_rgba(255,255,255,0.8)]" />
-                  <div className="absolute right-[4.5rem] top-14 h-2.5 w-2.5 rounded-full bg-[#dff8f7] shadow-[0_0_16px_rgba(196,245,242,0.9)]" />
-                  <div className="absolute right-14 top-20 h-4 w-4 rounded-full bg-white/65 shadow-[0_0_20px_rgba(255,255,255,0.7)]" />
-                  <div className="absolute inset-x-0 bottom-0 h-[4.5rem] bg-[linear-gradient(180deg,transparent,rgba(118,220,214,0.16)_52%,rgba(255,255,255,0.2))]" />
-                  <div className="absolute inset-x-0 bottom-6 h-px bg-[linear-gradient(90deg,transparent,rgba(216,180,90,0.1),rgba(216,180,90,0.45),rgba(216,180,90,0.1),transparent)]" />
+            <div className="relative z-10 flex min-h-[90svh] flex-col justify-between p-5 sm:p-8 lg:p-10">
+              <div className="flex items-start justify-between gap-4">
+                <div className="rounded-full border border-white/60 bg-white/62 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22] backdrop-blur-xl shadow-[0_10px_26px_rgba(86,128,126,0.08)]">
+                  Live Guest Album
                 </div>
-                <div className="inline-flex rounded-full border border-[#e7d7a2] bg-white/60 px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.32em] text-[#9b7b22]">Under The Sea Celebration</div>
-                <h1 className="mt-5 text-4xl font-semibold tracking-tight text-[#173f44] sm:text-6xl lg:text-7xl" style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}>
-                  Amiyah&apos;s Quinceañera
-                </h1>
-                <p className="mt-4 max-w-2xl text-base leading-7 text-[#245056] sm:text-lg">
-                  Take or upload your favorite photos and videos from the night, and leave a voice message she can keep long after the celebration.
+                <div className="rounded-full border border-white/60 bg-white/62 px-4 py-2 text-right text-[11px] font-semibold uppercase tracking-[0.24em] text-[#669a99] backdrop-blur-xl shadow-[0_10px_26px_rgba(86,128,126,0.08)]">
+                  July 25, 2026
+                </div>
+              </div>
+
+              <div className="max-w-[58rem]">
+                <div className="relative overflow-hidden rounded-[34px] border border-white/28 bg-[linear-gradient(180deg,rgba(255,255,255,0.34),rgba(255,255,255,0.08))] p-5 shadow-[0_18px_60px_rgba(73,111,112,0.06)] backdrop-blur-lg sm:p-7">
+                  <div className="pointer-events-none absolute inset-0">
+                    <div className="absolute right-[-2rem] top-[-2rem] h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.68),rgba(150,233,227,0.22)_46%,transparent_72%)] blur-2xl" />
+                    <div className="absolute left-[-2rem] bottom-[-2rem] h-44 w-44 rounded-full bg-[radial-gradient(circle,rgba(114,216,216,0.22),transparent_70%)] blur-2xl" />
+                    <div className="absolute right-10 top-8 h-3 w-3 rounded-full bg-white/75 shadow-[0_0_18px_rgba(255,255,255,0.8)]" />
+                    <div className="absolute right-[4.5rem] top-14 h-2.5 w-2.5 rounded-full bg-[#dff8f7] shadow-[0_0_16px_rgba(196,245,242,0.9)]" />
+                    <div className="absolute right-14 top-20 h-4 w-4 rounded-full bg-white/65 shadow-[0_0_20px_rgba(255,255,255,0.7)]" />
+                    <div className="absolute inset-x-0 bottom-0 h-[4.5rem] bg-[linear-gradient(180deg,transparent,rgba(118,220,214,0.16)_52%,rgba(255,255,255,0.2))]" />
+                    <div className="absolute inset-x-0 bottom-6 h-px bg-[linear-gradient(90deg,transparent,rgba(216,180,90,0.1),rgba(216,180,90,0.45),rgba(216,180,90,0.1),transparent)]" />
+                  </div>
+                  <div className="inline-flex rounded-full border border-[#e7d7a2] bg-white/60 px-4 py-2 text-[12px] font-semibold uppercase tracking-[0.32em] text-[#9b7b22]">Under The Sea Celebration</div>
+                  <h1 className="mt-5 text-4xl font-semibold tracking-tight text-[#173f44] sm:text-6xl lg:text-7xl" style={{ fontFamily: '"Cormorant Garamond", Georgia, serif' }}>
+                    Amiyah&apos;s Quinceañera
+                  </h1>
+                  <p className="mt-4 max-w-2xl text-base leading-7 text-[#245056] sm:text-lg">
+                    Take or upload your favorite photos and videos from the night, and leave a voice message she can keep long after the celebration.
+                  </p>
+
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    <button type="button" onClick={() => jumpToSection("upload-media")} className="inline-flex items-center gap-2 rounded-full border border-[#c8a546] bg-[#d9b24f] px-5 py-3 text-sm font-semibold text-[#1f2929] shadow-[0_16px_32px_rgba(181,141,41,0.24)] transition hover:-translate-y-0.5" >
+                      <Upload className="h-4 w-4" /> Upload Media
+                    </button>
+
+                    <button type="button" onClick={() => jumpToSection("gallery")} className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/78 px-5 py-3 text-sm font-semibold text-[#2e5f60] backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white" >
+                      <Camera className="h-4 w-4" /> View Album
+                    </button>
+
+                    <button type="button" onClick={() => jumpToSection("voice-memo")} className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/78 px-5 py-3 text-sm font-semibold text-[#2e5f60] backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white" >
+                      <Mic className="h-4 w-4" /> Leave Voice Memo
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="grid gap-4 md:grid-cols-3">
+            {/* Photos Card */}
+            <div className="relative overflow-hidden rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(232,249,247,0.78))] p-5 backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
+              <div className="absolute right-[-18px] top-[-18px] h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(114,216,216,0.2),transparent_68%)]" />
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">Photos</div>
+                  <div className="mt-2 text-sm text-[#4f7474]">Sea-glass snapshots from the night.</div>
+                </div>
+                <div className="text-3xl font-semibold">{counts.photos}</div>
+              </div>
+            </div>
+
+            {/* Videos Card */}
+            <div className="relative overflow-hidden rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(255,244,220,0.78))] p-5 backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
+              <div className="absolute right-[-18px] top-[-18px] h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(216,180,90,0.2),transparent_68%)]" />
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">Videos</div>
+                  <div className="mt-2 text-sm text-[#4f7474]">Entrance, dancing, and tide-turn moments.</div>
+                </div>
+                <div className="text-3xl font-semibold">{counts.videos}</div>
+              </div>
+            </div>
+
+            {/* Voice Memos Card */}
+            <div className="relative overflow-hidden rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(235,247,247,0.8))] p-5 backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
+              <div className="absolute right-[-18px] top-[-18px] h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(152,126,204,0.16),transparent_68%)]" />
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">Voice Memos</div>
+                  <div className="mt-2 text-sm text-[#4f7474]">
+                    Messages <strong className="font-semibold text-[#4f7474]">Amiyah</strong> can replay long after the party.
+                  </div>
+                </div>
+                <div className="text-3xl font-semibold">{counts.voice}</div>
+              </div>
+            </div>
+          </section>
+
+          <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+            <div className="space-y-6">
+              <section
+                id="upload-media"
+                className="relative overflow-hidden rounded-[30px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(235,250,247,0.84))] p-5 backdrop-blur-xl sm:p-6"
+                style={{ boxShadow: theme.shadow }}
+              >
+                <div className="absolute inset-x-0 top-0 h-20 bg-[radial-gradient(circle_at_top,rgba(114,216,216,0.22),transparent_70%)]" />
+                <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22]">Upload</div>
+                <h2 className="mt-2 text-2xl font-semibold">Add Photos Or Videos</h2>
+                <p className="mt-2 text-sm leading-6 text-[var(--amiyah-muted)]">
+                  Drop moments from the celebration straight into the shared album. Multiple files can go up in one pass.
                 </p>
 
-                <div className="mt-5 flex flex-wrap gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-[#7f9f9f]">
-                  <span className="rounded-full border border-white/55 bg-white/58 px-3 py-2">Pearl Glow</span>
-                  <span className="rounded-full border border-white/55 bg-white/58 px-3 py-2">Sea Glass Tones</span>
-                  <span className="rounded-full border border-white/55 bg-white/58 px-3 py-2">Golden Tide</span>
+                <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                  <label className="flex flex-col gap-2">
+                    <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#9b7b22]">Your Name</span>
+                    <input
+                      value={guestName}
+                      onChange={(event) => setGuestName(event.target.value)}
+                      placeholder="Optional"
+                      className="h-12 rounded-2xl border border-[var(--amiyah-border)] bg-white/80 px-4 outline-none"
+                    />
+                  </label>
+                  <label className="flex flex-col gap-2">
+                    <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#9b7b22]">Message</span>
+                    <input
+                      value={caption}
+                      onChange={(event) => setCaption(event.target.value)}
+                      placeholder="Optional"
+                      className="h-12 rounded-2xl border border-[var(--amiyah-border)] bg-white/80 px-4 outline-none"
+                    />
+                  </label>
                 </div>
 
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <button type="button" onClick={() => jumpToSection("upload-media")} className="inline-flex items-center gap-2 rounded-full border border-[#c8a546] bg-[#d9b24f] px-5 py-3 text-sm font-semibold text-[#1f2929] shadow-[0_16px_32px_rgba(181,141,41,0.24)] transition hover:-translate-y-0.5" >
-                    <Upload className="h-4 w-4" /> Upload Media
-                  </button>
-
-                  <button type="button" onClick={() => jumpToSection("gallery")} className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/78 px-5 py-3 text-sm font-semibold text-[#2e5f60] backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white" >
-                    <Camera className="h-4 w-4" /> View Album
-                  </button>
-
-                  <button type="button" onClick={() => jumpToSection("voice-memo")} className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/78 px-5 py-3 text-sm font-semibold text-[#2e5f60] backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white" >
-                    <Mic className="h-4 w-4" /> Leave Voice Memo
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="grid gap-4 md:grid-cols-3">
-          {/* Photos Card */}
-          <div className="relative overflow-hidden rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(232,249,247,0.78))] p-5 backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
-            <div className="absolute right-[-18px] top-[-18px] h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(114,216,216,0.2),transparent_68%)]" />
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">Photos</div>
-                <div className="mt-2 text-sm text-[#4f7474]">Sea-glass snapshots from the night.</div>
-              </div>
-              <div className="text-3xl font-semibold">{counts.photos}</div>
-            </div>
-          </div>
-
-          {/* Videos Card */}
-          <div className="relative overflow-hidden rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(255,244,220,0.78))] p-5 backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
-            <div className="absolute right-[-18px] top-[-18px] h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(216,180,90,0.2),transparent_68%)]" />
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">Videos</div>
-                <div className="mt-2 text-sm text-[#4f7474]">Entrance, dancing, and tide-turn moments.</div>
-              </div>
-              <div className="text-3xl font-semibold">{counts.videos}</div>
-            </div>
-          </div>
-
-          {/* Voice Memos Card */}
-          <div className="relative overflow-hidden rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(235,247,247,0.8))] p-5 backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
-            <div className="absolute right-[-18px] top-[-18px] h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(152,126,204,0.16),transparent_68%)]" />
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <div className="text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">Voice Memos</div>
-                <div className="mt-2 text-sm text-[#4f7474]">Messages she can replay long after the party.</div>
-              </div>
-              <div className="text-3xl font-semibold">{counts.voice}</div>
-            </div>
-          </div>
-        </section>
-
-        <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-          <div className="space-y-6">
-            <section
-              id="upload-media"
-              className="relative overflow-hidden rounded-[30px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(235,250,247,0.84))] p-5 backdrop-blur-xl sm:p-6"
-              style={{ boxShadow: theme.shadow }}
-            >
-              <div className="absolute inset-x-0 top-0 h-20 bg-[radial-gradient(circle_at_top,rgba(114,216,216,0.22),transparent_70%)]" />
-              <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22]">Upload</div>
-              <h2 className="mt-2 text-2xl font-semibold">Add Photos Or Videos</h2>
-              <p className="mt-2 text-sm leading-6 text-[var(--amiyah-muted)]">
-                Drop moments from the celebration straight into the shared album. Multiple files can go up in one pass.
-              </p>
-
-              <div className="mt-5 grid gap-4 sm:grid-cols-2">
-                <label className="flex flex-col gap-2">
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#9b7b22]">Your Name</span>
+                <label className="mt-4 flex cursor-pointer flex-col items-center justify-center rounded-[28px] border border-dashed border-[#c8b270] bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(235,249,246,0.72))] px-5 py-10 text-center transition hover:bg-white/86">
+                  <Upload className="h-7 w-7 text-[#7cbab8]" />
+                  <div className="mt-4 text-base font-medium">Photos or Videos</div>
+                  <div className="mt-2 text-sm text-[var(--amiyah-muted)]">JPEG, PNG, WEBP, MP4, MOV, WEBM up to 50 MB each, 12 files per upload, 180 MB per batch.</div>
                   <input
-                    value={guestName}
-                    onChange={(event) => setGuestName(event.target.value)}
-                    placeholder="Optional"
-                    className="h-12 rounded-2xl border border-[var(--amiyah-border)] bg-white/80 px-4 outline-none"
+                    ref={selectedFilesInputRef}
+                    type="file"
+                    multiple
+                    accept="image/*,video/*"
+                    onChange={(event) => void handleMediaFilesPicked(event)}
+                    className="hidden"
                   />
                 </label>
-                <label className="flex flex-col gap-2">
-                  <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[#9b7b22]">Message</span>
-                  <input
-                    value={caption}
-                    onChange={(event) => setCaption(event.target.value)}
-                    placeholder="Optional"
-                    className="h-12 rounded-2xl border border-[var(--amiyah-border)] bg-white/80 px-4 outline-none"
-                  />
-                </label>
-              </div>
 
-              <label className="mt-4 flex cursor-pointer flex-col items-center justify-center rounded-[28px] border border-dashed border-[#c8b270] bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(235,249,246,0.72))] px-5 py-10 text-center transition hover:bg-white/86">
-                <Upload className="h-7 w-7 text-[#7cbab8]" />
-                <div className="mt-4 text-base font-medium">Photos or Videos</div>
-                <div className="mt-2 text-sm text-[var(--amiyah-muted)]">JPEG, PNG, WEBP, MP4, MOV, WEBM up to 50 MB each, 12 files per upload, 180 MB per batch.</div>
-                <input
-                  ref={selectedFilesInputRef}
-                  type="file"
-                  multiple
-                  accept="image/*,video/*"
-                  onChange={(event) => void handleMediaFilesPicked(event)}
-                  className="hidden"
-                />
-              </label>
-
-              {selectedFiles.length ? (
-                <div className="mt-4 space-y-3">
-                  {selectedFiles.map((file) => (
-                    <div
-                      key={`${file.name}-${file.size}`}
-                      className="flex items-center justify-between rounded-2xl border border-[var(--amiyah-border)] bg-white/72 px-4 py-3"
-                    >
-                      <div className="min-w-0">
-                        <div className="truncate text-sm font-medium">{file.name}</div>
-                        <div className="mt-1 text-xs text-[var(--amiyah-muted)]">{formatFileSize(file.size)}</div>
+                {selectedFiles.length ? (
+                  <div className="mt-4 space-y-3">
+                    {selectedFiles.map((file) => (
+                      <div
+                        key={`${file.name}-${file.size}`}
+                        className="flex items-center justify-between rounded-2xl border border-[var(--amiyah-border)] bg-white/72 px-4 py-3"
+                      >
+                        <div className="min-w-0">
+                          <div className="truncate text-sm font-medium">{file.name}</div>
+                          <div className="mt-1 text-xs text-[var(--amiyah-muted)]">{formatFileSize(file.size)}</div>
+                        </div>
+                        <div className="rounded-full bg-[rgba(114,216,216,0.18)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#2c6665]">
+                          {detectMediaKind(file.type)}
+                        </div>
                       </div>
-                      <div className="rounded-full bg-[rgba(114,216,216,0.18)] px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#2c6665]">
-                        {detectMediaKind(file.type)}
+                    ))}
+                  </div>
+                ) : null}
+
+                <button
+                  type="button"
+                  onClick={() => void submitMediaUpload()}
+                  disabled={uploading || !selectedFiles.length}
+                  className="mt-5 inline-flex h-12 items-center justify-center gap-2 rounded-full border border-[#c8a546] bg-[#d9b24f] px-6 text-sm font-semibold text-[#1f2929] transition disabled:cursor-not-allowed disabled:opacity-55"
+                >
+                  {uploading ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+                  Upload To Album
+                </button>
+              </section>
+
+              <section
+                id="voice-memo"
+                className="relative overflow-hidden rounded-[30px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(244,251,249,0.84))] p-5 backdrop-blur-xl sm:p-6"
+                style={{ boxShadow: theme.shadow }}
+              >
+                <div className="absolute inset-x-0 top-0 h-20 bg-[radial-gradient(circle_at_top,rgba(216,180,90,0.14),transparent_72%)]" />
+                <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22]">Voice Message</div>
+                <h2 className="mt-2 text-2xl font-semibold">Leave A Voice Memo</h2>
+                <p className="mt-2 text-sm leading-6 text-[var(--amiyah-muted)]">
+                  Record a keepsake message from the celebration floor, or upload one you already saved.
+                </p>
+                <p className="mt-2 text-xs leading-6 text-[var(--amiyah-muted)]">
+                  Audio uploads and recorded voice memos are limited to {formatFileSize(MAX_AUDIO_FILE_SIZE_BYTES)} each.
+                </p>
+
+                <div className="mt-5 rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.86),rgba(236,249,248,0.72))] p-5">
+                  <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                    <div>
+                      <div className="text-sm font-medium">Recorder</div>
+                      <div className="mt-1 text-sm text-[var(--amiyah-muted)]">
+                        {isRecording ? `Recording… ${recordingSeconds}s` : "Ready"}
                       </div>
                     </div>
-                  ))}
-                </div>
-              ) : null}
+                    <div className="flex flex-wrap gap-3">
+                      {!isRecording ? (
+                        <button
+                          type="button"
+                          onClick={() => void startVoiceRecorder()}
+                          className="inline-flex items-center gap-2 rounded-full border border-[#6ecfd0] bg-[#7de0df]/22 px-4 py-2 text-sm font-semibold text-[#2d6d6c]"
+                        >
+                          <Mic className="h-4 w-4" />
+                          Start Recording
+                        </button>
+                      ) : (
+                        <button
+                          type="button"
+                          onClick={stopVoiceRecorder}
+                          className="inline-flex items-center gap-2 rounded-full border border-[#c8a546] bg-[#f4d98a]/34 px-4 py-2 text-sm font-semibold text-[#7e6317]"
+                        >
+                          <PauseCircle className="h-4 w-4" />
+                          Stop
+                        </button>
+                      )}
+                      <button
+                        type="button"
+                        onClick={() => audioUploadInputRef.current?.click()}
+                        className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/85 px-4 py-2 text-sm font-semibold text-[#2d6d6c]"
+                      >
+                        <Waves className="h-4 w-4" />
+                        Upload Audio File
+                      </button>
+                    </div>
+                  </div>
 
+                  <input ref={audioUploadInputRef} type="file" accept="audio/*" onChange={handleAudioFallbackPicked} className="hidden" />
+
+                  {audioPreviewUrl ? (
+                    <div className="mt-4 rounded-2xl border border-[var(--amiyah-border)] bg-white/85 p-4">
+                      <div className="text-sm font-medium">Recorded memo ready</div>
+                      <audio controls className="mt-3 w-full" src={audioPreviewUrl} />
+                    </div>
+                  ) : null}
+
+                  {audioFallbackFile ? (
+                    <div className="mt-4 rounded-2xl border border-[var(--amiyah-border)] bg-white/85 p-4">
+                      <div className="text-sm font-medium">Selected audio file</div>
+                      <div className="mt-2 text-sm text-[var(--amiyah-muted)]">
+                        {audioFallbackFile.name} · {formatFileSize(audioFallbackFile.size)}
+                      </div>
+                    </div>
+                  ) : null}
+
+                  <div className="mt-5 flex flex-wrap gap-3">
+                    <button
+                      type="button"
+                      onClick={() => void submitVoiceMemo()}
+                      disabled={uploading || (!audioBlob && !audioFallbackFile)}
+                      className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-[#c8a546] bg-[#d9b24f] px-5 text-sm font-semibold text-[#1f2929] disabled:cursor-not-allowed disabled:opacity-55"
+                    >
+                      {uploading ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Mic className="h-4 w-4" />}
+                      Upload Voice Memo
+                    </button>
+                    {(audioBlob || audioFallbackFile) ? (
+                      <button
+                        type="button"
+                        onClick={resetVoiceDraft}
+                        className="inline-flex h-11 items-center justify-center rounded-full border border-white/70 bg-white/85 px-5 text-sm font-semibold text-[#315f60]"
+                      >
+                        Clear Draft
+                      </button>
+                    ) : null}
+                  </div>
+                </div>
+              </section>
+            </div>
+
+            <section
+              id="gallery"
+              className="relative overflow-hidden rounded-[30px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(235,249,246,0.84))] p-5 backdrop-blur-xl sm:p-6"
+              style={{ boxShadow: theme.shadow }}
+            >
+              <div className="absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_top,rgba(114,216,216,0.18),transparent_72%)]" />
+              {/* Absolute Positioned Admin Lock Button */}
               <button
                 type="button"
-                onClick={() => void submitMediaUpload()}
-                disabled={uploading || !selectedFiles.length}
-                className="mt-5 inline-flex h-12 items-center justify-center gap-2 rounded-full border border-[#c8a546] bg-[#d9b24f] px-6 text-sm font-semibold text-[#1f2929] transition disabled:cursor-not-allowed disabled:opacity-55"
+                onClick={() => setAdminOpen(true)}
+                className="absolute top-5 right-5 sm:top-6 sm:right-6 inline-flex items-center justify-center rounded-full border border-white/70 bg-white/85 p-2.5 text-[#2d6d6c] transition hover:bg-white z-10"
+                aria-label={adminUnlocked ? "Moderation On" : "Admin Menu"}
+                title={adminUnlocked ? "Moderation On" : "Admin Menu"}
               >
-                {uploading ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
-                Upload To Album
+                <Lock className="h-4 w-4" />
               </button>
-            </section>
 
-            <section
-              id="voice-memo"
-              className="relative overflow-hidden rounded-[30px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(244,251,249,0.84))] p-5 backdrop-blur-xl sm:p-6"
-              style={{ boxShadow: theme.shadow }}
-            >
-              <div className="absolute inset-x-0 top-0 h-20 bg-[radial-gradient(circle_at_top,rgba(216,180,90,0.14),transparent_72%)]" />
-              <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22]">Voice Message</div>
-              <h2 className="mt-2 text-2xl font-semibold">Leave A Voice Memo</h2>
-              <p className="mt-2 text-sm leading-6 text-[var(--amiyah-muted)]">
-                Record a keepsake message from the celebration floor, or upload one you already saved.
-              </p>
-              <p className="mt-2 text-xs leading-6 text-[var(--amiyah-muted)]">
-                Audio uploads and recorded voice memos are limited to {formatFileSize(MAX_AUDIO_FILE_SIZE_BYTES)} each.
-              </p>
-
-              <div className="mt-5 rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.86),rgba(236,249,248,0.72))] p-5">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <div className="text-sm font-medium">Recorder</div>
-                    <div className="mt-1 text-sm text-[var(--amiyah-muted)]">
-                      {isRecording ? `Recording… ${recordingSeconds}s` : "Ready"}
-                    </div>
-                  </div>
-                  <div className="flex flex-wrap gap-3">
-                    {!isRecording ? (
-                      <button
-                        type="button"
-                        onClick={() => void startVoiceRecorder()}
-                        className="inline-flex items-center gap-2 rounded-full border border-[#6ecfd0] bg-[#7de0df]/22 px-4 py-2 text-sm font-semibold text-[#2d6d6c]"
-                      >
-                        <Mic className="h-4 w-4" />
-                        Start Recording
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={stopVoiceRecorder}
-                        className="inline-flex items-center gap-2 rounded-full border border-[#c8a546] bg-[#f4d98a]/34 px-4 py-2 text-sm font-semibold text-[#7e6317]"
-                      >
-                        <PauseCircle className="h-4 w-4" />
-                        Stop
-                      </button>
-                    )}
-                    <button
-                      type="button"
-                      onClick={() => audioUploadInputRef.current?.click()}
-                      className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/85 px-4 py-2 text-sm font-semibold text-[#2d6d6c]"
-                    >
-                      <Waves className="h-4 w-4" />
-                      Upload Audio File
-                    </button>
-                  </div>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22]">Gallery</div>
+                  <h2 className="mt-2 text-2xl font-semibold">Event Album</h2>
+                  <p className="mt-2 text-sm leading-6 text-[var(--amiyah-muted)]">
+                    A live stream of guest memories from the night. <br /> {totalUploads} item{totalUploads === 1 ? "" : "s"} so far.
+                  </p>
                 </div>
 
-                <input ref={audioUploadInputRef} type="file" accept="audio/*" onChange={handleAudioFallbackPicked} className="hidden" />
-
-                {audioPreviewUrl ? (
-                  <div className="mt-4 rounded-2xl border border-[var(--amiyah-border)] bg-white/85 p-4">
-                    <div className="text-sm font-medium">Recorded memo ready</div>
-                    <audio controls className="mt-3 w-full" src={audioPreviewUrl} />
-                  </div>
-                ) : null}
-
-                {audioFallbackFile ? (
-                  <div className="mt-4 rounded-2xl border border-[var(--amiyah-border)] bg-white/85 p-4">
-                    <div className="text-sm font-medium">Selected audio file</div>
-                    <div className="mt-2 text-sm text-[var(--amiyah-muted)]">
-                      {audioFallbackFile.name} · {formatFileSize(audioFallbackFile.size)}
-                    </div>
-                  </div>
-                ) : null}
-
-                <div className="mt-5 flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-3">
                   <button
                     type="button"
-                    onClick={() => void submitVoiceMemo()}
-                    disabled={uploading || (!audioBlob && !audioFallbackFile)}
-                    className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-[#c8a546] bg-[#d9b24f] px-5 text-sm font-semibold text-[#1f2929] disabled:cursor-not-allowed disabled:opacity-55"
+                    onClick={() => { if (!filteredGallery.length) { return; } openViewer(0); }}
+                    className="inline-flex items-center gap-2 rounded-full border border-[#c8a546] bg-[#d9b24f] px-4 py-2 text-sm font-semibold text-[#1f2929]"
                   >
-                    {uploading ? <LoaderCircle className="h-4 w-4 animate-spin" /> : <Mic className="h-4 w-4" />}
-                    Upload Voice Memo
+                    <PlayCircle className="h-4 w-4" /> Start Slideshow
                   </button>
-                  {(audioBlob || audioFallbackFile) ? (
-                    <button
-                      type="button"
-                      onClick={resetVoiceDraft}
-                      className="inline-flex h-11 items-center justify-center rounded-full border border-white/70 bg-white/85 px-5 text-sm font-semibold text-[#315f60]"
-                    >
-                      Clear Draft
-                    </button>
-                  ) : null}
                 </div>
               </div>
-            </section>
-          </div>
 
-          <section
-            id="gallery"
-            className="relative overflow-hidden rounded-[30px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(235,249,246,0.84))] p-5 backdrop-blur-xl sm:p-6"
-            style={{ boxShadow: theme.shadow }}
-          >
-            <div className="absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_top,rgba(114,216,216,0.18),transparent_72%)]" />
-            {/* Absolute Positioned Admin Lock Button */}
-            <button
-              type="button"
-              onClick={() => setAdminOpen(true)}
-              className="absolute top-5 right-5 sm:top-6 sm:right-6 inline-flex items-center justify-center rounded-full border border-white/70 bg-white/85 p-2.5 text-[#2d6d6c] transition hover:bg-white z-10"
-              aria-label={adminUnlocked ? "Moderation On" : "Admin Menu"}
-              title={adminUnlocked ? "Moderation On" : "Admin Menu"}
-            >
-              <Lock className="h-4 w-4" />
-            </button>
-
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-              <div>
-                <div className="text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22]">Gallery</div>
-                <h2 className="mt-2 text-2xl font-semibold">Event Album</h2>
-                <p className="mt-2 text-sm leading-6 text-[var(--amiyah-muted)]">
-                  A live stream of guest memories from the night. <br /> {totalUploads} item{totalUploads === 1 ? "" : "s"} so far.
-                </p>
-              </div>
-
-              <div className="flex flex-wrap gap-3">
-                <button
-                  type="button"
-                  onClick={() => { if (!filteredGallery.length) { return; } openViewer(0); }}
-                  className="inline-flex items-center gap-2 rounded-full border border-[#c8a546] bg-[#d9b24f] px-4 py-2 text-sm font-semibold text-[#1f2929]"
-                >
-                  <PlayCircle className="h-4 w-4" /> Start Slideshow
-                </button>
-              </div>
-            </div>
-
-            <div className="mt-5 flex flex-wrap gap-2">
-              {mediaTabs.map(({ key, label, icon: Icon }) => (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => setActiveTab(key)}
-                  className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition"
-                  style={{
-                    borderColor: key === activeTab ? "rgba(201,165,70,0.6)" : "rgba(188,157,77,0.16)",
-                    background: key === activeTab ? "rgba(217,178,79,0.18)" : "rgba(255,255,255,0.8)",
-                    color: key === activeTab ? "#7f6215" : "#2e5f60",
-                  }}
-                >
-                  <Icon className="h-4 w-4" /> {label}
-                </button>
-              ))}
-            </div>
-
-            {loadingGallery ? (
-              <div className="mt-6 flex min-h-[320px] items-center justify-center rounded-[28px] border border-[var(--amiyah-border)] bg-white/58">
-                <LoaderCircle className="h-7 w-7 animate-spin text-[#7cbab8]" />
-              </div>
-            ) : filteredGallery.length ? (
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                {filteredGallery.map((item, index) => (
-                  <article key={item.id} className="overflow-hidden rounded-[26px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(241,251,248,0.82))] shadow-[0_16px_42px_rgba(79,129,128,0.08)]">
-                    <div className="group relative aspect-[4/5] bg-[#dff9f7]">
-                      {item.media_kind === "image" ? (
-                        <>
-                          <Image src={item.publicUrl} alt={item.caption || "Guest photo upload"} fill unoptimized className="object-cover" />
-                          <button type="button" onClick={() => openViewer(index)} className="absolute inset-0 flex items-center justify-center bg-[#122123]/0 transition group-hover:bg-[#122123]/18" aria-label="Open photo in slideshow">
-                            <span className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/50 bg-white/85 text-[#224546] opacity-0 transition group-hover:opacity-100">
-                              <PlayCircle className="h-7 w-7" />
-                            </span>
-                          </button>
-                        </>
-                      ) : null}
-                      {item.media_kind === "video" ? (
-                        <>
-                          <video className="h-full w-full object-cover" src={item.publicUrl} muted playsInline preload="metadata" />
-                          <button type="button" onClick={() => openViewer(index)} className="absolute inset-0 flex items-center justify-center bg-[#122123]/18" aria-label="Open video in slideshow">
-                            <span className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/45 bg-white/84 text-[#224546]">
-                              <PlayCircle className="h-7 w-7" />
-                            </span>
-                          </button>
-                        </>
-                      ) : null}
-                      {item.media_kind === "audio" ? (
-                        <div className="flex h-full flex-col items-center justify-center gap-4 bg-[radial-gradient(circle_at_top,rgba(114,216,216,0.3),rgba(255,255,255,0.94))] p-5 text-center">
-                          <button type="button" onClick={() => void toggleCardAudio(item.id)} className="inline-flex h-16 w-16 items-center justify-center rounded-full border border-[#8bd5d4] bg-white/90 text-[#2f6968]" aria-label="Play voice memo">
-                            {playingAudioId === item.id ? <PauseCircle className="h-8 w-8" /> : <PlayCircle className="h-8 w-8" />}
-                          </button>
-                          <div className="text-base font-semibold">Voice Memo</div>
-                          <div className="text-sm text-[var(--amiyah-muted)]">Tap to listen or open in slideshow.</div>
-                          <button type="button" onClick={() => openViewer(index)} className="rounded-full border border-white/70 bg-white/80 px-4 py-2 text-sm font-semibold text-[#2d6d6c]">
-                            Open Viewer
-                          </button>
-                          <audio ref={(element) => { audioElementMapRef.current[item.id] = element; }} className="hidden" src={item.publicUrl} onEnded={() => setPlayingAudioId((current) => (current === item.id ? null : current))} />
-                        </div>
-                      ) : null}
-                      {adminUnlocked ? (
-                        <button type="button" onClick={() => void hideUpload(item)} disabled={adminWorking} className="absolute right-3 top-3 inline-flex items-center gap-2 rounded-full border border-red-200 bg-white/92 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-red-700 disabled:opacity-55">
-                          {adminWorking ? <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> : <X className="h-3.5 w-3.5" />} Hide
-                        </button>
-                      ) : null}
-                    </div>
-                    <div className="space-y-2 px-4 py-4">
-                      <div className="flex items-center justify-between gap-3">
-                        <div className="rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ background: item.media_kind === "image" ? "rgba(114,216,216,0.16)" : item.media_kind === "video" ? "rgba(217,178,79,0.16)" : "rgba(150,116,201,0.14)", color: item.media_kind === "image" ? "#2f6968" : item.media_kind === "video" ? "#7e6317" : "#6f4ea8", }}>
-                          {item.media_kind}
-                        </div>
-                        <div className="text-xs text-[var(--amiyah-muted)]">{formatDate(item.created_at)}</div>
-                      </div>
-                      <div className="text-sm font-medium">{item.guest_name || "Guest Upload"}</div>
-                      {item.caption ? <div className="text-sm leading-6 text-[var(--amiyah-muted)]">{item.caption}</div> : null}
-                      <div className="text-xs text-[var(--amiyah-muted)]">{formatFileSize(item.byte_size)}</div>
-                    </div>
-                  </article>
+              <div className="mt-5 flex flex-wrap gap-2">
+                {mediaTabs.map(({ key, label, icon: Icon }) => (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => setActiveTab(key)}
+                    className="inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-semibold transition"
+                    style={{
+                      borderColor: key === activeTab ? "rgba(201,165,70,0.6)" : "rgba(188,157,77,0.16)",
+                      background: key === activeTab ? "rgba(217,178,79,0.18)" : "rgba(255,255,255,0.8)",
+                      color: key === activeTab ? "#7f6215" : "#2e5f60",
+                    }}
+                  >
+                    <Icon className="h-4 w-4" /> {label}
+                  </button>
                 ))}
               </div>
-            ) : (
-              <div className="mt-6 rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.84),rgba(237,248,245,0.74))] px-5 py-12 text-center">
-                <div className="text-lg font-semibold">No Uploads</div>
-                <p className="mt-2 text-sm text-[var(--amiyah-muted)]">Be the first guest to share a photo, a video, or a message for Amiyah.</p>
-              </div>
-            )}
+
+              {loadingGallery ? (
+                <div className="mt-6 flex min-h-[320px] items-center justify-center rounded-[28px] border border-[var(--amiyah-border)] bg-white/58">
+                  <LoaderCircle className="h-7 w-7 animate-spin text-[#7cbab8]" />
+                </div>
+              ) : filteredGallery.length ? (
+                <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                  {filteredGallery.map((item, index) => (
+                    <article key={item.id} className="overflow-hidden rounded-[26px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(241,251,248,0.82))] shadow-[0_16px_42px_rgba(79,129,128,0.08)]">
+                      <div className="group relative aspect-[4/5] bg-[#dff9f7]">
+                        {item.media_kind === "image" ? (
+                          <>
+                            <Image src={item.publicUrl} alt={item.caption || "Guest photo upload"} fill unoptimized className="object-cover" />
+                            <button type="button" onClick={() => openViewer(index)} className="absolute inset-0 flex items-center justify-center bg-[#122123]/0 transition group-hover:bg-[#122123]/18" aria-label="Open photo in slideshow">
+                              <span className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/50 bg-white/85 text-[#224546] opacity-0 transition group-hover:opacity-100">
+                                <PlayCircle className="h-7 w-7" />
+                              </span>
+                            </button>
+                          </>
+                        ) : null}
+                        {item.media_kind === "video" ? (
+                          <>
+                            <video className="h-full w-full object-cover" src={item.publicUrl} muted playsInline preload="metadata" />
+                            <button type="button" onClick={() => openViewer(index)} className="absolute inset-0 flex items-center justify-center bg-[#122123]/18" aria-label="Open video in slideshow">
+                              <span className="inline-flex h-14 w-14 items-center justify-center rounded-full border border-white/45 bg-white/84 text-[#224546]">
+                                <PlayCircle className="h-7 w-7" />
+                              </span>
+                            </button>
+                          </>
+                        ) : null}
+                        {item.media_kind === "audio" ? (
+                          <div className="flex h-full flex-col items-center justify-center gap-4 bg-[radial-gradient(circle_at_top,rgba(114,216,216,0.3),rgba(255,255,255,0.94))] p-5 text-center">
+                            <button type="button" onClick={() => void toggleCardAudio(item.id)} className="inline-flex h-16 w-16 items-center justify-center rounded-full border border-[#8bd5d4] bg-white/90 text-[#2f6968]" aria-label="Play voice memo">
+                              {playingAudioId === item.id ? <PauseCircle className="h-8 w-8" /> : <PlayCircle className="h-8 w-8" />}
+                            </button>
+                            <div className="text-base font-semibold">Voice Memo</div>
+                            <div className="text-sm text-[var(--amiyah-muted)]">Tap to listen or open in slideshow.</div>
+                            <button type="button" onClick={() => openViewer(index)} className="rounded-full border border-white/70 bg-white/80 px-4 py-2 text-sm font-semibold text-[#2d6d6c]">
+                              Open Viewer
+                            </button>
+                            <audio ref={(element) => { audioElementMapRef.current[item.id] = element; }} className="hidden" src={item.publicUrl} onEnded={() => setPlayingAudioId((current) => (current === item.id ? null : current))} />
+                          </div>
+                        ) : null}
+                        {adminUnlocked ? (
+                          <button type="button" onClick={() => void hideUpload(item)} disabled={adminWorking} className="absolute right-3 top-3 inline-flex items-center gap-2 rounded-full border border-red-200 bg-white/92 px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-red-700 disabled:opacity-55">
+                            {adminWorking ? <LoaderCircle className="h-3.5 w-3.5 animate-spin" /> : <X className="h-3.5 w-3.5" />} Hide
+                          </button>
+                        ) : null}
+                      </div>
+                      <div className="space-y-2 px-4 py-4">
+                        <div className="flex items-center justify-between gap-3">
+                          <div className="rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em]" style={{ background: item.media_kind === "image" ? "rgba(114,216,216,0.16)" : item.media_kind === "video" ? "rgba(217,178,79,0.16)" : "rgba(150,116,201,0.14)", color: item.media_kind === "image" ? "#2f6968" : item.media_kind === "video" ? "#7e6317" : "#6f4ea8", }}>
+                            {item.media_kind}
+                          </div>
+                          <div className="text-xs text-[var(--amiyah-muted)]">{formatDate(item.created_at)}</div>
+                        </div>
+                        <div className="text-sm font-medium">{item.guest_name || "Guest Upload"}</div>
+                        {item.caption ? <div className="text-sm leading-6 text-[var(--amiyah-muted)]">{item.caption}</div> : null}
+                        <div className="text-xs text-[var(--amiyah-muted)]">{formatFileSize(item.byte_size)}</div>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <div className="mt-6 rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.84),rgba(237,248,245,0.74))] px-5 py-12 text-center">
+                  <div className="text-lg font-semibold">No Uploads</div>
+                  <p className="mt-2 text-sm text-[var(--amiyah-muted)]">Be the first guest to share a photo, a video, or a message for Amiyah.</p>
+                </div>
+              )}
+            </section>
           </section>
-        </section>
 
-        {statusMessage ? (
-          <section
-            className="rounded-[24px] border bg-[linear-gradient(180deg,rgba(255,255,255,0.86),rgba(239,248,245,0.72))] px-5 py-4 text-sm backdrop-blur-xl"
-            style={{
-              borderColor:
-                statusTone === "success"
-                  ? "rgba(16,185,129,0.24)"
-                  : statusTone === "error"
-                    ? "rgba(239,68,68,0.24)"
-                    : "rgba(114,216,216,0.28)",
-              background:
-                statusTone === "success"
-                  ? "rgba(236,253,245,0.85)"
-                  : statusTone === "error"
-                    ? "rgba(254,242,242,0.88)"
-                    : "rgba(239,255,255,0.84)",
-              color: statusTone === "success" ? "#166534" : statusTone === "error" ? "#991b1b" : "#245d5d",
-            }}
-          >
-            {statusMessage}
-          </section>
-        ) : null}
-      </div>
+          {statusMessage ? (
+            <section
+              className="rounded-[24px] border bg-[linear-gradient(180deg,rgba(255,255,255,0.86),rgba(239,248,245,0.72))] px-5 py-4 text-sm backdrop-blur-xl"
+              style={{
+                borderColor:
+                  statusTone === "success"
+                    ? "rgba(16,185,129,0.24)"
+                    : statusTone === "error"
+                      ? "rgba(239,68,68,0.24)"
+                      : "rgba(114,216,216,0.28)",
+                background:
+                  statusTone === "success"
+                    ? "rgba(236,253,245,0.85)"
+                    : statusTone === "error"
+                      ? "rgba(254,242,242,0.88)"
+                      : "rgba(239,255,255,0.84)",
+                color: statusTone === "success" ? "#166534" : statusTone === "error" ? "#991b1b" : "#245d5d",
+              }}
+            >
+              {statusMessage}
+            </section>
+          ) : null}
+        </div>
 
-      <AdminPanel
-        open={adminOpen}
-        unlocked={adminUnlocked}
-        password={adminPassword}
-        working={adminWorking}
-        error={adminError}
-        onPasswordChange={setAdminPassword}
-        onClose={() => {
-          setAdminOpen(false);
-          setAdminError(null);
-        }}
-        onVerify={() => void verifyAdminAccess()}
-      />
-
-      {viewerOpen && filteredGallery.length ? (
-        <GalleryViewer
-          items={filteredGallery}
-          index={viewerIndex}
-          isPlaying={viewerPlaying}
-          onClose={() => setViewerOpen(false)}
-          onNext={() => setViewerIndex((current) => cycleIndex(current + 1, filteredGallery.length))}
-          onPrevious={() => setViewerIndex((current) => cycleIndex(current - 1, filteredGallery.length))}
-          onTogglePlay={() => setViewerPlaying((current) => !current)}
+        <AdminPanel
+          open={adminOpen}
+          unlocked={adminUnlocked}
+          password={adminPassword}
+          working={adminWorking}
+          error={adminError}
+          onPasswordChange={setAdminPassword}
+          onClose={() => {
+            setAdminOpen(false);
+            setAdminError(null);
+          }}
+          onVerify={() => void verifyAdminAccess()}
         />
-      ) : null}
 
-      {uploadProgress?.active ? (
-        <>
-          <div className="fixed inset-0 z-[115] bg-[#0f2021]/54 backdrop-blur-[3px]">
-            <div className="flex h-full items-end justify-center px-3 pb-[max(1rem,env(safe-area-inset-bottom))] pt-6 sm:items-center sm:px-4 sm:pb-6">
-              <div className="w-full max-w-md rounded-[32px] border border-white/25 bg-white/96 p-5 text-center shadow-[0_28px_80px_rgba(53,77,78,0.24)] sm:p-6">
-                <div className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full border border-[#d6c081] bg-[#fff5d8] text-[#9b7b22]">
-                  <LoaderCircle className="h-8 w-8 animate-spin" />
-                </div>
-                <div className="mt-5 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">
-                  {uploadProgress.mode === "media" ? "Uploading Media" : "Uploading Voice Memo"}
-                </div>
-                <h3 className="mt-2 text-2xl font-semibold text-[#214445]">Please keep this page open</h3>
-                <p className="mt-3 text-sm leading-6 text-[#4b6c6c]">
-                  {uploadProgress.current} of {uploadProgress.total} {uploadProgress.total === 1 ? "item" : "items"} in progress.
-                </p>
-                <div className="mt-5 h-3 overflow-hidden rounded-full bg-[#e8f4f4]">
-                  <div
-                    className="h-full rounded-full bg-[linear-gradient(90deg,#72d8d8,#d8b45a)] transition-all"
-                    style={{ width: `${Math.max(8, Math.round((uploadProgress.current / Math.max(uploadProgress.total, 1)) * 100))}%` }}
-                  />
-                </div>
-                <div className="mt-4 truncate text-sm font-medium text-[#315f60]">{uploadProgress.label}</div>
-                <div className="mt-3 text-xs leading-5 text-[#5d7b7c]">
-                  Uploads continue best if Safari or Chrome stays open until this finishes.
+        {viewerOpen && filteredGallery.length ? (
+          <GalleryViewer
+            items={filteredGallery}
+            index={viewerIndex}
+            isPlaying={viewerPlaying}
+            onClose={() => setViewerOpen(false)}
+            onNext={() => setViewerIndex((current) => cycleIndex(current + 1, filteredGallery.length))}
+            onPrevious={() => setViewerIndex((current) => cycleIndex(current - 1, filteredGallery.length))}
+            onTogglePlay={() => setViewerPlaying((current) => !current)}
+          />
+        ) : null}
+
+        {uploadProgress?.active ? (
+          <>
+            <div className="fixed inset-0 z-[115] bg-[#0f2021]/54 backdrop-blur-[3px]">
+              <div className="flex h-full items-end justify-center px-3 pb-[max(1rem,env(safe-area-inset-bottom))] pt-6 sm:items-center sm:px-4 sm:pb-6">
+                <div className="w-full max-w-md rounded-[32px] border border-white/25 bg-white/96 p-5 text-center shadow-[0_28px_80px_rgba(53,77,78,0.24)] sm:p-6">
+                  <div className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full border border-[#d6c081] bg-[#fff5d8] text-[#9b7b22]">
+                    <LoaderCircle className="h-8 w-8 animate-spin" />
+                  </div>
+                  <div className="mt-5 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">
+                    {uploadProgress.mode === "media" ? "Uploading Media" : "Uploading Voice Memo"}
+                  </div>
+                  <h3 className="mt-2 text-2xl font-semibold text-[#214445]">Please keep this page open</h3>
+                  <p className="mt-3 text-sm leading-6 text-[#4b6c6c]">
+                    {uploadProgress.current} of {uploadProgress.total} {uploadProgress.total === 1 ? "item" : "items"} in progress.
+                  </p>
+                  <div className="mt-5 h-3 overflow-hidden rounded-full bg-[#e8f4f4]">
+                    <div
+                      className="h-full rounded-full bg-[linear-gradient(90deg,#72d8d8,#d8b45a)] transition-all"
+                      style={{ width: `${Math.max(8, Math.round((uploadProgress.current / Math.max(uploadProgress.total, 1)) * 100))}%` }}
+                    />
+                  </div>
+                  <div className="mt-4 truncate text-sm font-medium text-[#315f60]">{uploadProgress.label}</div>
+                  <div className="mt-3 text-xs leading-5 text-[#5d7b7c]">
+                    Uploads continue best if Safari or Chrome stays open until this finishes.
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="fixed bottom-5 right-5 z-[116] hidden w-[min(92vw,360px)] rounded-[26px] border border-white/35 bg-white/95 p-4 shadow-[0_22px_70px_rgba(53,77,78,0.22)] backdrop-blur-xl md:block">
-            <div className="flex items-start gap-3">
-              <div className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#d6c081] bg-[#fff5d8] text-[#9b7b22]">
-                <LoaderCircle className="h-5 w-5 animate-spin" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="text-sm font-semibold text-[#214445]">
-                  {uploadProgress.mode === "media" ? "Uploading to album" : "Uploading voice memo"}
+            <div className="fixed bottom-5 right-5 z-[116] hidden w-[min(92vw,360px)] rounded-[26px] border border-white/35 bg-white/95 p-4 shadow-[0_22px_70px_rgba(53,77,78,0.22)] backdrop-blur-xl md:block">
+              <div className="flex items-start gap-3">
+                <div className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#d6c081] bg-[#fff5d8] text-[#9b7b22]">
+                  <LoaderCircle className="h-5 w-5 animate-spin" />
                 </div>
-                <div className="mt-1 text-xs text-[#4b6c6c]">
-                  {uploadProgress.current} / {uploadProgress.total}
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-semibold text-[#214445]">
+                    {uploadProgress.mode === "media" ? "Uploading to album" : "Uploading voice memo"}
+                  </div>
+                  <div className="mt-1 text-xs text-[#4b6c6c]">
+                    {uploadProgress.current} / {uploadProgress.total}
+                  </div>
+                  <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#e8f4f4]">
+                    <div
+                      className="h-full rounded-full bg-[linear-gradient(90deg,#72d8d8,#d8b45a)] transition-all"
+                      style={{ width: `${Math.max(8, Math.round((uploadProgress.current / Math.max(uploadProgress.total, 1)) * 100))}%` }}
+                    />
+                  </div>
+                  <div className="mt-2 truncate text-xs font-medium text-[#315f60]">{uploadProgress.label}</div>
                 </div>
-                <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#e8f4f4]">
-                  <div
-                    className="h-full rounded-full bg-[linear-gradient(90deg,#72d8d8,#d8b45a)] transition-all"
-                    style={{ width: `${Math.max(8, Math.round((uploadProgress.current / Math.max(uploadProgress.total, 1)) * 100))}%` }}
-                  />
-                </div>
-                <div className="mt-2 truncate text-xs font-medium text-[#315f60]">{uploadProgress.label}</div>
               </div>
             </div>
-          </div>
-        </>
-      ) : null}
+          </>
+        ) : null}
       </main>
     </>
   );

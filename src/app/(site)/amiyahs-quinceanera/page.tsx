@@ -2,7 +2,7 @@
 
 import { Camera, ChevronLeft, ChevronRight, Film, LoaderCircle, Lock, Mic, PauseCircle, PlayCircle, Sparkles, Upload, Waves, X } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import * as THREE from "three";
 import { supabase } from "@/lib/supabase/client";
 
@@ -11,6 +11,10 @@ const EVENT_BUCKET = "event-media";
 const MAX_IMAGE_DIMENSION = 2200;
 const IMAGE_QUALITY = 0.86;
 const SLIDESHOW_IMAGE_MS = 4200;
+const MAX_MEDIA_FILE_SIZE_BYTES = 50 * 1024 * 1024;
+const MAX_AUDIO_FILE_SIZE_BYTES = 25 * 1024 * 1024;
+const MAX_MEDIA_FILES_PER_BATCH = 12;
+const MAX_MEDIA_BATCH_BYTES = 180 * 1024 * 1024;
 
 type MediaKind = "all" | "image" | "video" | "audio";
 
@@ -409,6 +413,11 @@ function formatFileSize(bytes: number) {
     return `${Math.max(1, Math.round(bytes / 1024))} KB`;
   }
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+function summarizeFileNames(files: { name: string; }[]) {
+  const preview = files.slice(0, 3).map((file) => file.name).join(", ");
+  return files.length > 3 ? `${preview}, and ${files.length - 3} more` : preview;
 }
 
 function formatDate(value: string) {
@@ -830,6 +839,9 @@ export default function AmiyahsQuinceaneraPage() {
   const selectedFilesInputRef = useRef<HTMLInputElement | null>(null);
   const audioUploadInputRef = useRef<HTMLInputElement | null>(null);
   const audioElementMapRef = useRef<Record<string, HTMLAudioElement | null>>({});
+  const handleIntroComplete = useCallback(() => {
+    setShowIntro(false);
+  }, []);
 
   useEffect(() => {
     const loadGallery = async () => {
@@ -1033,6 +1045,15 @@ export default function AmiyahsQuinceaneraPage() {
   const uploadSingleAsset = async (file: File | Blob, fileName: string, guest: string, note: string) => {
     const mimeType = file.type || "application/octet-stream";
     const mediaKind = detectMediaKind(mimeType);
+
+    if (mediaKind === "audio" && file.size > MAX_AUDIO_FILE_SIZE_BYTES) {
+      throw new Error(`Voice memos must be ${formatFileSize(MAX_AUDIO_FILE_SIZE_BYTES)} or smaller.`);
+    }
+
+    if ((mediaKind === "image" || mediaKind === "video") && file.size > MAX_MEDIA_FILE_SIZE_BYTES) {
+      throw new Error(`Photos and videos must be ${formatFileSize(MAX_MEDIA_FILE_SIZE_BYTES)} or smaller per file.`);
+    }
+
     const extension = fileName.includes(".") ? fileName.split(".").pop() : undefined;
     const safeExt = extension?.toLowerCase() || (mediaKind === "image" ? "jpg" : mediaKind === "video" ? "mp4" : "webm");
     const path = `${EVENT_SLUG}/${mediaKind}s/${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${slugifyFileName(fileName) || "guest-upload"}.${safeExt}`;
@@ -1073,13 +1094,46 @@ export default function AmiyahsQuinceaneraPage() {
       return;
     }
 
+    if (fileList.length > MAX_MEDIA_FILES_PER_BATCH) {
+      setStatus("error", `Choose up to ${MAX_MEDIA_FILES_PER_BATCH} files at a time.`);
+      event.target.value = "";
+      return;
+    }
+
     const normalizedFiles = await Promise.all(fileList.map((file) => normalizeImageFile(file)));
+    const oversizedFiles = normalizedFiles.filter((file) => file.size > MAX_MEDIA_FILE_SIZE_BYTES);
+
+    if (oversizedFiles.length) {
+      setStatus(
+        "error",
+        `These files are over ${formatFileSize(MAX_MEDIA_FILE_SIZE_BYTES)} each: ${summarizeFileNames(oversizedFiles)}.`,
+      );
+      event.target.value = "";
+      return;
+    }
+
+    const totalBatchBytes = normalizedFiles.reduce((sum, file) => sum + file.size, 0);
+    if (totalBatchBytes > MAX_MEDIA_BATCH_BYTES) {
+      setStatus(
+        "error",
+        `This batch is too large. Keep one upload batch under ${formatFileSize(MAX_MEDIA_BATCH_BYTES)} total.`,
+      );
+      event.target.value = "";
+      return;
+    }
+
     setSelectedFiles(normalizedFiles);
   };
 
   const handleAudioFallbackPicked = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] ?? null;
     if (file) {
+      if (file.size > MAX_AUDIO_FILE_SIZE_BYTES) {
+        setStatus("error", `Audio uploads must be ${formatFileSize(MAX_AUDIO_FILE_SIZE_BYTES)} or smaller.`);
+        event.target.value = "";
+        return;
+      }
+
       resetVoiceDraft();
       setAudioFallbackFile(file);
     }
@@ -1088,6 +1142,22 @@ export default function AmiyahsQuinceaneraPage() {
   const submitMediaUpload = async () => {
     if (!selectedFiles.length) {
       setStatus("error", "Choose at least one photo or video.");
+      return;
+    }
+
+    if (selectedFiles.length > MAX_MEDIA_FILES_PER_BATCH) {
+      setStatus("error", `Choose up to ${MAX_MEDIA_FILES_PER_BATCH} files at a time.`);
+      return;
+    }
+
+    if (selectedFiles.some((file) => file.size > MAX_MEDIA_FILE_SIZE_BYTES)) {
+      setStatus("error", `Photos and videos must be ${formatFileSize(MAX_MEDIA_FILE_SIZE_BYTES)} or smaller per file.`);
+      return;
+    }
+
+    const totalBatchBytes = selectedFiles.reduce((sum, file) => sum + file.size, 0);
+    if (totalBatchBytes > MAX_MEDIA_BATCH_BYTES) {
+      setStatus("error", `This batch is too large. Keep one upload batch under ${formatFileSize(MAX_MEDIA_BATCH_BYTES)} total.`);
       return;
     }
 
@@ -1121,6 +1191,16 @@ export default function AmiyahsQuinceaneraPage() {
 
     if (!audioBlob && !audioFallbackFile) {
       setStatus("error", "Record a voice memo or choose an audio file first.");
+      return;
+    }
+
+    if (audioFallbackFile && audioFallbackFile.size > MAX_AUDIO_FILE_SIZE_BYTES) {
+      setStatus("error", `Audio uploads must be ${formatFileSize(MAX_AUDIO_FILE_SIZE_BYTES)} or smaller.`);
+      return;
+    }
+
+    if (audioBlob && audioBlob.size > MAX_AUDIO_FILE_SIZE_BYTES) {
+      setStatus("error", `Recorded voice memos must stay under ${formatFileSize(MAX_AUDIO_FILE_SIZE_BYTES)}.`);
       return;
     }
 
@@ -1268,7 +1348,7 @@ export default function AmiyahsQuinceaneraPage() {
 
   return (
     <>
-      {showIntro ? <LiquidIntroOverlay onComplete={() => setShowIntro(false)} /> : null}
+      {showIntro ? <LiquidIntroOverlay onComplete={handleIntroComplete} /> : null}
       <main
         className={`min-h-dvh overflow-hidden px-4 py-5 transition-all duration-1000 sm:px-6 lg:px-8 ${showIntro ? "pointer-events-none opacity-0 blur-sm scale-[0.985]" : "opacity-100 blur-0 scale-100"}`}
         style={pageStyle}
@@ -1423,7 +1503,7 @@ export default function AmiyahsQuinceaneraPage() {
               <label className="mt-4 flex cursor-pointer flex-col items-center justify-center rounded-[28px] border border-dashed border-[#c8b270] bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(235,249,246,0.72))] px-5 py-10 text-center transition hover:bg-white/86">
                 <Upload className="h-7 w-7 text-[#7cbab8]" />
                 <div className="mt-4 text-base font-medium">Photos or Videos</div>
-                <div className="mt-2 text-sm text-[var(--amiyah-muted)]">JPEG, PNG, WEBP, MP4, MOV, WEBM up to 50 MB each.</div>
+                <div className="mt-2 text-sm text-[var(--amiyah-muted)]">JPEG, PNG, WEBP, MP4, MOV, WEBM up to 50 MB each, 12 files per upload, 180 MB per batch.</div>
                 <input
                   ref={selectedFilesInputRef}
                   type="file"
@@ -1474,6 +1554,9 @@ export default function AmiyahsQuinceaneraPage() {
               <h2 className="mt-2 text-2xl font-semibold">Leave A Voice Memo</h2>
               <p className="mt-2 text-sm leading-6 text-[var(--amiyah-muted)]">
                 Record a keepsake message from the celebration floor, or upload one you already saved.
+              </p>
+              <p className="mt-2 text-xs leading-6 text-[var(--amiyah-muted)]">
+                Audio uploads and recorded voice memos are limited to {formatFileSize(MAX_AUDIO_FILE_SIZE_BYTES)} each.
               </p>
 
               <div className="mt-5 rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.86),rgba(236,249,248,0.72))] p-5">

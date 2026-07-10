@@ -2,7 +2,7 @@
 
 import { Camera, ChevronLeft, ChevronRight, Film, LoaderCircle, Lock, Mic, PauseCircle, PlayCircle, Sparkles, Upload, Waves, X } from "lucide-react";
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties, type TouchEvent as ReactTouchEvent } from "react";
 import * as THREE from "three";
 import { supabase } from "@/lib/supabase/client";
 
@@ -76,11 +76,17 @@ function LiquidIntroOverlay({ onComplete }: { onComplete: () => void; }) {
       return;
     }
 
-    const renderer = new THREE.WebGLRenderer({
-      antialias: true,
-      alpha: true,
-      powerPreference: "high-performance",
-    });
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true,
+        powerPreference: "high-performance",
+      });
+    } catch {
+      onComplete();
+      return;
+    }
     renderer.setClearColor(0x000000, 0);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.85));
     mount.appendChild(renderer.domElement);
@@ -364,7 +370,16 @@ function LiquidIntroOverlay({ onComplete }: { onComplete: () => void; }) {
 
     frameId = window.requestAnimationFrame(animate);
 
+    // Failsafe: never leave the page hidden if frames stall (throttled tabs, weak GPUs).
+    const failSafeTimer = window.setTimeout(() => {
+      if (!lifecycle.completed) {
+        lifecycle.completed = true;
+        onComplete();
+      }
+    }, 4500);
+
     return () => {
+      window.clearTimeout(failSafeTimer);
       if (frameId) window.cancelAnimationFrame(frameId);
       window.removeEventListener("resize", resize);
       document.body.style.overflow = previousOverflow;
@@ -515,6 +530,131 @@ function cycleIndex(index: number, total: number) {
   return (index + total) % total;
 }
 
+const VIEWER_WAVE_MS = 1050;
+const VIEWER_WAVE_SWAP_MS = 460;
+
+type RisingBubble = {
+  left: number;
+  size: number;
+  delay: number;
+  duration: number;
+  sway: number;
+};
+
+function makeRisingBubbles(
+  count: number,
+  options: { minSize: number; maxSize: number; maxDelay: number; minDuration: number; maxDuration: number; },
+): RisingBubble[] {
+  return Array.from({ length: count }, () => ({
+    left: 2 + Math.random() * 94,
+    size: options.minSize + Math.random() * (options.maxSize - options.minSize),
+    delay: Math.random() * options.maxDelay,
+    duration: options.minDuration + Math.random() * (options.maxDuration - options.minDuration),
+    sway: (Math.random() * 2 - 1) * 26,
+  }));
+}
+
+const amiyahMotionStyles = `
+@keyframes amiyahWaveSweep {
+  0% { transform: translateY(calc(100% + 130px)); }
+  42% { transform: translateY(0); }
+  56% { transform: translateY(0); }
+  100% { transform: translateY(calc(-100% - 130px)); }
+}
+@keyframes amiyahTabWaveSweep {
+  0% { transform: translateY(calc(100% + 110px)); }
+  100% { transform: translateY(calc(-100% - 110px)); }
+}
+@keyframes amiyahWaveDrift {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@keyframes amiyahWaveBubble {
+  0% { transform: translateY(0) scale(0.45); opacity: 0; }
+  18% { opacity: 0.9; }
+  100% { transform: translateY(-56vh) scale(1.08); opacity: 0; }
+}
+@keyframes amiyahAmbientBubble {
+  0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
+  12% { opacity: 0.55; }
+  55% { transform: translateY(-48vh) translateX(var(--amiyah-sway, 10px)) scale(0.92); opacity: 0.4; }
+  100% { transform: translateY(-96vh) translateX(calc(var(--amiyah-sway, 10px) * -0.6)) scale(1.05); opacity: 0; }
+}
+@keyframes amiyahOrbPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+@keyframes amiyahRingPing {
+  0% { transform: scale(0.72); opacity: 0.65; }
+  100% { transform: scale(1.75); opacity: 0; }
+}
+@keyframes amiyahEqualizer {
+  0%, 100% { transform: scaleY(0.3); }
+  50% { transform: scaleY(1); }
+}
+@keyframes amiyahSlideshowProgress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
+@keyframes amiyahCardRise {
+  0% { opacity: 0; transform: translateY(24px) scale(0.97); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes amiyahMediaSettle {
+  0% { opacity: 0.3; transform: scale(1.04); }
+  100% { opacity: 1; transform: scale(1); }
+}
+.amiyah-wave-band { animation: amiyahWaveSweep ${VIEWER_WAVE_MS}ms cubic-bezier(0.5, 0, 0.24, 1) forwards; }
+.amiyah-tab-wave { animation: amiyahTabWaveSweep 900ms cubic-bezier(0.55, 0, 0.2, 1) forwards; }
+.amiyah-wave-drift { animation: amiyahWaveDrift 1.5s linear infinite; }
+.amiyah-card-rise { animation: amiyahCardRise 620ms cubic-bezier(0.22, 0.68, 0.26, 1) both; }
+.amiyah-gallery-card { content-visibility: auto; contain-intrinsic-size: auto 540px; }
+.amiyah-media-settle { animation: amiyahMediaSettle 680ms ease-out both; }
+@media (prefers-reduced-motion: reduce) {
+  .amiyah-wave-layer { display: none; }
+  .amiyah-wave-band, .amiyah-tab-wave, .amiyah-wave-drift, .amiyah-card-rise, .amiyah-media-settle { animation: none; }
+  .amiyah-motion { animation: none !important; }
+}
+`;
+
+function WaveCrest({ position, front, back }: { position: "top" | "bottom"; front: string; back: string; }) {
+  return (
+    <div
+      className={`absolute inset-x-0 h-[90px] overflow-hidden ${position === "top" ? "bottom-full" : "top-full"}`}
+      style={position === "bottom" ? { transform: "scaleY(-1)" } : undefined}
+      aria-hidden="true"
+    >
+      <div className="amiyah-wave-drift absolute bottom-0 left-0 h-full w-[200%]">
+        <svg className="h-full w-full" viewBox="0 0 2880 90" preserveAspectRatio="none">
+          <path
+            d="M0,52 C180,14 420,80 720,44 C1020,12 1260,74 1440,42 C1620,14 1860,78 2160,46 C2460,18 2700,72 2880,40 L2880,90 L0,90 Z"
+            fill={back}
+          />
+          <path
+            d="M0,66 C240,30 480,88 760,56 C1040,26 1300,84 1520,54 C1740,26 1990,86 2260,56 C2520,30 2740,80 2880,52 L2880,90 L0,90 Z"
+            fill={front}
+          />
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+function HeroArtwork() {
+  return (
+    <picture>
+      <source media="(min-width: 768px)" srcSet="/amiyahs-quinceanera/hero-web.png" />
+      <img
+        src="/amiyahs-quinceanera/hero-mobile.png"
+        alt="Amiyah's Quinceañera hero artwork"
+        fetchPriority="high"
+        decoding="async"
+        className="absolute inset-0 h-full w-full object-cover"
+      />
+    </picture>
+  );
+}
+
 function GalleryViewer({
   items,
   index,
@@ -522,6 +662,7 @@ function GalleryViewer({
   onClose,
   onNext,
   onPrevious,
+  onSelect,
   onTogglePlay,
 }: {
   items: GalleryItem[];
@@ -530,11 +671,33 @@ function GalleryViewer({
   onClose: () => void;
   onNext: () => void;
   onPrevious: () => void;
+  onSelect: (nextIndex: number) => void;
   onTogglePlay: () => void;
 }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const item = items[index];
+  const filmstripRef = useRef<HTMLDivElement | null>(null);
+  const displayIndexRef = useRef(index);
+  const touchStartRef = useRef<{ x: number; y: number; } | null>(null);
+
+  const [displayIndex, setDisplayIndex] = useState(index);
+  const [waveKey, setWaveKey] = useState(0);
+  const [waving, setWaving] = useState(false);
+  const [waveBubbles, setWaveBubbles] = useState<RisingBubble[]>([]);
+  const [ambientBubbles] = useState(() =>
+    makeRisingBubbles(9, { minSize: 6, maxSize: 22, maxDelay: 14, minDuration: 11, maxDuration: 20 }),
+  );
+
+  const safeIndex = items.length ? Math.min(displayIndex, items.length - 1) : 0;
+  const item = items[safeIndex];
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, []);
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -558,6 +721,44 @@ function GalleryViewer({
   }, [onClose, onNext, onPrevious, onTogglePlay]);
 
   useEffect(() => {
+    if (displayIndexRef.current === index) {
+      return;
+    }
+
+    setWaving(true);
+    setWaveKey((value) => value + 1);
+    setWaveBubbles(makeRisingBubbles(14, { minSize: 8, maxSize: 30, maxDelay: 0.35, minDuration: 0.8, maxDuration: 1.15 }));
+
+    const swapTimer = window.setTimeout(() => {
+      displayIndexRef.current = index;
+      setDisplayIndex(index);
+    }, VIEWER_WAVE_SWAP_MS);
+    const settleTimer = window.setTimeout(() => setWaving(false), VIEWER_WAVE_MS);
+
+    return () => {
+      window.clearTimeout(swapTimer);
+      window.clearTimeout(settleTimer);
+    };
+  }, [index]);
+
+  useEffect(() => {
+    const strip = filmstripRef.current;
+    if (!strip) {
+      return;
+    }
+
+    const activeThumb = strip.querySelector<HTMLElement>(`[data-thumb-index="${index}"]`);
+    if (!activeThumb) {
+      return;
+    }
+
+    strip.scrollTo({
+      left: activeThumb.offsetLeft - strip.clientWidth / 2 + activeThumb.clientWidth / 2,
+      behavior: "smooth",
+    });
+  }, [index, items.length]);
+
+  useEffect(() => {
     if (!item) {
       return;
     }
@@ -579,140 +780,265 @@ function GalleryViewer({
     }
   }, [item, isPlaying]);
 
+  const handleTouchStart = (event: ReactTouchEvent<HTMLDivElement>) => {
+    const touch = event.touches[0];
+    touchStartRef.current = { x: touch.clientX, y: touch.clientY };
+  };
+
+  const handleTouchEnd = (event: ReactTouchEvent<HTMLDivElement>) => {
+    const start = touchStartRef.current;
+    touchStartRef.current = null;
+    if (!start) {
+      return;
+    }
+
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - start.x;
+    const deltaY = touch.clientY - start.y;
+
+    if (Math.abs(deltaX) > 52 && Math.abs(deltaX) > Math.abs(deltaY) * 1.4) {
+      if (deltaX < 0) {
+        onNext();
+      } else {
+        onPrevious();
+      }
+    }
+  };
+
   if (!item) {
     return null;
   }
 
+  const kindLabel = item.media_kind === "image" ? "Photo" : item.media_kind === "video" ? "Video" : "Voice Memo";
+
   return (
-    <div className="fixed inset-0 z-110 flex items-center justify-center bg-[#0e1718]/82 px-4 py-6 backdrop-blur-xl">
-      <button
-        type="button"
-        onClick={onClose}
-        className="absolute right-4 top-4 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white transition hover:bg-white/18"
-        aria-label="Close slideshow"
-      >
-        <X className="h-5 w-5" />
-      </button>
+    <div className="fixed inset-0 z-110 flex flex-col bg-[#07171a]" role="dialog" aria-modal="true" aria-label="Event media viewer">
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_8%,rgba(114,216,216,0.18),transparent_44%),radial-gradient(circle_at_84%_14%,rgba(216,180,90,0.14),transparent_40%),linear-gradient(180deg,#0c2529_0%,#07171a_55%,#04100f_100%)]" />
+        {ambientBubbles.map((bubble, bubbleIndex) => (
+          <span
+            key={bubbleIndex}
+            className="amiyah-motion absolute rounded-full border border-white/20 bg-[radial-gradient(circle_at_30%_28%,rgba(255,255,255,0.55),rgba(157,240,237,0.14)_58%,transparent_78%)]"
+            style={{
+              left: `${bubble.left}%`,
+              bottom: "-5vh",
+              width: bubble.size,
+              height: bubble.size,
+              opacity: 0,
+              ["--amiyah-sway" as string]: `${bubble.sway}px`,
+              animation: `amiyahAmbientBubble ${bubble.duration}s linear infinite`,
+              animationDelay: `${bubble.delay}s`,
+            }}
+          />
+        ))}
+      </div>
 
-      <button
-        type="button"
-        onClick={onPrevious}
-        className="absolute left-3 top-1/2 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white transition hover:bg-white/18 md:left-6"
-        aria-label="Previous media"
-      >
-        <ChevronLeft className="h-5 w-5" />
-      </button>
-
-      <button
-        type="button"
-        onClick={onNext}
-        className="absolute right-3 top-1/2 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-white/10 text-white transition hover:bg-white/18 md:right-6"
-        aria-label="Next media"
-      >
-        <ChevronRight className="h-5 w-5" />
-      </button>
-
-      <div className="w-full max-w-5xl overflow-hidden rounded-[34px] border border-white/18 bg-[#122123]/88 shadow-[0_28px_100px_rgba(0,0,0,0.34)]">
-        <div className="flex items-center justify-between gap-3 border-b border-white/10 px-5 py-4 text-white/90">
+      <header className="relative z-20 flex items-center justify-between gap-3 px-4 pb-3 pt-[max(1rem,env(safe-area-inset-top))] sm:px-6">
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="hidden shrink-0 rounded-full border border-[#d8b45a]/45 bg-[#d8b45a]/12 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-[#ecd18d] sm:block">
+            {kindLabel}
+          </div>
           <div className="min-w-0">
-            <div className="truncate text-sm font-semibold uppercase tracking-[0.22em] text-[#d8b45a]">
-              {item.media_kind === "image" ? "Photo" : item.media_kind === "video" ? "Video" : "Voice Memo"}
-            </div>
-            <div className="mt-1 truncate text-lg font-medium">
-              {item.guest_name || "Guest Upload"}
+            <div className="truncate text-base font-semibold text-white sm:text-lg">{item.guest_name || "Guest Upload"}</div>
+            <div className="mt-0.5 truncate text-xs text-white/55">
+              {safeIndex + 1} of {items.length} · {formatDate(item.created_at)} · {formatFileSize(item.byte_size)}
             </div>
           </div>
+        </div>
 
+        <div className="flex shrink-0 items-center gap-2">
           <button
             type="button"
             onClick={onTogglePlay}
             className="inline-flex h-11 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 text-sm font-semibold text-white transition hover:bg-white/18"
           >
             {isPlaying ? <PauseCircle className="h-4 w-4" /> : <PlayCircle className="h-4 w-4" />}
-            {isPlaying ? "Pause" : "Play"}
+            <span className="hidden sm:inline">{isPlaying ? "Pause" : "Play"}</span>
+          </button>
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/20 bg-white/10 text-white transition hover:bg-white/18"
+            aria-label="Close slideshow"
+          >
+            <X className="h-5 w-5" />
           </button>
         </div>
+      </header>
 
-        <div className="grid gap-0 lg:grid-cols-[1.15fr_0.85fr]">
-          <div className="relative min-h-[48svh] bg-black/22">
-            {item.media_kind === "image" ? (
-              <div className="relative min-h-[48svh]">
-                <Image src={item.publicUrl} alt={item.caption || "Event photo"} fill unoptimized className="object-contain" />
-              </div>
-            ) : null}
+      <div
+        className="relative z-10 mx-3 min-h-0 flex-1 overflow-hidden rounded-[26px] border border-white/10 bg-black/30 sm:mx-6"
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+      >
+        {item.media_kind === "image" ? (
+          <div key={item.id} className="amiyah-media-settle absolute inset-0">
+            <Image src={item.publicUrl} alt={item.caption || "Event photo"} fill unoptimized sizes="100vw" className="object-contain" />
+          </div>
+        ) : null}
 
-            {item.media_kind === "video" ? (
-              <video
-                ref={videoRef}
-                controls
-                playsInline
-                autoPlay={isPlaying}
-                onEnded={onNext}
-                className="min-h-[48svh] w-full bg-black object-contain"
-                src={item.publicUrl}
+        {item.media_kind === "video" ? (
+          <video
+            key={item.id}
+            ref={videoRef}
+            controls
+            playsInline
+            autoPlay={isPlaying}
+            onEnded={onNext}
+            className="amiyah-media-settle absolute inset-0 h-full w-full object-contain"
+            src={item.publicUrl}
+          />
+        ) : null}
+
+        {item.media_kind === "audio" ? (
+          <div key={item.id} className="amiyah-media-settle absolute inset-0 flex flex-col items-center justify-center gap-6 px-6 text-center text-white">
+            <div className="relative flex h-36 w-36 items-center justify-center">
+              <span
+                className="amiyah-motion absolute inset-0 rounded-full border-2 border-[#9df0ed]/35"
+                style={{ animation: "amiyahRingPing 2.6s ease-out infinite" }}
               />
-            ) : null}
+              <span
+                className="amiyah-motion absolute inset-0 rounded-full border-2 border-[#efd68b]/30"
+                style={{ animation: "amiyahRingPing 2.6s ease-out infinite", animationDelay: "1.3s" }}
+              />
+              <span
+                className="amiyah-motion relative inline-flex h-24 w-24 items-center justify-center rounded-full border border-white/30 bg-[radial-gradient(circle_at_30%_25%,rgba(157,240,237,0.5),rgba(20,62,64,0.95))] shadow-[0_0_50px_rgba(114,216,216,0.35)]"
+                style={{ animation: "amiyahOrbPulse 3.4s ease-in-out infinite" }}
+              >
+                <Mic className="h-10 w-10" />
+              </span>
+            </div>
 
-            {item.media_kind === "audio" ? (
-              <div className="flex min-h-[48svh] flex-col items-center justify-center gap-6 bg-[radial-gradient(circle_at_top,rgba(114,216,216,0.32),rgba(15,28,29,0.96))] px-6 text-center text-white">
-                <div className="inline-flex h-24 w-24 items-center justify-center rounded-full border border-white/25 bg-white/10">
-                  <Mic className="h-10 w-10" />
-                </div>
-                <div>
-                  <div className="text-2xl font-semibold">Voice Memo</div>
-                  <div className="mt-2 text-sm text-white/70">Listen to a message left during the celebration.</div>
-                </div>
-                <button
-                  type="button"
-                  onClick={onTogglePlay}
-                  className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-5 py-3 text-sm font-semibold text-white"
-                >
-                  {isPlaying ? <PauseCircle className="h-5 w-5" /> : <PlayCircle className="h-5 w-5" />}
-                  {isPlaying ? "Pause Voice Memo" : "Play Voice Memo"}
-                </button>
-                <audio
-                  ref={audioRef}
-                  controls
-                  autoPlay={isPlaying}
-                  onEnded={onNext}
-                  className="w-full max-w-lg"
-                  src={item.publicUrl}
+            <div className="flex h-10 items-end gap-1.5" aria-hidden="true">
+              {Array.from({ length: 9 }).map((_, barIndex) => (
+                <span
+                  key={barIndex}
+                  className="amiyah-motion w-1.5 origin-bottom rounded-full bg-[linear-gradient(180deg,#9df0ed,#d8b45a)]"
+                  style={{
+                    height: "100%",
+                    animation: `amiyahEqualizer ${0.85 + (barIndex % 4) * 0.18}s ease-in-out infinite`,
+                    animationDelay: `${barIndex * 0.08}s`,
+                    animationPlayState: isPlaying ? "running" : "paused",
+                  }}
                 />
-              </div>
-            ) : null}
-          </div>
-
-          <div className="space-y-4 bg-white/96 p-5 text-[#244243]">
-            <div>
-              <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#a07d23]">Uploaded</div>
-              <div className="mt-2 text-base font-medium">{formatDate(item.created_at)}</div>
-            </div>
-            <div>
-              <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#a07d23]">Details</div>
-              <div className="mt-2 text-sm leading-7 text-[#426161]">
-                {item.caption || "No guest note was added to this upload."}
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-2xl border border-[#e7dcc0] bg-[#fff8eb] p-3">
-                <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#9b7b22]">Type</div>
-                <div className="mt-2 text-sm font-medium capitalize">{item.media_kind}</div>
-              </div>
-              <div className="rounded-2xl border border-[#e7dcc0] bg-[#fff8eb] p-3">
-                <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[#9b7b22]">Size</div>
-                <div className="mt-2 text-sm font-medium">{formatFileSize(item.byte_size)}</div>
-              </div>
+              ))}
             </div>
 
-            <div className="space-y-2">
-              <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[#a07d23]">Queue</div>
-              <div className="text-sm text-[#426161]">
-                {index + 1} of {items.length}
+            <div>
+              <div className="text-2xl font-semibold">Voice Memo</div>
+              <div className="mt-1 text-sm text-white/65">A keepsake message from the celebration.</div>
+            </div>
+
+            <audio
+              ref={audioRef}
+              controls
+              autoPlay={isPlaying}
+              onEnded={onNext}
+              className="w-full max-w-md"
+              src={item.publicUrl}
+            />
+          </div>
+        ) : null}
+
+        {isPlaying && item.media_kind === "image" && items.length > 1 ? (
+          <div className="absolute inset-x-0 top-0 z-20 h-1 bg-white/10">
+            <div
+              key={`${item.id}-${waveKey}`}
+              className="amiyah-motion h-full bg-[linear-gradient(90deg,#72d8d8,#d8b45a)]"
+              style={{ animation: `amiyahSlideshowProgress ${Math.max(SLIDESHOW_IMAGE_MS - VIEWER_WAVE_SWAP_MS, 1200)}ms linear forwards` }}
+            />
+          </div>
+        ) : null}
+
+        {items.length > 1 ? (
+          <>
+            <button
+              type="button"
+              onClick={onPrevious}
+              className="absolute left-3 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-[#0b2226]/55 text-white backdrop-blur-md transition hover:bg-[#0b2226]/80 md:left-5"
+              aria-label="Previous media"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              type="button"
+              onClick={onNext}
+              className="absolute right-3 top-1/2 z-20 inline-flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-[#0b2226]/55 text-white backdrop-blur-md transition hover:bg-[#0b2226]/80 md:right-5"
+              aria-label="Next media"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
+          </>
+        ) : null}
+
+        {waving ? (
+          <div key={waveKey} aria-hidden="true" className="amiyah-wave-layer pointer-events-none absolute inset-0 z-30 overflow-hidden">
+            <div className="amiyah-wave-band absolute inset-0">
+              <WaveCrest position="top" front="#3f9d9d" back="rgba(157,240,237,0.5)" />
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,#3f9d9d_0%,#2d6d6c_48%,#1d4a4c_100%)]">
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_28%_18%,rgba(239,214,139,0.3),transparent_52%),radial-gradient(circle_at_74%_70%,rgba(157,240,237,0.22),transparent_58%)]" />
+                {waveBubbles.map((bubble, bubbleIndex) => (
+                  <span
+                    key={bubbleIndex}
+                    className="amiyah-motion absolute rounded-full border border-white/40 bg-[radial-gradient(circle_at_30%_28%,rgba(255,255,255,0.8),rgba(157,240,237,0.25)_58%,transparent_80%)]"
+                    style={{
+                      left: `${bubble.left}%`,
+                      bottom: `${(bubbleIndex % 5) * 6}%`,
+                      width: bubble.size,
+                      height: bubble.size,
+                      opacity: 0,
+                      animation: `amiyahWaveBubble ${bubble.duration}s ease-out ${bubble.delay}s both`,
+                    }}
+                  />
+                ))}
               </div>
+              <WaveCrest position="bottom" front="#1d4a4c" back="rgba(45,109,108,0.55)" />
             </div>
           </div>
-        </div>
+        ) : null}
       </div>
+
+      <footer className="relative z-20 px-4 pb-[max(1rem,env(safe-area-inset-bottom))] pt-3 sm:px-6">
+        {item.caption ? (
+          <p className="mx-auto max-w-3xl text-center text-sm leading-6 text-white/85 line-clamp-2">{item.caption}</p>
+        ) : null}
+
+        {items.length > 1 ? (
+          <div
+            ref={filmstripRef}
+            className="mt-3 flex gap-2 overflow-x-auto pb-1"
+            style={{ scrollbarWidth: "thin" }}
+            aria-label="Media filmstrip"
+          >
+            {items.map((entry, entryIndex) => {
+              const isActive = entryIndex === index;
+              return (
+                <button
+                  key={entry.id}
+                  type="button"
+                  data-thumb-index={entryIndex}
+                  onClick={() => onSelect(entryIndex)}
+                  className={`relative h-14 w-14 shrink-0 overflow-hidden rounded-xl border transition-all duration-300 ${isActive ? "scale-105 border-[#ecd18d] opacity-100 ring-2 ring-[#d8b45a]/60" : "border-white/15 opacity-50 hover:opacity-90"}`}
+                  aria-label={`Open item ${entryIndex + 1} of ${items.length}`}
+                  aria-current={isActive ? "true" : undefined}
+                >
+                  {entry.media_kind === "image" ? (
+                    <Image src={entry.publicUrl} alt="" fill unoptimized sizes="56px" className="object-cover" />
+                  ) : entry.media_kind === "video" ? (
+                    <span className="flex h-full w-full items-center justify-center bg-[linear-gradient(160deg,#2d6d6c,#0f3335)] text-[#9df0ed]">
+                      <Film className="h-5 w-5" />
+                    </span>
+                  ) : (
+                    <span className="flex h-full w-full items-center justify-center bg-[linear-gradient(160deg,#6f4ea8,#2c2150)] text-[#dccbff]">
+                      <Mic className="h-5 w-5" />
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        ) : null}
+      </footer>
     </div>
   );
 }
@@ -805,6 +1131,7 @@ function AdminPanel({
 
 export default function AmiyahsQuinceaneraPage() {
   const [showIntro, setShowIntro] = useState(true);
+  const [pageSettled, setPageSettled] = useState(false);
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
   const [activeTab, setActiveTab] = useState<MediaKind>("all");
   const [loadingGallery, setLoadingGallery] = useState(true);
@@ -842,6 +1169,15 @@ export default function AmiyahsQuinceaneraPage() {
   const handleIntroComplete = useCallback(() => {
     setShowIntro(false);
   }, []);
+
+  useEffect(() => {
+    if (showIntro) {
+      return;
+    }
+
+    const settleTimer = window.setTimeout(() => setPageSettled(true), 1050);
+    return () => window.clearTimeout(settleTimer);
+  }, [showIntro]);
 
   useEffect(() => {
     const loadGallery = async () => {
@@ -1372,9 +1708,10 @@ export default function AmiyahsQuinceaneraPage() {
     <>
       {showIntro ? <LiquidIntroOverlay onComplete={handleIntroComplete} /> : null}
       <main
-        className={`min-h-dvh overflow-hidden px-4 py-5 transition-all duration-1000 sm:px-6 lg:px-8 ${showIntro ? "pointer-events-none opacity-0 blur-sm scale-[0.985]" : "opacity-100 blur-0 scale-100"}`}
+        className={`min-h-dvh overflow-hidden px-4 py-5 sm:px-6 lg:px-8 ${pageSettled ? "" : `transition-all duration-1000 ${showIntro ? "pointer-events-none opacity-0 blur-sm scale-[0.985]" : "opacity-100 blur-0 scale-100"}`}`}
         style={pageStyle}
       >
+        <style>{amiyahMotionStyles}</style>
         <div aria-hidden="true" className="pointer-events-none fixed inset-0 overflow-hidden">
           <div className="absolute -left-24 top-[18%] h-72 w-72 rounded-full bg-[radial-gradient(circle,rgba(216,180,90,0.18),transparent_68%)] blur-3xl" />
           <div className="absolute right-[-6rem] top-[10%] h-80 w-80 rounded-full bg-[radial-gradient(circle,rgba(255,231,170,0.26),transparent_68%)] blur-3xl" />
@@ -1384,12 +1721,7 @@ export default function AmiyahsQuinceaneraPage() {
         <div className="mx-auto flex max-w-7xl flex-col gap-6">
           <section className="relative min-h-[90svh] overflow-hidden rounded-[36px] border border-white/55 bg-white/18 shadow-[0_30px_100px_rgba(77,132,132,0.22)]">
             <div className="absolute inset-0">
-              <div className="absolute inset-0 hidden md:block">
-                <Image src="/amiyahs-quinceanera/hero-web.png" alt="Amiyah's Quinceañera hero artwork" fill priority className="object-cover" />
-              </div>
-              <div className="absolute inset-0 md:hidden">
-                <Image src="/amiyahs-quinceanera/hero-mobile.png" alt="Amiyah's Quinceañera mobile hero artwork" fill priority className="object-cover" />
-              </div>
+              <HeroArtwork />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(245,255,255,0.16),rgba(229,250,247,0.4)_34%,rgba(236,248,243,0.72)_62%,rgba(233,242,233,0.9)_100%)]" />
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_24%,rgba(116,225,217,0.26),transparent_20%),radial-gradient(circle_at_82%_22%,rgba(231,210,145,0.28),transparent_18%),radial-gradient(circle_at_50%_85%,rgba(97,198,190,0.18),transparent_26%)]" />
               <div className="absolute inset-x-0 bottom-0 h-44 bg-[linear-gradient(180deg,transparent,rgba(115,210,205,0.18)_36%,rgba(58,121,121,0.12))]" />
@@ -1398,16 +1730,16 @@ export default function AmiyahsQuinceaneraPage() {
 
             <div className="relative z-10 flex min-h-[90svh] flex-col justify-between p-5 sm:p-8 lg:p-10">
               <div className="flex items-start justify-between gap-4">
-                <div className="rounded-full border border-white/60 bg-white/62 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22] backdrop-blur-xl shadow-[0_10px_26px_rgba(86,128,126,0.08)]">
+                <div className="rounded-full border border-white/60 bg-white/62 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.28em] text-[#9b7b22] md:backdrop-blur-xl shadow-[0_10px_26px_rgba(86,128,126,0.08)]">
                   Live Guest Album
                 </div>
-                <div className="rounded-full border border-white/60 bg-white/62 px-4 py-2 text-right text-[11px] font-semibold uppercase tracking-[0.24em] text-[#669a99] backdrop-blur-xl shadow-[0_10px_26px_rgba(86,128,126,0.08)]">
+                <div className="rounded-full border border-white/60 bg-white/62 px-4 py-2 text-right text-[11px] font-semibold uppercase tracking-[0.24em] text-[#669a99] md:backdrop-blur-xl shadow-[0_10px_26px_rgba(86,128,126,0.08)]">
                   July 25, 2026
                 </div>
               </div>
 
               <div className="max-w-[58rem]">
-                <div className="relative overflow-hidden rounded-[34px] border border-white/28 bg-[linear-gradient(180deg,rgba(255,255,255,0.34),rgba(255,255,255,0.08))] p-5 shadow-[0_18px_60px_rgba(73,111,112,0.06)] backdrop-blur-lg sm:p-7">
+                <div className="relative overflow-hidden rounded-[34px] border border-white/28 bg-[linear-gradient(180deg,rgba(255,255,255,0.34),rgba(255,255,255,0.08))] p-5 shadow-[0_18px_60px_rgba(73,111,112,0.06)] md:backdrop-blur-lg sm:p-7">
                   <div className="pointer-events-none absolute inset-0">
                     <div className="absolute right-[-2rem] top-[-2rem] h-40 w-40 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.68),rgba(150,233,227,0.22)_46%,transparent_72%)] blur-2xl" />
                     <div className="absolute left-[-2rem] bottom-[-2rem] h-44 w-44 rounded-full bg-[radial-gradient(circle,rgba(114,216,216,0.22),transparent_70%)] blur-2xl" />
@@ -1430,11 +1762,11 @@ export default function AmiyahsQuinceaneraPage() {
                       <Upload className="h-4 w-4" /> Upload Media
                     </button>
 
-                    <button type="button" onClick={() => jumpToSection("gallery")} className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/78 px-5 py-3 text-sm font-semibold text-[#2e5f60] backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white" >
+                    <button type="button" onClick={() => jumpToSection("gallery")} className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/78 px-5 py-3 text-sm font-semibold text-[#2e5f60] md:backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white" >
                       <Camera className="h-4 w-4" /> View Album
                     </button>
 
-                    <button type="button" onClick={() => jumpToSection("voice-memo")} className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/78 px-5 py-3 text-sm font-semibold text-[#2e5f60] backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white" >
+                    <button type="button" onClick={() => jumpToSection("voice-memo")} className="inline-flex items-center gap-2 rounded-full border border-white/70 bg-white/78 px-5 py-3 text-sm font-semibold text-[#2e5f60] md:backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white" >
                       <Mic className="h-4 w-4" /> Leave Voice Memo
                     </button>
                   </div>
@@ -1445,7 +1777,7 @@ export default function AmiyahsQuinceaneraPage() {
 
           <section className="grid gap-4 md:grid-cols-3">
             {/* Photos Card */}
-            <div className="relative overflow-hidden rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(232,249,247,0.78))] p-5 backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
+            <div className="relative overflow-hidden rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(232,249,247,0.78))] p-5 md:backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
               <div className="absolute right-[-18px] top-[-18px] h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(114,216,216,0.2),transparent_68%)]" />
               <div className="flex items-center justify-between gap-4">
                 <div>
@@ -1457,7 +1789,7 @@ export default function AmiyahsQuinceaneraPage() {
             </div>
 
             {/* Videos Card */}
-            <div className="relative overflow-hidden rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(255,244,220,0.78))] p-5 backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
+            <div className="relative overflow-hidden rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(255,244,220,0.78))] p-5 md:backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
               <div className="absolute right-[-18px] top-[-18px] h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(216,180,90,0.2),transparent_68%)]" />
               <div className="flex items-center justify-between gap-4">
                 <div>
@@ -1469,7 +1801,7 @@ export default function AmiyahsQuinceaneraPage() {
             </div>
 
             {/* Voice Memos Card */}
-            <div className="relative overflow-hidden rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(235,247,247,0.8))] p-5 backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
+            <div className="relative overflow-hidden rounded-[28px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(235,247,247,0.8))] p-5 md:backdrop-blur-xl" style={{ boxShadow: theme.shadow }}>
               <div className="absolute right-[-18px] top-[-18px] h-24 w-24 rounded-full bg-[radial-gradient(circle,rgba(152,126,204,0.16),transparent_68%)]" />
               <div className="flex items-center justify-between gap-4">
                 <div>
@@ -1487,7 +1819,7 @@ export default function AmiyahsQuinceaneraPage() {
             <div className="space-y-6">
               <section
                 id="upload-media"
-                className="relative overflow-hidden rounded-[30px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(235,250,247,0.84))] p-5 backdrop-blur-xl sm:p-6"
+                className="relative overflow-hidden rounded-[30px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(235,250,247,0.84))] p-5 md:backdrop-blur-xl sm:p-6"
                 style={{ boxShadow: theme.shadow }}
               >
                 <div className="absolute inset-x-0 top-0 h-20 bg-[radial-gradient(circle_at_top,rgba(114,216,216,0.22),transparent_70%)]" />
@@ -1564,7 +1896,7 @@ export default function AmiyahsQuinceaneraPage() {
 
               <section
                 id="voice-memo"
-                className="relative overflow-hidden rounded-[30px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(244,251,249,0.84))] p-5 backdrop-blur-xl sm:p-6"
+                className="relative overflow-hidden rounded-[30px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(244,251,249,0.84))] p-5 md:backdrop-blur-xl sm:p-6"
                 style={{ boxShadow: theme.shadow }}
               >
                 <div className="absolute inset-x-0 top-0 h-20 bg-[radial-gradient(circle_at_top,rgba(216,180,90,0.14),transparent_72%)]" />
@@ -1660,7 +1992,7 @@ export default function AmiyahsQuinceaneraPage() {
 
             <section
               id="gallery"
-              className="relative overflow-hidden rounded-[30px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(235,249,246,0.84))] p-5 backdrop-blur-xl sm:p-6"
+              className="relative overflow-hidden rounded-[30px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.9),rgba(235,249,246,0.84))] p-5 md:backdrop-blur-xl sm:p-6"
               style={{ boxShadow: theme.shadow }}
             >
               <div className="absolute inset-x-0 top-0 h-24 bg-[radial-gradient(circle_at_top,rgba(114,216,216,0.18),transparent_72%)]" />
@@ -1718,9 +2050,16 @@ export default function AmiyahsQuinceaneraPage() {
                   <LoaderCircle className="h-7 w-7 animate-spin text-[#7cbab8]" />
                 </div>
               ) : filteredGallery.length ? (
-                <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div key={activeTab} className="relative mt-6 grid gap-4 sm:grid-cols-2">
+                  <div aria-hidden="true" className="amiyah-wave-layer pointer-events-none absolute -inset-2 z-10 overflow-hidden rounded-[30px]">
+                    <div className="amiyah-tab-wave absolute inset-0">
+                      <WaveCrest position="top" front="rgba(114,216,216,0.9)" back="rgba(157,240,237,0.5)" />
+                      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(114,216,216,0.9),rgba(84,178,177,0.92))]" />
+                      <WaveCrest position="bottom" front="rgba(84,178,177,0.92)" back="rgba(63,140,140,0.5)" />
+                    </div>
+                  </div>
                   {filteredGallery.map((item, index) => (
-                    <article key={item.id} className="overflow-hidden rounded-[26px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(241,251,248,0.82))] shadow-[0_16px_42px_rgba(79,129,128,0.08)]">
+                    <article key={item.id} style={{ animationDelay: `${Math.min(index, 11) * 60}ms` }} className="amiyah-card-rise amiyah-gallery-card overflow-hidden rounded-[26px] border border-[var(--amiyah-border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(241,251,248,0.82))] shadow-[0_16px_42px_rgba(79,129,128,0.08)]">
                       <div className="group relative aspect-[4/5] bg-[#dff9f7]">
                         {item.media_kind === "image" ? (
                           <>
@@ -1786,7 +2125,7 @@ export default function AmiyahsQuinceaneraPage() {
 
           {statusMessage ? (
             <section
-              className="rounded-[24px] border bg-[linear-gradient(180deg,rgba(255,255,255,0.86),rgba(239,248,245,0.72))] px-5 py-4 text-sm backdrop-blur-xl"
+              className="rounded-[24px] border bg-[linear-gradient(180deg,rgba(255,255,255,0.86),rgba(239,248,245,0.72))] px-5 py-4 text-sm md:backdrop-blur-xl"
               style={{
                 borderColor:
                   statusTone === "success"
@@ -1807,87 +2146,88 @@ export default function AmiyahsQuinceaneraPage() {
             </section>
           ) : null}
         </div>
-
-        <AdminPanel
-          open={adminOpen}
-          unlocked={adminUnlocked}
-          password={adminPassword}
-          working={adminWorking}
-          error={adminError}
-          onPasswordChange={setAdminPassword}
-          onClose={() => {
-            setAdminOpen(false);
-            setAdminError(null);
-          }}
-          onVerify={() => void verifyAdminAccess()}
-        />
-
-        {viewerOpen && filteredGallery.length ? (
-          <GalleryViewer
-            items={filteredGallery}
-            index={viewerIndex}
-            isPlaying={viewerPlaying}
-            onClose={() => setViewerOpen(false)}
-            onNext={() => setViewerIndex((current) => cycleIndex(current + 1, filteredGallery.length))}
-            onPrevious={() => setViewerIndex((current) => cycleIndex(current - 1, filteredGallery.length))}
-            onTogglePlay={() => setViewerPlaying((current) => !current)}
-          />
-        ) : null}
-
-        {uploadProgress?.active ? (
-          <>
-            <div className="fixed inset-0 z-[115] bg-[#0f2021]/54 backdrop-blur-[3px]">
-              <div className="flex h-full items-end justify-center px-3 pb-[max(1rem,env(safe-area-inset-bottom))] pt-6 sm:items-center sm:px-4 sm:pb-6">
-                <div className="w-full max-w-md rounded-[32px] border border-white/25 bg-white/96 p-5 text-center shadow-[0_28px_80px_rgba(53,77,78,0.24)] sm:p-6">
-                  <div className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full border border-[#d6c081] bg-[#fff5d8] text-[#9b7b22]">
-                    <LoaderCircle className="h-8 w-8 animate-spin" />
-                  </div>
-                  <div className="mt-5 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">
-                    {uploadProgress.mode === "media" ? "Uploading Media" : "Uploading Voice Memo"}
-                  </div>
-                  <h3 className="mt-2 text-2xl font-semibold text-[#214445]">Please keep this page open</h3>
-                  <p className="mt-3 text-sm leading-6 text-[#4b6c6c]">
-                    {uploadProgress.current} of {uploadProgress.total} {uploadProgress.total === 1 ? "item" : "items"} in progress.
-                  </p>
-                  <div className="mt-5 h-3 overflow-hidden rounded-full bg-[#e8f4f4]">
-                    <div
-                      className="h-full rounded-full bg-[linear-gradient(90deg,#72d8d8,#d8b45a)] transition-all"
-                      style={{ width: `${Math.max(8, Math.round((uploadProgress.current / Math.max(uploadProgress.total, 1)) * 100))}%` }}
-                    />
-                  </div>
-                  <div className="mt-4 truncate text-sm font-medium text-[#315f60]">{uploadProgress.label}</div>
-                  <div className="mt-3 text-xs leading-5 text-[#5d7b7c]">
-                    Uploads continue best if Safari or Chrome stays open until this finishes.
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="fixed bottom-5 right-5 z-[116] hidden w-[min(92vw,360px)] rounded-[26px] border border-white/35 bg-white/95 p-4 shadow-[0_22px_70px_rgba(53,77,78,0.22)] backdrop-blur-xl md:block">
-              <div className="flex items-start gap-3">
-                <div className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#d6c081] bg-[#fff5d8] text-[#9b7b22]">
-                  <LoaderCircle className="h-5 w-5 animate-spin" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="text-sm font-semibold text-[#214445]">
-                    {uploadProgress.mode === "media" ? "Uploading to album" : "Uploading voice memo"}
-                  </div>
-                  <div className="mt-1 text-xs text-[#4b6c6c]">
-                    {uploadProgress.current} / {uploadProgress.total}
-                  </div>
-                  <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#e8f4f4]">
-                    <div
-                      className="h-full rounded-full bg-[linear-gradient(90deg,#72d8d8,#d8b45a)] transition-all"
-                      style={{ width: `${Math.max(8, Math.round((uploadProgress.current / Math.max(uploadProgress.total, 1)) * 100))}%` }}
-                    />
-                  </div>
-                  <div className="mt-2 truncate text-xs font-medium text-[#315f60]">{uploadProgress.label}</div>
-                </div>
-              </div>
-            </div>
-          </>
-        ) : null}
       </main>
+
+      <AdminPanel
+        open={adminOpen}
+        unlocked={adminUnlocked}
+        password={adminPassword}
+        working={adminWorking}
+        error={adminError}
+        onPasswordChange={setAdminPassword}
+        onClose={() => {
+          setAdminOpen(false);
+          setAdminError(null);
+        }}
+        onVerify={() => void verifyAdminAccess()}
+      />
+
+      {viewerOpen && filteredGallery.length ? (
+        <GalleryViewer
+          items={filteredGallery}
+          index={viewerIndex}
+          isPlaying={viewerPlaying}
+          onClose={() => setViewerOpen(false)}
+          onNext={() => setViewerIndex((current) => cycleIndex(current + 1, filteredGallery.length))}
+          onPrevious={() => setViewerIndex((current) => cycleIndex(current - 1, filteredGallery.length))}
+          onSelect={(nextIndex) => setViewerIndex(nextIndex)}
+          onTogglePlay={() => setViewerPlaying((current) => !current)}
+        />
+      ) : null}
+
+      {uploadProgress?.active ? (
+        <>
+          <div className="fixed inset-0 z-[115] bg-[#0f2021]/54 backdrop-blur-[3px]">
+            <div className="flex h-full items-end justify-center px-3 pb-[max(1rem,env(safe-area-inset-bottom))] pt-6 sm:items-center sm:px-4 sm:pb-6">
+              <div className="w-full max-w-md rounded-[32px] border border-white/25 bg-white/96 p-5 text-center shadow-[0_28px_80px_rgba(53,77,78,0.24)] sm:p-6">
+                <div className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full border border-[#d6c081] bg-[#fff5d8] text-[#9b7b22]">
+                  <LoaderCircle className="h-8 w-8 animate-spin" />
+                </div>
+                <div className="mt-5 text-[11px] font-semibold uppercase tracking-[0.24em] text-[#9b7b22]">
+                  {uploadProgress.mode === "media" ? "Uploading Media" : "Uploading Voice Memo"}
+                </div>
+                <h3 className="mt-2 text-2xl font-semibold text-[#214445]">Please keep this page open</h3>
+                <p className="mt-3 text-sm leading-6 text-[#4b6c6c]">
+                  {uploadProgress.current} of {uploadProgress.total} {uploadProgress.total === 1 ? "item" : "items"} in progress.
+                </p>
+                <div className="mt-5 h-3 overflow-hidden rounded-full bg-[#e8f4f4]">
+                  <div
+                    className="h-full rounded-full bg-[linear-gradient(90deg,#72d8d8,#d8b45a)] transition-all"
+                    style={{ width: `${Math.max(8, Math.round((uploadProgress.current / Math.max(uploadProgress.total, 1)) * 100))}%` }}
+                  />
+                </div>
+                <div className="mt-4 truncate text-sm font-medium text-[#315f60]">{uploadProgress.label}</div>
+                <div className="mt-3 text-xs leading-5 text-[#5d7b7c]">
+                  Uploads continue best if Safari or Chrome stays open until this finishes.
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="fixed bottom-5 right-5 z-[116] hidden w-[min(92vw,360px)] rounded-[26px] border border-white/35 bg-white/95 p-4 shadow-[0_22px_70px_rgba(53,77,78,0.22)] backdrop-blur-xl md:block">
+            <div className="flex items-start gap-3">
+              <div className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-[#d6c081] bg-[#fff5d8] text-[#9b7b22]">
+                <LoaderCircle className="h-5 w-5 animate-spin" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-semibold text-[#214445]">
+                  {uploadProgress.mode === "media" ? "Uploading to album" : "Uploading voice memo"}
+                </div>
+                <div className="mt-1 text-xs text-[#4b6c6c]">
+                  {uploadProgress.current} / {uploadProgress.total}
+                </div>
+                <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#e8f4f4]">
+                  <div
+                    className="h-full rounded-full bg-[linear-gradient(90deg,#72d8d8,#d8b45a)] transition-all"
+                    style={{ width: `${Math.max(8, Math.round((uploadProgress.current / Math.max(uploadProgress.total, 1)) * 100))}%` }}
+                  />
+                </div>
+                <div className="mt-2 truncate text-xs font-medium text-[#315f60]">{uploadProgress.label}</div>
+              </div>
+            </div>
+          </div>
+        </>
+      ) : null}
     </>
   );
 }

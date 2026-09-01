@@ -1,75 +1,166 @@
 // app/(site)/steda/page.tsx
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import type { SlideNavProps } from "@/types/types";
 import AppImages from "@/constants/images";
 import ProjectPage from "@/components/Projects/ProjectsPage";
 
 // Screenshots
+import OnboardingView from "@/components/Projects/Steda/Screenshots/Steda_OnboardingView.png";
+import UsernameOnboardingView from "@/components/Projects/Steda/Screenshots/Steda_UsernameOnboardingView.png";
 import HomeView from "@/components/Projects/Steda/Screenshots/Steda_HomeView.png";
 import NewHabitView from "@/components/Projects/Steda/Screenshots/Steda_NewHabitView.png";
-import HabitDetailsView from "@/components/Projects/Steda/Screenshots/Steda_HabitDetailsView.png";
+import CounterCreationView from "@/components/Projects/Steda/Screenshots/Steda_CounterCreationView.png";
+import RemindersCreationView from "@/components/Projects/Steda/Screenshots/Steda_RemindersCreationView.png";
+import TabOpenProfileView from "@/components/Projects/Steda/Screenshots/Steda_TabOpenProfileView.png";
 import MoodView from "@/components/Projects/Steda/Screenshots/Steda_MoodView.png";
+
+const screenshots = [OnboardingView, UsernameOnboardingView, HomeView, NewHabitView, CounterCreationView, RemindersCreationView, TabOpenProfileView, MoodView];
 
 const versionHistory = [
   {
     version: "26.0",
-    title: "26.0 Update",
+    title: "Counters, Reminders & Daily Motivation",
+    description:
+      "Stay on track with customizable counters, standalone reminders, daily inspiration, and new widgets designed to keep your progress visible.",
     items: [
-      "Added meaningful counters for tracking water, workouts, focus sessions, goals, and more.",
-      "Counters now sync across the app, Home Screen widgets, Apple Watch, Watch widgets, and Live Activities.",
-      "Added dedicated one-time and repeating reminders for tasks that are not daily habits.",
-      "Added Apple Calendar and Apple Reminders support.",
-      "Expanded habit schedules with specific-date and monthly options.",
-      "Added daily quote and word of the day notification options.",
-      "Added more personalization with colors, app icons, and tracking details.",
+      "Create custom counters with personalized names, units, goals, colors, and icons.",
+      "Track workouts, water intake, habits, medications, tasks, study sessions, and anything else that matters.",
+      "View real-time progress and pace insights, including per-hour tracking.",
+      "Start, pause, reset, and manage counter sessions with ease.",
+      "Use Home Screen widgets to update counters and view your daily quote and Word of the Day.",
+      "Add Steda Today widgets for quick access to habits, reminders, and daily progress.",
+      "Create one-time or recurring reminders for medications, appointments, errands, calls, bills, and calendar nudges.",
+      "Sync supported reminders with Apple Reminders for a seamless experience.",
+      "Receive a daily motivational quote and Word of the Day at a time you choose.",
+      "Save your favorite quotes and words in Saved Prompts to revisit anytime.",
     ],
   },
   {
     version: "1.1",
-    title: "1.1 Update",
-    items: ["New & improved achievements.", "Bug fixes."],
+    title: "Achievements & Improvements",
+    description:
+      "A smaller update focused on improving achievements and overall reliability.",
+    items: [
+      "Added new and improved achievements.",
+      "Improved performance and reliability.",
+      "Fixed bugs throughout the app.",
+    ],
   },
 ];
 
-function WhatsNewSection() {
-  const [selectedVersion, setSelectedVersion] = useState(versionHistory[0].version);
+const features = [
+  <>
+    <strong className="text-slate-100">Flexible Habit Tracking:</strong>{" "}
+    Create habits that fit your life with daily, weekly, specific-date, and
+    monthly schedules.
+  </>,
+  <>
+    <strong className="text-slate-100">Powerful Custom Counters:</strong>{" "}
+    Track workouts, water, study sessions, tasks, repetitions, medication, and
+    personal goals with customizable names, units, colors, icons, and targets.
+  </>,
+  <>
+    <strong className="text-slate-100">Real-Time Pace Insights:</strong>{" "}
+    View live progress and per-hour tracking insights while managing active
+    counter sessions.
+  </>,
+  <>
+    <strong className="text-slate-100">Standalone Reminders:</strong>{" "}
+    Create one-time or recurring reminders for medications, appointments,
+    errands, calls, bills, tasks, and calendar nudges.
+  </>,
+  <>
+    <strong className="text-slate-100">Apple Reminders Support:</strong>{" "}
+    Sync supported Steda reminders with Apple Reminders, or use Steda
+    notifications on their own.
+  </>,
+  <>
+    <strong className="text-slate-100">Daily Mood Check-Ins:</strong>{" "}
+    Quickly record how you feel and uncover emotional patterns through an
+    interactive mood calendar.
+  </>,
+  <>
+    <strong className="text-slate-100">Home &amp; Lock Screen Widgets:</strong>{" "}
+    Update counters, view daily content, and keep today’s habits, reminders,
+    and progress close at hand.
+  </>,
+  <>
+    <strong className="text-slate-100">Daily Motivation:</strong>{" "}
+    Receive a motivational quote and Word of the Day at a time you choose, then
+    save your favorites in Saved Prompts.
+  </>,
+  <>
+    <strong className="text-slate-100">Visible Progress:</strong>{" "}
+    Build streaks, reach milestones, complete habits, manage sessions, and
+    watch your consistency grow over time.
+  </>,
+];
 
-  const selected = useMemo(
-    () => versionHistory.find((item) => item.version === selectedVersion) ?? versionHistory[0],
-    [selectedVersion]
+function WhatsNewSection() {
+  const [selectedVersion, setSelectedVersion] = useState(
+    versionHistory[0].version
   );
 
+  const selected =
+    versionHistory.find((item) => item.version === selectedVersion) ??
+    versionHistory[0];
+
   return (
-    <section className="mt-8 rounded-3xl border border-white/10 bg-white/4 p-5">
-      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <section className="mt-8 rounded-3xl border border-white/10 bg-white/4 p-5 sm:p-6">
+      <div className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
+          <p className="mb-1 text-xs font-bold uppercase tracking-[0.2em] text-(--accent)">
+            Version History
+          </p>
+
           <h3 className="text-xl font-bold text-white">What’s New</h3>
-          <p className="text-sm text-slate-400">View Steda version history.</p>
+
+          <p className="mt-1 text-sm text-slate-400">
+            Explore the latest Steda updates and improvements.
+          </p>
         </div>
 
-        <select
-          value={selectedVersion}
-          onChange={(event) => setSelectedVersion(event.target.value)}
-          className="rounded-2xl border border-white/10 bg-black/40 px-4 py-2 text-sm font-semibold text-white outline-none transition hover:border-white/20 focus:border-(--accent)"
-        >
-          {versionHistory.map((item) => (
-            <option key={item.version} value={item.version}>
-              Version {item.version}
-            </option>
-          ))}
-        </select>
+        <label className="flex flex-col gap-1.5 text-xs font-semibold uppercase tracking-wider text-slate-400">
+          Select Version
+
+          <select
+            value={selectedVersion}
+            onChange={(event) => setSelectedVersion(event.target.value)}
+            className="min-w-40 rounded-2xl border border-white/10 bg-black/40 px-4 py-2.5 text-sm font-semibold normal-case tracking-normal text-white outline-none transition hover:border-white/20 focus:border-(--accent)"
+          >
+            {versionHistory.map((item) => (
+              <option key={item.version} value={item.version}>
+                Version {item.version}
+              </option>
+            ))}
+          </select>
+        </label>
       </div>
 
-      <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-        <h4 className="mb-3 text-lg font-bold text-white">{selected.title}</h4>
+      <div className="rounded-2xl border border-white/10 bg-black/20 p-4 sm:p-5">
+        <div className="mb-4">
+          <div className="mb-2 inline-flex rounded-full border border-(--accent)/20 bg-(--accent)/10 px-3 py-1 text-xs font-bold text-(--accent)">
+            Version {selected.version}
+          </div>
 
-        <ul className="space-y-2 text-sm leading-relaxed text-slate-300">
+          <h4 className="text-lg font-bold text-white">{selected.title}</h4>
+
+          <p className="mt-1 text-sm leading-relaxed text-slate-400">
+            {selected.description}
+          </p>
+        </div>
+
+        <ul className="space-y-3 text-sm leading-relaxed text-slate-300">
           {selected.items.map((item) => (
-            <li key={item} className="flex gap-2">
-              <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-(--accent)" />
+            <li key={item} className="flex gap-3">
+              <span
+                aria-hidden="true"
+                className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-(--accent)"
+              />
+
               <span>{item}</span>
             </li>
           ))}
@@ -85,8 +176,6 @@ export default function Page({
   prevSlide,
 }: SlideNavProps) {
   const router = useRouter();
-
-  const screenshots = [HomeView, NewHabitView, HabitDetailsView, MoodView];
 
   return (
     <ProjectPage
@@ -108,75 +197,82 @@ export default function Page({
       }}
       actions={({ openFeedback }) => [
         {
-          label: "Apple Store",
+          label: "View on the App Store",
           href: "https://apps.apple.com/us/app/steda/id6745674975",
           variant: "primary",
         },
-        { label: "Send Feedback", onClick: openFeedback, variant: "secondary" },
+        {
+          label: "Send Feedback",
+          onClick: openFeedback,
+          variant: "secondary",
+        },
       ]}
       description={
         <div className="space-y-4 leading-relaxed">
-          <p>
+          <p className="text-lg text-slate-200">
             <strong>
               Build better routines with{" "}
-              <span className="text-var(--accent)">Steda</span>
-            </strong>{" "}
-            — Steda helps you build better habits, track meaningful counters, manage
-            reminders, and reflect on how you feel along the way. Designed to keep
-            your progress visible and your motivation high, Steda makes routines feel
-            simple, personal, and easier to return to every day.
+              <span className="text-(--accent)">Steda</span>.
+            </strong>
           </p>
 
           <p>
-            Start building the habits, reminders, and small actions that move you
-            forward. One day at a time.
+            Steda is your all-in-one space to build better habits, track what
+            matters, manage reminders, and stay connected to how you feel each
+            day.
+          </p>
+
+          <p>
+            Whether you’re working toward a goal, improving your mindset,
+            remembering important tasks, or simply trying to become more
+            consistent, Steda keeps your routines clear, motivating, and easy to
+            return to.
+          </p>
+
+          <p>
+            Create flexible habits, track progress with customizable counters,
+            schedule standalone reminders, record daily moods, and keep your
+            most important information visible through Home Screen and Lock
+            Screen widgets.
+          </p>
+
+          <p className="font-semibold text-slate-200">
+            Build habits that last. Track what matters.
+            <br />
+            One day, one reminder, one action, and one count at a time.
           </p>
 
           <WhatsNewSection />
         </div>
       }
-      featureTitle="Features"
-      features={[
-        <>
-          <strong className="text-slate-100">Flexible Habit Tracking:</strong> Create custom habits
-          with daily, weekly, specific-date, and monthly schedules.
-        </>,
-        <>
-          <strong className="text-slate-100">Counters That Stay in Sync:</strong> Track water,
-          workouts, focus sessions, personal goals, and more across the app, widgets,
-          Apple Watch, and Live Activities.
-        </>,
-        <>
-          <strong className="text-slate-100">Dedicated Reminders:</strong> Create one-time or
-          repeating reminders for medication, calls, errands, appointments, and monthly check-ins.
-        </>,
-        <>
-          <strong className="text-slate-100">Calendar &amp; Apple Reminders Support:</strong> Connect
-          Steda with Apple Calendar and Apple Reminders.
-        </>,
-        <>
-          <strong className="text-slate-100">Daily Mood Reflection:</strong> Log how you feel each day
-          and review emotional patterns with an interactive mood calendar.
-        </>,
-        <>
-          <strong className="text-slate-100">Your Notifications:</strong> Set personalized habit and
-          reminder notifications, plus daily quote and word of the day delivery times.
-        </>,
-        <>
-          <strong className="text-slate-100">Progress You Can See:</strong> View streaks,
-          completions, achievements, and progress snapshots.
-        </>,
-        <>
-          <strong className="text-slate-100">Personal Customization:</strong> Choose colors, app icons,
-          and details that make your tracking space feel like your own.
-        </>,
-      ]}
+      featureTitle="Everything You Need to Stay on Track"
+      features={features}
       builtWith={[
-        { src: AppImages.githubLight, alt: "GitHub", href: "https://github.com/devzano" },
-        { src: AppImages.xcode, alt: "Xcode", href: "https://developer.apple.com/xcode/" },
-        { src: AppImages.swiftui, alt: "SwiftUI", href: "https://developer.apple.com/xcode/swiftui/" },
-        { src: AppImages.privacyPolicy, alt: "Privacy Policy", onClick: () => router.push("/steda/privacy") },
-        { src: AppImages.termsConditions, alt: "Terms and Conditions", onClick: () => router.push("/steda/terms") },
+        {
+          src: AppImages.githubLight,
+          alt: "GitHub",
+          href: "https://github.com/devzano",
+        },
+        {
+          src: AppImages.xcode,
+          alt: "Xcode",
+          href: "https://developer.apple.com/xcode/",
+        },
+        {
+          src: AppImages.swiftui,
+          alt: "SwiftUI",
+          href: "https://developer.apple.com/xcode/swiftui/",
+        },
+        {
+          src: AppImages.privacyPolicy,
+          alt: "Privacy Policy",
+          onClick: () => router.push("/steda/privacy"),
+        },
+        {
+          src: AppImages.termsConditions,
+          alt: "Terms and Conditions",
+          onClick: () => router.push("/steda/terms"),
+        },
       ]}
     />
   );

@@ -270,11 +270,7 @@ const sideloadSteps = [
   },
 ];
 
-export default function Page({
-  showArrows = false,
-  nextSlide,
-  prevSlide,
-}: SlideNavProps) {
+export default function Page({ showArrows = false, nextSlide, prevSlide }: SlideNavProps) {
   const router = useRouter();
   const [isIpaModalOpen, setIsIpaModalOpen] = useState(false);
 
@@ -337,6 +333,11 @@ export default function Page({
             label: "Play Store",
             href: "https://play.google.com/store/apps/details?id=com.devzano.Watchlistr",
             variant: "secondary",
+          },
+          {
+            label: "TestFlight",
+            href: "https://testflight.apple.com/join/5fAq7d4d",
+            variant: "accent",
           },
           {
             label: "iOS IPA",

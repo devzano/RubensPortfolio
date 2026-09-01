@@ -22,13 +22,16 @@ const versionHistory = [
     version: "26.0",
     title: "26.0 Update",
     items: [
-      "Expanded fuel logging with receipt details, photo attachments, and e-receipt imports.",
-      "Fuel receipt scanning to automatically capture useful fill-up details.",
-      "Nearby fuel and EV charging stations on the map.",
-      "Station details, fuel price reporting, and crowd pricing support.",
-      "Trip tracking with automatic/manual options, trip drafts, and organized trip history.",
-      "Document vault for storing important vehicle records.",
-      "Cleaner report exports for vehicle history records.",
+      "Added nearby EV charging station support alongside fuel stations.",
+      "Added fuel receipt import and OCR improvements for faster fuel log entry.",
+      "Added crowd fuel price reporting and community fuel profile settings.",
+      "Added smarter trip tracking with trip drafts and review flows.",
+      "Added document vault support for storing vehicle records in one place.",
+      "Added automatic reminders for registration, inspection, and insurance expirations.",
+      "Improved vehicle analytics with better oil life, battery age, brake, and fuel economy visibility.",
+      "Improved exports and reporting for a cleaner vehicle history.",
+      "Expanded CarPlay support and in-vehicle trip and fuel experiences.",
+      "Refined onboarding, dark appearance, and the overall app interface.",
     ],
   },
   {
@@ -97,7 +100,16 @@ export default function Page({
 }: SlideNavProps) {
   const router = useRouter();
 
-  const screenshots = [OnboardingView, OnboardingAddVehicleView, HomeView, NearbyFuel, TripCenterView, NewVehicleView, VehicleDetailsView, ServiceLogView];
+  const screenshots = [
+    OnboardingView,
+    OnboardingAddVehicleView,
+    HomeView,
+    NearbyFuel,
+    TripCenterView,
+    NewVehicleView,
+    VehicleDetailsView,
+    ServiceLogView,
+  ];
 
   return (
     <ProjectPage
@@ -123,7 +135,11 @@ export default function Page({
           href: "https://apps.apple.com/us/app/autoarchive/id6744589503",
           variant: "primary",
         },
-        { label: "Send Feedback", onClick: openFeedback, variant: "secondary" },
+        {
+          label: "Send Feedback",
+          onClick: openFeedback,
+          variant: "secondary",
+        },
       ]}
       description={
         <div className="space-y-4 leading-relaxed">
@@ -134,17 +150,22 @@ export default function Page({
           </p>
 
           <p>
-            Stay in control of your car care with AutoArchive — the all-in-one app for
-            managing vehicle maintenance, fuel logs, trip tracking, reminders,
-            documents, and important vehicle details. Whether you're tracking one car
-            or a small fleet, AutoArchive keeps everything organized, searchable, and
-            easy to review.
+            Stay in control of your vehicle with AutoArchive, the all-in-one app for
+            service records, fuel logs, trip tracking, reminders, documents, and
+            important vehicle details. Whether you track one car or manage a small
+            fleet, AutoArchive keeps everything organized, searchable, and easy to
+            review.
           </p>
 
           <p>
-            From oil changes and tire rotations to fuel receipts, nearby gas prices,
+            From oil changes and tire rotations to fuel receipts, nearby fuel prices,
             trip drafts, part numbers, and renewal dates, AutoArchive helps you keep a
-            complete history of your vehicle in one place.
+            complete digital history for every vehicle in one place.
+          </p>
+
+          <p>
+            AutoArchive helps replace scattered notes, paper receipts, and glovebox
+            clutter with one organized digital record for your vehicle.
           </p>
 
           <WhatsNewSection />
@@ -152,25 +173,82 @@ export default function Page({
       }
       featureTitle="Key Features"
       features={[
-        <>Create detailed vehicle profiles with VIN lookup for make, model, and year.</>,
-        <>Log service records with cost, mileage, notes, and multiple photo attachments.</>,
-        <>Track fuel fill-ups, costs, mileage, receipts, and e-receipt imports.</>,
-        <>Scan fuel receipts to automatically capture useful fuel log details.</>,
+        <>
+          Create detailed vehicle profiles with VIN lookup to quickly populate make,
+          model, and year.
+        </>,
+        <>
+          Log service records with cost, mileage, notes, and multiple photo
+          attachments.
+        </>,
+        <>Track fuel fill-ups, fuel costs, mileage, and receipt details.</>,
+        <>
+          Import and scan fuel receipts with OCR to automatically pull useful fuel log
+          information.
+        </>,
         <>Discover nearby fuel and EV charging stations on the map.</>,
-        <>View station details, report fuel prices, and support crowd pricing.</>,
-        <>Track trips automatically or manually, review drafts, and organize trip history.</>,
-        <>Monitor registration, insurance, inspection, oil life, fluids, tires, and battery status.</>,
-        <>Store part numbers and search for compatible parts based on your vehicle.</>,
-        <>Save documents and important records in the built-in document vault.</>,
-        <>Export reports for a cleaner, searchable vehicle history.</>,
-        <>Add custom tags, notes, and reminders for maintenance, renewals, and more.</>,
+        <>
+          View station details, report fuel prices, and help keep community pricing up
+          to date.
+        </>,
+        <>
+          Track trips automatically or manually, review trip drafts, and keep trip
+          history organized.
+        </>,
+        <>
+          Save Home, Work, and other places to support smarter trip prompts and tracking
+          flows.
+        </>,
+        <>
+          Monitor registration, insurance, inspection, oil life, fluid levels, tire
+          pressure, battery age, brake condition, and fuel economy.
+        </>,
+        <>
+          Store part numbers for filters, tires, brakes, batteries, and more, and search
+          for compatible parts based on your vehicle.
+        </>,
+        <>
+          Save documents and important records in one place with a built-in document
+          vault.
+        </>,
+        <>
+          Export reports for cleaner records, maintenance history, and easier sharing.
+        </>,
+        <>
+          Add reminders for maintenance, renewals, and other vehicle tasks, including
+          automatic expiration reminders for key legal dates.
+        </>,
+        <>
+          Use CarPlay support for in-vehicle access to key driving and fuel-related
+          experiences.
+        </>,
       ]}
       builtWith={[
-        { src: AppImages.githubLight, alt: "GitHub", href: "https://github.com/devzano" },
-        { src: AppImages.xcode, alt: "Xcode", href: "https://developer.apple.com/xcode/" },
-        { src: AppImages.swiftui, alt: "SwiftUI", href: "https://developer.apple.com/xcode/swiftui/" },
-        { src: AppImages.termsConditions, alt: "Terms", onClick: () => router.push("/autoarchive/terms") },
-        { src: AppImages.privacyPolicy, alt: "Privacy", onClick: () => router.push("/autoarchive/privacy") },
+        {
+          src: AppImages.githubLight,
+          alt: "GitHub",
+          href: "https://github.com/devzano",
+        },
+        {
+          src: AppImages.xcode,
+          alt: "Xcode",
+          href: "https://developer.apple.com/xcode/",
+        },
+        {
+          src: AppImages.swiftui,
+          alt: "SwiftUI",
+          href: "https://developer.apple.com/xcode/swiftui/",
+        },
+        {
+          src: AppImages.termsConditions,
+          alt: "Terms",
+          onClick: () => router.push("/autoarchive/terms"),
+        },
+        {
+          src: AppImages.privacyPolicy,
+          alt: "Privacy",
+          onClick: () => router.push("/autoarchive/privacy"),
+        },
       ]}
     />
   );

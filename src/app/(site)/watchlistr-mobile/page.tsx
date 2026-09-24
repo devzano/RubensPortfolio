@@ -249,7 +249,7 @@ function WhatsNewSection() {
 const WATCHLISTR_IPA_PATH =
   "https://github.com/devzano/RubensPortfolio/releases/download/watchlistr-ios-ipa/Watchlistr.ipa";
 const WATCHLISTR_APK_PATH =
-  "https://github.com/devzano/RubensPortfolio/releases/download/watchlistr-android-apk/Watchlistr.26.1.apk";
+  "https://github.com/devzano/RubensPortfolio/releases/download/watchlistr-android-apk/Watchlistr.apk";
 
 const watchlistrModalAccentVars = {
   "--accent": "#2EA0FF",

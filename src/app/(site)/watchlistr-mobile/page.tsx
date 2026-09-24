@@ -196,11 +196,15 @@ const versionHistory = [
 ];
 
 function WhatsNewSection() {
-  const [selectedVersion, setSelectedVersion] = useState(versionHistory[0].version);
+  const [selectedVersion, setSelectedVersion] = useState(
+    versionHistory[0].version,
+  );
 
   const selected = useMemo(
-    () => versionHistory.find((item) => item.version === selectedVersion) ?? versionHistory[0],
-    [selectedVersion]
+    () =>
+      versionHistory.find((item) => item.version === selectedVersion) ??
+      versionHistory[0],
+    [selectedVersion],
   );
 
   return (
@@ -208,7 +212,9 @@ function WhatsNewSection() {
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="text-xl font-bold text-white">What’s New</h3>
-          <p className="text-sm text-slate-400">View Watchlistr version history.</p>
+          <p className="text-sm text-slate-400">
+            View Watchlistr version history.
+          </p>
         </div>
 
         <select
@@ -242,6 +248,8 @@ function WhatsNewSection() {
 
 const WATCHLISTR_IPA_PATH =
   "https://github.com/devzano/RubensPortfolio/releases/download/watchlistr-ios-ipa/Watchlistr.ipa";
+const WATCHLISTR_APK_PATH =
+  "https://github.com/devzano/RubensPortfolio/releases/download/watchlistr-android-apk/Watchlistr.26.1.apk";
 
 const watchlistrModalAccentVars = {
   "--accent": "#2EA0FF",
@@ -270,9 +278,33 @@ const sideloadSteps = [
   },
 ];
 
-export default function Page({ showArrows = false, nextSlide, prevSlide }: SlideNavProps) {
+const apkInstallSteps = [
+  {
+    title: "Download APK",
+    body: "Use the button below to download the Watchlistr APK directly to your Android device.",
+  },
+  {
+    title: "Open the APK",
+    body: "Once the download finishes, open Watchlistr.apk from your browser or Downloads app.",
+  },
+  {
+    title: "Allow installation if prompted",
+    body: "Android may ask you to allow your browser or file manager to install apps from this source. Enable the permission when prompted.",
+  },
+  {
+    title: "Install Watchlistr",
+    body: "Return to the installer and tap Install. Once installation finishes, you can open Watchlistr normally.",
+  },
+];
+
+export default function Page({
+  showArrows = false,
+  nextSlide,
+  prevSlide,
+}: SlideNavProps) {
   const router = useRouter();
   const [isIpaModalOpen, setIsIpaModalOpen] = useState(false);
+  const [isApkModalOpen, setIsApkModalOpen] = useState(false);
 
   const screenshots = [
     // iOS
@@ -314,7 +346,9 @@ export default function Page({ showArrows = false, nextSlide, prevSlide }: Slide
         titleLink="https://watchlistr.app"
         icon={AppImages.watchlistr}
         iconAlt="Watchlistr app icon"
-        subtle={<>for the full iOS experience of Watchlistr, tap iOS IPA.</>}
+        subtle={
+          <>Download Watchlistr directly with the iOS IPA or Android APK.</>
+        }
         screenshots={screenshots}
         screenshotProps={{
           variant: "app",
@@ -344,7 +378,16 @@ export default function Page({ showArrows = false, nextSlide, prevSlide }: Slide
             onClick: () => setIsIpaModalOpen(true),
             variant: "accent",
           },
-          { label: "Send Feedback", onClick: openFeedback, variant: "secondary" },
+          {
+            label: "Android APK",
+            onClick: () => setIsApkModalOpen(true),
+            variant: "accent",
+          },
+          {
+            label: "Send Feedback",
+            onClick: openFeedback,
+            variant: "secondary",
+          },
         ]}
         description={
           <div className="space-y-4 leading-relaxed">
@@ -353,10 +396,10 @@ export default function Page({ showArrows = false, nextSlide, prevSlide }: Slide
                 Discover and track your favorite movies and shows with{" "}
                 <span className="text-var(--accent)">Watchlistr</span>
               </strong>{" "}
-              — your personalized hub for keeping up with the latest releases, hidden
-              gems, and timeless classics. With an intuitive design, powerful search
-              tools, and smart watchlist management, Watchlistr makes it effortless to
-              stay on top of your entertainment journey.
+              — your personalized hub for keeping up with the latest releases,
+              hidden gems, and timeless classics. With an intuitive design,
+              powerful search tools, and smart watchlist management, Watchlistr
+              makes it effortless to stay on top of your entertainment journey.
             </p>
 
             <WhatsNewSection />
@@ -365,62 +408,110 @@ export default function Page({ showArrows = false, nextSlide, prevSlide }: Slide
         featureTitle="Features"
         features={[
           <>
-            <strong className="text-slate-100">Browse &amp; Discover:</strong> Explore the latest blockbusters, classic
-            films, and binge-worthy series. Enjoy curated lists, streaming service breakdowns, and dedicated TV show
-            sections highlighting what’s airing today and tomorrow. Sort your content your way with flexible sorting
-            options.
+            <strong className="text-slate-100">Browse &amp; Discover:</strong>{" "}
+            Explore the latest blockbusters, classic films, and binge-worthy
+            series. Enjoy curated lists, streaming service breakdowns, and
+            dedicated TV show sections highlighting what’s airing today and
+            tomorrow. Sort your content your way with flexible sorting options.
           </>,
           <>
-            <strong className="text-slate-100">Smart Search:</strong> Quickly find movies, shows, actors, or genres with
-            a powerful search feature — complete with search history for fast access. View collections when available for
-            movies and preview genre-based media selections.
+            <strong className="text-slate-100">Smart Search:</strong> Quickly
+            find movies, shows, actors, or genres with a powerful search feature
+            — complete with search history for fast access. View collections
+            when available for movies and preview genre-based media selections.
           </>,
           <>
-            <strong className="text-slate-100">Detailed Media Info:</strong> Tap into rich details for any title — from
-            episode counts to streaming availability. Jump directly into streaming apps (if installed) or view details on
-            TMDB. Easily explore collections, discover related media through cast connections, and enjoy smart
-            suggestions.
+            <strong className="text-slate-100">Detailed Media Info:</strong> Tap
+            into rich details for any title — from episode counts to streaming
+            availability. Jump directly into streaming apps (if installed) or
+            view details on TMDB. Easily explore collections, discover related
+            media through cast connections, and enjoy smart suggestions.
           </>,
           <>
-            <strong className="text-slate-100">Share Your Favorites:</strong> Share media directly from its detail page.
-            The recipient is taken straight to the media’s page within the app for seamless sharing and discovery.
+            <strong className="text-slate-100">Share Your Favorites:</strong>{" "}
+            Share media directly from its detail page. The recipient is taken
+            straight to the media’s page within the app for seamless sharing and
+            discovery.
           </>,
           <>
-            <strong className="text-slate-100">Custom Notifications:</strong> Stay in the loop with reminders for new
-            releases, upcoming episodes, or rewatch plans — all delivered with a unique notification sound.
+            <strong className="text-slate-100">Custom Notifications:</strong>{" "}
+            Stay in the loop with reminders for new releases, upcoming episodes,
+            or rewatch plans — all delivered with a unique notification sound.
           </>,
           <>
-            <strong className="text-slate-100">Manage Your Watchlist:</strong> Mark movies or individual episodes as
-            “watched,” long-press to set reminders or toggle statuses, auto “New Episode” badges, sort by
+            <strong className="text-slate-100">Manage Your Watchlist:</strong>{" "}
+            Mark movies or individual episodes as “watched,” long-press to set
+            reminders or toggle statuses, auto “New Episode” badges, sort by
             status/alpha/added date, and organize into folders.
           </>,
           <>
-            <strong className="text-slate-100">Personalized Profile:</strong> Customize photo, text colors, light/dark
-            mode, see counts &amp; notifications, choose default launch tab.
+            <strong className="text-slate-100">Personalized Profile:</strong>{" "}
+            Customize photo, text colors, light/dark mode, see counts &amp;
+            notifications, choose default launch tab.
           </>,
           <>
-            <strong className="text-slate-100">Secure Sign-In:</strong> Apple/Google auth with Firebase; try as a guest
-            via a temp user.
+            <strong className="text-slate-100">Secure Sign-In:</strong>{" "}
+            Apple/Google auth with Firebase; try as a guest via a temp user.
           </>,
         ]}
         builtWith={[
-          { src: AppImages.githubLight, alt: "GitHub", href: "https://github.com/devzano" },
-          { src: AppImages.xcode, alt: "Xcode", href: "https://developer.apple.com/xcode/" },
-          { src: AppImages.swiftui, alt: "SwiftUI", href: "https://developer.apple.com/xcode/swiftui/" },
+          {
+            src: AppImages.githubLight,
+            alt: "GitHub",
+            href: "https://github.com/devzano",
+          },
+          {
+            src: AppImages.xcode,
+            alt: "Xcode",
+            href: "https://developer.apple.com/xcode/",
+          },
+          {
+            src: AppImages.swiftui,
+            alt: "SwiftUI",
+            href: "https://developer.apple.com/xcode/swiftui/",
+          },
           { src: AppImages.expo, alt: "Expo", href: "https://docs.expo.dev/" },
-          { src: AppImages.firebase, alt: "Firebase", href: "https://firebase.google.com/" },
-          { src: AppImages.termsConditions, alt: "Terms", onClick: () => router.push("/watchlistr-mobile/terms") },
-          { src: AppImages.privacyPolicy, alt: "Privacy", onClick: () => router.push("/watchlistr-mobile/privacy") },
+          {
+            src: AppImages.firebase,
+            alt: "Firebase",
+            href: "https://firebase.google.com/",
+          },
+          {
+            src: AppImages.termsConditions,
+            alt: "Terms",
+            onClick: () => router.push("/watchlistr-mobile/terms"),
+          },
+          {
+            src: AppImages.privacyPolicy,
+            alt: "Privacy",
+            onClick: () => router.push("/watchlistr-mobile/privacy"),
+          },
         ]}
       />
 
-      <IpaInstallModal isOpen={isIpaModalOpen} onClose={() => setIsIpaModalOpen(false)} />
+      <IpaInstallModal
+        isOpen={isIpaModalOpen}
+        onClose={() => setIsIpaModalOpen(false)}
+      />
+
+      <ApkInstallModal
+        isOpen={isApkModalOpen}
+        onClose={() => setIsApkModalOpen(false)}
+      />
     </>
   );
 }
 
-function IpaInstallModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void; }) {
-  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null);
+function IpaInstallModal({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) {
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
+    null,
+  );
   const closeButtonRef = useRef<HTMLButtonElement | null>(null);
   const previousFocusRef = useRef<HTMLElement | null>(null);
 
@@ -482,7 +573,10 @@ function IpaInstallModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
 
         <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-5 pt-6 sm:px-7 sm:pt-7">
           <div className="pr-11">
-            <h2 id="watchlistr-ipa-title" className="text-2xl font-semibold tracking-tight text-var(--accent-light) sm:text-3xl">
+            <h2
+              id="watchlistr-ipa-title"
+              className="text-2xl font-semibold tracking-tight text-var(--accent-light) sm:text-3xl"
+            >
               Watchlistr IPA
             </h2>
             <p className="mt-3 text-sm leading-6 text-slate-300 sm:text-base">
@@ -492,14 +586,21 @@ function IpaInstallModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
 
           <div className="mt-6 space-y-3">
             {sideloadSteps.map((step, index) => (
-              <div key={step.title} className="rounded-xl border border-white/10 bg-white/6 p-4">
+              <div
+                key={step.title}
+                className="rounded-xl border border-white/10 bg-white/6 p-4"
+              >
                 <div className="flex gap-3">
                   <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-var(--accent-soft) text-sm font-semibold text-var(--accent-light) ring-1 ring-var(--accent-softer)">
                     {index + 1}
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold text-white">{step.title}</h3>
-                    <p className="mt-1 text-sm leading-6 text-slate-300">{step.body}</p>
+                    <h3 className="text-sm font-semibold text-white">
+                      {step.title}
+                    </h3>
+                    <p className="mt-1 text-sm leading-6 text-slate-300">
+                      {step.body}
+                    </p>
                   </div>
                 </div>
               </div>
@@ -509,7 +610,6 @@ function IpaInstallModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
           <div className="mt-5 rounded-xl border border-var(--accent-soft) bg-var(--accent-verysoft) p-4 text-sm leading-6 text-slate-300">
             Free Apple ID installs may need to be refreshed periodically.
           </div>
-
         </div>
 
         <div className="border-t border-white/10 bg-slate-950/95 px-5 py-4 sm:px-7">
@@ -523,6 +623,139 @@ function IpaInstallModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => 
         </div>
       </div>
     </div>,
-    portalContainer
+    portalContainer,
+  );
+}
+
+function ApkInstallModal({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) {
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(
+    null,
+  );
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
+
+  useEffect(() => {
+    setPortalContainer(document.getElementById("modal-root") ?? document.body);
+  }, []);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    previousFocusRef.current = document.activeElement as HTMLElement | null;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const focusHandle = window.requestAnimationFrame(() => {
+      closeButtonRef.current?.focus();
+    });
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        onClose();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.cancelAnimationFrame(focusHandle);
+      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = previousOverflow;
+      previousFocusRef.current?.focus?.();
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen || !portalContainer) return null;
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-10000 flex items-center justify-center overflow-y-auto bg-black/90 px-4 py-6 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="watchlistr-apk-title"
+      style={watchlistrModalAccentVars}
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) {
+          onClose();
+        }
+      }}
+    >
+      <div className="relative flex max-h-[88dvh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl border border-white/10 bg-slate-950/95 text-slate-100 shadow-2xl shadow-black/50 ring-1 ring-white/10">
+        <button
+          ref={closeButtonRef}
+          type="button"
+          onClick={onClose}
+          className="absolute right-3 top-3 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-white/10 text-2xl leading-none text-slate-200 transition hover:scale-105 hover:bg-white/15 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-var(--accent)"
+          aria-label="Close APK install instructions"
+        >
+          &times;
+        </button>
+
+        <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-5 pt-6 sm:px-7 sm:pt-7">
+          <div className="pr-11">
+            <h2
+              id="watchlistr-apk-title"
+              className="text-2xl font-semibold tracking-tight text-var(--accent-light) sm:text-3xl"
+            >
+              Watchlistr APK
+            </h2>
+
+            <p className="mt-3 text-sm leading-6 text-slate-300 sm:text-base">
+              Install Watchlistr directly on your Android device.
+            </p>
+          </div>
+
+          <div className="mt-6 space-y-3">
+            {apkInstallSteps.map((step, index) => (
+              <div
+                key={step.title}
+                className="rounded-xl border border-white/10 bg-white/6 p-4"
+              >
+                <div className="flex gap-3">
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-var(--accent-soft) text-sm font-semibold text-var(--accent-light) ring-1 ring-var(--accent-softer)">
+                    {index + 1}
+                  </div>
+
+                  <div>
+                    <h3 className="text-sm font-semibold text-white">
+                      {step.title}
+                    </h3>
+
+                    <p className="mt-1 text-sm leading-6 text-slate-300">
+                      {step.body}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-5 rounded-xl border border-var(--accent-soft) bg-var(--accent-verysoft) p-4 text-sm leading-6 text-slate-300">
+            Android may display a security warning because the APK is being
+            installed outside of Google Play. Only install APK files from
+            sources you trust.
+          </div>
+        </div>
+
+        <div className="border-t border-white/10 bg-slate-950/95 px-5 py-4 sm:px-7">
+          <a
+            href={WATCHLISTR_APK_PATH}
+            download
+            className="inline-flex min-h-12 w-full items-center justify-center rounded-full bg-linear-to-br from-var(--accent-light) to-var(--accent) px-5 text-sm font-semibold text-white shadow-lg shadow-black/30 transition hover:-translate-y-0.5 hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-var(--accent-light)"
+          >
+            Download APK
+          </a>
+        </div>
+      </div>
+    </div>,
+    portalContainer,
   );
 }

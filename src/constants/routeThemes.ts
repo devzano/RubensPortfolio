@@ -30,6 +30,10 @@ export const ROUTE_THEMES: ThemeConfig[] = [
     accent: "#09A6D4",
   },
   {
+    match: (pathname) => pathname.startsWith("/yieldlens"),
+    accent: "#7CE7A7",
+  },
+  {
     match: (pathname) => pathname.startsWith("/mps-mobile") || pathname.startsWith("/mps-web"),
     icon: AppImages.manzanosPopShop,
     accent: "#5C5F5E",

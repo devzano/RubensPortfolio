@@ -40,6 +40,12 @@ export default function YieldLensPage() {
             >
               Privacy Policy
             </Link>
+            <Link
+              href="/yieldlens/terms"
+              className="rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold text-slate-100 shadow-lg shadow-black/20 backdrop-blur-md transition hover:-translate-y-0.5 hover:border-white/25"
+            >
+              Terms
+            </Link>
             <a
               href="mailto:rmanzano.se@gmail.com"
               className="rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold text-slate-100 shadow-lg shadow-black/20 backdrop-blur-md transition hover:-translate-y-0.5 hover:border-white/25"

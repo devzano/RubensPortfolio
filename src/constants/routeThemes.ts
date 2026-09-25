@@ -31,6 +31,7 @@ export const ROUTE_THEMES: ThemeConfig[] = [
   },
   {
     match: (pathname) => pathname.startsWith("/yieldlens"),
+    icon: AppImages.yieldlens,
     accent: "#7CE7A7",
   },
   {

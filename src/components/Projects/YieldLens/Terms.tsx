@@ -3,7 +3,7 @@
 import React from "react";
 import DocShell from "../LegalDocShell";
 
-const LAST_UPDATED = "September 24, 2026";
+const LAST_UPDATED = "September 26, 2026";
 const SUPPORT_EMAIL = "rmanzano.se@gmail.com";
 
 export default function Terms() {
@@ -12,7 +12,7 @@ export default function Terms() {
       <p>
         These Terms apply to the YieldLens mobile application (&ldquo;Application&rdquo;),
         created by devzano (&ldquo;Service Provider&rdquo;). YieldLens is an independent,
-        read-only reporting companion for Google AdMob publishers. By downloading or using the
+        reporting and setup companion for Google AdMob publishers. By downloading or using the
         Application, you agree to these Terms.
       </p>
 
@@ -22,8 +22,9 @@ export default function Terms() {
         </h2>
         <p>
           The Service Provider grants you a limited, non-transferable, non-exclusive license to use
-          YieldLens for personal or internal business reporting purposes, subject to these Terms,
-          applicable app store rules, and Google&apos;s terms for services you connect.
+          YieldLens for personal or internal business reporting and AdMob setup purposes, subject
+          to these Terms, applicable app store rules, and Google&apos;s terms for services you
+          connect.
         </p>
       </div>
 
@@ -33,9 +34,15 @@ export default function Terms() {
         </h2>
         <p>
           YieldLens uses Google OAuth so you can authorize access to your own Google AdMob data.
-          The Application requests read-only access and is designed to display publisher accounts,
-          app inventory, ad units, mediation details, and reporting metrics. YieldLens does not
-          create, edit, or delete your AdMob accounts, apps, ad units, campaigns, or payments.
+          The Application is designed to display publisher accounts, app inventory, ad units,
+          mediation details, and reporting metrics. YieldLens may also request AdMob monetization
+          permission so you can create AdMob apps or ad units from setup tools inside the
+          Application.
+        </p>
+        <p className="mt-3">
+          YieldLens only performs setup actions after you choose and submit them. YieldLens does
+          not manage your AdMob payments, payment profile, bank details, campaigns, account
+          ownership, or unrelated Google services.
         </p>
       </div>
 
@@ -46,7 +53,9 @@ export default function Terms() {
         <p>
           You are responsible for maintaining control of your device, Google account, AdMob
           account, app store accounts, and any permissions you grant. You agree to use YieldLens
-          only with accounts and data you are authorized to access.
+          only with accounts and data you are authorized to access. You are also responsible for
+          confirming that any app or ad-unit setup action you submit is accurate and intended for
+          your AdMob account.
         </p>
       </div>
 

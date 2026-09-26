@@ -3,10 +3,11 @@ import Link from "next/link";
 import AppImages from "@/constants/images";
 
 const features = [
-  "Read-only Google AdMob account connection",
+  "Secure Google AdMob account connection",
   "Publisher, app, and ad-unit inventory",
   "Network and mediation reporting",
   "Estimated earnings, impressions, clicks, eCPM, CTR, and match rate",
+  "Optional AdMob app and ad-unit setup tools",
   "CSV export and local saved report filters",
   "Disconnect and account deletion controls",
 ];
@@ -29,8 +30,8 @@ export default function YieldLensPage() {
               YieldLens
             </h1>
             <p className="max-w-2xl text-xl leading-8 text-slate-300">
-              A read-only reporting companion for app publishers who want a clearer view of
-              Google AdMob earnings, inventory, and mediation performance.
+              A reporting and setup companion for app publishers who want a clearer view of Google
+              AdMob earnings, inventory, mediation performance, apps, and ad units.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
@@ -59,7 +60,7 @@ export default function YieldLensPage() {
           <div className="rounded-2xl border border-emerald-300/20 bg-[#0B1210] p-6">
             <div className="mb-6 flex items-center justify-between gap-4">
               <div>
-                <p className="text-sm font-semibold text-emerald-200">Read-only AdMob reporting</p>
+                <p className="text-sm font-semibold text-emerald-200">AdMob reporting and setup</p>
                 <p className="mt-1 text-sm text-slate-400">Independent app. Not affiliated with Google.</p>
               </div>
               <span className="rounded-full bg-emerald-300/10 px-3 py-1 text-xs font-bold text-emerald-200">
@@ -88,7 +89,13 @@ export default function YieldLensPage() {
             admob.readonly
           </code>{" "}
           scope so connected users can view their own AdMob publisher details, apps, ad units, and
-          requested reports. YieldLens cannot modify AdMob inventory, campaigns, or payments.
+          requested reports. It may also request the{" "}
+          <code className="rounded bg-black/30 px-1.5 py-0.5 text-emerald-200">
+            admob.monetization
+          </code>{" "}
+          scope so users can create AdMob apps and ad units from setup tools they submit.
+          YieldLens does not manage AdMob payments, campaigns, account ownership, or unrelated
+          Google services.
         </p>
       </section>
     </main>

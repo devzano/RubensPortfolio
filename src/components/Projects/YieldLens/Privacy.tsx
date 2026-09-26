@@ -4,7 +4,7 @@
 import React from "react";
 import DocShell from "../LegalDocShell";
 
-const LAST_UPDATED = "September 24, 2026";
+const LAST_UPDATED = "September 26, 2026";
 const SUPPORT_EMAIL = "rmanzano.se@gmail.com";
 
 export default function Privacy() {
@@ -13,8 +13,9 @@ export default function Privacy() {
       <p>
         This Privacy Policy applies to the YieldLens mobile application
         (&ldquo;Application&rdquo;) created by devzano (&ldquo;Service Provider&rdquo;). YieldLens
-        helps users securely view read-only Google AdMob account information,
-        app inventory, ad units, and network or mediation reporting data.
+        helps users securely view Google AdMob account information, app inventory, ad units, and
+        network or mediation reporting data. YieldLens also includes optional setup tools for
+        creating AdMob apps and ad units when you explicitly choose to use them.
       </p>
 
       <div>
@@ -22,16 +23,18 @@ export default function Privacy() {
           1. Information We Collect
         </h2>
         <p>
-          YieldLens only requests information needed to authenticate you and display your AdMob
-          data after you choose to connect your Google account. This may include:
+          YieldLens only requests information needed to authenticate you, display your AdMob data,
+          and complete setup actions you request after you choose to connect your Google account.
+          This may include:
         </p>
         <ul className="list-disc space-y-2 pl-6 marker:text-sky-400">
           <li>Your Google account identifier, name, and email address</li>
           <li>Your AdMob publisher accounts, apps, ad units, and mediation groups</li>
           <li>
-            Read-only AdMob report data such as estimated earnings, impressions, clicks, eCPM,
-            date ranges, apps, ad units, countries, and ad sources
+            AdMob report data such as estimated earnings, impressions, clicks, eCPM, date ranges,
+            apps, ad units, countries, and ad sources
           </li>
+          <li>App and ad-unit setup details you enter before creating AdMob resources</li>
           <li>App settings, selected account IDs, saved report filters, and connection status</li>
           <li>Basic technical information needed to operate the service and prevent abuse</li>
         </ul>
@@ -43,13 +46,18 @@ export default function Privacy() {
         </h2>
         <p>
           YieldLens uses Google OAuth so you can grant access directly from Google. The
-          Application requests read-only AdMob access and does not request permission to create,
-          edit, or delete your AdMob accounts, apps, ad units, campaigns, or payments.
+          Application requests access to read your AdMob reporting data and, when enabled by you,
+          create or manage AdMob monetization settings such as apps and ad units. YieldLens only
+          performs setup actions after you submit them in the Application.
         </p>
         <p className="mt-3">
           Access tokens are used to retrieve your AdMob information from Google APIs. Refresh
           tokens, when provided by Google, are stored securely on the backend so YieldLens can keep
           your dashboard current until you disconnect your account or revoke access.
+        </p>
+        <p className="mt-3">
+          YieldLens does not manage your AdMob payments, payment profile, bank details, campaigns,
+          account ownership, or unrelated Google services.
         </p>
       </div>
 
@@ -60,6 +68,7 @@ export default function Privacy() {
           <li>Authenticate your account and maintain your signed-in session</li>
           <li>Display your AdMob accounts, apps, ad units, and reporting metrics</li>
           <li>Generate network and mediation reports based on filters you choose</li>
+          <li>Create AdMob apps or ad units when you submit those setup actions</li>
           <li>Cache short-lived responses to improve performance and reduce repeated API calls</li>
           <li>Provide support, troubleshoot issues, protect the service, and honor deletion requests</li>
         </ul>

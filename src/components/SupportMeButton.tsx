@@ -1,6 +1,6 @@
 "use client";
 
-import { Heart, Video } from "lucide-react";
+import { Heart, Computer } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
@@ -64,7 +64,7 @@ export default function SupportMeButton() {
       }
     >
       <span className="inline-flex h-12 items-center gap-2 px-4 text-sm font-bold">
-        <Video className="h-4 w-4" aria-hidden="true" />
+        <Computer className="h-4 w-4" aria-hidden="true" />
         Support Me
       </span>
       {formattedSupporterCount ? (
